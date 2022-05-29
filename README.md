@@ -2,12 +2,11 @@
 
 ## 🤰🏻 손민수템 공유 커뮤니티 개발
 ### 👻 팀원 소개
-|<img src="https://drive.google.com/file/d/1o7ZRVOVXJ8RtSYrXIiG6iyfQ0VmIkVZv/view?usp=sharing"/>|이미지2|
+|이미지1|이미지2|
 |---|---|
 |[김보인](https://github.com/Boin-Kau)|[박준용](https://github.com/ezenjun)|
+<br/>
 
-
-  
 ## 👐🏻 커밋 메세지 컨벤션
 - 논의필요
   - [레퍼런스1](https://doublesprogramming.tistory.com/256)
