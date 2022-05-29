@@ -15,6 +15,7 @@
 |상태관리|Recoil|0.7.3-alpha.2|
 |스타일링|Styled-Components|5.3.5|
 |-|Scss|1.52.1|
+|애니메이션|react-transition-group|4.4.2|
 |서버통신|Axios|0.27.2|
 
 
