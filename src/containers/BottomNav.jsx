@@ -22,17 +22,17 @@ export default function BottomNav() {
       </Link>
       <Link to='/search'>
         <BottomNavItem>
-          검색
+          +
         </BottomNavItem>
       </Link>
-      <Link to='/search'>
+      <Link to='/scrap'>
         <BottomNavItem>
-          검색
+          찜
         </BottomNavItem>
       </Link>
-      <Link to='/search'>
+      <Link to='/my'>
         <BottomNavItem>
-          검색
+          마이
         </BottomNavItem>
       </Link>
 
