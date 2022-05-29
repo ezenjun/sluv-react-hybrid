@@ -5,7 +5,6 @@
 |이미지1|이미지2|
 |---|---|
 |[김보인](https://github.com/Boin-Kau)|[박준용](https://github.com/ezenjun)|
-<br/>
 
 ### 🥾 개발환경 및 기술스택
 |분류|이름|버전|
