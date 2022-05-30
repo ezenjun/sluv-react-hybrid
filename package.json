@@ -23,9 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "aws s3 sync ./build s3://sluv-celebit-frontend-deploy --profile=sluv-celebit-frontend-iam",
-    "invalidate": "aws cloudfront create-invalidation --profile=sluv-celebit-frontend-iam --distribution-id E2B2A9R2DSB2QD --paths /*",
-    "all": "npm-run-all -s build deploy invalidate"
+    "deploy": "aws s3 sync ./build s3://sluv-celebit-frontend-deploy --profile=sluv-celebit-frontend-iam"
   },
   "eslintConfig": {
     "extends": [

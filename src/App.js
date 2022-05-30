@@ -4,7 +4,6 @@ import BottomNav from './containers/BottomNav';
 import Pages from './containers/Pages';
 
 import { palette } from './styles/palette';
-import './styles/GlobalStyle.scss';
 
 
 export default function App() {
