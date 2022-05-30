@@ -50,6 +50,29 @@
   
   
 ### 🎹 Git branch 전략
+- 본인의 이름으로 branch를 만들고, 해당 branch에서 개발을 진행합니다. 
+  ```
+    git branch charles
+    git checkout charles
+  ```
+- add, commit을 진행합니다. 
+- 개인이 만든 로컬 브랜치 위치에서 깃허브 서버로 push를 진행합니다. 
+  ```
+    git checkout charles
+    git push origin charles
+  ```
+
+- 깃허브 본인 브랜치에서 main 브랜치로 PR을 날려줍니다. 
+- main 브랜치에 merge가 완료됐다면, 로컬 main 브랜치에서 git pull을 받아줍니다. 
+  ```
+    git checkout main
+    git pull origin main
+  ```
+- 본인 브랜치로 다시 이동해서, main 브랜치를 merge 해줍니다.
+  ```
+    git checkout charles
+    git merge main
+  ```
 
 
 ## React 개발 컨벤션
