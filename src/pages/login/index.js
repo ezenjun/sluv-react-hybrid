@@ -1,11 +1,39 @@
-import React from 'react'
+import React,{ useEffect } from 'react'
 import styled from 'styled-components'
 import { KAKAO_AUTH_URL } from './KakaoOAuth'
 import Kakaoimg from '../../assets/kakao_buttons/kakao_login_medium_wide.png'
+import {GoogleClient_ID} from './GoogleOAuth'
+import jwt_decode from 'jwt-decode'
+import { useSetRecoilState } from 'recoil';
+import { GoogleUserInfoState } from '../../recoil/User';
+import { useNavigate } from 'react-router-dom'
+
 
 
 
 export default function Login(){
+  const setUserInfo = useSetRecoilState(GoogleUserInfoState);
+  const navigate = useNavigate();
+  
+  function handleCallbackResponse(response){
+    console.log("encoded JWT ID Token: " + response.credential);
+    var userObject = jwt_decode(response.credential);
+    console.log(userObject);
+    setUserInfo(userObject);
+    navigate('/home');
+  }
+
+  useEffect(()=>{
+    /* global google*/
+    google.accounts.id.initialize({
+      client_id: GoogleClient_ID,
+      callback: handleCallbackResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("google"),
+      {type:"standard", theme:"outline", size:"large", width:"300px", logo_alignment:"left", shape:"pill"}
+    )
+  },[]);
   
   return (
     <>
@@ -17,7 +45,7 @@ export default function Login(){
         </InfotextContainer>
         <ButtonContainer>
           <KaKaoButton href={KAKAO_AUTH_URL} />
-          {/* Google Login */}
+          <div id="google"/>
           {/* Email Login */}
         </ButtonContainer>
       </MainContainer>
@@ -53,6 +81,7 @@ const SubText = styled.h5`
 
 const ButtonContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -65,5 +94,12 @@ const KaKaoButton = styled.a`
   width: 300px;
   height: 45px;
   border: none;
+  border-radius: 40px;
+  margin-bottom: 20px;
 `;
 
+// const GoogleButton = styled.div`
+//   width: 300px;
+//   height: 45px;
+//   margin: 10px 0;
+// `
