@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil';
-import { bottomNavStatusState } from '../../recoil/bottomNav';
+import { bottomNavStatusState } from '../../recoil/BottomNav';
 
-export default function Search() {
+export default function Scrap() {
   const setBottomNavStatus = useSetRecoilState(bottomNavStatusState);
 
   useEffect(() => {
@@ -12,6 +12,6 @@ export default function Search() {
   },[]);
 
   return (
-    <div>Search</div>
+    <div>Scrap</div>
   )
 }

@@ -55,7 +55,7 @@
     git branch charles
     git checkout charles
   ```
-- add, commit을 진행합니다. 
+- add, commit을 진행합니다! 
 - 개인이 만든 로컬 브랜치 위치에서 깃허브 서버로 push를 진행합니다. 
   ```
     git checkout charles

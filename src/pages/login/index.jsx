@@ -8,9 +8,6 @@ import { useSetRecoilState } from 'recoil';
 import { GoogleUserInfoState } from '../../recoil/User';
 import { useNavigate } from 'react-router-dom'
 
-
-
-
 export default function Login(){
   const setUserInfo = useSetRecoilState(GoogleUserInfoState);
   const navigate = useNavigate();
@@ -23,7 +20,7 @@ export default function Login(){
     navigate('/signup/nickname');
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     /* global google*/
     google.accounts.id.initialize({
       client_id: GoogleClient_ID,
@@ -45,7 +42,7 @@ export default function Login(){
         </InfotextContainer>
         <ButtonContainer>
           <KaKaoButton href={KAKAO_AUTH_URL} />
-          <div id="google"/>
+          <GoogleButton id="google" />
           {/* Email Login */}
         </ButtonContainer>
       </MainContainer>
@@ -62,6 +59,8 @@ const MainContainer = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
+
+
 `;
 
 const LogoContainer = styled.div`
@@ -98,8 +97,8 @@ const KaKaoButton = styled.a`
   margin-bottom: 20px;
 `;
 
-// const GoogleButton = styled.div`
-//   width: 300px;
-//   height: 45px;
-//   margin: 10px 0;
-// `
+const GoogleButton = styled.div`
+  width: 300px;
+  height: 45px;
+  margin: 10px 0;
+`
