@@ -4,3 +4,4 @@ export const GoogleUserInfoState = atom({
   key: 'GoogleUserInfoState',
   default: [],
 });
+

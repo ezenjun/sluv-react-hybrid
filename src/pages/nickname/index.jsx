@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from 'styled-components'
 import { useSetRecoilState } from "recoil";
-import {bottomNavStatusState} from '../../recoil/bottomNav';
+import {bottomNavStatusState} from '../../recoil/BottomNav';
 
 export default function NickName() {
   const setBottomNavStatus = useSetRecoilState(bottomNavStatusState);
@@ -55,7 +55,7 @@ const Input = styled.input`
   font-size: 14px;
   &:focus {
     outline: none;
- }
+  }
 `
 
 const ButtonContainer = styled.div`
