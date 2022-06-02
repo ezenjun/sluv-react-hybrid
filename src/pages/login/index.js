@@ -20,7 +20,7 @@ export default function Login(){
     var userObject = jwt_decode(response.credential);
     console.log(userObject);
     setUserInfo(userObject);
-    navigate('/home');
+    navigate('/signup/nickname');
   }
 
   useEffect(()=>{
@@ -31,7 +31,7 @@ export default function Login(){
     });
     google.accounts.id.renderButton(
       document.getElementById("google"),
-      {type:"standard", theme:"outline", size:"large", width:"300px", logo_alignment:"left", shape:"pill"}
+      {type:"standard", theme:"outline", size:"large", width:"300px", logo_alignment:"left", shape:"circle"}
     )
   },[]);
   
