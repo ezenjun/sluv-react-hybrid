@@ -10,13 +10,17 @@ import KakaoRedirectHandler from '../pages/login/KakaoRedirectHandler'
 import My from '../pages/my'
 import RequestCeleb from '../pages/request'
 import Search from '../pages/search'
-import SelectCeleb from '../pages/selectCeleb'
+import SelectCeleb from '../pages/signup/SelectCeleb'
 import SignUp from '../pages/signup'
 import Custom from '../pages/home/Custom'
 import Follow from '../pages/home/Follow'
 import Question from '../pages/home/Question'
 import Event from '../pages/home/Event'
 import Notice from '../pages/notice'
+import SearchResult from '../pages/search/SearchResult'
+import AddBinder from '../pages/binder/AddBinder'
+import UserProfile from '../pages/my/UserProfile'
+import Setting from '../pages/my/Setting'
 
 
 export default function Pages() {
@@ -45,8 +49,16 @@ export default function Pages() {
       <Route path='/notice' element={<Notice/>} />
 
       <Route path='/search' element={<Search/>} />
+      <Route path='/search/result' element={<SearchResult/>} />
+
       <Route path='/binder' element={<Binder/>} />
+      <Route path='/binder/add' element={<AddBinder/>} />
+
       <Route path='/my' element={<My/>} />
+      <Route path='/profile/:idx' element={<UserProfile/>} />
+      <Route path='/setting' element={<Setting/>} />
+
+
     </Routes>
   )
 }

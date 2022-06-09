@@ -25,9 +25,9 @@ export default function BottomNav() {
           +
         </BottomNavItem>
       </Link>
-      <Link to='/scrap'>
+      <Link to='/binder'>
         <BottomNavItem>
-          찜
+          바인더
         </BottomNavItem>
       </Link>
       <Link to='/my'>
