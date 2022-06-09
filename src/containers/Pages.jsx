@@ -1,15 +1,14 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import FindEmail from '../pages/find/findemail'
-import FindPassword from '../pages/find/findpassword'
+import Binder from '../pages/binder'
+import FindEmail from '../pages/login/FindEmail'
+import FindPassword from '../pages/login/FindPassword'
 import Home from '../pages/home'
-import LocalLogin from '../pages/locallogin'
+import LocalLogin from '../pages/login/LocalLogin'
 import Login from '../pages/login'
 import KakaoRedirectHandler from '../pages/login/KakaoRedirectHandler'
 import My from '../pages/my'
-import NickName from '../pages/nickname'
 import RequestCeleb from '../pages/request'
-import Scrap from '../pages/scrap'
 import Search from '../pages/search'
 import SelectCeleb from '../pages/selectCeleb'
 import SignUp from '../pages/signup'
@@ -32,8 +31,9 @@ export default function Pages() {
       <Route path="/find/password" element={<FindPassword/>} />
 
       <Route path='/home' element={<Home/>} />
+      
       <Route path='/search' element={<Search/>} />
-      <Route path='/scrap' element={<Scrap/>} />
+      <Route path='/binder' element={<Binder/>} />
       <Route path='/my' element={<My/>} />
     </Routes>
   )

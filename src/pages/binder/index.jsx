@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil';
 import { bottomNavStatusState } from '../../recoil/BottomNav';
 
-export default function Scrap() {
+export default function Binder() {
   const setBottomNavStatus = useSetRecoilState(bottomNavStatusState);
 
   useEffect(() => {
@@ -12,6 +12,6 @@ export default function Scrap() {
   },[]);
 
   return (
-    <div>Scrap</div>
+    <div>Binder</div>
   )
 }
