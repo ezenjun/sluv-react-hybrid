@@ -9,21 +9,12 @@ import { customApiClient } from "../../utils/apiClient";
 export default function Login(){
   const navigate = useNavigate();
   
-<<<<<<< HEAD
-  function handleCallbackResponse(response){
-    console.log("encoded JWT ID Token: " + response.credential);
-
-    var userObject = jwt_decode(response.credential);
-
-    console.log(userObject);
-    setUserInfo(userObject);
-=======
   async function handleCallbackResponse(response){
     // console.log("encoded JWT ID Token: " + response.credential);
     const url = `/auth/google-login?code=${response.credential}`;
     const data = await customApiClient('get', url);
     console.log(data);
->>>>>>> 71c9612f7e7428223a431858ebd9658fdc1e1eeb
+
     navigate('/signup/nickname');
   }
 
