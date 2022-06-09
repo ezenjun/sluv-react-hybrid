@@ -1,6 +1,9 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import FindEmail from '../pages/find/findemail'
+import FindPassword from '../pages/find/findpassword'
 import Home from '../pages/home'
+import LocalLogin from '../pages/locallogin'
 import Login from '../pages/login'
 import KakaoRedirectHandler from '../pages/login/KakaoRedirectHandler'
 import My from '../pages/my'
@@ -23,6 +26,10 @@ export default function Pages() {
       <Route path="/select/celebrity" element={<SelectCeleb/>} />
 
       <Route path="/request/celebrity" element={<RequestCeleb/>} />
+
+      <Route path="/login" element={<LocalLogin/>} />
+      <Route path="/find/email" element={<FindEmail/>} />
+      <Route path="/find/password" element={<FindPassword/>} />
 
       <Route path='/home' element={<Home/>} />
       <Route path='/search' element={<Search/>} />
