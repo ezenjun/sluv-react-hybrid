@@ -14,11 +14,14 @@ export default function Login(){
   
   function handleCallbackResponse(response){
     console.log("encoded JWT ID Token: " + response.credential);
+
     var userObject = jwt_decode(response.credential);
+
     console.log(userObject);
     setUserInfo(userObject);
     navigate('/signup/nickname');
   }
+
 
   useEffect(() => {
     /* global google*/
@@ -26,12 +29,15 @@ export default function Login(){
       client_id: GoogleClient_ID,
       callback: handleCallbackResponse
     });
+
     google.accounts.id.renderButton(
       document.getElementById("google"),
       {type:"standard", theme:"outline", size:"large", width:"300px", logo_alignment:"left", shape:"circle"}
     )
   },[]);
   
+
+
   return (
     <>
       <MainContainer>

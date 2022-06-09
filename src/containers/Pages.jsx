@@ -9,10 +9,12 @@ import Scrap from '../pages/scrap'
 import Search from '../pages/search'
 import SelectCeleb from '../pages/selectCeleb'
 import SignUp from '../pages/signup'
+import WebViewCheck from '../WebViewCheck';
 
 export default function Pages() {
   return (
     <Routes>
+      <Route path='/' element={<WebViewCheck/>}/>
       <Route path='/login' element={<Login/>} />
       <Route path="/auth/kakao-login" element={<KakaoRedirectHandler/>} />
       <Route path="/signup" element={<SignUp/>}>
