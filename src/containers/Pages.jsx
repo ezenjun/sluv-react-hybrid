@@ -12,6 +12,11 @@ import RequestCeleb from '../pages/request'
 import Search from '../pages/search'
 import SelectCeleb from '../pages/selectCeleb'
 import SignUp from '../pages/signup'
+import Custom from '../pages/home/Custom'
+import Follow from '../pages/home/Follow'
+import Question from '../pages/home/Question'
+import Event from '../pages/home/Event'
+import Notice from '../pages/notice'
 
 
 export default function Pages() {
@@ -30,8 +35,15 @@ export default function Pages() {
       <Route path="/find/email" element={<FindEmail/>} />
       <Route path="/find/password" element={<FindPassword/>} />
 
-      <Route path='/home' element={<Home/>} />
+      <Route path='/home' element={<Home/>} >
+        <Route path='' element={<Custom/>} />
+        <Route path='follow' element={<Follow/>} />
+        <Route path='question' element={<Question/>} />
+        <Route path='event' element={<Event/>} />
+      </ Route >
       
+      <Route path='/notice' element={<Notice/>} />
+
       <Route path='/search' element={<Search/>} />
       <Route path='/binder' element={<Binder/>} />
       <Route path='/my' element={<My/>} />
