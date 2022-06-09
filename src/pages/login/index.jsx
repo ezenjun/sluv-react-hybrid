@@ -45,6 +45,7 @@ export default function Login(){
         <ButtonContainer>
           <KaKaoButton href={KAKAO_AUTH_URL} />
           <GoogleButton id="google" />
+          <h1 onClick={()=>navigate('/signup')}>이메일로 시작</h1>
           {/* Email Login */}
         </ButtonContainer>
       </MainContainer>
