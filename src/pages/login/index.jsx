@@ -3,15 +3,13 @@ import styled from 'styled-components'
 import { KAKAO_AUTH_URL } from './KakaoOAuth'
 import Kakaoimg from '../../assets/kakao_buttons/kakao_login_medium_wide.png'
 import {GoogleClient_ID} from './GoogleOAuth'
-import jwt_decode from 'jwt-decode'
-import { useSetRecoilState } from 'recoil';
-import { GoogleUserInfoState } from '../../recoil/User';
 import { useNavigate } from 'react-router-dom'
+import { customApiClient } from "../../utils/apiClient";
 
 export default function Login(){
-  const setUserInfo = useSetRecoilState(GoogleUserInfoState);
   const navigate = useNavigate();
   
+<<<<<<< HEAD
   function handleCallbackResponse(response){
     console.log("encoded JWT ID Token: " + response.credential);
 
@@ -19,6 +17,13 @@ export default function Login(){
 
     console.log(userObject);
     setUserInfo(userObject);
+=======
+  async function handleCallbackResponse(response){
+    // console.log("encoded JWT ID Token: " + response.credential);
+    const url = `/auth/google-login?code=${response.credential}`;
+    const data = await customApiClient('get', url);
+    console.log(data);
+>>>>>>> 71c9612f7e7428223a431858ebd9658fdc1e1eeb
     navigate('/signup/nickname');
   }
 
@@ -52,8 +57,6 @@ export default function Login(){
           {/* Email Login */}
         </ButtonContainer>
       </MainContainer>
-        
-      
     </>
   )
 }
@@ -65,8 +68,6 @@ const MainContainer = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-
-
 `;
 
 const LogoContainer = styled.div`
@@ -79,10 +80,10 @@ const InfotextContainer = styled.div`
 `;
 
 const MainText = styled.h2``
+
 const SubText = styled.h5`
   font-weight: lighter;
 `
-
 
 const ButtonContainer = styled.div`
   display: flex;

@@ -25,7 +25,6 @@ export default function Pages() {
       <Route path='/search' element={<Search/>} />
       <Route path='/scrap' element={<Scrap/>} />
       <Route path='/my' element={<My/>} />
-      
     </Routes>
   )
 }
