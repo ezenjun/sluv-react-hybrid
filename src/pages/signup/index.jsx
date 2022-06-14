@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { SignupProgressState } from '../../recoil/User';
 import styled from 'styled-components';
+import { palette } from '../../styles/palette';
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
@@ -257,7 +259,9 @@ export default function Signup() {
 					<MainText>
 						{nickname}님<br />
 						스럽 회원가입을 축하드려요!
-						<Button onClick={handleNextClick}>관심셀럽 선택하기</Button>
+						<StyledLink to={'/select/celebrity'}>
+							<Button>관심셀럽 선택하기</Button>
+						</StyledLink>
 					</MainText>
 				</ContentWrap>
 			)}
@@ -270,7 +274,7 @@ const MainContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
-	background-color: white;
+	background-color: ${palette.white.secondary}; ;
 `;
 const ContentWrap = styled.div`
 	display: flex;
@@ -386,5 +390,16 @@ const Button = styled.button`
 		:disabled {
 			cursor: not-allowed;
 		}
+	}
+`;
+const StyledLink = styled(Link)`
+	text-decoration: none;
+	color: inherit;
+	&:focus,
+	&:hover,
+	&:visited,
+	&:link,
+	&:active {
+		text-decoration: none;
 	}
 `;
