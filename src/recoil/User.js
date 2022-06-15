@@ -1,7 +1,11 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const GoogleUserInfoState = atom({
-  key: 'GoogleUserInfoState',
-  default: [],
+	key: 'GoogleUserInfoState',
+	default: [],
 });
 
+export const SignupProgressState = atom({
+	key: 'SignupProgressState',
+	default: 1,
+});
