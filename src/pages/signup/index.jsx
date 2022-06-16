@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { SignupProgressState } from '../../recoil/User';
@@ -129,140 +129,184 @@ export default function Signup() {
 
 		setIntervalId(timer);
 	};
-
+	const inputRef = useRef(null);
+	const handleAuthSend = () => {
+		beginTimer();
+	};
 	return (
 		<MainContainer>
-			<Button onClick={handleBackClick}>before</Button>
-			<div>progress = {currentPage * 25}%</div>
+			{currentPage !== 5 && (
+				<>
+					<Button onClick={handleBackClick}>before</Button>
+					{/* <div>progress = {currentPage * 25}%</div> */}
+				</>
+			)}
 			{currentPage === 1 && (
 				<ContentWrap>
-					<MainText>
-						스럽 서비스 이용약관에 <br />
-						동의해주세요
-					</MainText>
-					<NextButton onClick={handleNextClick}>next</NextButton>
-					{/* 버튼 disabled 처리 */}
+					<TopWrap>
+						<PageLabel>
+							<MainText>
+								스럽 서비스 이용약관에 <br />
+								동의해주세요
+							</MainText>
+						</PageLabel>
+					</TopWrap>
+					<BottomWrap>
+						<NextButton onClick={handleNextClick}>다음</NextButton>
+						{/* 버튼 disabled 처리 */}
+					</BottomWrap>
 				</ContentWrap>
 			)}
 			{currentPage === 2 && (
 				<ContentWrap>
-					<MainText>
-						휴대전화번호 <br />
-						인증이 필요해요
-					</MainText>
-					<SubText>휴대전화번호</SubText>
-					<InputWrapPhone>
-						<InputPhone>
-							<Input
-								value={phoneNumber}
-								onChange={handlePhoneNumber}
-								type="text"
-								placeholder="휴대폰 번호 (- 없이 입력)"
-							/>
-							{phoneNumberValid ? <Check>ok</Check> : <Clear>x</Clear>}
-						</InputPhone>
-						{phoneNumberValid ? (
-							<Button disabled={false} onClick={beginTimer}>
-								인증번호 발송
-							</Button>
-						) : (
-							<Button disabled={true}>인증번호 발송</Button>
-						)}
+					<TopWrap>
+						<PageLabel>
+							<MainText>
+								휴대폰 번호 <br />
+								인증이 필요해요.
+							</MainText>
+						</PageLabel>
+						<SubText>휴대폰 번호</SubText>
+						<InputWrapPhone>
+							<InputPhone>
+								<Input
+									value={phoneNumber}
+									onChange={handlePhoneNumber}
+									type="text"
+									placeholder="-없이 휴대폰 번호 입력"
+									ref={inputRef}
+								/>
+								{phoneNumberValid ? <Check>ok</Check> : <Clear>x</Clear>}
+							</InputPhone>
+							{phoneNumberValid ? (
+								<Button disabled={false} onClick={handleAuthSend}>
+									인증하기
+								</Button>
+							) : (
+								<Button disabled={true}>인증하기</Button>
+							)}
 
-						{/* 재발송 버튼 */}
-					</InputWrapPhone>
-					<SubText>인증번호</SubText>
-					<InputWrap>
-						{codeInputAccess ? (
-							<Input
-								value={authCode}
-								onChange={handleAuthCode}
-								type="number"
-								placeholder="4자리 숫자"
-							/>
-						) : (
-							<Input
-								value={authCode}
-								onChange={handleAuthCode}
-								type="number"
-								placeholder="4자리 숫자"
-								disabled={true}
-							/>
-						)}
+							{/* 재발송 버튼 */}
+						</InputWrapPhone>
+						<SubText>인증번호</SubText>
+						<InputWrap>
+							{codeInputAccess ? (
+								<Input
+									value={authCode}
+									onChange={handleAuthCode}
+									type="number"
+									placeholder="인증번호 4자리"
+									ref={inputRef}
+								/>
+							) : (
+								<Input
+									value={authCode}
+									onChange={handleAuthCode}
+									type="number"
+									placeholder="인증번호 4자리"
+									disabled={true}
+								/>
+							)}
 
-						{authCodeValid ? (
-							<Check>ok</Check>
-						) : (
-							<Clear>
-								{timeMin}:{timeSec < 10 ? `0${timeSec}` : timeSec}
-							</Clear>
-						)}
-					</InputWrap>
-					<NextButton onClick={handleNextClick}>next</NextButton>
-					{/* 버튼 disabled처리 */}
+							{authCodeValid ? (
+								<Check>ok</Check>
+							) : (
+								<Clear>
+									{timeMin}:{timeSec < 10 ? `0${timeSec}` : timeSec}
+								</Clear>
+							)}
+						</InputWrap>
+					</TopWrap>
+					<BottomWrap>
+						<NextButton onClick={handleNextClick}>다음</NextButton>
+						{/* 버튼 disabled처리 */}
+					</BottomWrap>
 				</ContentWrap>
 			)}
 			{currentPage === 3 && (
 				<ContentWrap>
-					<MainText>
-						이메일과 비밀번호를
-						<br />
-						입력해 주세요
-					</MainText>
-					<SubText>이메일 주소</SubText>
-					<InputWrap>
-						<Input
-							value={email}
-							onChange={handleEmail}
-							type="text"
-							placeholder="이메일을 입력해주세요"
-						/>
-						{emailValid ? <Check>ok</Check> : <Clear>x</Clear>}
-					</InputWrap>
-					<SubText>비밀번호</SubText>
-					<InputWrap>
-						<Input
-							value={password}
-							onChange={handlePassword}
-							type="password"
-							placeholder="영문, 숫자, 특수문자 포함 8자 이상"
-						/>
-						{passwordValid ? <Check>ok</Check> : <Clear>x</Clear>}
-					</InputWrap>
-					<NextButton onClick={handleNextClick}>next</NextButton>
-					{/* 버튼 disabled처리 */}
+					<TopWrap>
+						<PageLabel>
+							<MainText>
+								이메일과 비밀번호를
+								<br />
+								입력해 주세요
+							</MainText>
+						</PageLabel>
+						<SubText>이메일 주소</SubText>
+						<InputWrap>
+							<Input
+								value={email}
+								onChange={handleEmail}
+								type="text"
+								placeholder="이메일을 입력해주세요"
+							/>
+							{emailValid ? <Check>ok</Check> : <Clear>x</Clear>}
+						</InputWrap>
+						<SubText>비밀번호</SubText>
+						<InputWrap>
+							<Input
+								value={password}
+								onChange={handlePassword}
+								type="password"
+								placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+							/>
+							{passwordValid ? <Check>ok</Check> : <Clear>x</Clear>}
+						</InputWrap>
+					</TopWrap>
+					<BottomWrap>
+						<NextButton onClick={handleNextClick}>다음</NextButton>
+						{/* 버튼 disabled처리 */}
+					</BottomWrap>
 				</ContentWrap>
 			)}
 			{currentPage === 4 && (
 				<ContentWrap>
-					<MainText>
-						사용하실 닉네임을
-						<br />
-						입력해 주세요
-					</MainText>
-					<SubText>닉네임</SubText>
-					<InputWrap>
-						<Input
-							value={nickname}
-							onChange={handleNickname}
-							type="text"
-							placeholder="언제든지 수정가능해요"
-						/>
-						{nicknameValid ? <Check>ok</Check> : <Clear>x</Clear>}
-					</InputWrap>
-					<NextButton onClick={handleNextClick}>완료</NextButton>
-					{/* 버튼 disabled처리 */}
+					<TopWrap>
+						<PageLabel>
+							<MainText>
+								사용하실 닉네임을
+								<br />
+								입력해 주세요
+							</MainText>
+						</PageLabel>
+						<SubText>닉네임</SubText>
+						<InputWrap>
+							<Input
+								value={nickname}
+								onChange={handleNickname}
+								type="text"
+								placeholder="언제든지 수정이 가능해요"
+							/>
+							{nicknameValid ? <Check>ok</Check> : <Clear>x</Clear>}
+						</InputWrap>
+					</TopWrap>
+					<BottomWrap>
+						<NextButton onClick={handleNextClick}>완료</NextButton>
+						{/* 버튼 disabled처리 */}
+					</BottomWrap>
 				</ContentWrap>
 			)}
 			{currentPage === 5 && (
 				<ContentWrap>
-					<MainText>
-						{nickname}님<br />
-						스럽 회원가입을 축하드려요!
+					<CompleteTopWrap>
+						<NameText color="#9e30f4">
+							{nickname}
+							<NameText> 님</NameText>
+						</NameText>
+						<CompletePageLabel>
+							<MainText>스럽 회원가입을</MainText>
+							<MainText>축하드려요!</MainText>
+							<SubText fontsize="16px" color="#4A4A4A" margin="20px">
+								스럽에서 다양한 활동 기대할게요.
+							</SubText>
+						</CompletePageLabel>
+					</CompleteTopWrap>
+					<BottomWrap>
 						<StyledLink to={'/select/celebrity'}>
-							<Button>관심셀럽 선택하기</Button>
+							<NextButton>관심셀럽 등록하러 가기</NextButton>
 						</StyledLink>
-					</MainText>
+					</BottomWrap>
 				</ContentWrap>
 			)}
 		</MainContainer>
@@ -270,52 +314,95 @@ export default function Signup() {
 }
 
 const MainContainer = styled.div`
-	height: 100vh;
 	display: flex;
+	height: 100%;
+	box-sizing: border-box;
 	flex-direction: column;
-	padding: 1rem;
-	background-color: ${palette.white.secondary}; ;
+	background-color: ${palette.white.primary}; ;
 `;
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
+	padding: 20px;
+	height: 100%;
+	justify-content: space-between;
 `;
-const MainText = styled.h1``;
+const TopWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-top: 36px;
+`;
+const CompleteTopWrap = styled.div`
+	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+`;
+const BottomWrap = styled.div``;
+
+const PageLabel = styled.div`
+	margin-bottom: 24px;
+`;
+const CompletePageLabel = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 24px;
+`;
+
+const MainText = styled.span`
+	font-size: 24px;
+	font-weight: 700;
+`;
+const SubText = styled.span`
+	font-size: ${props => props.fontsize || '12px'};
+	font-weight: 600;
+	color: ${props => props.color || 'black'};
+	margin: ${props => props.margin || '0 0 8px 0'};
+`;
+const NameText = styled.span`
+	font-size: 18px;
+	font-weight: 700;
+	margin-bottom: 16px;
+	color: ${props => props.color || 'black'};
+`;
+
 const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
-	background-color: white;
-	margin-bottom: 10px;
-	border-bottom: 1px solid #d6d6d6;
-	&:active,
+	border: 1px solid #e2e0e0;
+	border-radius: 10px;
+	padding: 8px;
+	margin-bottom: 26px;
+	:focus {
+		border: 1px solid #9e30f4;
+	}
 	&:focus-within {
-		border-bottom: 1px solid #9e30f4;
-		color: #9e30f4;
+		border: 1px solid #9e30f4;
 	}
 `;
 const InputWrapPhone = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: white;
-	margin-bottom: 10px;
+	background-color: transparent;
+	margin-bottom: 26px;
 `;
 const InputPhone = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	color: inherit;
-	font-weight: bold;
 	height: 40px;
-	width: 70%;
-	outline: none;
-	border: none;
-	border-bottom: 1px solid #d6d6d6;
+	width: 65%;
+	border: 1px solid #e2e0e0;
+	border-radius: 8px;
+	padding: 8px;
 	&:active,
 	&:focus-within {
-		border-bottom: 1px solid #9e30f4;
-		color: #9e30f4;
+		border: 1px solid #9e30f4;
 	}
-
 	::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
@@ -328,13 +415,20 @@ const InputPhone = styled.div`
 
 const Input = styled.input`
 	align-items: center;
-	padding: 0 10px;
-	color: inherit;
-	font-weight: bold;
 	height: 40px;
 	width: 100%;
+	padding: 0 10px;
+	font-size: 14px;
+	font-weight: 400;
 	outline: none;
 	border: none;
+	background-color: transparent;
+	&:disabled {
+		::placeholder {
+			color: #dadada;
+		}
+		cursor: not-allowed;
+	}
 
 	::-webkit-inner-spin-button {
 		-webkit-appearance: none;
@@ -352,6 +446,8 @@ const Check = styled.div`
 const Clear = styled.button`
 	align-items: center;
 	border: none;
+	font-size: 14px;
+	font-weight: 400;
 	background-color: transparent;
 	border-radius: 20px;
 	color: #9e30f4;
@@ -360,13 +456,17 @@ const Clear = styled.button`
 		cursor: pointer;
 	}
 `;
-const SubText = styled.h3``;
+
 const NextButton = styled.button`
+	width: 100%;
+	height: 44px;
 	border: none;
-	height: 40px;
 	border-radius: 20px;
+	background-color: #9e30f4;
+	margin-bottom: 30px;
+	color: white;
 	:disabled {
-		background-color: #d6d6d6;
+		background-color: #dadada;
 	}
 	&:hover {
 		cursor: pointer;
@@ -374,16 +474,15 @@ const NextButton = styled.button`
 `;
 const Button = styled.button`
 	border: none;
-	height: 40px;
-	border-radius: 20px;
-	color: #9e30f4;
-	border: 1px solid #9e30f4;
-	background-color: transparent;
-	padding: 0 20px;
+	height: 48px;
+	border-radius: 24px;
+	font-weight: bold;
+	font-size: 14px;
+	background-color: #ebebeb;
+	padding: 0 18px;
 	:disabled {
 		border: none;
-		background-color: #d6d6d6;
-		color: black;
+		color: white;
 	}
 	&:hover {
 		cursor: pointer;
