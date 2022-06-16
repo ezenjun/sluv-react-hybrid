@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { SignupProgressState } from '../../recoil/User';
 import styled from 'styled-components';
 import { palette } from '../../styles/palette';
-
+import { TopNav } from '../../components/TopNav';
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	// input value
@@ -137,8 +137,18 @@ export default function Signup() {
 		<MainContainer>
 			{currentPage !== 5 && (
 				<>
-					<Button onClick={handleBackClick}>before</Button>
-					{/* <div>progress = {currentPage * 25}%</div> */}
+					<TopNav>
+						<Button
+							backgroundcolor="white"
+							borderradius="none"
+							onClick={handleBackClick}
+						>
+							이전
+						</Button>
+					</TopNav>
+					<ProgressWrap>
+						<ProgressBar progress={currentPage * 25}></ProgressBar>
+					</ProgressWrap>
 				</>
 			)}
 			{currentPage === 1 && (
@@ -297,7 +307,7 @@ export default function Signup() {
 						<CompletePageLabel>
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
-							<SubText fontsize="16px" color="#4A4A4A" margin="20px">
+							<SubText fontsize="16px" color="#4A4A4A" margin="30px">
 								스럽에서 다양한 활동 기대할게요.
 							</SubText>
 						</CompletePageLabel>
@@ -318,7 +328,8 @@ const MainContainer = styled.div`
 	height: 100%;
 	box-sizing: border-box;
 	flex-direction: column;
-	background-color: ${palette.white.primary}; ;
+	border: 1px solid black;
+	background-color: ${palette.white.primary};
 `;
 const ContentWrap = styled.div`
 	display: flex;
@@ -327,10 +338,23 @@ const ContentWrap = styled.div`
 	height: 100%;
 	justify-content: space-between;
 `;
+
+const ProgressWrap = styled.div`
+	width: 100%;
+	height: 2px;
+	margin-bottom: 1rem;
+	background-color: #fbf6ff;
+`;
+const ProgressBar = styled.div`
+	width: ${props => props.progress}%;
+	height: 100%;
+	background-color: #9e30f4;
+	transition: width 0.5s;
+`;
+
 const TopWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-top: 36px;
 `;
 const CompleteTopWrap = styled.div`
 	display: flex;
@@ -352,7 +376,7 @@ const CompletePageLabel = styled.div`
 `;
 
 const MainText = styled.span`
-	font-size: 24px;
+	font-size: 26px;
 	font-weight: 700;
 `;
 const SubText = styled.span`
@@ -472,13 +496,14 @@ const NextButton = styled.button`
 		cursor: pointer;
 	}
 `;
+
 const Button = styled.button`
 	border: none;
 	height: 48px;
-	border-radius: 24px;
+	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
 	font-size: 14px;
-	background-color: #ebebeb;
+	background-color: ${props => props.backgroundcolor || '#ebebeb'};
 	padding: 0 18px;
 	:disabled {
 		border: none;
