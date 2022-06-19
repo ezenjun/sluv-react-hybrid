@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useRoutes, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { SignupProgressState } from '../../recoil/User';
 import styled from 'styled-components';
 import { palette } from '../../styles/palette';
 import { TopNav } from '../../components/TopNav';
+import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
+import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
+import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
+import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	// input value
@@ -38,6 +43,9 @@ export default function Signup() {
 			// console.log(phoneNumber);
 		}
 	};
+	const phoneInputReset = () => {
+		setPhoneNumber('');
+	};
 
 	const handleAuthCode = e => {
 		const regex = /^[0-9\b -]{0,4}$/; //숫자만 포함 4자
@@ -51,6 +59,9 @@ export default function Signup() {
 			// console.log(authCode);
 		}
 	};
+	const authCodeInputReset = () => {
+		setAuthCode('');
+	};
 
 	const handleEmail = e => {
 		setEmail(e.target.value);
@@ -63,6 +74,9 @@ export default function Signup() {
 			setEmailValid(false);
 		}
 	};
+	const emailInputReset = () => {
+		setEmail('');
+	};
 
 	const handlePassword = e => {
 		setPassword(e.target.value);
@@ -74,6 +88,9 @@ export default function Signup() {
 			setPasswordValid(false);
 		}
 	};
+	const passwordInputReset = () => {
+		setPassword('');
+	};
 
 	const handleNickname = e => {
 		setNickname(e.target.value);
@@ -84,6 +101,9 @@ export default function Signup() {
 			setNicknameValid(false);
 		}
 	};
+	const nicknameInputReset = () => {
+		setNickname('');
+	};
 	// page
 	const handleNextClick = () => {
 		if (currentPage < 5) {
@@ -91,9 +111,13 @@ export default function Signup() {
 		}
 	};
 
+	const navigate = useNavigate();
 	const handleBackClick = () => {
 		if (currentPage > 1) {
 			setCurrentPage(currentPage - 1);
+		}
+		if (currentPage === 1) {
+			navigate('/');
 		}
 	};
 	// auth code timer
@@ -138,13 +162,9 @@ export default function Signup() {
 			{currentPage !== 5 && (
 				<>
 					<TopNav>
-						<Button
-							backgroundcolor="white"
-							borderradius="none"
-							onClick={handleBackClick}
-						>
-							이전
-						</Button>
+						<BackButton onClick={handleBackClick}>
+							<LeftArrow />
+						</BackButton>
 					</TopNav>
 					<ProgressWrap>
 						<ProgressBar progress={currentPage * 25}></ProgressBar>
@@ -176,56 +196,106 @@ export default function Signup() {
 								인증이 필요해요.
 							</MainText>
 						</PageLabel>
-						<SubText>휴대폰 번호</SubText>
-						<InputWrapPhone>
-							<InputPhone>
-								<Input
-									value={phoneNumber}
-									onChange={handlePhoneNumber}
-									type="text"
-									placeholder="-없이 휴대폰 번호 입력"
-									ref={inputRef}
-								/>
-								{phoneNumberValid ? <Check>ok</Check> : <Clear>x</Clear>}
-							</InputPhone>
-							{phoneNumberValid ? (
-								<Button disabled={false} onClick={handleAuthSend}>
-									인증하기
-								</Button>
-							) : (
-								<Button disabled={true}>인증하기</Button>
-							)}
+						<FormWrap>
+							<SubText>휴대폰 번호</SubText>
+							<InputWrapPhone>
+								<InputPhone valid={phoneNumberValid} value={phoneNumber}>
+									<Input
+										value={phoneNumber}
+										onChange={handlePhoneNumber}
+										type="text"
+										placeholder="-없이 휴대폰 번호 입력"
+									/>
+									{phoneNumberValid ? (
+										<IconWrap>
+											<Check />
+										</IconWrap>
+									) : (
+										<></>
+									)}
+									{phoneNumber.length !== 0 && !phoneNumberValid ? (
+										<IconWrap onClick={phoneInputReset}>
+											<Delete />
+										</IconWrap>
+									) : (
+										<></>
+									)}
+								</InputPhone>
+								{phoneNumberValid ? (
+									<Button disabled={false} onClick={handleAuthSend}>
+										인증하기
+									</Button>
+								) : (
+									<Button disabled={true}>인증하기</Button>
+								)}
 
-							{/* 재발송 버튼 */}
-						</InputWrapPhone>
-						<SubText>인증번호</SubText>
-						<InputWrap>
-							{codeInputAccess ? (
-								<Input
-									value={authCode}
-									onChange={handleAuthCode}
-									type="number"
-									placeholder="인증번호 4자리"
-									ref={inputRef}
-								/>
-							) : (
-								<Input
-									value={authCode}
-									onChange={handleAuthCode}
-									type="number"
-									placeholder="인증번호 4자리"
-									disabled={true}
-								/>
-							)}
+								{/* 재발송 버튼 */}
+							</InputWrapPhone>
+							<ErrorMessage>
+								{!phoneNumberValid && phoneNumber.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										올바른 휴대폰 번호를 입력해주세요.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
+						<FormWrap>
+							<SubText>인증번호</SubText>
+							<InputWrap valid={authCodeValid} value={authCode}>
+								{codeInputAccess ? (
+									<>
+										<Input
+											value={authCode}
+											onChange={handleAuthCode}
+											type="number"
+											placeholder="인증번호 4자리"
+										/>
+									</>
+								) : (
+									<Input
+										value={authCode}
+										onChange={handleAuthCode}
+										type="number"
+										placeholder="인증번호 4자리"
+										disabled={true}
+									/>
+								)}
 
-							{authCodeValid ? (
-								<Check>ok</Check>
-							) : (
-								<Clear>
-									{timeMin}:{timeSec < 10 ? `0${timeSec}` : timeSec}
-								</Clear>
-							)}
-						</InputWrap>
+								{authCode.length !== 0 && !authCodeValid ? (
+									<IconWrap onClick={authCodeInputReset}>
+										<Delete />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+
+								{codeInputAccess && !authCodeValid ? (
+									<Clear>
+										{timeMin}:{timeSec < 10 ? `0${timeSec}` : timeSec}
+									</Clear>
+								) : (
+									<></>
+								)}
+								{authCodeValid ? (
+									<IconWrap>
+										<Check />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+							</InputWrap>
+							<ErrorMessage>
+								{!authCodeValid && authCode.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										올바른 인증번호 형식이 아닙니다.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
 						<NextButton onClick={handleNextClick}>다음</NextButton>
@@ -243,26 +313,64 @@ export default function Signup() {
 								입력해 주세요
 							</MainText>
 						</PageLabel>
-						<SubText>이메일 주소</SubText>
-						<InputWrap>
-							<Input
-								value={email}
-								onChange={handleEmail}
-								type="text"
-								placeholder="이메일을 입력해주세요"
-							/>
-							{emailValid ? <Check>ok</Check> : <Clear>x</Clear>}
-						</InputWrap>
-						<SubText>비밀번호</SubText>
-						<InputWrap>
-							<Input
-								value={password}
-								onChange={handlePassword}
-								type="password"
-								placeholder="영문, 숫자, 특수문자 포함 8자 이상"
-							/>
-							{passwordValid ? <Check>ok</Check> : <Clear>x</Clear>}
-						</InputWrap>
+						<FormWrap>
+							<SubText>이메일 주소</SubText>
+							<InputWrap valid={emailValid} value={email}>
+								<Input
+									value={email}
+									onChange={handleEmail}
+									type="text"
+									placeholder="이메일을 입력해주세요"
+								/>
+								{emailValid ? (
+									<IconWrap>
+										<Check />
+									</IconWrap>
+								) : (
+									<IconWrap onClick={emailInputReset}>
+										<Delete />
+									</IconWrap>
+								)}
+							</InputWrap>
+							<ErrorMessage>
+								{!emailValid && email.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										올바른 이메일을 입력해주세요.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
+						<FormWrap>
+							<SubText>비밀번호</SubText>
+							<InputWrap valid={passwordValid} value={password}>
+								<Input
+									value={password}
+									onChange={handlePassword}
+									type="password"
+									placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+								/>
+								{passwordValid ? (
+									<IconWrap>
+										<Check />
+									</IconWrap>
+								) : (
+									<IconWrap onClick={passwordInputReset}>
+										<Delete />
+									</IconWrap>
+								)}
+							</InputWrap>
+							<ErrorMessage>
+								{!passwordValid && password.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
 						<NextButton onClick={handleNextClick}>다음</NextButton>
@@ -280,16 +388,35 @@ export default function Signup() {
 								입력해 주세요
 							</MainText>
 						</PageLabel>
-						<SubText>닉네임</SubText>
-						<InputWrap>
-							<Input
-								value={nickname}
-								onChange={handleNickname}
-								type="text"
-								placeholder="언제든지 수정이 가능해요"
-							/>
-							{nicknameValid ? <Check>ok</Check> : <Clear>x</Clear>}
-						</InputWrap>
+						<FormWrap>
+							<SubText>닉네임</SubText>
+							<InputWrap valid={nicknameValid} value={nickname}>
+								<Input
+									value={nickname}
+									onChange={handleNickname}
+									type="text"
+									placeholder="언제든지 수정이 가능해요"
+								/>
+								{nicknameValid ? (
+									<IconWrap>
+										<Check />
+									</IconWrap>
+								) : (
+									<IconWrap onClick={nicknameInputReset}>
+										<Delete />
+									</IconWrap>
+								)}
+							</InputWrap>
+							<ErrorMessage>
+								{!nicknameValid && nickname.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										올바른 닉네임을 입력해주세요.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
 						<NextButton onClick={handleNextClick}>완료</NextButton>
@@ -300,6 +427,7 @@ export default function Signup() {
 			{currentPage === 5 && (
 				<ContentWrap>
 					<CompleteTopWrap>
+						<Present></Present>
 						<NameText color="#9e30f4">
 							{nickname}
 							<NameText> 님</NameText>
@@ -377,28 +505,40 @@ const CompletePageLabel = styled.div`
 
 const MainText = styled.span`
 	font-size: 26px;
-	font-weight: 700;
+	font-weight: bold;
+	color: #262626;
 `;
 const SubText = styled.span`
 	font-size: ${props => props.fontsize || '12px'};
-	font-weight: 600;
+	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || 'black'};
 	margin: ${props => props.margin || '0 0 8px 0'};
 `;
 const NameText = styled.span`
 	font-size: 18px;
-	font-weight: 700;
-	margin-bottom: 16px;
+	font-weight: bold;
+	margin-top: 16px;
+	margin-bottom: 32px;
 	color: ${props => props.color || 'black'};
 `;
 
+const FormWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 26px;
+`;
+
 const InputWrap = styled.div`
+	${props =>
+		props.valid || props.value.length === 0
+			? 'border: 1px solid #e2e0e0;'
+			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border: 1px solid #e2e0e0;
+
 	border-radius: 10px;
-	padding: 8px;
-	margin-bottom: 26px;
+	padding: 16px;
+	/* margin-bottom: 26px; */
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -411,18 +551,21 @@ const InputWrapPhone = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	background-color: transparent;
-	margin-bottom: 26px;
+	/* margin-bottom: 26px; */
 `;
 const InputPhone = styled.div`
+	${props =>
+		props.valid || props.value.length === 0
+			? 'border: 1px solid #e2e0e0;'
+			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	width: 100%;
 	color: inherit;
-	height: 40px;
-	width: 65%;
-	border: 1px solid #e2e0e0;
 	border-radius: 8px;
-	padding: 8px;
+	padding: 16px;
+	margin-right: 11px;
 	&:active,
 	&:focus-within {
 		border: 1px solid #9e30f4;
@@ -439,9 +582,8 @@ const InputPhone = styled.div`
 
 const Input = styled.input`
 	align-items: center;
-	height: 40px;
+	height: 17px;
 	width: 100%;
-	padding: 0 10px;
 	font-size: 14px;
 	font-weight: 400;
 	outline: none;
@@ -463,22 +605,28 @@ const Input = styled.input`
 		margin: 0;
 	}
 `;
-const Check = styled.div`
-	color: #9e30f4;
-	font-weight: bold;
+
+const ErrorMessage = styled.div`
+	display: flex;
+	margin-top: 8px;
 `;
-const Clear = styled.button`
+
+const IconWrap = styled.div`
+	display: flex;
+	justify-content: center;
 	align-items: center;
+`;
+const Clear = styled.div`
+	align-items: center;
+	padding: none;
 	border: none;
 	font-size: 14px;
-	font-weight: 400;
+	font-weight: normal;
 	background-color: transparent;
 	border-radius: 20px;
 	color: #9e30f4;
 	font-size: medium;
-	&:hover {
-		cursor: pointer;
-	}
+	margin-left: 16px;
 `;
 
 const NextButton = styled.button`
@@ -498,13 +646,16 @@ const NextButton = styled.button`
 `;
 
 const Button = styled.button`
+	box-sizing: border-box;
 	border: none;
+
 	height: 48px;
+	flex-shrink: 0;
 	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
 	font-size: 14px;
 	background-color: ${props => props.backgroundcolor || '#ebebeb'};
-	padding: 0 18px;
+	padding: 16px 18px 15px;
 	:disabled {
 		border: none;
 		color: white;
@@ -514,6 +665,19 @@ const Button = styled.button`
 		:disabled {
 			cursor: not-allowed;
 		}
+	}
+	.span {
+		width: 49px;
+		height: 17px;
+		font-family: Pretendard;
+		font-size: 14px;
+		font-weight: 600;
+		font-stretch: normal;
+		font-style: normal;
+		line-height: normal;
+		letter-spacing: normal;
+		text-align: center;
+		color: #262626;
 	}
 `;
 const StyledLink = styled(Link)`
@@ -525,5 +689,15 @@ const StyledLink = styled(Link)`
 	&:link,
 	&:active {
 		text-decoration: none;
+	}
+`;
+
+const BackButton = styled.div`
+	border: none;
+	background-color: transparent;
+	padding: none;
+	margin: none;
+	&:hover {
+		cursor: pointer;
 	}
 `;
