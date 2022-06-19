@@ -1,17 +1,95 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useRoutes, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { SignupProgressState } from '../../recoil/User';
 import styled from 'styled-components';
 import { palette } from '../../styles/palette';
 import { TopNav } from '../../components/TopNav';
+import { SignupProgressState } from '../../recoil/User';
+
 import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
+import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
+
+	const [allCheck, setAllCheck] = useState(false);
+	const [ageCheck, setAgeCheck] = useState(false);
+	const [useCheck, setUseCheck] = useState(false);
+	const [personalInfoCheck, setpersonalInfoCheck] = useState(false);
+	const [marketingCheck, setMarketingCheck] = useState(false);
+	const [necessary, setNecessary] = useState(0);
+
+	const allBtnEvent = () => {
+		if (allCheck === false) {
+			setAllCheck(true);
+			setAgeCheck(true);
+			setUseCheck(true);
+			setpersonalInfoCheck(true);
+			setMarketingCheck(true);
+			setNecessary(3);
+		} else {
+			setAllCheck(false);
+			setAgeCheck(false);
+			setUseCheck(false);
+			setpersonalInfoCheck(false);
+			setMarketingCheck(false);
+			setNecessary(0);
+		}
+	};
+	const ageBtnEvent = () => {
+		if (ageCheck === false) {
+			setAgeCheck(true);
+			setNecessary(necessary + 1);
+		} else {
+			setAgeCheck(false);
+			setNecessary(necessary - 1);
+		}
+	};
+
+	const useBtnEvent = () => {
+		if (useCheck === false) {
+			setUseCheck(true);
+			setNecessary(necessary + 1);
+		} else {
+			setUseCheck(false);
+			setNecessary(necessary - 1);
+		}
+	};
+
+	const personalInfoBtnEvent = () => {
+		if (personalInfoCheck === false) {
+			setpersonalInfoCheck(true);
+			setNecessary(necessary + 1);
+		} else {
+			setpersonalInfoCheck(false);
+			setNecessary(necessary - 1);
+		}
+	};
+
+	const marketingBtnEvent = () => {
+		if (marketingCheck === false) {
+			setMarketingCheck(true);
+		} else {
+			setMarketingCheck(false);
+		}
+	};
+	useEffect(() => {
+		if (
+			ageCheck === true &&
+			useCheck === true &&
+			personalInfoCheck === true &&
+			marketingCheck === true
+		) {
+			setAllCheck(true);
+			setNecessary(3);
+		} else {
+			setAllCheck(false);
+		}
+	}, [necessary, ageCheck, useCheck, marketingCheck, personalInfoCheck]);
 	// input value
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [authCode, setAuthCode] = useState('');
@@ -40,7 +118,6 @@ export default function Signup() {
 			} else {
 				setPhoneNumberValid(false);
 			}
-			// console.log(phoneNumber);
 		}
 	};
 	const phoneInputReset = () => {
@@ -56,7 +133,6 @@ export default function Signup() {
 			} else {
 				setAuthCodeValid(false);
 			}
-			// console.log(authCode);
 		}
 	};
 	const authCodeInputReset = () => {
@@ -65,7 +141,6 @@ export default function Signup() {
 
 	const handleEmail = e => {
 		setEmail(e.target.value);
-		console.log(emailValid);
 		const regex =
 			/^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i; // email regex
 		if (regex.test(email)) {
@@ -157,6 +232,7 @@ export default function Signup() {
 	const handleAuthSend = () => {
 		beginTimer();
 	};
+
 	return (
 		<MainContainer>
 			{currentPage !== 5 && (
@@ -180,10 +256,136 @@ export default function Signup() {
 								동의해주세요
 							</MainText>
 						</PageLabel>
+						<FormWrap>
+							<TermsWrap margin="0 0 12px 0">
+								{allCheck ? (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={allBtnEvent}
+									>
+										<CheckOn />
+									</IconWrap>
+								) : (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={allBtnEvent}
+									>
+										<CheckOff />
+									</IconWrap>
+								)}
+
+								<SubText fontweight="bold" fontsize="16px">
+									약관 전체동의
+								</SubText>
+							</TermsWrap>
+							<Line />
+							<TermsWrap>
+								{ageCheck ? (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={ageBtnEvent}
+									>
+										<CheckOn />
+									</IconWrap>
+								) : (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={ageBtnEvent}
+									>
+										<CheckOff />
+									</IconWrap>
+								)}
+								<SubText fontweight="normal" fontsize="14px">
+									<SubText color="#9e30f4" fontsize="14px">
+										[필수]{' '}
+									</SubText>
+									만 14세 이상
+								</SubText>
+							</TermsWrap>
+							<TermsWrap>
+								{useCheck ? (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={useBtnEvent}
+									>
+										<CheckOn />
+									</IconWrap>
+								) : (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={useBtnEvent}
+									>
+										<CheckOff />
+									</IconWrap>
+								)}
+								<SubText fontweight="normal" fontsize="14px">
+									<SubText color="#9e30f4" fontsize="14px">
+										[필수]{' '}
+									</SubText>
+									이용약관 동의
+								</SubText>
+							</TermsWrap>
+							<TermsWrap>
+								{personalInfoCheck ? (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={personalInfoBtnEvent}
+									>
+										<CheckOn />
+									</IconWrap>
+								) : (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={personalInfoBtnEvent}
+									>
+										<CheckOff />
+									</IconWrap>
+								)}
+								<SubText fontweight="normal" fontsize="14px">
+									<SubText color="#9e30f4" fontsize="14px">
+										[필수]{' '}
+									</SubText>
+									개인정보 처리방침 동의
+								</SubText>
+							</TermsWrap>
+							<TermsWrap>
+								{marketingCheck ? (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={marketingBtnEvent}
+									>
+										<CheckOn />
+									</IconWrap>
+								) : (
+									<IconWrap
+										button="true"
+										margin="0 8px 0 0"
+										onClick={marketingBtnEvent}
+									>
+										<CheckOff />
+									</IconWrap>
+								)}
+								<SubText fontweight="normal" fontsize="14px">
+									[선택] 광고성 정보 수신 및 마케팅 활용 동의
+								</SubText>
+							</TermsWrap>
+						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
-						<NextButton onClick={handleNextClick}>다음</NextButton>
-						{/* 버튼 disabled 처리 */}
+						{necessary === 3 ? (
+							<NextButton onClick={handleNextClick}>다음</NextButton>
+						) : (
+							<NextButton disabled={true}>다음</NextButton>
+						)}
 					</BottomWrap>
 				</ContentWrap>
 			)}
@@ -197,7 +399,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText>휴대폰 번호</SubText>
+							<SubText margin="0 0 8px 0">휴대폰 번호</SubText>
 							<InputWrapPhone>
 								<InputPhone valid={phoneNumberValid} value={phoneNumber}>
 									<Input
@@ -242,7 +444,7 @@ export default function Signup() {
 							</ErrorMessage>
 						</FormWrap>
 						<FormWrap>
-							<SubText>인증번호</SubText>
+							<SubText margin="0 0 8px 0">인증번호</SubText>
 							<InputWrap valid={authCodeValid} value={authCode}>
 								{codeInputAccess ? (
 									<>
@@ -298,8 +500,11 @@ export default function Signup() {
 						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
-						<NextButton onClick={handleNextClick}>다음</NextButton>
-						{/* 버튼 disabled처리 */}
+						{authCodeValid ? (
+							<NextButton onClick={handleNextClick}>다음</NextButton>
+						) : (
+							<NextButton disabled={true}>다음</NextButton>
+						)}
 					</BottomWrap>
 				</ContentWrap>
 			)}
@@ -314,7 +519,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText>이메일 주소</SubText>
+							<SubText margin="0 0 8px 0">이메일 주소</SubText>
 							<InputWrap valid={emailValid} value={email}>
 								<Input
 									value={email}
@@ -343,7 +548,7 @@ export default function Signup() {
 							</ErrorMessage>
 						</FormWrap>
 						<FormWrap>
-							<SubText>비밀번호</SubText>
+							<SubText margin="0 0 8px 0">비밀번호</SubText>
 							<InputWrap valid={passwordValid} value={password}>
 								<Input
 									value={password}
@@ -373,8 +578,11 @@ export default function Signup() {
 						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
-						<NextButton onClick={handleNextClick}>다음</NextButton>
-						{/* 버튼 disabled처리 */}
+						{emailValid && passwordValid ? (
+							<NextButton onClick={handleNextClick}>다음</NextButton>
+						) : (
+							<NextButton disabled={true}>다음</NextButton>
+						)}
 					</BottomWrap>
 				</ContentWrap>
 			)}
@@ -389,7 +597,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText>닉네임</SubText>
+							<SubText margin="0 0 8px 0">닉네임</SubText>
 							<InputWrap valid={nicknameValid} value={nickname}>
 								<Input
 									value={nickname}
@@ -419,8 +627,11 @@ export default function Signup() {
 						</FormWrap>
 					</TopWrap>
 					<BottomWrap>
-						<NextButton onClick={handleNextClick}>완료</NextButton>
-						{/* 버튼 disabled처리 */}
+						{nicknameValid ? (
+							<NextButton onClick={handleNextClick}>다음</NextButton>
+						) : (
+							<NextButton disabled={true}>다음</NextButton>
+						)}
 					</BottomWrap>
 				</ContentWrap>
 			)}
@@ -442,7 +653,7 @@ export default function Signup() {
 					</CompleteTopWrap>
 					<BottomWrap>
 						<StyledLink to={'/select/celebrity'}>
-							<NextButton>관심셀럽 등록하러 가기</NextButton>
+							<NextButton>관심 셀럽 등록하러 가기</NextButton>
 						</StyledLink>
 					</BottomWrap>
 				</ContentWrap>
@@ -478,23 +689,26 @@ const ProgressBar = styled.div`
 	height: 100%;
 	background-color: #9e30f4;
 	transition: width 0.5s;
+	/* border-radius: 0 10px 10px 0; */
 `;
 
 const TopWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
+
+const BottomWrap = styled.div``;
+
+const PageLabel = styled.div`
+	margin-bottom: 26px;
+`;
+
 const CompleteTopWrap = styled.div`
 	display: flex;
 	height: 100%;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
-`;
-const BottomWrap = styled.div``;
-
-const PageLabel = styled.div`
-	margin-bottom: 24px;
 `;
 const CompletePageLabel = styled.div`
 	display: flex;
@@ -509,14 +723,16 @@ const MainText = styled.span`
 	color: #262626;
 `;
 const SubText = styled.span`
+	font-family: Pretendard;
 	font-size: ${props => props.fontsize || '12px'};
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || 'black'};
-	margin: ${props => props.margin || '0 0 8px 0'};
+	margin: ${props => props.margin || '0'};
 `;
 const NameText = styled.span`
 	font-size: 18px;
 	font-weight: bold;
+	font-family: Pretendard;
 	margin-top: 16px;
 	margin-bottom: 32px;
 	color: ${props => props.color || 'black'};
@@ -528,6 +744,16 @@ const FormWrap = styled.div`
 	margin-bottom: 26px;
 `;
 
+const TermsWrap = styled.div`
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin: ${props => props.margin || '12px 0 0 0'};
+	.span {
+		margin: 0;
+	}
+`;
+
 const InputWrap = styled.div`
 	${props =>
 		props.valid || props.value.length === 0
@@ -535,10 +761,8 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-
 	border-radius: 10px;
 	padding: 16px;
-	/* margin-bottom: 26px; */
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -551,7 +775,6 @@ const InputWrapPhone = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	background-color: transparent;
-	/* margin-bottom: 26px; */
 `;
 const InputPhone = styled.div`
 	${props =>
@@ -586,6 +809,7 @@ const Input = styled.input`
 	width: 100%;
 	font-size: 14px;
 	font-weight: 400;
+	font-family: Pretendard;
 	outline: none;
 	border: none;
 	background-color: transparent;
@@ -611,10 +835,19 @@ const ErrorMessage = styled.div`
 	margin-top: 8px;
 `;
 
-const IconWrap = styled.div`
+const IconWrap = styled.div.attrs(props => ({
+	className: props.className,
+}))`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin: ${props => props.margin || '0'};
+	${props =>
+		props.button
+			? `&:hover {
+			cursor: pointer;
+		}`
+			: ''};
 `;
 const Clear = styled.div`
 	align-items: center;
@@ -631,24 +864,30 @@ const Clear = styled.div`
 
 const NextButton = styled.button`
 	width: 100%;
-	height: 44px;
+	height: 48px;
 	border: none;
+	font-family: Pretendard;
+	font-weight: bold;
 	border-radius: 20px;
 	background-color: #9e30f4;
 	margin-bottom: 30px;
 	color: white;
 	:disabled {
 		background-color: #dadada;
+		color: white;
 	}
 	&:hover {
 		cursor: pointer;
+		:disabled {
+			cursor: not-allowed;
+		}
 	}
 `;
 
 const Button = styled.button`
 	box-sizing: border-box;
+	font-family: Pretendard;
 	border: none;
-
 	height: 48px;
 	flex-shrink: 0;
 	border-radius: ${props => props.borderradius || '24px'};
@@ -700,4 +939,9 @@ const BackButton = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
+`;
+
+const Line = styled.div`
+	border-bottom: 1px solid #ebebeb;
+	margin: 4px 0;
 `;
