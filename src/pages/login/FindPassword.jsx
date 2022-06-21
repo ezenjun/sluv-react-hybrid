@@ -28,7 +28,7 @@ export default function FindPassword() {
 
 	const navigate = useNavigate();
 	const handleNextClick = () => {
-		navigate('/find/email/result');
+		navigate('/find/password/result');
 	};
 
 	return (

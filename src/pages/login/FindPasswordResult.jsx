@@ -6,10 +6,15 @@ import { palette } from '../../styles/palette';
 import { TopNav } from '../../components/TopNav';
 import { PurpleButton } from '../../components/PurpleButton';
 import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
-import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
-import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
+import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
 
 export default function FindPasswordResult() {
+	const [idExist, setIdExist] = useState(true);
+	const navigate = useNavigate();
+	const handleNextClick = () => {
+		if (idExist) navigate('/login');
+		else navigate('/');
+	};
 	return (
 		<MainContainer>
 			<TopNav>
@@ -19,12 +24,40 @@ export default function FindPasswordResult() {
 					</BackButton>
 				</StyledLink>
 			</TopNav>
-			<ContentWrap>
-				<TopWrap></TopWrap>
-				<BottomWrap>
-					<PurpleButton>로그인으로 돌아가기 </PurpleButton>
-				</BottomWrap>
-			</ContentWrap>
+			{idExist ? (
+				<ContentWrap>
+					<CompleteTopWrap>
+						<Present></Present>
+						<CompletePageLabel>
+							<MainText>아래 이메일로 비밀번호</MainText>
+							<MainText>변경링크를 보내드렸어요.</MainText>
+							<SubText fontsize="14px" color="#8d8d8d" margin="16px 0">
+								개인정보 보호를 위해 뒷자리는 ***로 표시할게요.
+							</SubText>
+						</CompletePageLabel>
+						<EmailWrap>sss123123****@naver.com</EmailWrap>
+					</CompleteTopWrap>
+					<BottomWrap>
+						<PurpleButton onClick={handleNextClick}>로그인으로 돌아가기 </PurpleButton>
+					</BottomWrap>
+				</ContentWrap>
+			) : (
+				<ContentWrap>
+					<CompleteTopWrap>
+						<Present></Present>
+						<CompletePageLabel>
+							<MainText>이메일 가입 내역이 </MainText>
+							<MainText>존재하지 않아요.</MainText>
+							<SubText fontsize="14px" color="#8d8d8d" margin="16px 0">
+								스럽 회원가입 진행 후 이용해 주세요
+							</SubText>
+						</CompletePageLabel>
+					</CompleteTopWrap>
+					<BottomWrap>
+						<PurpleButton onClick={handleNextClick}>회원가입 하러가기</PurpleButton>
+					</BottomWrap>
+				</ContentWrap>
+			)}
 		</MainContainer>
 	);
 }
@@ -54,14 +87,22 @@ const ContentWrap = styled.div`
 	height: 100%;
 	justify-content: space-between;
 `;
-const TopWrap = styled.div`
+const CompleteTopWrap = styled.div`
 	display: flex;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
 	flex-direction: column;
 `;
-const BottomWrap = styled.div``;
-const PageLabel = styled.div`
-	margin-bottom: 26px;
+const CompletePageLabel = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 32px;
+	margin-bottom: 24px;
 `;
+const BottomWrap = styled.div``;
+
 const MainText = styled.span`
 	font-size: 24px;
 	font-weight: bold;
@@ -87,4 +128,17 @@ const StyledLink = styled(Link)`
 	&:active {
 		text-decoration: none;
 	}
+`;
+
+const EmailWrap = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-weight: bold;
+	height: 44px;
+	padding: 0 26px;
+	background-color: #f4f4f4;
+	border-radius: 13px;
+	color: #9e30f4;
 `;
