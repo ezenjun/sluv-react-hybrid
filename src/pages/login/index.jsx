@@ -70,7 +70,7 @@ export default function Login() {
 					{/* Email Login */}
 				</ButtonContainer>
 				<LocalLogin>
-					이미 계정이 있어요.<LoginText to="/login">로그인하기</LoginText>
+					이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
 				</LocalLogin>
 			</MainContainer>
 		</>
@@ -80,7 +80,7 @@ export default function Login() {
 const MainContainer = styled.div`
 	display: flex;
 	box-sizing: border-box;
-	background-color: ${palette.white.secondary};
+	background-color: ${palette.white.primary};
 	padding: 20px;
 	flex-direction: column;
 	justify-content: space-evenly;

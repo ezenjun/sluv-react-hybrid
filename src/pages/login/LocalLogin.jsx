@@ -228,7 +228,7 @@ const PageLabel = styled.div`
 	margin-bottom: 26px;
 `;
 const MainText = styled.span`
-	font-size: 26px;
+	font-size: 24px;
 	font-weight: bold;
 	color: #262626;
 `;
