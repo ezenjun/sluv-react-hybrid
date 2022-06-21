@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { palette } from '../../styles/palette';
 import { TopNav } from '../../components/TopNav';
 import { SignupProgressState } from '../../recoil/User';
-
+import { PurpleButton } from '../../components/PurpleButton';
 import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
@@ -382,9 +382,9 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{necessary === 3 ? (
-							<NextButton onClick={handleNextClick}>다음</NextButton>
+							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
 						) : (
-							<NextButton disabled={true}>다음</NextButton>
+							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
 					</BottomWrap>
 				</ContentWrap>
@@ -424,11 +424,11 @@ export default function Signup() {
 									)}
 								</InputPhone>
 								{phoneNumberValid ? (
-									<Button disabled={false} onClick={handleAuthSend}>
+									<AuthButton disabled={false} onClick={handleAuthSend}>
 										인증하기
-									</Button>
+									</AuthButton>
 								) : (
-									<Button disabled={true}>인증하기</Button>
+									<AuthButton disabled={true}>인증하기</AuthButton>
 								)}
 
 								{/* 재발송 버튼 */}
@@ -501,9 +501,9 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{authCodeValid ? (
-							<NextButton onClick={handleNextClick}>다음</NextButton>
+							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
 						) : (
-							<NextButton disabled={true}>다음</NextButton>
+							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
 					</BottomWrap>
 				</ContentWrap>
@@ -532,9 +532,14 @@ export default function Signup() {
 										<Check />
 									</IconWrap>
 								) : (
+									<></>
+								)}
+								{email.length !== 0 && !emailValid ? (
 									<IconWrap onClick={emailInputReset}>
 										<Delete />
 									</IconWrap>
+								) : (
+									<></>
 								)}
 							</InputWrap>
 							<ErrorMessage>
@@ -561,9 +566,14 @@ export default function Signup() {
 										<Check />
 									</IconWrap>
 								) : (
+									<></>
+								)}
+								{password.length !== 0 && !passwordValid ? (
 									<IconWrap onClick={passwordInputReset}>
 										<Delete />
 									</IconWrap>
+								) : (
+									<></>
 								)}
 							</InputWrap>
 							<ErrorMessage>
@@ -579,9 +589,9 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{emailValid && passwordValid ? (
-							<NextButton onClick={handleNextClick}>다음</NextButton>
+							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
 						) : (
-							<NextButton disabled={true}>다음</NextButton>
+							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
 					</BottomWrap>
 				</ContentWrap>
@@ -610,9 +620,14 @@ export default function Signup() {
 										<Check />
 									</IconWrap>
 								) : (
+									<></>
+								)}
+								{nickname.length !== 0 && !nicknameValid ? (
 									<IconWrap onClick={nicknameInputReset}>
 										<Delete />
 									</IconWrap>
+								) : (
+									<></>
 								)}
 							</InputWrap>
 							<ErrorMessage>
@@ -628,9 +643,9 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{nicknameValid ? (
-							<NextButton onClick={handleNextClick}>다음</NextButton>
+							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
 						) : (
-							<NextButton disabled={true}>다음</NextButton>
+							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
 					</BottomWrap>
 				</ContentWrap>
@@ -653,7 +668,7 @@ export default function Signup() {
 					</CompleteTopWrap>
 					<BottomWrap>
 						<StyledLink to={'/select/celebrity'}>
-							<NextButton>관심 셀럽 등록하러 가기</NextButton>
+							<PurpleButton>관심 셀럽 등록하러 가기</PurpleButton>
 						</StyledLink>
 					</BottomWrap>
 				</ContentWrap>
@@ -835,20 +850,6 @@ const ErrorMessage = styled.div`
 	margin-top: 8px;
 `;
 
-const IconWrap = styled.div.attrs(props => ({
-	className: props.className,
-}))`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: ${props => props.margin || '0'};
-	${props =>
-		props.button
-			? `&:hover {
-			cursor: pointer;
-		}`
-			: ''};
-`;
 const Clear = styled.div`
 	align-items: center;
 	padding: none;
@@ -862,29 +863,29 @@ const Clear = styled.div`
 	margin-left: 16px;
 `;
 
-const NextButton = styled.button`
-	width: 100%;
-	height: 48px;
-	border: none;
-	font-family: Pretendard;
-	font-weight: bold;
-	border-radius: 20px;
-	background-color: #9e30f4;
-	margin-bottom: 30px;
-	color: white;
-	:disabled {
-		background-color: #dadada;
-		color: white;
-	}
-	&:hover {
-		cursor: pointer;
-		:disabled {
-			cursor: not-allowed;
-		}
-	}
-`;
+// const NextButton = styled.button`
+// 	width: 100%;
+// 	height: 48px;
+// 	border: none;
+// 	font-family: Pretendard;
+// 	font-weight: bold;
+// 	border-radius: 20px;
+// 	background-color: #9e30f4;
+// 	margin-bottom: 30px;
+// 	color: white;
+// 	:disabled {
+// 		background-color: #dadada;
+// 		color: white;
+// 	}
+// 	&:hover {
+// 		cursor: pointer;
+// 		:disabled {
+// 			cursor: not-allowed;
+// 		}
+// 	}
+// `;
 
-const Button = styled.button`
+const AuthButton = styled.button`
 	box-sizing: border-box;
 	font-family: Pretendard;
 	border: none;
@@ -944,4 +945,19 @@ const BackButton = styled.div`
 const Line = styled.div`
 	border-bottom: 1px solid #ebebeb;
 	margin: 4px 0;
+`;
+
+const IconWrap = styled.div.attrs(props => ({
+	className: props.className,
+}))`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: ${props => props.margin || '0'};
+	${props =>
+		props.button
+			? `&:hover {
+			cursor: pointer;
+		}`
+			: ''};
 `;
