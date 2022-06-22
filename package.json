@@ -1,47 +1,48 @@
 {
-  "name": "sluv-react-hybrid",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.27.2",
-    "jwt-decode": "^3.1.2",
-    "npm-run-all": "^4.1.5",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
-    "react-transition-group": "^4.4.2",
-    "recoil": "^0.7.3-alpha.2",
-    "sass": "^1.52.1",
-    "styled-components": "^5.3.5",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "deploy": "aws s3 sync ./build s3://sluv-celebit-frontend-deploy --profile=sluv-celebit-frontend-iam"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "sluv-react-hybrid",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@testing-library/jest-dom": "^5.16.4",
+		"@testing-library/react": "^13.2.0",
+		"@testing-library/user-event": "^13.5.0",
+		"axios": "^0.27.2",
+		"jwt-decode": "^3.1.2",
+		"npm-run-all": "^4.1.5",
+		"react": "^18.1.0",
+		"react-dom": "^18.1.0",
+		"react-router-dom": "^6.3.0",
+		"react-scripts": "5.0.1",
+		"react-transition-group": "^4.4.2",
+		"recoil": "^0.7.3-alpha.2",
+		"sass": "^1.52.1",
+		"styled-components": "^5.3.5",
+		"web-vitals": "^2.1.4"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"deploy": "aws s3 sync ./build s3://sluv-celebit-frontend-deploy --profile=sluv-celebit-frontend-iam",
+		"invalidate": "aws cloudfront create-invalidation --profil=sluv-celebit-frontend-iam --distribution-id E3QQGUQDB3JEK8 --paths /* "
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }
