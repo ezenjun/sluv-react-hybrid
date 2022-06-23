@@ -1,40 +1,33 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components'
+import { BottomNavState } from '../recoil/BottomNav';
+
 import { palette } from '../styles/palette';
 
 export default function BottomNav() {
+  const [bottomNavRecoilState, setBottomNavRecoilState] = useRecoilState(BottomNavState);
 
   return (
-    <BottomNavWrap>
-      <Link to='/home'>
-        <BottomNavItem>
-          홈
-        </BottomNavItem>
-      </Link>
-      <Link to='/search'>
-        <BottomNavItem>
-          검색
-        </BottomNavItem>
-      </Link>
-      <Link to='/search'>
-        <BottomNavItem>
-          +
-        </BottomNavItem>
-      </Link>
-      <Link to='/binder'>
-        <BottomNavItem>
-          바인더
-        </BottomNavItem>
-      </Link>
-      <Link to='/my'>
-        <BottomNavItem>
-          마이
-        </BottomNavItem>
-      </Link>
-
-    </BottomNavWrap>
-  )
+		<BottomNavWrap openStatus={bottomNavRecoilState}>
+			<Link to="/home">
+				<BottomNavItem>홈</BottomNavItem>
+			</Link>
+			<Link to="/search">
+				<BottomNavItem>검색</BottomNavItem>
+			</Link>
+			<Link to="/search">
+				<BottomNavItem>+</BottomNavItem>
+			</Link>
+			<Link to="/binder">
+				<BottomNavItem>바인더</BottomNavItem>
+			</Link>
+			<Link to="/my">
+				<BottomNavItem>마이</BottomNavItem>
+			</Link>
+		</BottomNavWrap>
+  );
 }
 
 const BottomNavWrap = styled.div`
