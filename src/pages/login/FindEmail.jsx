@@ -106,7 +106,7 @@ export default function FindEmail() {
 						<MainText>이메일 찾기</MainText>
 					</PageLabel>
 					<FormWrap>
-						<SubText margin="0 0 8px 0">휴대폰 번호</SubText>
+						<SubText margin="0 0 0.5rem 0">휴대폰 번호</SubText>
 						<InputWrapPhone>
 							<InputPhone valid={phoneNumberValid} value={phoneNumber}>
 								<Input
@@ -151,7 +151,7 @@ export default function FindEmail() {
 						</ErrorMessage>
 					</FormWrap>
 					<FormWrap>
-						<SubText margin="0 0 8px 0">인증번호</SubText>
+						<SubText margin="0 0 0.5rem 0">인증번호</SubText>
 						<InputWrap valid={authCodeValid} value={authCode}>
 							{codeInputAccess ? (
 								<>
@@ -238,7 +238,7 @@ const BackButton = styled.div`
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 1.25rem;
 	height: 100%;
 	justify-content: space-between;
 `;
@@ -248,16 +248,16 @@ const TopWrap = styled.div`
 `;
 const BottomWrap = styled.div``;
 const PageLabel = styled.div`
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 const MainText = styled.span`
-	font-size: 24px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	color: #262626;
 `;
 const SubText = styled.span`
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || 'black'};
 	margin: ${props => props.margin || '0'};
@@ -266,7 +266,7 @@ const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: ${props => props.color || 'black'};
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || 'normal'};
 	&:focus,
 	&:hover,
@@ -279,7 +279,7 @@ const StyledLink = styled(Link)`
 const FormWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-bottom: ${props => props.marginBottom || '26px'};
+	margin-bottom: ${props => props.marginBottom || '1.625rem'};
 `;
 
 const InputWrapPhone = styled.div`
@@ -298,9 +298,9 @@ const InputPhone = styled.div`
 	justify-content: space-between;
 	width: 100%;
 	color: inherit;
-	border-radius: 8px;
-	padding: 16px;
-	margin-right: 11px;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	margin-right: 0.6875rem;
 	&:active,
 	&:focus-within {
 		border: 1px solid #9e30f4;
@@ -322,8 +322,8 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border-radius: 10px;
-	padding: 16px;
+	border-radius: 0.625rem;
+	padding: 1rem;
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -333,9 +333,9 @@ const InputWrap = styled.div`
 `;
 const Input = styled.input`
 	align-items: center;
-	height: 17px;
+	height: 1.0625rem;
 	width: 100%;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 400;
 	font-family: Pretendard;
 	outline: none;
@@ -362,13 +362,13 @@ const AuthButton = styled.button`
 	box-sizing: border-box;
 	font-family: Pretendard;
 	border: none;
-	height: 48px;
+	height: 3rem;
 	flex-shrink: 0;
 	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 0.875rem;
 	background-color: ${props => props.backgroundcolor || '#ebebeb'};
-	padding: 16px 18px 15px;
+	padding: 1rem 1.125rem 0.9375rem;
 	:disabled {
 		border: none;
 		color: white;
@@ -381,9 +381,9 @@ const AuthButton = styled.button`
 	}
 	.span {
 		width: 49px;
-		height: 17px;
+		height: 1.0625rem;
 		font-family: Pretendard;
-		font-size: 14px;
+		font-size: 0.875rem;
 		font-weight: 600;
 		font-stretch: normal;
 		font-style: normal;
@@ -396,14 +396,14 @@ const AuthButton = styled.button`
 
 const LoginOptionWrap = styled.div`
 	display: flex;
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 
 const TermsWrap = styled.div`
 	display: flex;
 	align-items: center;
 	text-align: center;
-	margin: ${props => props.margin || '0 20px 0 0'};
+	margin: ${props => props.margin || '0 1.25rem 0 0'};
 	.span {
 		margin: 0;
 	}
@@ -427,7 +427,7 @@ const IconWrap = styled.div.attrs(props => ({
 const FindWrap = styled.div`
 	display: flex;
 	box-sizing: border-box;
-	padding: 0 50px;
+	padding: 0 3.125rem;
 	justify-content: space-around;
 `;
 
@@ -436,18 +436,18 @@ const Line = styled.div`
 `;
 const ErrorMessage = styled.div`
 	display: flex;
-	margin-top: 8px;
+	margin-top: 0.5rem;
 `;
 
 const Clear = styled.div`
 	align-items: center;
 	padding: none;
 	border: none;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: normal;
 	background-color: transparent;
-	border-radius: 20px;
+	border-radius: 1.25rem;
 	color: #9e30f4;
 	font-size: medium;
-	margin-left: 16px;
+	margin-left: 1rem;
 `;

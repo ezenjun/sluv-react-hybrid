@@ -5,8 +5,8 @@ export const TopNav = styled.div`
 	display: flex;
 	box-sizing: border-box;
 	font-weight: 700;
-	font-size: 18px;
+	font-size: 1.125rem;
 	width: 100%;
-	padding: 12px 20px;
+	padding: 0.75rem 1.25rem;
 	align-items: center;
 `;
