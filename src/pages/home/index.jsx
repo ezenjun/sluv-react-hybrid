@@ -1,15 +1,12 @@
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { bottomNavStatusState } from '../../recoil/BottomNav';
 import { Link, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
 export default function Home() {
-	const setBottomNavStatus = useSetRecoilState(bottomNavStatusState);
 
 	useEffect(() => {
 		// 하단바 띄워주기
-		setBottomNavStatus(true);
+		
 	}, []);
 
 	return (

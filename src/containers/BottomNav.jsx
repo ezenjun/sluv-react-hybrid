@@ -1,15 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
 import styled from 'styled-components'
-import { bottomNavStatusState } from '../recoil/BottomNav';
 import { palette } from '../styles/palette';
 
 export default function BottomNav() {
-  const bottomNavStatus = useRecoilValue(bottomNavStatusState);
 
   return (
-    <BottomNavWrap openStatus={bottomNavStatus}>
+    <BottomNavWrap>
       <Link to='/home'>
         <BottomNavItem>
           홈
