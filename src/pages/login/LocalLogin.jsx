@@ -81,7 +81,7 @@ export default function LocalLogin() {
 				</PageLabel>
 				<TopWrap>
 					<FormWrap>
-						<SubText margin="0 0 8px 0">이메일 주소</SubText>
+						<SubText margin="0 0 0.5rem 0">이메일 주소</SubText>
 						<InputWrap valid={emailValid} value={email}>
 							<Input
 								value={email}
@@ -106,7 +106,7 @@ export default function LocalLogin() {
 						</InputWrap>
 					</FormWrap>
 					<FormWrap marginBottom="16px">
-						<SubText margin="0 0 8px 0">비밀번호</SubText>
+						<SubText margin="0 0 0.5rem 0">비밀번호</SubText>
 						<InputWrap valid={passwordValid} value={password}>
 							<Input
 								value={password}
@@ -135,7 +135,7 @@ export default function LocalLogin() {
 							{autoLoginCheck ? (
 								<IconWrap
 									button="true"
-									margin="0 8px 0 0"
+									margin="0 0.5rem 0 0"
 									onClick={autoLoginBtnEvent}
 								>
 									<CheckOn />
@@ -143,7 +143,7 @@ export default function LocalLogin() {
 							) : (
 								<IconWrap
 									button="true"
-									margin="0 8px 0 0"
+									margin="0 0.5rem 0 0"
 									onClick={autoLoginBtnEvent}
 								>
 									<CheckOff />
@@ -157,7 +157,7 @@ export default function LocalLogin() {
 							{rememberIdCheck ? (
 								<IconWrap
 									button="true"
-									margin="0 8px 0 0"
+									margin="0 0.5rem 0 0"
 									onClick={rememberIdBtnEvent}
 								>
 									<CheckOn />
@@ -165,7 +165,7 @@ export default function LocalLogin() {
 							) : (
 								<IconWrap
 									button="true"
-									margin="0 8px 0 0"
+									margin="0 0.5rem 0 0"
 									onClick={rememberIdBtnEvent}
 								>
 									<CheckOff />
@@ -216,7 +216,7 @@ const BackButton = styled.div`
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 1.25rem;
 	height: 100%;
 `;
 const TopWrap = styled.div`
@@ -225,16 +225,16 @@ const TopWrap = styled.div`
 `;
 
 const PageLabel = styled.div`
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 const MainText = styled.span`
-	font-size: 24px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	color: #262626;
 `;
 const SubText = styled.span`
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || 'black'};
 	margin: ${props => props.margin || '0'};
@@ -243,7 +243,7 @@ const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: ${props => props.color || 'black'};
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || 'normal'};
 	&:focus,
 	&:hover,
@@ -256,7 +256,7 @@ const StyledLink = styled(Link)`
 const FormWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-bottom: ${props => props.marginBottom || '26px'};
+	margin-bottom: ${props => props.marginBottom || '1.625rem'};
 `;
 
 const InputWrap = styled.div`
@@ -266,8 +266,8 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border-radius: 10px;
-	padding: 16px;
+	border-radius: 0.625rem;
+	padding: 1rem;
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -277,9 +277,9 @@ const InputWrap = styled.div`
 `;
 const Input = styled.input`
 	align-items: center;
-	height: 17px;
+	height: 1.0625rem;
 	width: 100%;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 400;
 	font-family: Pretendard;
 	outline: none;
@@ -303,14 +303,14 @@ const Input = styled.input`
 `;
 const LoginOptionWrap = styled.div`
 	display: flex;
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 
 const TermsWrap = styled.div`
 	display: flex;
 	align-items: center;
 	text-align: center;
-	margin: ${props => props.margin || '0 20px 0 0'};
+	margin: ${props => props.margin || '0 1.25rem 0 0'};
 	.span {
 		margin: 0;
 	}
@@ -334,7 +334,7 @@ const IconWrap = styled.div.attrs(props => ({
 const FindWrap = styled.div`
 	display: flex;
 	box-sizing: border-box;
-	padding: 0 50px;
+	padding: 0 3.125rem;
 	justify-content: space-around;
 `;
 

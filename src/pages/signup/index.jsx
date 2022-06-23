@@ -257,11 +257,11 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<TermsWrap margin="0 0 12px 0">
+							<TermsWrap margin="0 0 0.75rem 0">
 								{allCheck ? (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={allBtnEvent}
 									>
 										<CheckOn />
@@ -269,7 +269,7 @@ export default function Signup() {
 								) : (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={allBtnEvent}
 									>
 										<CheckOff />
@@ -285,7 +285,7 @@ export default function Signup() {
 								{ageCheck ? (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={ageBtnEvent}
 									>
 										<CheckOn />
@@ -293,7 +293,7 @@ export default function Signup() {
 								) : (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={ageBtnEvent}
 									>
 										<CheckOff />
@@ -310,7 +310,7 @@ export default function Signup() {
 								{useCheck ? (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={useBtnEvent}
 									>
 										<CheckOn />
@@ -318,7 +318,7 @@ export default function Signup() {
 								) : (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={useBtnEvent}
 									>
 										<CheckOff />
@@ -335,7 +335,7 @@ export default function Signup() {
 								{personalInfoCheck ? (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={personalInfoBtnEvent}
 									>
 										<CheckOn />
@@ -343,7 +343,7 @@ export default function Signup() {
 								) : (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={personalInfoBtnEvent}
 									>
 										<CheckOff />
@@ -360,7 +360,7 @@ export default function Signup() {
 								{marketingCheck ? (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={marketingBtnEvent}
 									>
 										<CheckOn />
@@ -368,7 +368,7 @@ export default function Signup() {
 								) : (
 									<IconWrap
 										button="true"
-										margin="0 8px 0 0"
+										margin="0 0.5rem 0 0"
 										onClick={marketingBtnEvent}
 									>
 										<CheckOff />
@@ -399,7 +399,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText margin="0 0 8px 0">휴대폰 번호</SubText>
+							<SubText margin="0 0 0.5rem 0">휴대폰 번호</SubText>
 							<InputWrapPhone>
 								<InputPhone valid={phoneNumberValid} value={phoneNumber}>
 									<Input
@@ -444,7 +444,7 @@ export default function Signup() {
 							</ErrorMessage>
 						</FormWrap>
 						<FormWrap>
-							<SubText margin="0 0 8px 0">인증번호</SubText>
+							<SubText margin="0 0 0.5rem 0">인증번호</SubText>
 							<InputWrap valid={authCodeValid} value={authCode}>
 								{codeInputAccess ? (
 									<>
@@ -519,7 +519,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText margin="0 0 8px 0">이메일 주소</SubText>
+							<SubText margin="0 0 0.5rem 0">이메일 주소</SubText>
 							<InputWrap valid={emailValid} value={email}>
 								<Input
 									value={email}
@@ -553,7 +553,7 @@ export default function Signup() {
 							</ErrorMessage>
 						</FormWrap>
 						<FormWrap>
-							<SubText margin="0 0 8px 0">비밀번호</SubText>
+							<SubText margin="0 0 0.5rem 0">비밀번호</SubText>
 							<InputWrap valid={passwordValid} value={password}>
 								<Input
 									value={password}
@@ -607,7 +607,7 @@ export default function Signup() {
 							</MainText>
 						</PageLabel>
 						<FormWrap>
-							<SubText margin="0 0 8px 0">닉네임</SubText>
+							<SubText margin="0 0 0.5rem 0">닉네임</SubText>
 							<InputWrap valid={nicknameValid} value={nickname}>
 								<Input
 									value={nickname}
@@ -661,7 +661,7 @@ export default function Signup() {
 						<CompletePageLabel>
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
-							<SubText fontsize="16px" color="#4A4A4A" margin="30px">
+							<SubText fontsize="16px" color="#4A4A4A" margin="1.875rem">
 								스럽에서 다양한 활동 기대할게요.
 							</SubText>
 						</CompletePageLabel>
@@ -688,14 +688,14 @@ const MainContainer = styled.div`
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 1.25rem;
 	height: 100%;
 	justify-content: space-between;
 `;
 
 const ProgressWrap = styled.div`
 	width: 100%;
-	height: 2px;
+	height: 0.125rem;
 	margin-bottom: 1rem;
 	background-color: #fbf6ff;
 `;
@@ -715,7 +715,7 @@ const TopWrap = styled.div`
 const BottomWrap = styled.div``;
 
 const PageLabel = styled.div`
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 
 const CompleteTopWrap = styled.div`
@@ -729,11 +729,11 @@ const CompletePageLabel = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-bottom: 24px;
+	margin-bottom: 1.5rem;
 `;
 
 const MainText = styled.span`
-	font-size: 26px;
+	font-size: 1.625rem;
 	font-weight: bold;
 	color: #262626;
 `;
@@ -745,18 +745,18 @@ const SubText = styled.span`
 	margin: ${props => props.margin || '0'};
 `;
 const NameText = styled.span`
-	font-size: 18px;
+	font-size: 1.125rem;
 	font-weight: bold;
 	font-family: Pretendard;
-	margin-top: 16px;
-	margin-bottom: 32px;
+	margin-top: 1rem;
+	margin-bottom: 2rem;
 	color: ${props => props.color || 'black'};
 `;
 
 const FormWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 26px;
+	margin-bottom: 1.625rem;
 `;
 
 const TermsWrap = styled.div`
@@ -776,8 +776,8 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border-radius: 10px;
-	padding: 16px;
+	border-radius: 0.625rem;
+	padding: 1rem;
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -801,9 +801,9 @@ const InputPhone = styled.div`
 	justify-content: space-between;
 	width: 100%;
 	color: inherit;
-	border-radius: 8px;
-	padding: 16px;
-	margin-right: 11px;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	margin-right: 0.6875rem;
 	&:active,
 	&:focus-within {
 		border: 1px solid #9e30f4;
@@ -820,9 +820,9 @@ const InputPhone = styled.div`
 
 const Input = styled.input`
 	align-items: center;
-	height: 17px;
+	height: 1.0625rem;
 	width: 100%;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 400;
 	font-family: Pretendard;
 	outline: none;
@@ -847,25 +847,25 @@ const Input = styled.input`
 
 const ErrorMessage = styled.div`
 	display: flex;
-	margin-top: 8px;
+	margin-top: 0.5rem;
 `;
 
 const Clear = styled.div`
 	align-items: center;
 	padding: none;
 	border: none;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: normal;
 	background-color: transparent;
-	border-radius: 20px;
+	border-radius: 1.25rem;
 	color: #9e30f4;
 	font-size: medium;
-	margin-left: 16px;
+	margin-left: 1rem;
 `;
 
 // const NextButton = styled.button`
 // 	width: 100%;
-// 	height: 48px;
+// 	height: 3rem;
 // 	border: none;
 // 	font-family: Pretendard;
 // 	font-weight: bold;
@@ -889,13 +889,13 @@ const AuthButton = styled.button`
 	box-sizing: border-box;
 	font-family: Pretendard;
 	border: none;
-	height: 48px;
+	height: 3rem;
 	flex-shrink: 0;
 	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
-	font-size: 14px;
+	font-size: 0.875rem;
 	background-color: ${props => props.backgroundcolor || '#ebebeb'};
-	padding: 16px 18px 15px;
+	padding: 1rem 1.125rem 0.9375rem;
 	:disabled {
 		border: none;
 		color: white;
@@ -907,10 +907,10 @@ const AuthButton = styled.button`
 		}
 	}
 	.span {
-		width: 49px;
-		height: 17px;
+		width: 3.0625rem;
+		height: 1.0625rem;
 		font-family: Pretendard;
-		font-size: 14px;
+		font-size: 0.875rem;
 		font-weight: 600;
 		font-stretch: normal;
 		font-style: normal;
@@ -944,7 +944,7 @@ const BackButton = styled.div`
 
 const Line = styled.div`
 	border-bottom: 1px solid #ebebeb;
-	margin: 4px 0;
+	margin: 0;
 `;
 
 const IconWrap = styled.div.attrs(props => ({
