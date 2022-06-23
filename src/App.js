@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import BottomNav from './containers/BottomNav';
 import Pages from './containers/Pages';
 
+import './App.scss';
+
 import { palette } from './styles/palette';
 
 export default function App() {
