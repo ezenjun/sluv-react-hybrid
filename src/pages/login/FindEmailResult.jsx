@@ -84,7 +84,7 @@ const BackButton = styled.div`
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 1.25rem;
 	height: 100%;
 	justify-content: space-between;
 `;
@@ -99,19 +99,19 @@ const CompletePageLabel = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-top: 32px;
-	margin-bottom: 24px;
+	margin-top: 2rem;
+	margin-bottom: 1.5rem;
 `;
 const BottomWrap = styled.div``;
 
 const MainText = styled.span`
-	font-size: 24px;
+	font-size: 1.5rem;
 	font-weight: bold;
 	color: #262626;
 `;
 const SubText = styled.span`
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || 'black'};
 	margin: ${props => props.margin || '0'};
@@ -120,7 +120,7 @@ const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: ${props => props.color || 'black'};
 	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
+	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || 'normal'};
 	&:focus,
 	&:hover,
@@ -137,9 +137,9 @@ const EmailWrap = styled.div`
 	align-items: center;
 	text-align: center;
 	font-weight: bold;
-	height: 44px;
-	padding: 0 26px;
+	height: 2.75rem;
+	padding: 0 1.625rem;
 	background-color: #f4f4f4;
-	border-radius: 13px;
+	border-radius: 0.8125rem;
 	color: #9e30f4;
 `;

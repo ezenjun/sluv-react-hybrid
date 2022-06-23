@@ -33,7 +33,7 @@ export default function Login() {
 			type: 'standard',
 			theme: 'outline',
 			size: 'large',
-			width: '300px',
+			width: '100%',
 			text: 'signin_with',
 			logo_alignment: 'left',
 			shape: 'circle',
@@ -81,7 +81,7 @@ const MainContainer = styled.div`
 	display: flex;
 	box-sizing: border-box;
 	background-color: ${palette.white.primary};
-	padding: 20px;
+	padding: 1.25rem;
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
@@ -101,7 +101,7 @@ const InfotextContainer = styled.div`
 `;
 
 const MainText = styled.span`
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 600;
 `;
 
@@ -117,16 +117,16 @@ const KaKaoButton = styled.a`
 	background-image: url(${Kakaoimg});
 	background-repeat: no-repeat;
 	color: transparent;
-	width: 300px;
-	height: 45px;
+	width: 18.75rem;
+	height: 2.8125rem;
 	border: none;
-	border-radius: 40px;
-	margin-bottom: 12px;
+	border-radius: 2.5rem;
+	margin-bottom: 0.75rem;
 `;
 
 const GoogleButton = styled.div`
-	width: 300px;
-	margin-bottom: 12px;
+	width: 100vw;
+	margin-bottom: 0.75rem;
 `;
 
 const EmailButton = styled(Link)`
@@ -135,12 +135,12 @@ const EmailButton = styled(Link)`
 	justify-content: center;
 	text-decoration: none;
 	font-family: Pretendard;
-	font-size: 14px;
+	font-size: 0.875rem;
 	color: #9e30f4;
-	width: 300px;
-	height: 45px;
-	border-radius: 40px;
-	margin-bottom: 12px;
+	width: 18.75rem;
+	height: 2.625rem;
+	border-radius: 2.5rem;
+	margin-bottom: 0.75rem;
 	border: 1px solid #9e30f4;
 `;
 
@@ -148,19 +148,19 @@ const IconWrap = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-right: 16px;
+	margin-right: 1rem;
 `;
 
 const LoginText = styled(Link)`
 	color: #6a6a6a;
 	font-family: Pretendard;
-	font-size: 12px;
+	font-size: 0.75rem;
 `;
 
 const LocalLogin = styled.span`
 	color: #6a6a6a;
 	text-decoration: none;
 	font-family: Pretendard;
-	font-size: 12px;
-	border-radius: 40px;
+	font-size: 0.75rem;
+	border-radius: 2.5rem;
 `;
