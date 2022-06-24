@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+// 로그인, 회원가입용 input 창 - disabled=true면 커서 block
 export const Input = styled.input`
 	align-items: center;
 	height: 1.0625rem;

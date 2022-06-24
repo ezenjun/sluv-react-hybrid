@@ -23,6 +23,9 @@ const Button = styled.button`
 	}
 `;
 
+// 회원가입, 바인더에서 쓰일
+// (조건 미충족 => disabled = true) 회색 배경 흰색 text 버튼 -> (조건 충족 => disabled = false) 보라색 배경 흰색 text 버튼
+
 export const PurpleButton = ({ children, onClick, disabled }) => {
 	return (
 		<Button onClick={onClick} disabled={disabled}>
