@@ -1,13 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useRoutes, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
-import { palette } from '../../styles/palette';
-import { TopNav } from '../../components/TopNav';
-import { PurpleButton } from '../../components/PurpleButton';
-import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
+import { TopNav } from '../../components/containers/TopNav';
+import { BackButton } from '../../components/Buttons/BackButton';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
+import { MainContainer } from '../../components/containers/MainContainer';
+import { Input } from '../../components/Input';
 
 export default function FindEmail() {
 	const [phoneNumber, setPhoneNumber] = useState('');
@@ -17,7 +20,6 @@ export default function FindEmail() {
 	const [timeMin, setTimeMin] = useState(0);
 	const [timeSec, setTimeSec] = useState(15);
 	const [codeInputAccess, setCodeInputAccess] = useState(false);
-	const [intervalId, setIntervalId] = useState();
 
 	const handlePhoneNumber = e => {
 		const regex = /^[0-9\b -]{0,11}$/; //숫자만 포함 11자
@@ -83,27 +85,22 @@ export default function FindEmail() {
 				}
 			}
 		}, 1000);
-
-		setIntervalId(timer);
 	};
-	const inputRef = useRef(null);
 	const handleAuthSend = () => {
 		beginTimer();
 	};
-
+	const handleBackClick = () => {
+		navigate('/login');
+	};
 	return (
 		<MainContainer>
 			<TopNav>
-				<StyledLink to="/login">
-					<BackButton>
-						<LeftArrow />
-					</BackButton>
-				</StyledLink>
+				<BackButton onClick={handleBackClick} />
 			</TopNav>
 			<ContentWrap>
 				<TopWrap>
 					<PageLabel>
-						<MainText>이메일 찾기</MainText>
+						<MainText fontsize="1.5rem">이메일 찾기</MainText>
 					</PageLabel>
 					<FormWrap>
 						<SubText margin="0 0 0.5rem 0">휴대폰 번호</SubText>
@@ -217,23 +214,6 @@ export default function FindEmail() {
 		</MainContainer>
 	);
 }
-const MainContainer = styled.div`
-	display: flex;
-	height: 100%;
-	box-sizing: border-box;
-	flex-direction: column;
-	border: 1px solid black;
-	background-color: ${palette.white.primary};
-`;
-const BackButton = styled.div`
-	border: none;
-	background-color: transparent;
-	padding: none;
-	margin: none;
-	&:hover {
-		cursor: pointer;
-	}
-`;
 
 const ContentWrap = styled.div`
 	display: flex;
@@ -250,32 +230,7 @@ const BottomWrap = styled.div``;
 const PageLabel = styled.div`
 	margin-bottom: 1.625rem;
 `;
-const MainText = styled.span`
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: #262626;
-`;
-const SubText = styled.span`
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '0.75rem'};
-	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.color || 'black'};
-	margin: ${props => props.margin || '0'};
-`;
-const StyledLink = styled(Link)`
-	text-decoration: none;
-	color: ${props => props.color || 'black'};
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '0.75rem'};
-	font-weight: ${props => props.fontweight || 'normal'};
-	&:focus,
-	&:hover,
-	&:visited,
-	&:link,
-	&:active {
-		text-decoration: none;
-	}
-`;
+
 const FormWrap = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -331,32 +286,6 @@ const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
-const Input = styled.input`
-	align-items: center;
-	height: 1.0625rem;
-	width: 100%;
-	font-size: 0.875rem;
-	font-weight: 400;
-	font-family: Pretendard;
-	outline: none;
-	border: none;
-	background-color: transparent;
-	&:disabled {
-		::placeholder {
-			color: #dadada;
-		}
-		cursor: not-allowed;
-	}
-
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-`;
 
 const AuthButton = styled.button`
 	box-sizing: border-box;
@@ -394,21 +323,6 @@ const AuthButton = styled.button`
 	}
 `;
 
-const LoginOptionWrap = styled.div`
-	display: flex;
-	margin-bottom: 1.625rem;
-`;
-
-const TermsWrap = styled.div`
-	display: flex;
-	align-items: center;
-	text-align: center;
-	margin: ${props => props.margin || '0 1.25rem 0 0'};
-	.span {
-		margin: 0;
-	}
-`;
-
 const IconWrap = styled.div.attrs(props => ({
 	className: props.className,
 }))`
@@ -424,16 +338,6 @@ const IconWrap = styled.div.attrs(props => ({
 			: ''};
 `;
 
-const FindWrap = styled.div`
-	display: flex;
-	box-sizing: border-box;
-	padding: 0 3.125rem;
-	justify-content: space-around;
-`;
-
-const Line = styled.div`
-	border-right: 1px solid #e2e0e0;
-`;
 const ErrorMessage = styled.div`
 	display: flex;
 	margin-top: 0.5rem;
