@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useRoutes, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { palette } from '../../styles/palette';
-import { TopNav } from '../../components/TopNav';
-import { PurpleButton } from '../../components/PurpleButton';
-import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
+import { TopNav } from '../../components/containers/TopNav';
+import { MainContainer } from '../../components/containers/MainContainer';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { Input } from '../../components/Input';
+import { BackButton } from '../../components/Buttons/BackButton';
+import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 
@@ -30,20 +32,18 @@ export default function FindPassword() {
 	const handleNextClick = () => {
 		navigate('/find/password/result');
 	};
-
+	const handleBackClick = () => {
+		navigate('/login');
+	};
 	return (
 		<MainContainer>
 			<TopNav>
-				<StyledLink to="/login">
-					<BackButton>
-						<LeftArrow />
-					</BackButton>
-				</StyledLink>
+				<BackButton onClick={handleBackClick} />
 			</TopNav>
 			<ContentWrap>
 				<TopWrap>
 					<PageLabel>
-						<MainText>비밀번호 찾기</MainText>
+						<MainText fontsize="1.5rem">비밀번호 찾기</MainText>
 					</PageLabel>
 					<FormWrap>
 						<SubText margin="0 0 0.5rem 0">이메일 주소</SubText>
@@ -91,24 +91,6 @@ export default function FindPassword() {
 		</MainContainer>
 	);
 }
-const MainContainer = styled.div`
-	display: flex;
-	height: 100%;
-	box-sizing: border-box;
-	flex-direction: column;
-	border: 1px solid black;
-	background-color: ${palette.white.primary};
-`;
-const BackButton = styled.div`
-	border: none;
-	background-color: transparent;
-	padding: none;
-	margin: none;
-	&:hover {
-		cursor: pointer;
-	}
-`;
-
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -124,69 +106,11 @@ const BottomWrap = styled.div``;
 const PageLabel = styled.div`
 	margin-bottom: 1.625rem;
 `;
-const MainText = styled.span`
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: #262626;
-`;
-const SubText = styled.span`
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '0.75rem'};
-	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.color || 'black'};
-	margin: ${props => props.margin || '0'};
-`;
-const StyledLink = styled(Link)`
-	text-decoration: none;
-	color: ${props => props.color || 'black'};
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '0.75rem'};
-	font-weight: ${props => props.fontweight || 'normal'};
-	&:focus,
-	&:hover,
-	&:visited,
-	&:link,
-	&:active {
-		text-decoration: none;
-	}
-`;
+
 const FormWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	margin-bottom: ${props => props.marginBottom || '1.625rem'};
-`;
-
-const InputWrapPhone = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	background-color: transparent;
-`;
-const InputPhone = styled.div`
-	${props =>
-		props.valid || props.value.length === 0
-			? 'border: 1px solid #e2e0e0;'
-			: 'border: 1px solid #ef0000'};
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	color: inherit;
-	border-radius: 0.5rem;
-	padding: 1rem;
-	margin-right: 0.6875rem;
-	&:active,
-	&:focus-within {
-		border: 1px solid #9e30f4;
-	}
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
 `;
 
 const InputWrap = styled.div`
@@ -205,83 +129,6 @@ const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
-const Input = styled.input`
-	align-items: center;
-	height: 1.0625rem;
-	width: 100%;
-	font-size: 0.875rem;
-	font-weight: 400;
-	font-family: Pretendard;
-	outline: none;
-	border: none;
-	background-color: transparent;
-	&:disabled {
-		::placeholder {
-			color: #dadada;
-		}
-		cursor: not-allowed;
-	}
-
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-`;
-
-const AuthButton = styled.button`
-	box-sizing: border-box;
-	font-family: Pretendard;
-	border: none;
-	height: 3rem;
-	flex-shrink: 0;
-	border-radius: ${props => props.borderradius || '1.5rem'};
-	font-weight: bold;
-	font-size: 0.875rem;
-	background-color: ${props => props.backgroundcolor || '#ebebeb'};
-	padding: 1rem 1.125rem 0.9375rem;
-	:disabled {
-		border: none;
-		color: white;
-	}
-	&:hover {
-		cursor: pointer;
-		:disabled {
-			cursor: not-allowed;
-		}
-	}
-	.span {
-		width: 3.0625rem;
-		height: 1.0625rem;
-		font-family: Pretendard;
-		font-size: 0.875rem;
-		font-weight: 600;
-		font-stretch: normal;
-		font-style: normal;
-		line-height: normal;
-		letter-spacing: normal;
-		text-align: center;
-		color: #262626;
-	}
-`;
-
-const LoginOptionWrap = styled.div`
-	display: flex;
-	margin-bottom: 26px;
-`;
-
-const TermsWrap = styled.div`
-	display: flex;
-	align-items: center;
-	text-align: center;
-	margin: ${props => props.margin || '0 1.25rem 0 0'};
-	.span {
-		margin: 0;
-	}
-`;
 
 const IconWrap = styled.div.attrs(props => ({
 	className: props.className,
@@ -298,30 +145,7 @@ const IconWrap = styled.div.attrs(props => ({
 			: ''};
 `;
 
-const FindWrap = styled.div`
-	display: flex;
-	box-sizing: border-box;
-	padding: 0 3.125rem;
-	justify-content: space-around;
-`;
-
-const Line = styled.div`
-	border-right: 1px solid #e2e0e0;
-`;
 const ErrorMessage = styled.div`
 	display: flex;
 	margin-top: 0.5rem;
-`;
-
-const Clear = styled.div`
-	align-items: center;
-	padding: none;
-	border: none;
-	font-size: 0.875rem;
-	font-weight: normal;
-	background-color: transparent;
-	border-radius: 1.25rem;
-	color: #9e30f4;
-	font-size: medium;
-	margin-left: 1rem;
 `;

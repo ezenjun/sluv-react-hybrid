@@ -1,10 +1,5 @@
-import React, { useEffect } from "react";
+import React from 'react';
 
-
-export default function SelectCeleb() { 
-  return (
-    <div>
-      SelectCeleb
-    </div>
-  );
+export default function SelectCeleb() {
+	return <div>SelectCeleb</div>;
 }

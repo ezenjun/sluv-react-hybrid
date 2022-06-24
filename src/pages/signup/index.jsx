@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useRoutes, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { palette } from '../../styles/palette';
-import { TopNav } from '../../components/TopNav';
+import { TopNav } from '../../components/containers/TopNav';
+import { MainContainer } from '../../components/containers/MainContainer';
 import { SignupProgressState } from '../../recoil/User';
-import { PurpleButton } from '../../components/PurpleButton';
-import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { BackButton } from '../../components/Buttons/BackButton';
+import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
+import { Input } from '../../components/Input';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
@@ -106,7 +109,6 @@ export default function Signup() {
 	const [timeMin, setTimeMin] = useState(0);
 	const [timeSec, setTimeSec] = useState(15);
 	const [codeInputAccess, setCodeInputAccess] = useState(false);
-	const [intervalId, setIntervalId] = useState();
 
 	// handler functions
 	const handlePhoneNumber = e => {
@@ -225,10 +227,7 @@ export default function Signup() {
 				}
 			}
 		}, 1000);
-
-		setIntervalId(timer);
 	};
-	const inputRef = useRef(null);
 	const handleAuthSend = () => {
 		beginTimer();
 	};
@@ -238,9 +237,7 @@ export default function Signup() {
 			{currentPage !== 5 && (
 				<>
 					<TopNav>
-						<BackButton onClick={handleBackClick}>
-							<LeftArrow />
-						</BackButton>
+						<BackButton onClick={handleBackClick} />
 					</TopNav>
 					<ProgressWrap>
 						<ProgressBar progress={currentPage * 25}></ProgressBar>
@@ -677,14 +674,6 @@ export default function Signup() {
 	);
 }
 
-const MainContainer = styled.div`
-	display: flex;
-	height: 100%;
-	box-sizing: border-box;
-	flex-direction: column;
-	border: 1px solid black;
-	background-color: ${palette.white.primary};
-`;
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -732,25 +721,13 @@ const CompletePageLabel = styled.div`
 	margin-bottom: 1.5rem;
 `;
 
-const MainText = styled.span`
-	font-size: 1.625rem;
-	font-weight: bold;
-	color: #262626;
-`;
-const SubText = styled.span`
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '12px'};
-	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.color || 'black'};
-	margin: ${props => props.margin || '0'};
-`;
 const NameText = styled.span`
 	font-size: 1.125rem;
 	font-weight: bold;
 	font-family: Pretendard;
 	margin-top: 1rem;
 	margin-bottom: 2rem;
-	color: ${props => props.color || 'black'};
+	color: ${props => props.color || '#262626'};
 `;
 
 const FormWrap = styled.div`
@@ -818,33 +795,6 @@ const InputPhone = styled.div`
 	}
 `;
 
-const Input = styled.input`
-	align-items: center;
-	height: 1.0625rem;
-	width: 100%;
-	font-size: 0.875rem;
-	font-weight: 400;
-	font-family: Pretendard;
-	outline: none;
-	border: none;
-	background-color: transparent;
-	&:disabled {
-		::placeholder {
-			color: #dadada;
-		}
-		cursor: not-allowed;
-	}
-
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-`;
-
 const ErrorMessage = styled.div`
 	display: flex;
 	margin-top: 0.5rem;
@@ -862,28 +812,6 @@ const Clear = styled.div`
 	font-size: medium;
 	margin-left: 1rem;
 `;
-
-// const NextButton = styled.button`
-// 	width: 100%;
-// 	height: 3rem;
-// 	border: none;
-// 	font-family: Pretendard;
-// 	font-weight: bold;
-// 	border-radius: 20px;
-// 	background-color: #9e30f4;
-// 	margin-bottom: 30px;
-// 	color: white;
-// 	:disabled {
-// 		background-color: #dadada;
-// 		color: white;
-// 	}
-// 	&:hover {
-// 		cursor: pointer;
-// 		:disabled {
-// 			cursor: not-allowed;
-// 		}
-// 	}
-// `;
 
 const AuthButton = styled.button`
 	box-sizing: border-box;
@@ -929,16 +857,6 @@ const StyledLink = styled(Link)`
 	&:link,
 	&:active {
 		text-decoration: none;
-	}
-`;
-
-const BackButton = styled.div`
-	border: none;
-	background-color: transparent;
-	padding: none;
-	margin: none;
-	&:hover {
-		cursor: pointer;
 	}
 `;
 

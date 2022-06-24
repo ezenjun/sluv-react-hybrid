@@ -9,6 +9,7 @@ import { customApiClient } from '../../utils/apiClient';
 import { ReactComponent as EmailIcon } from '../../assets/Icons/emailIcon.svg';
 import { ReactComponent as LoginSubtext } from '../../assets/Icons/LoginSubtext.svg';
 import { ReactComponent as Logo } from '../../assets/Logo/Logo.svg';
+import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 export default function Login() {
 	const navigate = useNavigate();
@@ -37,42 +38,41 @@ export default function Login() {
 			logo_alignment: 'left',
 			shape: 'circle',
 		});
+		// eslint-disable-next-line
 	}, []);
 
 	return (
-		<>
-			<MainContainer>
-				<LogoContainer>
-					<Logo></Logo>
-					<InfotextContainer>
-						<MainText>
-							셀럽의 아이템 정보 집합소 <br />
-							스럽에서 시작해 보세요!
-							<br />
-						</MainText>
-					</InfotextContainer>
-				</LogoContainer>
+		<MainContainer>
+			<LogoContainer>
+				<Logo></Logo>
+				<InfotextContainer>
+					<MainText fontsize="1rem">
+						셀럽의 아이템 정보 집합소 <br />
+						스럽에서 시작해 보세요!
+						<br />
+					</MainText>
+				</InfotextContainer>
+			</LogoContainer>
 
-				<ButtonContainer>
-					<LoginSubtext style={{ marginBottom: '12px' }}></LoginSubtext>
-					<KaKaoButton href={KAKAO_AUTH_URL} />
-					<GoogleButton>
-						<div id="google" />
-					</GoogleButton>
+			<ButtonContainer>
+				<LoginSubtext style={{ marginBottom: '12px' }}></LoginSubtext>
+				<KaKaoButton href={KAKAO_AUTH_URL} />
+				<GoogleButton>
+					<div id="google" />
+				</GoogleButton>
 
-					<EmailButton to="/signup">
-						<IconWrap>
-							<EmailIcon />
-						</IconWrap>
-						이메일로 시작
-					</EmailButton>
-					{/* Email Login */}
-				</ButtonContainer>
-				<LocalLogin>
-					이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
-				</LocalLogin>
-			</MainContainer>
-		</>
+				<EmailButton to="/signup">
+					<IconWrap>
+						<EmailIcon />
+					</IconWrap>
+					이메일로 시작
+				</EmailButton>
+				{/* Email Login */}
+			</ButtonContainer>
+			<LocalLogin>
+				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
+			</LocalLogin>
+		</MainContainer>
 	);
 }
 
@@ -97,11 +97,6 @@ const LogoContainer = styled.div`
 
 const InfotextContainer = styled.div`
 	text-align: center;
-`;
-
-const MainText = styled.span`
-	font-size: 1rem;
-	font-weight: 600;
 `;
 
 const ButtonContainer = styled.div`

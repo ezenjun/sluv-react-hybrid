@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, useRoutes, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { palette } from '../../styles/palette';
-import { TopNav } from '../../components/TopNav';
-import { PurpleButton } from '../../components/PurpleButton';
-import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
+import { TopNav } from '../../components/containers/TopNav';
+import { MainContainer } from '../../components/containers/MainContainer';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { BackButton } from '../../components/Buttons/BackButton';
+import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
+import { Input } from '../../components/Input';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
@@ -62,19 +64,18 @@ export default function LocalLogin() {
 			setRememberIdCheck(false);
 		}
 	};
-
+	const navigate = useNavigate();
+	const handleBackClick = () => {
+		navigate('/');
+	};
 	return (
 		<MainContainer>
 			<TopNav>
-				<StyledLink to="/">
-					<BackButton>
-						<LeftArrow />
-					</BackButton>
-				</StyledLink>
+				<BackButton onClick={handleBackClick} />
 			</TopNav>
 			<ContentWrap>
 				<PageLabel>
-					<MainText>
+					<MainText fontsize="1.5rem">
 						셀럽의 아이템 정보 집합소 <br />
 						스럽에서 시작해 보세요!
 					</MainText>
@@ -195,23 +196,6 @@ export default function LocalLogin() {
 		</MainContainer>
 	);
 }
-const MainContainer = styled.div`
-	display: flex;
-	height: 100%;
-	box-sizing: border-box;
-	flex-direction: column;
-	border: 1px solid black;
-	background-color: ${palette.white.primary};
-`;
-const BackButton = styled.div`
-	border: none;
-	background-color: transparent;
-	padding: none;
-	margin: none;
-	&:hover {
-		cursor: pointer;
-	}
-`;
 
 const ContentWrap = styled.div`
 	display: flex;
@@ -227,18 +211,7 @@ const TopWrap = styled.div`
 const PageLabel = styled.div`
 	margin-bottom: 1.625rem;
 `;
-const MainText = styled.span`
-	font-size: 1.5rem;
-	font-weight: bold;
-	color: #262626;
-`;
-const SubText = styled.span`
-	font-family: Pretendard;
-	font-size: ${props => props.fontsize || '0.75rem'};
-	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.color || 'black'};
-	margin: ${props => props.margin || '0'};
-`;
+
 const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: ${props => props.color || 'black'};
@@ -275,32 +248,7 @@ const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
-const Input = styled.input`
-	align-items: center;
-	height: 1.0625rem;
-	width: 100%;
-	font-size: 0.875rem;
-	font-weight: 400;
-	font-family: Pretendard;
-	outline: none;
-	border: none;
-	background-color: transparent;
-	&:disabled {
-		::placeholder {
-			color: #dadada;
-		}
-		cursor: not-allowed;
-	}
 
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-`;
 const LoginOptionWrap = styled.div`
 	display: flex;
 	margin-bottom: 1.625rem;
@@ -335,9 +283,10 @@ const FindWrap = styled.div`
 	display: flex;
 	box-sizing: border-box;
 	padding: 0 3.125rem;
-	justify-content: space-around;
+	justify-content: space-evenly;
 `;
 
 const Line = styled.div`
 	border-right: 1px solid #e2e0e0;
+	margin: 0 10px;
 `;
