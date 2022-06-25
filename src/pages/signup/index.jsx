@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
@@ -16,6 +16,7 @@ import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg
 import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
+import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
@@ -26,6 +27,11 @@ export default function Signup() {
 	const [personalInfoCheck, setpersonalInfoCheck] = useState(false);
 	const [marketingCheck, setMarketingCheck] = useState(false);
 	const [necessary, setNecessary] = useState(0);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const allBtnEvent = () => {
 		if (allCheck === false) {
@@ -249,7 +255,19 @@ export default function Signup() {
 			console.log('인증번호 인증 성공');
 		} else {
 			setAuthCodeValid(false);
-			alert('인증번호 인증 실패');
+			
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('휴대폰 인증에 실패하였어요');
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+
 			console.log('인증번호 인증 실패');
 		}
 	}
@@ -739,7 +757,7 @@ export default function Signup() {
 const ContentWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 1.25rem;
+	padding: 1.25rem 1.25rem 0 1.25rem;
 	height: 100%;
 	justify-content: space-between;
 `;

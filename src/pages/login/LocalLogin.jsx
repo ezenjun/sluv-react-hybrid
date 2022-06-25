@@ -13,6 +13,8 @@ import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
+import { useSetRecoilState } from 'recoil';
+import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
 
 export default function LocalLogin() {
 	const [email, setEmail] = useState('');
@@ -21,6 +23,11 @@ export default function LocalLogin() {
 	const [passwordValid, setPasswordValid] = useState(false);
 	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
 	const [rememberIdCheck, setRememberIdCheck] = useState(false);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const handleEmail = e => {
 		setEmail(e.target.value);
@@ -78,12 +85,22 @@ export default function LocalLogin() {
 		const postUserSignupUri = '/auth/login';
 		const data = await customApiClient('post', postUserSignupUri, body);
 		if (data.isSuccess === true) {
-			alert('로그인 완료');
 			console.log('로그인 완료');
 			console.log(data.result.jwt);
 			navigate('/home');
 		} else {
-			alert('로그인 실패');
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('회원정보가 없어요. 아이디/비밀번호를 확인해 주세요.');
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			},2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			},2300);
+
 			console.log(data.message);
 			if (data.code === 3003) {
 				setEmailValid(false);
