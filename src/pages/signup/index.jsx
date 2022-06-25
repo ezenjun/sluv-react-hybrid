@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { SignupProgressState } from '../../recoil/User';
@@ -198,13 +199,13 @@ export default function Signup() {
 		}
 	};
 	// auth code timer
-	let min = 0;
-	let sec = 15;
+	let min = 3;
+	let sec = 0;
 
 	const beginTimer = () => {
 		setCodeInputAccess(true);
-		min = 0;
-		sec = 15;
+		min = 3;
+		sec = 0;
 		setTimeMin(min);
 		setTimeSec(sec);
 
@@ -229,8 +230,69 @@ export default function Signup() {
 		}, 1000);
 	};
 	const handleAuthSend = () => {
+		handleAuthCodeSendAPI();
 		beginTimer();
 	};
+
+	// 인증번호 발송 API
+	async function handleAuthCodeSendAPI() {
+		const url = `/auth/sms?phone=${phoneNumber}`;
+		const data = await customApiClient('get', url);
+		if (data.isSuccess === true) beginTimer();
+	}
+	// 인증번호 확인 API
+	async function handleAuthCodeCheckAPI() {
+		const url = `/auth/sms/validation?phone=${phoneNumber}&certnum=${authCode}`;
+		const data = await customApiClient('get', url);
+		if (data.isSuccess === true) {
+			handleNextClick();
+			console.log('인증번호 인증 성공');
+		} else {
+			setAuthCodeValid(false);
+			alert('인증번호 인증 실패');
+			console.log('인증번호 인증 실패');
+		}
+	}
+	// 이메일 비밀번호 확인 API
+	async function handleEmailCheckAPI() {
+		const url = `/users/email-check?email=${email}`;
+		const data = await customApiClient('get', url);
+		if (data.isSuccess === true) {
+			handleNextClick();
+			console.log('이메일 등록 성공');
+		} else {
+			setEmailValid(false);
+			alert(data.message);
+			console.log(data.message);
+		}
+	}
+	// 최종 회원가입 용 API
+
+	async function handleSignUpAPI() {
+		const url = `/users/nickname-check?nickname=${nickname}`;
+		const data = await customApiClient('get', url);
+		if (data.isSuccess === true) {
+			console.log('닉네임 등록 성공');
+			const body = {
+				phoneNumber: phoneNumber,
+				email: email,
+				pwd: password,
+				nickName: nickname,
+			};
+			const postUserSignupUri = '/auth/signup';
+			const data = await customApiClient('post', postUserSignupUri, body);
+			if (data.isSuccess === true) {
+				alert('회원 생성 완료');
+				console.log('회원 생성 완료');
+				console.log(data.result.jwt);
+				handleNextClick();
+			}
+		} else {
+			setNicknameValid(false);
+			alert(data.message);
+			console.log(data.message);
+		}
+	}
 
 	return (
 		<MainContainer>
@@ -421,7 +483,7 @@ export default function Signup() {
 									)}
 								</InputPhone>
 								{phoneNumberValid ? (
-									<AuthButton disabled={false} onClick={handleAuthSend}>
+									<AuthButton disabled={false} onClick={handleAuthCodeSendAPI}>
 										인증하기
 									</AuthButton>
 								) : (
@@ -498,7 +560,7 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{authCodeValid ? (
-							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
+							<PurpleButton onClick={handleAuthCodeCheckAPI}>다음</PurpleButton>
 						) : (
 							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
@@ -586,7 +648,7 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{emailValid && passwordValid ? (
-							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
+							<PurpleButton onClick={handleEmailCheckAPI}>다음</PurpleButton>
 						) : (
 							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
@@ -640,7 +702,7 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{nicknameValid ? (
-							<PurpleButton onClick={handleNextClick}>다음</PurpleButton>
+							<PurpleButton onClick={handleSignUpAPI}>다음</PurpleButton>
 						) : (
 							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
