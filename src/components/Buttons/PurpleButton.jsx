@@ -9,7 +9,7 @@ const Button = styled.button`
 	font-weight: bold;
 	border-radius: 4rem;
 	background-color: #9e30f4;
-	margin-bottom: ${props => props.marginBottom || '30px'};
+	margin-bottom: ${props => props.marginBottom || '1rem'};
 	color: white;
 	:disabled {
 		background-color: #dadada;
