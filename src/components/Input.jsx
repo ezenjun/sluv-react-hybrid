@@ -5,12 +5,13 @@ export const Input = styled.input`
 	align-items: center;
 	height: 1.0625rem;
 	width: 100%;
-	font-size: 0.875rem;
+	font-size: 14px;
 	font-weight: 400;
 	font-family: Pretendard;
 	outline: none;
 	border: none;
 	background-color: transparent;
+	margin: ${props => props.margin || '0'};
 	&:disabled {
 		::placeholder {
 			color: #dadada;
