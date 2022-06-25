@@ -7,5 +7,7 @@ export const MainContainer = styled.div`
 	height: 100%;
 	box-sizing: border-box;
 	flex-direction: column;
+	border: 1px solid black;
+	padding: ${props => props.padding || '0'};
 	background-color: ${palette.white.primary};
 `;

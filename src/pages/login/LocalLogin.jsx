@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
@@ -68,6 +69,30 @@ export default function LocalLogin() {
 	const handleBackClick = () => {
 		navigate('/');
 	};
+	// 이메일 비밀번호 확인 API
+	async function handleLoginAPI() {
+		const body = {
+			email: email,
+			pwd: password,
+		};
+		const postUserSignupUri = '/auth/login';
+		const data = await customApiClient('post', postUserSignupUri, body);
+		if (data.isSuccess === true) {
+			alert('로그인 완료');
+			console.log('로그인 완료');
+			console.log(data.result.jwt);
+			navigate('/home');
+		} else {
+			alert('로그인 실패');
+			console.log(data.message);
+			if (data.code === 3003) {
+				setEmailValid(false);
+			} else if (data.code === 3004) {
+				setPasswordValid(false);
+			}
+		}
+	}
+
 	return (
 		<MainContainer>
 			<TopNav>
@@ -177,7 +202,9 @@ export default function LocalLogin() {
 							</SubText>
 						</TermsWrap>
 					</LoginOptionWrap>
-					<PurpleButton marginBottom="26px">로그인</PurpleButton>
+					<PurpleButton marginBottom="26px" onClick={handleLoginAPI}>
+						로그인
+					</PurpleButton>
 					<FindWrap>
 						<StyledLink to="/find/email" color="#6a6a6a">
 							아이디 찾기
