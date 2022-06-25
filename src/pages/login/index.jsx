@@ -79,7 +79,7 @@ export default function Login() {
 const MainContainer = styled.div`
 	display: flex;
 	box-sizing: border-box;
-	background-color: ${palette.white.primary};
+	background-color: ${palette.white.secondary};
 	padding: 1.25rem;
 	flex-direction: column;
 	justify-content: space-evenly;
