@@ -29,6 +29,22 @@ export default function SelectCeleb() {
 		setActorTabstatus(!actorTabstatus);
 	};
 
+	const selectedArray = [];
+	const onSelectCeleb = id => {
+		if (selectedArray[id] === false) {
+			selectedArray[id] = true;
+			setSelected(selected + 1);
+		} else {
+			if (selected > 0) {
+				selectedArray[id] = false;
+				setSelected(selected - 1);
+			}
+		}
+		console.log('id=', id);
+		console.log('selectedArray[id]=', selectedArray[id]);
+		console.log('selected=', selected);
+	};
+
 	useEffect(() => {
 		if (selected === 3) {
 			setPageComplete(true);
@@ -38,7 +54,16 @@ export default function SelectCeleb() {
 	return (
 		<MainContainer>
 			<TopNav>
-				<SubText>다음</SubText>
+				<NavRight>
+					{selected > 0 ? (
+						<SubText margin="0 16px" color="#9e30f4">
+							{selected}개 선택
+						</SubText>
+					) : (
+						<></>
+					)}
+					{selected >= 3 ? <SubText>다음</SubText> : <SubText>다음</SubText>}
+				</NavRight>
 			</TopNav>
 			<ContentWrap padding="0">
 				<TextWrap>
@@ -88,141 +113,15 @@ export default function SelectCeleb() {
 				</SearchTab>
 				<ListContainer>
 					<Celeb>
-						<Image></Image>
+						<Image id="1" onClick={onSelectCeleb(0)}></Image>
 						스트레이키즈
 					</Celeb>
 					<Celeb>
-						<Image></Image>
+						<Image id="2" onClick={onSelectCeleb(1)}></Image>
 						스트레이키즈
 					</Celeb>
 					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
+						<Image id="3" onClick={onSelectCeleb(2)}></Image>
 						스트레이키즈
 					</Celeb>
 				</ListContainer>
@@ -231,13 +130,19 @@ export default function SelectCeleb() {
 	);
 }
 
+const NavRight = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+`;
+
 const ListContainer = styled.div`
 	display: grid;
 	padding: 1.25rem;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-auto-rows: minmax(120px, auto);
 	justify-content: center;
-	gap: 1rem 0.6875rem;
+	gap: 16px 11px;
 `;
 
 const TextWrap = styled.div`
@@ -266,6 +171,10 @@ const Image = styled.div`
 	height: 6.25rem;
 	border-radius: 50%;
 	background-color: pink;
+	margin-bottom: 8px;
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const InputWrap = styled.div`
