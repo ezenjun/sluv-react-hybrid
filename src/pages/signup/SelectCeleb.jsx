@@ -38,11 +38,11 @@ export default function SelectCeleb() {
 	return (
 		<MainContainer>
 			<TopNav>
-				<BackButton />
+				<SubText>다음</SubText>
 			</TopNav>
-			<ContentWrap>
+			<ContentWrap padding="0">
 				<TextWrap>
-					<MainText fontsize="24px" margin="8px 0">
+					<MainText fontsize="24px" margin="11px 0 8px 0">
 						좋아하는 셀럽을
 						<br />
 						최소 3명 선택해주세요
@@ -231,25 +231,24 @@ export default function SelectCeleb() {
 	);
 }
 
-const SearchContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-`;
-
 const ListContainer = styled.div`
 	display: grid;
+	padding: 1.25rem;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-auto-rows: minmax(120px, auto);
-	gap: 8px;
+	justify-content: center;
+	gap: 1rem 0.6875rem;
 `;
 
 const TextWrap = styled.div`
 	display: flex;
 	flex-direction: column;
+	padding: 0 20px;
 `;
 
 const SearchTab = styled.div`
 	// position: -webkit-sticky;
+	padding: 0 20px;
 	background-color: white;
 	position: sticky;
 	top: 0;
@@ -263,9 +262,9 @@ const Celeb = styled.div`
 	/* border: 1px solid black; */
 `;
 const Image = styled.div`
-	width: 100px;
-	height: 100px;
-	border-radius: 50px;
+	width: 6.25rem;
+	height: 6.25rem;
+	border-radius: 50%;
 	background-color: pink;
 `;
 

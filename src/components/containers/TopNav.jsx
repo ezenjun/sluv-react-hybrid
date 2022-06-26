@@ -5,9 +5,9 @@ export const TopNav = styled.div`
 	display: flex;
 	box-sizing: border-box;
 	font-weight: 700;
-	font-size: 1.125rem;
+	font-size: 18px;
 	width: 100%;
-	padding: 0.75rem 1.25rem;
+	padding: 15px 20px;
 	align-items: center;
 	text-align: center;
 `;

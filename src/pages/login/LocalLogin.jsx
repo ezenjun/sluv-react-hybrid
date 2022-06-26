@@ -14,7 +14,12 @@ import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
 import { useSetRecoilState } from 'recoil';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function LocalLogin() {
 	const [email, setEmail] = useState('');
@@ -90,16 +95,16 @@ export default function LocalLogin() {
 			navigate('/home');
 		} else {
 			setToastMessageBottomPosition('1.625rem');
+			setToastMessage('회원정보가 없어요. 아이디/비밀번호를 확인해 주세요.');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
-			setToastMessage('회원정보가 없어요. 아이디/비밀번호를 확인해 주세요.');
 
 			setTimeout(() => {
 				setToastMessageStatus(false);
-			},2000);
+			}, 2000);
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
-			},2300);
+			}, 2300);
 
 			console.log(data.message);
 			if (data.code === 3003) {
