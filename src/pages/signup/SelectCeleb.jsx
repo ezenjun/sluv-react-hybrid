@@ -28,21 +28,175 @@ export default function SelectCeleb() {
 		setSingerTabstatus(!singerTabstatus);
 		setActorTabstatus(!actorTabstatus);
 	};
+	const [celebList, setCelebList] = useState([
+		{
+			id: 1,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 2,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 3,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 4,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 5,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 6,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 7,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 8,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 9,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 10,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 11,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 12,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 13,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 14,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 15,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 16,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 17,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 18,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 19,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 20,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 21,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 22,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 23,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 24,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+	]);
 
-	const selectedArray = [];
-	const onSelectCeleb = id => {
-		if (selectedArray[id] === false) {
-			selectedArray[id] = true;
+	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
+	const handleRemoveItem = celeb => {
+		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
+	};
+	const onSelectCeleb = (celeb, e) => {
+		if (celeb.selected === false) {
+			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
 			setSelected(selected + 1);
+			console.log('celeb selected= ', celeb.selected);
+			celeb.selected = true;
+			setCelebList([...celebList]);
 		} else {
-			if (selected > 0) {
-				selectedArray[id] = false;
-				setSelected(selected - 1);
-			}
+			handleRemoveItem(celeb);
+			setSelected(selected - 1);
+			celeb.selected = false;
+			setCelebList([...celebList]);
 		}
-		console.log('id=', id);
-		console.log('selectedArray[id]=', selectedArray[id]);
+		console.log('id=', celeb.id);
+		console.log('celeb selected= ', celeb.selected);
 		console.log('selected=', selected);
+		console.log(selectedCelebsArray);
+		e.preventDefault();
 	};
 
 	useEffect(() => {
@@ -62,7 +216,11 @@ export default function SelectCeleb() {
 					) : (
 						<></>
 					)}
-					{selected >= 3 ? <SubText>다음</SubText> : <SubText>다음</SubText>}
+					{selected >= 3 ? (
+						<SubText>다음</SubText>
+					) : (
+						<SubText color="#b1b1b1">다음</SubText>
+					)}
 				</NavRight>
 			</TopNav>
 			<ContentWrap padding="0">
@@ -112,19 +270,16 @@ export default function SelectCeleb() {
 					</TabWrap>
 				</SearchTab>
 				<ListContainer>
-					<Celeb>
-						<Image id="1" onClick={onSelectCeleb(0)}></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image id="2" onClick={onSelectCeleb(1)}></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image id="3" onClick={onSelectCeleb(2)}></Image>
-						스트레이키즈
-					</Celeb>
+					{celebList.map(celeb => (
+						<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
+							<Image key={celeb.id} border={celeb.selected}></Image>
+							{celeb.celebname}
+						</Celeb>
+					))}
 				</ListContainer>
+				{selectedCelebsArray.map(celeb => (
+					<div key={celeb.id}>{celeb.celebname}</div>
+				))}
 			</ContentWrap>
 		</MainContainer>
 	);
@@ -172,6 +327,8 @@ const Image = styled.div`
 	border-radius: 50%;
 	background-color: pink;
 	margin-bottom: 8px;
+	box-sizing: border-box;
+	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
 	&:hover {
 		cursor: pointer;
 	}
