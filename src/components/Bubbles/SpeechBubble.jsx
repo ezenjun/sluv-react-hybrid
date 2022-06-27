@@ -4,12 +4,13 @@ export const SpeechBubbleWrap = styled.div`
 	display: inline-block;
 	background: ${props => props.backgroundColor || 'white'};
 	position: relative;
-	padding: 15px 20px;
+	padding: 0.9375rem 1.125rem;
+	margin-left: 0.5rem;
 	border-radius: 13px;
 	-moz-border-radius: 13px;
 	-webkit-border-radius: 13px;
 	border: none;
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 600;
 	color: ${props => props.color || '#262626'};
 
@@ -20,8 +21,8 @@ export const SpeechBubbleWrap = styled.div`
 		top: 20%;
 		width: 0;
 		height: 0;
-		border-bottom: 8px solid transparent;
-		border-right: ${props => props.borderRight || '8px solid white'};
+		border-bottom: 0.5rem solid transparent;
+		border-right: ${props => props.borderRight || '0.5rem solid white'};
 	}
 
 	.redStar {
