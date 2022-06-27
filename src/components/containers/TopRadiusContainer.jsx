@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const TopRadiusContainer = styled.div`
-	border: 1px black solid;
-	padding: 26px 20px ;
+	padding: 1.625rem 1.25rem;
 
 	border-radius: 20px 20px 0 0;
-	background-color: black;
+	background: linear-gradient(to top, #fffff0 0%, #ffecf0 102%); ;
 `;
+
