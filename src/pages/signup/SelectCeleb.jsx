@@ -351,7 +351,6 @@ export default function SelectCeleb() {
 															<Image key={celeb.id}>
 																{celeb.celebname}
 															</Image>
-															{index % 4}
 														</CelebLeftTop>
 													) : (
 														<></>
@@ -361,9 +360,9 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}></Image>
-															{index % 4}
-															{celeb.celebname}
+															<Image key={celeb.id}>
+																{celeb.celebname}
+															</Image>
 														</CelebLeftBottom>
 													) : (
 														<></>
@@ -373,9 +372,9 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}></Image>
-															{index % 4}
-															{celeb.celebname}
+															<Image key={celeb.id}>
+																{celeb.celebname}
+															</Image>
 														</CelebRightTop>
 													) : (
 														<></>
@@ -385,9 +384,9 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}></Image>
-															{index % 4}
-															{celeb.celebname}
+															<Image key={celeb.id}>
+																{celeb.celebname}
+															</Image>
 														</CelebRightBottom>
 													) : (
 														<></>
@@ -409,14 +408,14 @@ export default function SelectCeleb() {
 
 const BottomWrap = styled.div`
 	box-sizing: border-box;
-	padding: 0 30px;
+	padding: 0 20px;
 `;
 const MembersContainer = styled.div`
 	display: flex;
 	width: 100%;
 	flex-direction: row;
-	border: 1px solid blue;
-	margin-left: 20px;
+	box-sizing: border-box;
+	padding-right: 1.25rem;
 	margin-top: 55px;
 	overflow-x: scroll;
 	height: 100%;
@@ -426,7 +425,7 @@ const MembersContainer = styled.div`
 `;
 const RepeatWrap = styled.div`
 	display: flex;
-	border: 1px solid blue;
+	position: relative;
 	height: 370px;
 	width: 370px;
 `;
@@ -476,36 +475,27 @@ const Celeb = styled.div`
 	/* border: 1px solid black; */
 `;
 const CelebLeftTop = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	font-size: 14px;
-	/* border: 1px solid black; */
+	position: relative;
+	left: 1.25rem;
+	font-size: 1rem;
 `;
 const CelebLeftBottom = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	font-size: 14px;
-	/* border: 1px solid black; */
+	position: absolute;
+	left: 1.25rem;
+	top: 7rem;
+	font-size: 1rem;
 `;
 const CelebRightTop = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	font-size: 14px;
-	/* border: 1px solid black; */
+	position: relative;
+	top: 3.1875rem;
+	left: 1.125rem;
+	font-size: 1rem;
 `;
 const CelebRightBottom = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	font-size: 14px;
-	/* border: 1px solid black; */
+	position: absolute;
+	top: 10.125rem;
+	left: 7.375rem;
+	font-size: 1rem;
 `;
 const Image = styled.div`
 	display: flex;
