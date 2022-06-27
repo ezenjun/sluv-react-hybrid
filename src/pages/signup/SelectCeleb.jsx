@@ -10,6 +10,7 @@ import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
+import { render } from '@testing-library/react';
 
 export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useState(1);
@@ -176,6 +177,7 @@ export default function SelectCeleb() {
 			selected: false,
 		},
 	]);
+	const boxcount = celebList.length / 4;
 
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
 	const handleRemoveItem = celeb => {
@@ -308,8 +310,8 @@ export default function SelectCeleb() {
 							)}
 						</NavRight>
 					</TopNav>
-					<ContentWrap>
-						<TextWrap padding="0">
+					<ContentWrap padding="0">
+						<TextWrap padding="0 20px">
 							<MainText fontsize="24px" margin="15px 0 8px 0">
 								좋아하는 멤버를
 								<br />
@@ -332,8 +334,72 @@ export default function SelectCeleb() {
 							>
 								<div>스트레이키즈</div>
 							</SpeechBubbleWrap>
-							<CelebListWrap></CelebListWrap>
 						</BottomWrap>
+						<MembersContainer>
+							{(function () {
+								let renderList = [];
+								for (let i = 0; i < celebList.length; i += 4) {
+									renderList.push(
+										<RepeatWrap>
+											{celebList.slice(i, i + 4).map((celeb, index) => (
+												<>
+													{index % 4 === 0 ? (
+														<CelebLeftTop
+															key={celeb.id}
+															onClick={e => onSelectCeleb(celeb, e)}
+														>
+															<Image key={celeb.id}>
+																{celeb.celebname}
+															</Image>
+															{index % 4}
+														</CelebLeftTop>
+													) : (
+														<></>
+													)}
+													{index % 4 === 1 ? (
+														<CelebLeftBottom
+															key={celeb.id}
+															onClick={e => onSelectCeleb(celeb, e)}
+														>
+															<Image key={celeb.id}></Image>
+															{index % 4}
+															{celeb.celebname}
+														</CelebLeftBottom>
+													) : (
+														<></>
+													)}
+													{index % 4 === 2 ? (
+														<CelebRightTop
+															key={celeb.id}
+															onClick={e => onSelectCeleb(celeb, e)}
+														>
+															<Image key={celeb.id}></Image>
+															{index % 4}
+															{celeb.celebname}
+														</CelebRightTop>
+													) : (
+														<></>
+													)}
+													{index % 4 === 3 ? (
+														<CelebRightBottom
+															key={celeb.id}
+															onClick={e => onSelectCeleb(celeb, e)}
+														>
+															<Image key={celeb.id}></Image>
+															{index % 4}
+															{celeb.celebname}
+														</CelebRightBottom>
+													) : (
+														<></>
+													)}
+												</>
+											))}
+										</RepeatWrap>
+									);
+								}
+								return renderList;
+							})()}
+						</MembersContainer>
 					</ContentWrap>
 				</MainContainer>
 			)}
@@ -342,10 +408,27 @@ export default function SelectCeleb() {
 }
 
 const BottomWrap = styled.div`
-	padding: 0 10px;
+	box-sizing: border-box;
+	padding: 0 30px;
 `;
-const CelebListWrap = styled.div`
-	padding: 0 10px;
+const MembersContainer = styled.div`
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+	border: 1px solid blue;
+	margin-left: 20px;
+	margin-top: 55px;
+	overflow-x: scroll;
+	height: 100%;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
+`;
+const RepeatWrap = styled.div`
+	display: flex;
+	border: 1px solid blue;
+	height: 370px;
+	width: 370px;
 `;
 
 const NavRight = styled.div`
@@ -379,7 +462,6 @@ const TextWrap = styled.div`
 `;
 
 const SearchTab = styled.div`
-	// position: -webkit-sticky;
 	padding: 0 20px;
 	background-color: white;
 	position: sticky;
@@ -393,9 +475,46 @@ const Celeb = styled.div`
 	font-size: 14px;
 	/* border: 1px solid black; */
 `;
+const CelebLeftTop = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	/* border: 1px solid black; */
+`;
+const CelebLeftBottom = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	/* border: 1px solid black; */
+`;
+const CelebRightTop = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	/* border: 1px solid black; */
+`;
+const CelebRightBottom = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	/* border: 1px solid black; */
+`;
 const Image = styled.div`
+	display: flex;
 	width: 6.25rem;
 	height: 6.25rem;
+	justify-content: center;
+	align-items: flex-end;
+	padding-bottom: 12px;
+	color: white;
 	border-radius: 50%;
 	background-color: pink;
 	margin-bottom: 8px;
