@@ -311,7 +311,7 @@ export default function SelectCeleb() {
 						</NavRight>
 					</TopNav>
 					<ContentWrap padding="0">
-						<TextWrap padding="0 20px">
+						<TextWrap padding="0 1.25rem">
 							<MainText fontsize="24px" margin="15px 0 8px 0">
 								좋아하는 멤버를
 								<br />
@@ -471,7 +471,7 @@ const Celeb = styled.div`
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
-	font-size: 14px;
+	font-size: 0.875rem;
 	/* border: 1px solid black; */
 `;
 const CelebLeftTop = styled.div`
@@ -482,25 +482,25 @@ const CelebLeftTop = styled.div`
 const CelebLeftBottom = styled.div`
 	position: absolute;
 	left: 1.25rem;
-	top: 7rem;
+	top: 10rem;
 	font-size: 1rem;
 `;
 const CelebRightTop = styled.div`
 	position: relative;
-	top: 3.1875rem;
+	top: 4.6875rem;
 	left: 1.125rem;
 	font-size: 1rem;
 `;
 const CelebRightBottom = styled.div`
 	position: absolute;
-	top: 10.125rem;
-	left: 7.375rem;
+	left: 10.625rem;
+	top: 14.6875rem;
 	font-size: 1rem;
 `;
 const Image = styled.div`
 	display: flex;
-	width: 6.25rem;
-	height: 6.25rem;
+	width: 9.375rem;
+	height: 9.375rem;
 	justify-content: center;
 	align-items: flex-end;
 	padding-bottom: 12px;
