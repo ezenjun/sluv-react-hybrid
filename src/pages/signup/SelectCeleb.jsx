@@ -9,8 +9,10 @@ import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ContentWrap } from '../../components/containers/ContentWrap';
+import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 
 export default function SelectCeleb() {
+	const [currentPage, setCurrentPage] = useState(1);
 	const [pageComplete, setPageComplete] = useState(false);
 	const [selected, setSelected] = useState(0);
 	const [searchInput, setSearchInput] = useState('');
@@ -28,7 +30,179 @@ export default function SelectCeleb() {
 		setSingerTabstatus(!singerTabstatus);
 		setActorTabstatus(!actorTabstatus);
 	};
+	const [celebList, setCelebList] = useState([
+		{
+			id: 1,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 2,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 3,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 4,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 5,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 6,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 7,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 8,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 9,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 10,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 11,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 12,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 13,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 14,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 15,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 16,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 17,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 18,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 19,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 20,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 21,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+		{
+			id: 22,
+			celebname: 'velopert',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+		},
+		{
+			id: 23,
+			celebname: 'tester',
+			img: 'tester@example.com',
+			selected: false,
+		},
+		{
+			id: 24,
+			celebname: 'liz',
+			img: 'liz@example.com',
+			selected: false,
+		},
+	]);
 
+	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
+	const handleRemoveItem = celeb => {
+		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
+	};
+	const onSelectCeleb = (celeb, e) => {
+		if (celeb.selected === false) {
+			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
+			setSelected(selected + 1);
+			console.log('celeb selected= ', celeb.selected);
+			celeb.selected = true;
+			setCelebList([...celebList]);
+		} else {
+			handleRemoveItem(celeb);
+			setSelected(selected - 1);
+			celeb.selected = false;
+			setCelebList([...celebList]);
+		}
+
+		e.preventDefault();
+	};
+	const handleBackClick = () => {
+		setCurrentPage(currentPage - 1);
+	};
+	const handleNextClick = () => {
+		setCurrentPage(currentPage + 1);
+	};
 	useEffect(() => {
 		if (selected === 3) {
 			setPageComplete(true);
@@ -36,200 +210,158 @@ export default function SelectCeleb() {
 	}, [pageComplete]);
 
 	return (
-		<MainContainer>
-			<TopNav>
-				<SubText>다음</SubText>
-			</TopNav>
-			<ContentWrap padding="0">
-				<TextWrap>
-					<MainText fontsize="24px" margin="11px 0 8px 0">
-						좋아하는 셀럽을
-						<br />
-						최소 3명 선택해주세요
-					</MainText>
-					<SubText
-						color="#8d8d8d"
-						fontsize="14px"
-						fontweight="regular"
-						margin="0 0 20px 0"
-					>
-						선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
-					</SubText>
-				</TextWrap>
+		<>
+			{currentPage === 1 && (
+				<MainContainer>
+					<TopNav>
+						<NavRight>
+							{selected > 0 ? (
+								<SubText margin="0 16px" color="#9e30f4">
+									{selected}개 선택
+								</SubText>
+							) : (
+								<></>
+							)}
+							{selected >= 3 ? (
+								<NextButton onClick={handleNextClick}>다음</NextButton>
+							) : (
+								<SubText color="#b1b1b1">다음</SubText>
+							)}
+						</NavRight>
+					</TopNav>
+					<ContentWrap padding="0">
+						<TextWrap>
+							<MainText fontsize="24px" margin="15px 0 8px 0">
+								좋아하는 셀럽 태그를
+								<br />
+								3개 이상 선택해주세요
+							</MainText>
+							<SubText
+								color="#8d8d8d"
+								fontsize="14px"
+								fontweight="regular"
+								margin="0 0 20px 0"
+							>
+								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
+							</SubText>
+						</TextWrap>
 
-				<SearchTab>
-					<InputWrap>
-						<IconWrap>
-							<SearchIcon />
-						</IconWrap>
-						<Input
-							value={searchInput}
-							onChange={handleSearchInput}
-							type="text"
-							placeholder="활동명을 한글로 검색해주세요"
-							margin="0 0 0 6px"
-						/>
-						{searchInput.length !== 0 ? (
-							<IconWrap onClick={searchInputReset}>
-								<Delete />
-							</IconWrap>
-						) : (
-							<></>
-						)}
-					</InputWrap>
-					<TabWrap>
-						<Tab status={singerTabstatus} onClick={onClickTab}>
-							가수
-						</Tab>
-						<Tab status={actorTabstatus} onClick={onClickTab}>
-							배우
-						</Tab>
-					</TabWrap>
-				</SearchTab>
-				<ListContainer>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-
-					<Celeb>
-						<Image></Image>
-						스트레이키즈
-					</Celeb>
-				</ListContainer>
-			</ContentWrap>
-		</MainContainer>
+						<SearchTab>
+							<InputWrap>
+								<IconWrap>
+									<SearchIcon />
+								</IconWrap>
+								<Input
+									value={searchInput}
+									onChange={handleSearchInput}
+									type="text"
+									placeholder="활동명을 한글로 검색해주세요"
+									margin="0 0 0 6px"
+								/>
+								{searchInput.length !== 0 ? (
+									<IconWrap onClick={searchInputReset}>
+										<Delete />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+							</InputWrap>
+							<TabWrap>
+								<Tab status={singerTabstatus} onClick={onClickTab}>
+									가수
+								</Tab>
+								<Tab status={actorTabstatus} onClick={onClickTab}>
+									배우
+								</Tab>
+							</TabWrap>
+						</SearchTab>
+						<ListContainer>
+							{celebList.map(celeb => (
+								<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
+									<Image key={celeb.id} border={celeb.selected}></Image>
+									{celeb.celebname}
+								</Celeb>
+							))}
+						</ListContainer>
+						{selectedCelebsArray.map(celeb => (
+							<div key={celeb.id}>{celeb.celebname}</div>
+						))}
+					</ContentWrap>
+				</MainContainer>
+			)}
+			{currentPage === 2 && (
+				<MainContainer>
+					<TopNav>
+						<BackButton onClick={handleBackClick} />
+						<NavRight>
+							{selected > 0 ? (
+								<SubText margin="0 16px" color="#9e30f4">
+									{selected}개 선택
+								</SubText>
+							) : (
+								<></>
+							)}
+							{selected >= 3 ? (
+								<NextButton onClick={handleNextClick}>다음</NextButton>
+							) : (
+								<SubText color="#b1b1b1">다음</SubText>
+							)}
+						</NavRight>
+					</TopNav>
+					<ContentWrap>
+						<TextWrap padding="0">
+							<MainText fontsize="24px" margin="15px 0 8px 0">
+								좋아하는 멤버를
+								<br />
+								자유롭게 선택해주세요
+							</MainText>
+							<SubText
+								color="#8d8d8d"
+								fontsize="14px"
+								fontweight="regular"
+								margin="0 0 20px 0"
+							>
+								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
+							</SubText>
+						</TextWrap>
+						<BottomWrap>
+							<SpeechBubbleWrap
+								backgroundColor="#9e30f4"
+								color="white"
+								borderRight="8px solid #9e30f4"
+							>
+								<div>스트레이키즈</div>
+							</SpeechBubbleWrap>
+							<CelebListWrap></CelebListWrap>
+						</BottomWrap>
+					</ContentWrap>
+				</MainContainer>
+			)}
+		</>
 	);
 }
+
+const BottomWrap = styled.div`
+	padding: 0 10px;
+`;
+const CelebListWrap = styled.div`
+	padding: 0 10px;
+`;
+
+const NavRight = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	width: 100%;
+`;
+const NextButton = styled.span`
+	font-size: ${props => props.fontsize || '0.75rem'};
+	font-weight: ${props => props.fontweight || '600'};
+	color: ${props => props.color || '#262626'};
+	margin: ${props => props.margin || '0'};
+	&:hover {
+		cursor: pointer;
+	}
+`;
 
 const ListContainer = styled.div`
 	display: grid;
@@ -237,13 +369,13 @@ const ListContainer = styled.div`
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-auto-rows: minmax(120px, auto);
 	justify-content: center;
-	gap: 1rem 0.6875rem;
+	gap: 16px 11px;
 `;
 
 const TextWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 0 20px;
+	padding: ${props => props.padding || '0 1.25rem'};
 `;
 
 const SearchTab = styled.div`
@@ -266,6 +398,12 @@ const Image = styled.div`
 	height: 6.25rem;
 	border-radius: 50%;
 	background-color: pink;
+	margin-bottom: 8px;
+	box-sizing: border-box;
+	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const InputWrap = styled.div`
