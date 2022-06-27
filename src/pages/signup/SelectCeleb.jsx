@@ -9,8 +9,10 @@ import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ContentWrap } from '../../components/containers/ContentWrap';
+import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 
 export default function SelectCeleb() {
+	const [currentPage, setCurrentPage] = useState(1);
 	const [pageComplete, setPageComplete] = useState(false);
 	const [selected, setSelected] = useState(0);
 	const [searchInput, setSearchInput] = useState('');
@@ -192,13 +194,15 @@ export default function SelectCeleb() {
 			celeb.selected = false;
 			setCelebList([...celebList]);
 		}
-		console.log('id=', celeb.id);
-		console.log('celeb selected= ', celeb.selected);
-		console.log('selected=', selected);
-		console.log(selectedCelebsArray);
+
 		e.preventDefault();
 	};
-
+	const handleBackClick = () => {
+		setCurrentPage(currentPage - 1);
+	};
+	const handleNextClick = () => {
+		setCurrentPage(currentPage + 1);
+	};
 	useEffect(() => {
 		if (selected === 3) {
 			setPageComplete(true);
@@ -206,89 +210,157 @@ export default function SelectCeleb() {
 	}, [pageComplete]);
 
 	return (
-		<MainContainer>
-			<TopNav>
-				<NavRight>
-					{selected > 0 ? (
-						<SubText margin="0 16px" color="#9e30f4">
-							{selected}개 선택
-						</SubText>
-					) : (
-						<></>
-					)}
-					{selected >= 3 ? (
-						<SubText>다음</SubText>
-					) : (
-						<SubText color="#b1b1b1">다음</SubText>
-					)}
-				</NavRight>
-			</TopNav>
-			<ContentWrap padding="0">
-				<TextWrap>
-					<MainText fontsize="24px" margin="11px 0 8px 0">
-						좋아하는 셀럽을
-						<br />
-						최소 3명 선택해주세요
-					</MainText>
-					<SubText
-						color="#8d8d8d"
-						fontsize="14px"
-						fontweight="regular"
-						margin="0 0 20px 0"
-					>
-						선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
-					</SubText>
-				</TextWrap>
+		<>
+			{currentPage === 1 && (
+				<MainContainer>
+					<TopNav>
+						<NavRight>
+							{selected > 0 ? (
+								<SubText margin="0 16px" color="#9e30f4">
+									{selected}개 선택
+								</SubText>
+							) : (
+								<></>
+							)}
+							{selected >= 3 ? (
+								<NextButton onClick={handleNextClick}>다음</NextButton>
+							) : (
+								<SubText color="#b1b1b1">다음</SubText>
+							)}
+						</NavRight>
+					</TopNav>
+					<ContentWrap padding="0">
+						<TextWrap>
+							<MainText fontsize="24px" margin="15px 0 8px 0">
+								좋아하는 셀럽 태그를
+								<br />
+								3개 이상 선택해주세요
+							</MainText>
+							<SubText
+								color="#8d8d8d"
+								fontsize="14px"
+								fontweight="regular"
+								margin="0 0 20px 0"
+							>
+								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
+							</SubText>
+						</TextWrap>
 
-				<SearchTab>
-					<InputWrap>
-						<IconWrap>
-							<SearchIcon />
-						</IconWrap>
-						<Input
-							value={searchInput}
-							onChange={handleSearchInput}
-							type="text"
-							placeholder="활동명을 한글로 검색해주세요"
-							margin="0 0 0 6px"
-						/>
-						{searchInput.length !== 0 ? (
-							<IconWrap onClick={searchInputReset}>
-								<Delete />
-							</IconWrap>
-						) : (
-							<></>
-						)}
-					</InputWrap>
-					<TabWrap>
-						<Tab status={singerTabstatus} onClick={onClickTab}>
-							가수
-						</Tab>
-						<Tab status={actorTabstatus} onClick={onClickTab}>
-							배우
-						</Tab>
-					</TabWrap>
-				</SearchTab>
-				<ListContainer>
-					{celebList.map(celeb => (
-						<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
-							<Image key={celeb.id} border={celeb.selected}></Image>
-							{celeb.celebname}
-						</Celeb>
-					))}
-				</ListContainer>
-				{selectedCelebsArray.map(celeb => (
-					<div key={celeb.id}>{celeb.celebname}</div>
-				))}
-			</ContentWrap>
-		</MainContainer>
+						<SearchTab>
+							<InputWrap>
+								<IconWrap>
+									<SearchIcon />
+								</IconWrap>
+								<Input
+									value={searchInput}
+									onChange={handleSearchInput}
+									type="text"
+									placeholder="활동명을 한글로 검색해주세요"
+									margin="0 0 0 6px"
+								/>
+								{searchInput.length !== 0 ? (
+									<IconWrap onClick={searchInputReset}>
+										<Delete />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+							</InputWrap>
+							<TabWrap>
+								<Tab status={singerTabstatus} onClick={onClickTab}>
+									가수
+								</Tab>
+								<Tab status={actorTabstatus} onClick={onClickTab}>
+									배우
+								</Tab>
+							</TabWrap>
+						</SearchTab>
+						<ListContainer>
+							{celebList.map(celeb => (
+								<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
+									<Image key={celeb.id} border={celeb.selected}></Image>
+									{celeb.celebname}
+								</Celeb>
+							))}
+						</ListContainer>
+						{selectedCelebsArray.map(celeb => (
+							<div key={celeb.id}>{celeb.celebname}</div>
+						))}
+					</ContentWrap>
+				</MainContainer>
+			)}
+			{currentPage === 2 && (
+				<MainContainer>
+					<TopNav>
+						<BackButton onClick={handleBackClick} />
+						<NavRight>
+							{selected > 0 ? (
+								<SubText margin="0 16px" color="#9e30f4">
+									{selected}개 선택
+								</SubText>
+							) : (
+								<></>
+							)}
+							{selected >= 3 ? (
+								<NextButton onClick={handleNextClick}>다음</NextButton>
+							) : (
+								<SubText color="#b1b1b1">다음</SubText>
+							)}
+						</NavRight>
+					</TopNav>
+					<ContentWrap>
+						<TextWrap padding="0">
+							<MainText fontsize="24px" margin="15px 0 8px 0">
+								좋아하는 멤버를
+								<br />
+								자유롭게 선택해주세요
+							</MainText>
+							<SubText
+								color="#8d8d8d"
+								fontsize="14px"
+								fontweight="regular"
+								margin="0 0 20px 0"
+							>
+								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
+							</SubText>
+						</TextWrap>
+						<BottomWrap>
+							<SpeechBubbleWrap
+								backgroundColor="#9e30f4"
+								color="white"
+								borderRight="8px solid #9e30f4"
+							>
+								<div>스트레이키즈</div>
+							</SpeechBubbleWrap>
+							<CelebListWrap></CelebListWrap>
+						</BottomWrap>
+					</ContentWrap>
+				</MainContainer>
+			)}
+		</>
 	);
 }
+
+const BottomWrap = styled.div`
+	padding: 0 10px;
+`;
+const CelebListWrap = styled.div`
+	padding: 0 10px;
+`;
 
 const NavRight = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	width: 100%;
+`;
+const NextButton = styled.span`
+	font-size: ${props => props.fontsize || '0.75rem'};
+	font-weight: ${props => props.fontweight || '600'};
+	color: ${props => props.color || '#262626'};
+	margin: ${props => props.margin || '0'};
+	&:hover {
+		cursor: pointer;
+	}
 `;
 
 const ListContainer = styled.div`
@@ -303,7 +375,7 @@ const ListContainer = styled.div`
 const TextWrap = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 0 20px;
+	padding: ${props => props.padding || '0 1.25rem'};
 `;
 
 const SearchTab = styled.div`

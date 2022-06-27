@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SpeechBubbleWrap = styled.div`
 	display: inline-block;
-	background: white;
+	background: ${props => props.backgroundColor || 'white'};
 	position: relative;
 	padding: 15px 20px;
 	border-radius: 13px;
@@ -11,7 +11,7 @@ export const SpeechBubbleWrap = styled.div`
 	border: none;
 	font-size: 16px;
 	font-weight: 600;
-	color: #262626;
+	color: ${props => props.color || '#262626'};
 
 	::before {
 		content: '';
@@ -21,11 +21,10 @@ export const SpeechBubbleWrap = styled.div`
 		width: 0;
 		height: 0;
 		border-bottom: 8px solid transparent;
-		border-right: 8px solid white;
+		border-right: ${props => props.borderRight || '8px solid white'};
 	}
 
 	.redStar {
 		color: #ff365f;
 	}
 `;
-
