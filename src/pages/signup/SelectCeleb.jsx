@@ -46,14 +46,14 @@ export default function SelectCeleb() {
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
-			isGroup: false,
+			isGroup: true,
 		},
 		{
 			id: 2,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
-			isGroup: false,
+			isGroup: true,
 		},
 		{
 			id: 3,
@@ -227,33 +227,27 @@ export default function SelectCeleb() {
 			celeb.selected = false;
 			setCelebList([...celebList]);
 		}
-		countGroup(selectedCelebsArray);
+		// countGroup(selectedCelebsArray);
 		e.preventDefault();
 	};
-	// var groupLen = 0;
-	var groupList = [];
-	const countGroup = () => {
-		for (let i = 0; i < selectedCelebsArray.length; i++) {
-			if (selectedCelebsArray[i].isGroup === true) {
-				const member = selectedCelebsArray[i];
-				console.log(member);
-				groupList.push(member);
-			}
-		}
-		setGroupLen(groupList.length);
-		console.log(groupLen);
-	};
-
-	useEffect(() => {
-		console.log('useEffect len', groupLen);
-	}, [groupLen]);
+	// // var groupLen = 0;
+	// var groupList = [];
+	// const countGroup = () => {
+	// 	for (let i = 0; i < selectedCelebsArray.length; i++) {
+	// 		if (selectedCelebsArray[i].isGroup === true) {
+	// 			const member = selectedCelebsArray[i];
+	// 			console.log(member);
+	// 			groupList.push(member);
+	// 		}
+	// 	}
+	// 	console.log('groupList length: ', groupList.length);
+	// };
 
 	const handleBackClick = () => {
 		setCurrentPage(currentPage - 1);
 	};
 	const handleNextClick = () => {
-		// setGroupLen(groupList.length);
-		setCurrentPage(0);
+		setCurrentPage(currentPage + 1);
 	};
 
 	useEffect(() => {
