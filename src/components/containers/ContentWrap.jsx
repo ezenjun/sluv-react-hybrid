@@ -7,6 +7,7 @@ export const ContentWrap = styled.div`
 	height: 100%;
 	overflow-y: scroll;
 	position: relative;
+
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
