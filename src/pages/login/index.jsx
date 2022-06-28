@@ -11,6 +11,7 @@ import { ReactComponent as Logo } from '../../assets/Logo/Logo.svg';
 import { ReactComponent as KakaoIcon } from '../../assets/Icons/kakao_icon.svg';
 import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
+import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
 export default function Login() {
 	const navigate = useNavigate();
 
@@ -51,7 +52,12 @@ export default function Login() {
 			</LogoContainer>
 
 			<ButtonContainer>
-				<LoginSubtext style={{ marginBottom: '1rem' }}></LoginSubtext>
+				<div style={{ margin: '0 auto' }}>
+					<LoginSpeechBubble>
+						로그인하여 다양한
+						<span className="boldText"> 셀럽의 아이템</span>을 만나보세요!
+					</LoginSpeechBubble>
+				</div>
 				<a href={KAKAO_AUTH_URL}>
 					<KaKaoButton>
 						<KakaoIcon
