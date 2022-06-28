@@ -31,11 +31,10 @@ export default function Login() {
 		});
 
 		google.accounts.id.renderButton(document.getElementById('google'), {
-			type: 'standard',
+			type: 'icon',
 			theme: 'outline',
 			size: 'large',
-			width: '300px',
-			logo_alignment: 'left',
+			width: '40px',
 			shape: 'circle',
 		});
 		// eslint-disable-next-line
@@ -75,9 +74,11 @@ export default function Login() {
 					<div className="grayLine"></div>
 				</Division>
 
-				<GoogleButton>
-					<div id="google" />
-				</GoogleButton>
+				<div>
+					<GoogleButton>
+						<div id="google" />
+					</GoogleButton>
+				</div>
 			</ButtonContainer>
 			<LocalLogin>
 				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
@@ -90,9 +91,9 @@ const MainContainer = styled.div`
 	display: flex;
 	box-sizing: border-box;
 	background-color: ${palette.white.secondary};
-	padding: 2.5rem;
+	padding: 0 2.5rem 1rem 2.5rem;
 	flex-direction: column;
-	justify-content: space-evenly;
+	/* justify-content: space-evenly; */
 	height: 100%;
 	width: 100%; 
 `;
@@ -102,6 +103,8 @@ const LogoContainer = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+
+	margin-top: 158px;
 `;
 
 const InfotextContainer = styled.div`
@@ -124,6 +127,8 @@ const ButtonContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+	flex: 1;
 `;
 
 const KaKaoButton = styled.div`
@@ -174,9 +179,6 @@ const Division = styled.div`
 	}
 `;
 
-
-
-
 const GoogleButton = styled.div`
 	display: flex;
 	align-items: center;
@@ -186,14 +188,15 @@ const GoogleButton = styled.div`
 
 
 const LoginText = styled(Link)`
+	text-decoration: underline;
 	color: #6a6a6a;
 	font-family: Pretendard;
 	font-size: 0.75rem;
 `;
 
-const LocalLogin = styled.span`
+const LocalLogin = styled.div`
+	margin: 0 auto;
 	color: #6a6a6a;
-	text-decoration: none;
 	font-family: Pretendard;
 	font-size: 0.75rem;
 	border-radius: 2.5rem;
