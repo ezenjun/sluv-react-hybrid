@@ -14,9 +14,10 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function SelectCeleb() {
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const [pageComplete, setPageComplete] = useState(false);
 	const [selected, setSelected] = useState(0);
+	const [groupPage, setGroupPage] = useState(0);
 	const [searchInput, setSearchInput] = useState('');
 	const handleSearchInput = e => {
 		setSearchInput(e.target.value);
@@ -207,7 +208,7 @@ export default function SelectCeleb() {
 			isGroup: true,
 		},
 	]);
-	const [groupList, setGroupList] = useState([]);
+
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
 	const handleRemoveItem = celeb => {
 		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
@@ -259,38 +260,17 @@ export default function SelectCeleb() {
 		},
 	]);
 
-	const [groupPage, setGroupPage] = useState(0);
-	const [selectedMembersArray, setSelectedMembersArray] = useState([]);
-	const [selectedMembersCount, setSelectedMembersCount] = useState([]);
-
-	// const onSelectMember = (celeb, e) => {
-	// 	if (celeb.selected === false) {
-	// 		setMemberList(memberList => [...memberList, celeb]);
-	// 		setSelected(selected + 1);
-	// 		celeb.selected = true;
-	// 		setCelebList([...celebList]);
-	// 	} else {
-	// 		handleRemoveItem(celeb);
-	// 		setSelected(selected - 1);
-	// 		celeb.selected = false;
-	// 		setCelebList([...celebList]);
-	// 	}
-	// 	e.preventDefault();
-	// };
-
+	const groupList = [];
 	const countGroup = array => {
 		for (let i = 0; i < array.length; i++) {
 			if (array[i].isGroup === true) {
 				const member = selectedCelebsArray[i];
-				console.log('member', member);
-				setGroupList([member, ...groupList]);
-				console.log('groupList: ', groupList);
+				groupList.push(member);
 			}
 		}
-		// setGroupList([...groupList]);
-		console.log(groupList.length);
-		// setGroupPage(groupList.length);
-		// console.log(groupPage);
+		console.log('groupList length: ', groupList.length);
+		setGroupPage(groupList.length);
+		console.log(groupPage);
 	};
 
 	const handleBackClick = () => {
@@ -298,7 +278,9 @@ export default function SelectCeleb() {
 	};
 	const handleNextClick = () => {
 		countGroup(selectedCelebsArray);
-		setCurrentPage(currentPage + 1);
+		setGroupPage(groupList.length);
+		setCurrentPage(0);
+		if (groupPage === 0) navigate('../..//home');
 	};
 	useEffect(() => {
 		if (selected === 3) {
@@ -308,7 +290,7 @@ export default function SelectCeleb() {
 
 	return (
 		<>
-			{currentPage === 1 && (
+			{currentPage === 0 && (
 				<MainContainer>
 					<TopNav>
 						<NavRight>
@@ -401,7 +383,7 @@ export default function SelectCeleb() {
 					</ContentWrap>
 				</MainContainer>
 			)}
-			{currentPage === 2 && (
+			{currentPage === 1 && (
 				<MainContainer>
 					<TopNav>
 						<BackButton onClick={handleBackClick} />
