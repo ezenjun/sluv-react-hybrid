@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function Custom() {
-  return (
-    <div>Event</div>
-  )
+	return <div>Custom</div>;
 }
