@@ -42,7 +42,7 @@ export default function Home() {
 						borderBottom={tabIndex === 2 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(2)}
 					>
-						<Tab color={tabIndex === 2 ? '#262626' : ''}>팔로잉</Tab>
+						<Tab color={tabIndex === 1 ? '#262626' : ''}>팔로잉</Tab>
 					</StyledLink>
 					<StyledLink
 						to="question"
@@ -50,7 +50,7 @@ export default function Home() {
 						borderBottom={tabIndex === 3 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(3)}
 					>
-						<Tab color={tabIndex === 3 ? '#262626' : ''}>질문</Tab>
+						<Tab color={tabIndex === 1 ? '#262626' : ''}>질문</Tab>
 					</StyledLink>
 					<StyledLink
 						to="event"
@@ -58,7 +58,7 @@ export default function Home() {
 						borderBottom={tabIndex === 4 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(4)}
 					>
-						<Tab color={tabIndex === 4 ? '#262626' : ''}>이벤트</Tab>
+						<Tab color={tabIndex === 1 ? '#262626' : ''}>이벤트</Tab>
 					</StyledLink>
 				</TabContainer>
 				<FeedContainer>
@@ -98,7 +98,9 @@ const Tab = styled.div`
 const FeedContainer = styled.div`
 	height: 100vh;
 	overflow-y: scroll;
-	border: 1px solid black;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
 `;
 
 const StyledLink = styled(Link)`
@@ -108,4 +110,5 @@ const StyledLink = styled(Link)`
 	color: ${props => props.margin || '#8d8d8d'};
 	margin: ${props => props.margin || '0'};
 	border-bottom: ${props => props.borderBottom || 'none'};
+	transition: 1s ease;
 `;
