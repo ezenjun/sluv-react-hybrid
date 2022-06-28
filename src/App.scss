@@ -6,6 +6,11 @@ body {
 	-khtml-user-select: none;
 	user-select: none;
 }
+// a 태그 밑줄 제거
+a {
+	text-decoration: none;
+}
+
 
 //반응형
 @media screen and (max-width: 325px) {
@@ -57,3 +62,11 @@ body {
 		font-size: 21px;
 	}
 }
+
+
+
+
+
+
+
+

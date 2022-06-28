@@ -5,7 +5,7 @@ import Pages from './containers/Pages';
 
 import './App.scss';
 import { palette } from './styles/palette';
-import GlobalStyles from './styles/GlobalStyles';
+
 
 import { useRecoilValue } from 'recoil';
 import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from './recoil/ToastMessage';
@@ -18,7 +18,6 @@ export default function App() {
 
 	return (
 		<RootWrap>
-			<GlobalStyles />
 			<BrowserRouter>
 				<Pages />
 				{/* 하단바 */}
