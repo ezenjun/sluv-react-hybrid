@@ -321,7 +321,7 @@ export default function SelectCeleb() {
 						<RequsetWrap>
 							<RequestButton>
 								<PurpleButton
-									boxshadow="0px 0px 10px #454545"
+									boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 									marginBottom="0"
 									onClick={handleRequestCeleb}
 								>
