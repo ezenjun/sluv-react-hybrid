@@ -48,10 +48,10 @@ export default function RequestCeleb() {
     return (
 		<MainContainer>
 			<TopNav style={{ justifyContent: 'space-between' }}>
-				<BackButton />
+				<BackButton onClick={()=>navigate(-1)} />
 				<div className="centerText">셀럽 추가 요청하기</div>
-				<div 
-					className="rightText" 
+				<div
+					className="rightText"
 					style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
 					onClick={onClickConfirm}
 				>

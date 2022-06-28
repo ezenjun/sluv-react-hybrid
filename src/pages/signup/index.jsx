@@ -285,7 +285,18 @@ export default function Signup() {
 			console.log('이메일 등록 성공');
 		} else {
 			setEmailValid(false);
-			alert(data.message);
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage(data.message);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+
 			console.log(data.message);
 		}
 	}

@@ -17,6 +17,7 @@
 		"recoil": "^0.7.3-alpha.2",
 		"sass": "^1.52.1",
 		"styled-components": "^5.3.5",
+		"styled-reset": "^4.4.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {

@@ -6,6 +6,11 @@ body {
 	-khtml-user-select: none;
 	user-select: none;
 }
+// a 태그 밑줄 제거
+a {
+	text-decoration: none;
+}
+
 
 //반응형
 @media screen and (max-width: 325px) {
@@ -18,12 +23,12 @@ body {
 		font-size: 15px;
 	}
 }
-@media screen and (min-width: 345px) and (max-width: 369px) {
+@media screen and (min-width: 345px) and (max-width: 375px) {
 	html {
 		font-size: 16px;
 	}
 }
-@media screen and (min-width: 370px) and (max-width: 409px) {
+@media screen and (min-width: 376px) and (max-width: 409px) {
 	html {
 		font-size: 17px;
 	}
@@ -57,3 +62,11 @@ body {
 		font-size: 21px;
 	}
 }
+
+
+
+
+
+
+
+
