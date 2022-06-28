@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { KAKAO_AUTH_URL } from './KakaoOAuth';
-import Kakaoimg from '../../assets/kakao_buttons/kakao_login_medium_wide.png';
 import { GoogleClient_ID } from './GoogleOAuth';
 import { useNavigate } from 'react-router-dom';
 import { customApiClient } from '../../utils/apiClient';
 import { ReactComponent as EmailIcon } from '../../assets/Icons/emailIcon.svg';
-import { ReactComponent as LoginSubtext } from '../../assets/Icons/LoginSubtext.svg';
+import { ReactComponent as LoginSubtext } from '../../assets/Icons/login_subText.svg';
 import { ReactComponent as Logo } from '../../assets/Logo/Logo.svg';
+import { ReactComponent as KakaoIcon } from '../../assets/Icons/kakao_icon.svg';
 import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 export default function Login() {
@@ -46,17 +46,19 @@ export default function Login() {
 			<LogoContainer>
 				<Logo></Logo>
 				<InfotextContainer>
-					<MainText fontsize="1rem">
-						셀럽의 아이템 정보 집합소 <br />
-						스럽에서 시작해 보세요!
-						<br />
-					</MainText>
+					<div className="mainInfoText">셀럽의 아이템 정보 집합소</div>
+					<div className="subInfoText">스럽의 정보는 사랑스럽다!</div>
 				</InfotextContainer>
 			</LogoContainer>
 
 			<ButtonContainer>
 				<LoginSubtext style={{ marginBottom: '12px' }}></LoginSubtext>
-				<KaKaoButton href={KAKAO_AUTH_URL} />
+				<KaKaoButton href={KAKAO_AUTH_URL}>
+					<div>
+						<KakaoIcon />
+						<span>카카오로 시작하기</span>
+					</div>
+				</KaKaoButton>
 				<GoogleButton>
 					<div id="google" />
 				</GoogleButton>
@@ -97,6 +99,18 @@ const LogoContainer = styled.div`
 
 const InfotextContainer = styled.div`
 	text-align: center;
+
+	.mainInfoText {
+		margin-top: 0.75rem;
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #262626;
+	}
+	.subInfoText {
+		margin-top: 0.5rem;
+		font-size: 0.875rem;
+		color: #6a6a6a;
+	}
 `;
 
 const ButtonContainer = styled.div`
@@ -108,11 +122,9 @@ const ButtonContainer = styled.div`
 `;
 
 const KaKaoButton = styled.a`
-	background-image: url(${Kakaoimg});
-	background-repeat: no-repeat;
-	color: transparent;
-	width: 300px;
-	height: 45px;
+	
+	background-color: #fee500;
+	display: flex;
 	border: none;
 	border-radius: 2.5rem;
 	margin-bottom: 0.75rem;
