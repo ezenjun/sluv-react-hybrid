@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -10,7 +11,7 @@ import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
-import { render } from '@testing-library/react';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +24,10 @@ export default function SelectCeleb() {
 	const searchInputReset = () => {
 		setSearchInput('');
 	};
-
+	const navigate = useNavigate();
+	const handleRequestCeleb = () => {
+		navigate('../../request/celebrity');
+	};
 	const [singerTabstatus, setSingerTabstatus] = useState(true);
 	const [actorTabstatus, setActorTabstatus] = useState(false);
 
@@ -37,147 +41,170 @@ export default function SelectCeleb() {
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 2,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 3,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 4,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 5,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 6,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 7,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 8,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 9,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 10,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 11,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 12,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 13,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 14,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 15,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 16,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 17,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 18,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 19,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: false,
 		},
 		{
 			id: 20,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 21,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 22,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 23,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
+			isGroup: true,
 		},
 		{
 			id: 24,
 			celebname: 'liz',
 			img: 'liz@example.com',
 			selected: false,
+			isGroup: true,
 		},
 	]);
-	const boxcount = celebList.length / 4;
 
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
 	const handleRemoveItem = celeb => {
@@ -196,7 +223,6 @@ export default function SelectCeleb() {
 			celeb.selected = false;
 			setCelebList([...celebList]);
 		}
-
 		e.preventDefault();
 	};
 	const handleBackClick = () => {
@@ -280,7 +306,11 @@ export default function SelectCeleb() {
 						<ListContainer>
 							{celebList.map(celeb => (
 								<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
-									<Image key={celeb.id} border={celeb.selected}></Image>
+									<Image
+										size="100px"
+										key={celeb.id}
+										border={celeb.selected}
+									></Image>
 									{celeb.celebname}
 								</Celeb>
 							))}
@@ -288,6 +318,17 @@ export default function SelectCeleb() {
 						{selectedCelebsArray.map(celeb => (
 							<div key={celeb.id}>{celeb.celebname}</div>
 						))}
+						<RequsetWrap>
+							<RequestButton>
+								<PurpleButton
+									boxshadow="0px 0px 10px #454545"
+									marginBottom="0"
+									onClick={handleRequestCeleb}
+								>
+									셀럽 추가 요청하기
+								</PurpleButton>
+							</RequestButton>
+						</RequsetWrap>
 					</ContentWrap>
 				</MainContainer>
 			)}
@@ -348,7 +389,7 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}>
+															<Image size="9.25rem" key={celeb.id}>
 																{celeb.celebname}
 															</Image>
 														</CelebLeftTop>
@@ -360,7 +401,7 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}>
+															<Image size="9.25rem" key={celeb.id}>
 																{celeb.celebname}
 															</Image>
 														</CelebLeftBottom>
@@ -372,7 +413,7 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}>
+															<Image size="9.25rem" key={celeb.id}>
 																{celeb.celebname}
 															</Image>
 														</CelebRightTop>
@@ -384,7 +425,7 @@ export default function SelectCeleb() {
 															key={celeb.id}
 															onClick={e => onSelectCeleb(celeb, e)}
 														>
-															<Image key={celeb.id}>
+															<Image size="9.25rem" key={celeb.id}>
 																{celeb.celebname}
 															</Image>
 														</CelebRightBottom>
@@ -405,6 +446,19 @@ export default function SelectCeleb() {
 		</>
 	);
 }
+
+const RequsetWrap = styled.div`
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	bottom: 1rem;
+`;
+const RequestButton = styled.div`
+	width: 156px;
+	margin: 0;
+`;
 
 const BottomWrap = styled.div`
 	box-sizing: border-box;
@@ -499,8 +553,8 @@ const CelebRightBottom = styled.div`
 `;
 const Image = styled.div`
 	display: flex;
-	width: 9.375rem;
-	height: 9.375rem;
+	width: ${props => props.size || '6.25rem'};
+	height: ${props => props.size || '6.25rem'};
 	justify-content: center;
 	align-items: flex-end;
 	padding-bottom: 12px;

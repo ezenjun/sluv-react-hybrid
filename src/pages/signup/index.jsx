@@ -16,7 +16,12 @@ import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg
 import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
@@ -255,7 +260,7 @@ export default function Signup() {
 			console.log('인증번호 인증 성공');
 		} else {
 			setAuthCodeValid(false);
-			
+
 			setToastMessageBottomPosition('5.125rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
