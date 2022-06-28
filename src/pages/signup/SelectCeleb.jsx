@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -14,11 +15,15 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function SelectCeleb() {
+	const [groupLen, setGroupLen] = useState(0);
 	const [currentPage, setCurrentPage] = useState(0);
 	const [pageComplete, setPageComplete] = useState(false);
 	const [selected, setSelected] = useState(0);
-	const [groupPage, setGroupPage] = useState(0);
+
 	const [searchInput, setSearchInput] = useState('');
+	const [singerTabstatus, setSingerTabstatus] = useState(true);
+	const [actorTabstatus, setActorTabstatus] = useState(false);
+
 	const handleSearchInput = e => {
 		setSearchInput(e.target.value);
 	};
@@ -29,29 +34,26 @@ export default function SelectCeleb() {
 	const handleRequestCeleb = () => {
 		navigate('../../request/celebrity');
 	};
-	const [singerTabstatus, setSingerTabstatus] = useState(true);
-	const [actorTabstatus, setActorTabstatus] = useState(false);
 
 	const onClickTab = () => {
 		setSingerTabstatus(!singerTabstatus);
 		setActorTabstatus(!actorTabstatus);
 	};
 
-	// 관심셀럽 선택
 	const [celebList, setCelebList] = useState([
 		{
 			id: 1,
 			celebname: 'velopert',
 			img: 'public.velopert@gmail.com',
 			selected: false,
-			isGroup: true,
+			isGroup: false,
 		},
 		{
 			id: 2,
 			celebname: 'tester',
 			img: 'tester@example.com',
 			selected: false,
-			isGroup: true,
+			isGroup: false,
 		},
 		{
 			id: 3,
@@ -225,68 +227,41 @@ export default function SelectCeleb() {
 			celeb.selected = false;
 			setCelebList([...celebList]);
 		}
+		countGroup(selectedCelebsArray);
 		e.preventDefault();
 	};
-
-	// 관심 멤버 선택
-	const [memberList, setMemberList] = useState([
-		{
-			id: 1,
-			celebname: '지수',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 2,
-			celebname: '제니',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 3,
-			celebname: '로제',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 4,
-			celebname: '리사',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-	]);
-
-	const groupList = [];
-	const countGroup = array => {
-		for (let i = 0; i < array.length; i++) {
-			if (array[i].isGroup === true) {
+	// var groupLen = 0;
+	var groupList = [];
+	const countGroup = () => {
+		for (let i = 0; i < selectedCelebsArray.length; i++) {
+			if (selectedCelebsArray[i].isGroup === true) {
 				const member = selectedCelebsArray[i];
+				console.log(member);
 				groupList.push(member);
 			}
 		}
-		console.log('groupList length: ', groupList.length);
-		setGroupPage(groupList.length);
-		console.log(groupPage);
+		setGroupLen(groupList.length);
+		console.log(groupLen);
 	};
+
+	useEffect(() => {
+		console.log('useEffect len', groupLen);
+	}, [groupLen]);
 
 	const handleBackClick = () => {
 		setCurrentPage(currentPage - 1);
 	};
 	const handleNextClick = () => {
-		countGroup(selectedCelebsArray);
-		setGroupPage(groupList.length);
+		// setGroupLen(groupList.length);
 		setCurrentPage(0);
-		if (groupPage === 0) navigate('../..//home');
 	};
+
 	useEffect(() => {
 		if (selected === 3) {
 			setPageComplete(true);
+			setCurrentPage(1);
 		}
-	}, [pageComplete]);
+	}, []);
 
 	return (
 		<>
