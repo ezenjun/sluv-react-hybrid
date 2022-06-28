@@ -35,6 +35,8 @@ export default function SelectCeleb() {
 		setSingerTabstatus(!singerTabstatus);
 		setActorTabstatus(!actorTabstatus);
 	};
+
+	// 관심셀럽 선택
 	const [celebList, setCelebList] = useState([
 		{
 			id: 1,
@@ -205,7 +207,7 @@ export default function SelectCeleb() {
 			isGroup: true,
 		},
 	]);
-
+	const [groupList, setGroupList] = useState([]);
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
 	const handleRemoveItem = celeb => {
 		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
@@ -214,7 +216,6 @@ export default function SelectCeleb() {
 		if (celeb.selected === false) {
 			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
 			setSelected(selected + 1);
-			console.log('celeb selected= ', celeb.selected);
 			celeb.selected = true;
 			setCelebList([...celebList]);
 		} else {
@@ -225,10 +226,78 @@ export default function SelectCeleb() {
 		}
 		e.preventDefault();
 	};
+
+	// 관심 멤버 선택
+	const [memberList, setMemberList] = useState([
+		{
+			id: 1,
+			celebname: '지수',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+			isGroup: true,
+		},
+		{
+			id: 2,
+			celebname: '제니',
+			img: 'tester@example.com',
+			selected: false,
+			isGroup: true,
+		},
+		{
+			id: 3,
+			celebname: '로제',
+			img: 'liz@example.com',
+			selected: false,
+			isGroup: false,
+		},
+		{
+			id: 4,
+			celebname: '리사',
+			img: 'public.velopert@gmail.com',
+			selected: false,
+			isGroup: true,
+		},
+	]);
+
+	const [groupPage, setGroupPage] = useState(0);
+	const [selectedMembersArray, setSelectedMembersArray] = useState([]);
+	const [selectedMembersCount, setSelectedMembersCount] = useState([]);
+
+	// const onSelectMember = (celeb, e) => {
+	// 	if (celeb.selected === false) {
+	// 		setMemberList(memberList => [...memberList, celeb]);
+	// 		setSelected(selected + 1);
+	// 		celeb.selected = true;
+	// 		setCelebList([...celebList]);
+	// 	} else {
+	// 		handleRemoveItem(celeb);
+	// 		setSelected(selected - 1);
+	// 		celeb.selected = false;
+	// 		setCelebList([...celebList]);
+	// 	}
+	// 	e.preventDefault();
+	// };
+
+	const countGroup = array => {
+		for (let i = 0; i < array.length; i++) {
+			if (array[i].isGroup === true) {
+				const member = selectedCelebsArray[i];
+				console.log('member', member);
+				setGroupList([member, ...groupList]);
+				console.log('groupList: ', groupList);
+			}
+		}
+		// setGroupList([...groupList]);
+		console.log(groupList.length);
+		// setGroupPage(groupList.length);
+		// console.log(groupPage);
+	};
+
 	const handleBackClick = () => {
 		setCurrentPage(currentPage - 1);
 	};
 	const handleNextClick = () => {
+		countGroup(selectedCelebsArray);
 		setCurrentPage(currentPage + 1);
 	};
 	useEffect(() => {
