@@ -7,10 +7,10 @@ export const TopNav = styled.div`
 	font-weight: 700;
 	font-size: 1.125rem;
 	width: 100%;
+	/* height: 49px; */
 	padding: 0.9375rem 1.25rem;
 	align-items: center;
 	text-align: center;
-
 	// 상단바 중앙 텍스트
 	.centerText {
 		font-size: 1.125rem;
