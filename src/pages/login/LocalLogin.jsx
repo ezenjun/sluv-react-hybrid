@@ -92,6 +92,9 @@ export default function LocalLogin() {
 		if (data.isSuccess === true) {
 			console.log('로그인 완료');
 			console.log(data.result.jwt);
+			//토큰저장
+			localStorage.setItem('x-access-token', data.result.jwt);
+			
 			navigate('/home');
 		} else {
 			setToastMessageBottomPosition('1.625rem');

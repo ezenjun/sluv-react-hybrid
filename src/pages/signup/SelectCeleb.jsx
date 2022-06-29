@@ -352,6 +352,8 @@ export default function SelectCeleb() {
 					</ContentWrap>
 				</MainContainer>
 			)}
+
+			
 			{currentPage === 1 && (
 				<MainContainer>
 					<TopNav>
