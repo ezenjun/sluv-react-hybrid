@@ -21,7 +21,16 @@ export default function Login() {
 		const data = await customApiClient('get', url);
 		console.log(data);
 
-		navigate('/signup/nickname');
+		if (data.code === 3001) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			navigate('/home');
+		}
+		if (data.code === 1000) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			// 닉네임으로 페이지 변경
+		}
 	}
 
 	useEffect(() => {
@@ -150,6 +159,7 @@ const KaKaoButton = styled.div`
 	.kakaoBtnText {
 		font-size: 0.875rem;
 		font-weight: 600;
+		color: #000000;
 	}
 `;
 

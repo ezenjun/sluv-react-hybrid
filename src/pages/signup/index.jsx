@@ -319,6 +319,9 @@ export default function Signup() {
 				alert('회원 생성 완료');
 				console.log('회원 생성 완료');
 				console.log(data.result.jwt);
+				//토큰저장
+				localStorage.setItem('x-access-token', data.result.jwt);
+
 				handleNextClick();
 			}
 		} else {

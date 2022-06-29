@@ -13,12 +13,12 @@ export const customApiClient = async (method, url, data) => {
 
     try {
         const result = await apiClient(url, {
-            method: method,
-            data: data,
-            headers: {
-                Authorization: "Bearer " + localStorage.getItem("x-access-token"),
-            }
-        });
+			method: method,
+			data: data,
+			headers: {
+				'X-ACCESS-TOKEN': localStorage.getItem('x-access-token'),
+			},
+		});
 
         return result.data;
     }
