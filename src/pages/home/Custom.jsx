@@ -74,6 +74,18 @@ export default function Custom() {
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 				</ItemWrap>
+				<RecommendUserWrap>
+					<TextWrap>
+						<MainText fontsize="1.5rem">인기 스러버 추천</MainText>
+					</TextWrap>
+					<ChipWrap>
+						<Chip>스트레이키즈</Chip>
+						<Chip>리노</Chip>
+						<Chip>현진</Chip>
+						<Chip>아이엔</Chip>
+						<Chip>필릭스</Chip>
+					</ChipWrap>
+				</RecommendUserWrap>
 			</ItemContainer>
 		</>
 	);
@@ -101,13 +113,14 @@ const Events = styled.div`
 const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 40px 20px 50px 20px;
+	box-sizing: border-box;
+	padding: 2.5rem 1.25rem 3.125rem 1.25rem;
 `;
 const TextWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
-	margin-bottom: 25px;
+	margin-bottom: ${props => props.marginbottom || '20px'};
 `;
 const ChipWrap = styled.div`
 	overflow-x: scroll;
@@ -119,37 +132,44 @@ const ChipWrap = styled.div`
 const Chip = styled.div`
 	display: inline-block;
 	box-sizing: border-box;
-	padding: 10px 16px;
-	margin-right: 8px;
-	border-radius: 30.4px;
+	padding: 0.625rem 1rem;
+	margin-right: 0.5rem;
+	border-radius: 1.9rem;
 	border: solid 1px #e2e0e0;
-	font-size: 14px;
+	font-size: 0.875rem;
 `;
 const FilterWrap = styled.div`
 	display: flex;
-	margin-bottom: 16px;
+	margin-bottom: 1rem;
 `;
 const HorizontalLine = styled.div`
-	margin: 12px 0;
+	margin: 0.75rem 0;
 	border-top: 1px solid #f4f4f4;
 `;
 const VerticalLine = styled.div`
-	margin: 0 8px;
+	margin: 0 0.5rem;
 	border-right: 1px solid #d9d9d9;
 `;
 const ItemWrap = styled.div`
 	display: grid;
-	justify-content: center;
+	justify-items: center;
 	grid-template-columns: 1fr 1fr;
-	grid-template-rows: 13.6875rem 13.6875rem;
-	row-gap: 11px;
-	column-gap: 11px;
+	grid-auto-rows: minmax(6.25rem, auto);
+	row-gap: 0.6875rem;
+	column-gap: 0.6875rem;
 `;
 const Item = styled.div``;
 const Image = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
-	border-radius: 16px;
+	border-radius: 1rem;
 	background-color: blue;
 	margin-bottom: 1rem;
+`;
+const RecommendUserWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding-top: 40px;
+	padding-bottom: 50px;
 `;
