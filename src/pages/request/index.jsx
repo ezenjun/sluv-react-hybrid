@@ -6,6 +6,9 @@ import { TopRadiusContainer } from '../../components/containers/TopRadiusContain
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { InputSpeechBubbleWrap, SpeechBubbleInput, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import { customApiClient } from '../../utils/apiClient';
 
 export default function RequestCeleb() {
 
@@ -16,6 +19,11 @@ export default function RequestCeleb() {
 	const [isName, setIsName] = useState(false);
 	const [isReason, setIsReason] = useState(false);
 	const [isConfirm, setIsConfirm] = useState(false);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	useEffect(() => {
 		if(name) {
@@ -41,8 +49,31 @@ export default function RequestCeleb() {
 		setIsConfirm(false);
 	},[name,reason]);
 
-	const onClickConfirm = () => {
-		if(isConfirm) navigate(-1);
+	const onClickConfirm = async () => {
+		if(isConfirm) {
+			// 셀럽 추가 요청하기 API
+			const body = {
+				name: name,
+				reason: reason,
+			};
+			const data = await customApiClient('post', '/celebs/req', body);
+			if(!data.isSuccess) {
+				console.log(data.message);
+				return;
+			}
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessage('셀럽 추가를 성공적으로 요청했어요');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+				navigate(-1);
+			}, 2300);
+		}
 	}
 
     return (
