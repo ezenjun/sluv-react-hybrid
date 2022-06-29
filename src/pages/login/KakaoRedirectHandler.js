@@ -16,14 +16,17 @@ export default function KakaoRedirectHandler (){
         const url = `/auth/kakao-login?code=${code}`;
         const data = await customApiClient('get', url);
 
-        console.log(data);
-        if (!data) return
-        if (data.statusCode !== 1000) { return }
-
-        const jwt = data.result.jwt;
-        localStorage.setItem("x-access-token", jwt);  
-
-        navigate("/signup/nickname"); // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(닉네임으로)
+        if(data.code === 3001) {
+            console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt); 
+            navigate('/home'); 
+        } 
+        if(data.code === 1000) {
+            console.log(data.result.jwt);
+            localStorage.setItem('x-access-token', data.result.jwt);  
+            // 닉네임으로 페이지 변경
+        }
+        
     }
 
 
