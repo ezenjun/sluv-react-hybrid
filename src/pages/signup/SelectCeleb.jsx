@@ -356,9 +356,6 @@ export default function SelectCeleb() {
 								</Celeb>
 							))}
 						</ListContainer>
-						{selectedCelebsArray.map(celeb => (
-							<div key={celeb.id}>{celeb.celebname}</div>
-						))}
 						<RequsetWrap>
 							<RequestButton>
 								<PurpleButton
@@ -374,7 +371,6 @@ export default function SelectCeleb() {
 				</MainContainer>
 			)}
 
-			
 			{currentPage === 1 && (
 				<MainContainer>
 					<TopNav>
@@ -546,7 +542,7 @@ const ListContainer = styled.div`
 	display: grid;
 	padding: 1.25rem;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-auto-rows: minmax(120px, auto);
+	grid-auto-rows: minmax(auto, auto);
 	justify-content: center;
 	gap: 16px 11px;
 `;
@@ -566,7 +562,6 @@ const SearchTab = styled.div`
 const Celeb = styled.div`
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	align-items: center;
 	font-size: 0.875rem;
 	/* border: 1px solid black; */
@@ -609,6 +604,16 @@ const Image = styled.div`
 	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
 	&:hover {
 		cursor: pointer;
+	}
+	@media screen and (max-width: 350px) {
+		width: 5.3125rem;
+		height: 5.3125rem;
+		margin-bottom: 6px;
+	}
+	@media screen and (max-width: 320px) {
+		width: 70px;
+		height: 70px;
+		margin-bottom: 5px;
 	}
 `;
 
