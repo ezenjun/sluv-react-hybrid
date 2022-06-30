@@ -2,11 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-
+import { HorizontalLine } from '../../components/Lines/HorizontalLine';
+import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as SpeakerPhone } from '../../assets/Icons/speakerphone.svg';
 import { ReactComponent as BubbleHeart } from '../../assets/Icons/bubbleHeart.svg';
+import { useNavigate } from 'react-router-dom';
 export default function Custom() {
+	const navigate = useNavigate();
+	const detailCelebClick = celebId => {
+		navigate('/celeb/detail/' + celebId);
+	};
 	return (
 		<>
 			<EventContainer>
@@ -22,7 +28,7 @@ export default function Custom() {
 						<br />
 						LUV 아이템
 					</MainText>
-					<RightArrow></RightArrow>
+					<RightArrow onClick={() => detailCelebClick(1)}></RightArrow>
 				</TextWrap>
 				<ChipWrap>
 					<Chip selected={true}>스트레이키즈</Chip>
@@ -429,14 +435,7 @@ const FilterWrap = styled.div`
 	display: flex;
 	margin-bottom: 1rem;
 `;
-const HorizontalLine = styled.div`
-	margin: 0.75rem 0;
-	border-top: 1px solid #f4f4f4;
-`;
-const VerticalLine = styled.div`
-	margin: 0 0.5rem;
-	border-right: 1px solid #d9d9d9;
-`;
+
 const ItemWrap = styled.div`
 	display: grid;
 	justify-items: center;

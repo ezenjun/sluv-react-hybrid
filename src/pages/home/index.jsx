@@ -21,7 +21,7 @@ export default function Home() {
 			<MainContainer>
 				<TopNav style={{ justifyContent: 'space-between' }}>
 					<LogoWrap to="">
-						<Logo />
+						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
 					</LogoWrap>
 					<NavRight to="../notice">
 						<Alarm />
