@@ -337,8 +337,8 @@ export default function Custom() {
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
-			<ItemContainer padding="10px 20px 50px 20px">
-				<TextWrap>
+			<ItemContainer padding="10px 0 50px 20px">
+				<TextWrap padding="0 20px 0 0">
 					<MainText fontsize="1.5rem">
 						#스러버's LUV
 						<br />
@@ -356,6 +356,8 @@ export default function Custom() {
 					</SubText>
 				</FilterWrap>
 				<HotItemWrap>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
 					<HotItem></HotItem>
 					<HotItem></HotItem>
 					<HotItem></HotItem>
@@ -564,31 +566,93 @@ const Question = styled.div`
 `;
 const HotItemWrap = styled.div`
 	display: grid;
-	gap: 10px;
+	gap: 0.625rem;
 	height: 31.75rem;
-	.item:nth-child(1) {
-		grid-column: 1 / 4;
+	padding: 0 20px 20px 0;
+	/*  margin-right: 20px; */
+	overflow-x: scroll;
+	grid-template-columns: repeat(8, minmax(10.125rem, auto));
+	grid-template-rows: 1fr 1fr 1fr;
+	/* box-sizing: border-box; */
+
+	::-webkit-scrollbar {
+		margin-top: 10px;
+		width: 5px;
+		height: 4px;
+		background-color: #f0f0f0; /* 또는 트랙에 추가한다 */
+		bottom: 100px;
+	}
+
+	/* 썸(thumb) 추가 */
+	::-webkit-scrollbar-thumb {
+		margin-top: 10px;
+		width: 38px;
+		background: #262626;
+		border-radius: 38px;
+	}
+
+	> div:nth-child(1) {
+		grid-column: 1 / 2;
+		grid-row: 1 / 4;
+	}
+	> div:nth-child(2) {
+		grid-column: 2 / 3;
 		grid-row: 1 / 2;
 	}
-	.item:nth-child(2) {
-		grid-column-start: 2;
-		grid-column-end: 3;
-		grid-row-start: 1;
-		grid-row-end: 2;
+	> div:nth-child(3) {
+		grid-column: 3 / 4;
+		grid-row: 1 / 2;
 	}
-	.item:nth-child(3) {
-		grid-column: 4;
+	> div:nth-child(4) {
+		grid-column: 2 / 4;
+		grid-row: 2 / 3;
 	}
-	.item:nth-child(4) {
-		grid-column: 5;
+	> div:nth-child(5) {
+		grid-column: 2 / 3;
+		grid-row: 3 / 4;
 	}
-	.item:nth-child(5) {
-		grid-column: 6;
+	> div:nth-child(6) {
+		grid-column: 3 / 4;
+		grid-row: 3 / 4;
 	}
-	.item:nth-child(6) {
-		grid-column: 7;
+	> div:nth-child(7) {
+		grid-column: 4 / 5;
+		grid-row: 1 / 2;
+	}
+	> div:nth-child(8) {
+		grid-column: 5 / 6;
+		grid-row: 1 / 2;
+	}
+	> div:nth-child(9) {
+		grid-column: 4 / 6;
+		grid-row: 2 / 4;
+	}
+	> div:nth-child(10) {
+		grid-column: 6 / 7;
+		grid-row: 1 / 2;
+	}
+	> div:nth-child(11) {
+		grid-column: 7 / 9;
+		grid-row: 1 / 2;
+		/* margin-right: 20px; */
+	}
+	> div:nth-child(12) {
+		grid-column: 6 / 9;
+		grid-row: 2 / 3;
+		/* margin-right: 20px; */
+	}
+	> div:nth-child(13) {
+		grid-column: 6 / 8;
+		grid-row: 3 / 4;
+	}
+	> div:nth-child(14) {
+		grid-column: 8 / 9;
+		grid-row: 3 / 4;
+		column-gap: 20px;
+		/* margin-right: 20px; */
 	}
 `;
 const HotItem = styled.div`
 	background-color: darkolivegreen;
+	border-radius: 16px;
 `;
