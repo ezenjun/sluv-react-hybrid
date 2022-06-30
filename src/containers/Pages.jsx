@@ -23,6 +23,7 @@ import UserProfile from '../pages/my/UserProfile';
 import Setting from '../pages/my/Setting';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
+import CelebDetail from '../pages/celebdetail';
 
 export default function Pages() {
 	return (
@@ -49,6 +50,8 @@ export default function Pages() {
 				<Route path="question" element={<Question />} />
 				<Route path="event" element={<Event />} />
 			</Route>
+
+			<Route path="celeb/detail/:celebIdx" element={<CelebDetail />} />
 
 			<Route path="/notice" element={<Notice />} />
 

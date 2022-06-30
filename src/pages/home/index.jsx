@@ -21,7 +21,7 @@ export default function Home() {
 			<MainContainer>
 				<TopNav style={{ justifyContent: 'space-between' }}>
 					<LogoWrap to="">
-						<Logo />
+						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
 					</LogoWrap>
 					<NavRight to="../notice">
 						<Alarm />
@@ -110,5 +110,4 @@ const StyledLink = styled(Link)`
 	color: ${props => props.margin || '#8d8d8d'};
 	margin: ${props => props.margin || '0'};
 	border-bottom: ${props => props.borderbottom || 'none'};
-	transition: 1s ease;
 `;
