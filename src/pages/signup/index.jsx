@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
-import { SignupProgressState } from '../../recoil/User';
+import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -25,6 +25,7 @@ import {
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
+	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
 	const [allCheck, setAllCheck] = useState(false);
 	const [ageCheck, setAgeCheck] = useState(false);
@@ -37,6 +38,8 @@ export default function Signup() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+	
+
 
 	const allBtnEvent = () => {
 		if (allCheck === false) {
@@ -92,6 +95,7 @@ export default function Signup() {
 			setMarketingCheck(false);
 		}
 	};
+
 	useEffect(() => {
 		if (
 			ageCheck === true &&
