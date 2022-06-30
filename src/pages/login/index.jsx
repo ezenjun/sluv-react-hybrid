@@ -13,12 +13,13 @@ import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
 import { useSetRecoilState } from 'recoil';
-import { SignupProgressState } from '../../recoil/User';
+import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
 
 export default function Login() {
 	const navigate = useNavigate();
 
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
+	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
 	async function handleCallbackResponse(response) {
 		// console.log("encoded JWT ID Token: " + response.credential);
@@ -35,12 +36,16 @@ export default function Login() {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			// 닉네임으로 페이지 변경
+			setSocialLoginComplete(true);
 			setCurrentPage(4);
 			navigate('/signup');
 		}
 	}
 
 	useEffect(() => {
+		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
+		setCurrentPage(1);
+		setSocialLoginComplete(false);
 		/* global google*/
 		google.accounts.id.initialize({
 			client_id: GoogleClient_ID,
