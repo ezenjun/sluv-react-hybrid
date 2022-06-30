@@ -9,4 +9,5 @@ export const MainContainer = styled.div`
 	flex-direction: column;
 	background-color: ${palette.white.primary};
 	padding: ${props => props.padding || '0'};
+	overflow-y: auto;
 `;

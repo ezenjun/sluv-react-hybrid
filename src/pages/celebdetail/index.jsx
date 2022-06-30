@@ -23,7 +23,7 @@ export default function CelebDetail() {
 	};
 
 	return (
-		<MainContainer>
+		<>
 			<TopNav style={{ position: 'relative' }}>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
@@ -75,14 +75,31 @@ export default function CelebDetail() {
 						</ItemTextWrap>
 						<SubInfoWrap>
 							<ProfileImg></ProfileImg>
-							<SubText> 이리노순둥도리</SubText>
+							<SubText margin="0 "> 이리노순둥도리</SubText>
 							<Dot></Dot>
-							<SubText> 5분 전</SubText>
+							<SubText color="#8d8d8d"> 5분 전</SubText>
+						</SubInfoWrap>
+					</Item>
+				</ItemsContainer>
+				<HorizontalLine />
+				<ItemsContainer>
+					<Item>
+						<Image></Image>
+						<ItemTextWrap>
+							<SubText fontsize="1rem">마하그리드</SubText>
+							<VerticalLine></VerticalLine>
+							<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
+						</ItemTextWrap>
+						<SubInfoWrap>
+							<ProfileImg></ProfileImg>
+							<SubText margin="0 "> 이리노순둥도리</SubText>
+							<Dot></Dot>
+							<SubText color="#8d8d8d"> 5분 전</SubText>
 						</SubInfoWrap>
 					</Item>
 				</ItemsContainer>
 			</ContentWrap>
-		</MainContainer>
+		</>
 	);
 }
 const ChipWrap = styled.div`
@@ -123,7 +140,7 @@ const ItemsContainer = styled.div`
 	flex-direction: column;
 	box-sizing: border-box;
 	align-content: space-between;
-	height: 17.25rem;
+	/* height: 276px; */
 	overflow-x: scroll;
 	margin-top: 20px;
 	::-webkit-scrollbar {
@@ -139,7 +156,7 @@ const Item = styled.div`
 `;
 const Image = styled.div`
 	width: 100%;
-	height: 230px;
+	height: 14.375rem;
 	background-color: darkturquoise;
 	border-radius: 1rem;
 `;
@@ -148,21 +165,24 @@ const ItemTextWrap = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin: 16px 0 10px 0;
+	margin: 1rem 0 0.625rem 0;
 `;
 const SubInfoWrap = styled.div`
+	display: flex;
 	justify-content: space-between;
 	align-items: center;
 `;
 const ProfileImg = styled.div`
-	width: 22px;
-	height: 22px;
+	width: 1.375rem;
+	height: 1.375rem;
 	border-radius: 50%;
 	background-color: darkturquoise;
+	margin-right: 0.5rem;
 `;
 const Dot = styled.div`
-	width: 2px;
-	height: 2px;
+	width: 0.125rem;
+	height: 0.125rem;
 	border-radius: 50%;
 	background-color: #8d8d8d;
+	margin: 0 6px;
 `;
