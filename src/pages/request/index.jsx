@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { BackButton } from '../../components/Buttons/BackButton';
-import { MainContainer } from '../../components/containers/MainContainer'
-import { TopNav } from '../../components/containers/TopNav'
+import { MainContainer } from '../../components/containers/MainContainer';
+import { TopNav } from '../../components/containers/TopNav';
 import { TopRadiusContainer } from '../../components/containers/TopRadiusContainer';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
-import { InputSpeechBubbleWrap, SpeechBubbleInput, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
+import {
+	InputSpeechBubbleWrap,
+	SpeechBubbleInput,
+	SpeechBubbleTextArea,
+} from '../../components/Bubbles/InputSpeechBubble';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 import { customApiClient } from '../../utils/apiClient';
 
 export default function RequestCeleb() {
-
 	const navigate = useNavigate();
 
 	const [name, setName] = useState('');
@@ -26,12 +34,12 @@ export default function RequestCeleb() {
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	useEffect(() => {
-		if(name) {
+		if (name) {
 			setIsName(true);
 			return;
-		} 
+		}
 		setIsName(false);
-	},[name]);
+	}, [name]);
 
 	useEffect(() => {
 		if (reason) {
@@ -42,22 +50,22 @@ export default function RequestCeleb() {
 	}, [reason]);
 
 	useEffect(() => {
-		if(name && reason) {
+		if (name && reason) {
 			setIsConfirm(true);
 			return;
 		}
 		setIsConfirm(false);
-	},[name,reason]);
+	}, [name, reason]);
 
 	const onClickConfirm = async () => {
-		if(isConfirm) {
+		if (isConfirm) {
 			// 셀럽 추가 요청하기 API
 			const body = {
 				name: name,
 				reason: reason,
 			};
 			const data = await customApiClient('post', '/celebs/req', body);
-			if(!data.isSuccess) {
+			if (!data.isSuccess) {
 				console.log(data.message);
 				return;
 			}
@@ -74,12 +82,12 @@ export default function RequestCeleb() {
 				navigate(-1);
 			}, 2300);
 		}
-	}
+	};
 
-    return (
+	return (
 		<MainContainer>
 			<TopNav style={{ justifyContent: 'space-between' }}>
-				<BackButton onClick={()=>navigate(-1)} />
+				<BackButton onClick={() => navigate(-1)} />
 				<div className="centerText">셀럽 추가 요청하기</div>
 				<div
 					className="rightText"
@@ -122,5 +130,3 @@ export default function RequestCeleb() {
 		</MainContainer>
 	);
 }
-
-
