@@ -5,15 +5,21 @@ import { ReactComponent as Logo } from '../../assets/Logo/LogoHome.svg';
 import { ReactComponent as Alarm } from '../../assets/Icons/alarm.svg';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
+import { useSetRecoilState } from 'recoil';
+import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function Home() {
 	const [tabIndex, setTabIndex] = useState(1);
+
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+
 	const toggleTab = idx => {
 		setTabIndex(idx);
 		console.log(tabIndex);
 	};
 	useEffect(() => {
 		// 하단바 띄워주기
+		setBottomNavStatus(true);
 	}, []);
 
 	return (
