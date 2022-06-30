@@ -31,7 +31,7 @@ export default function Home() {
 					<StyledLink
 						to=""
 						margin="0 20px 0 0"
-						borderBottom={tabIndex === 1 ? '2px solid #262626' : ''}
+						borderbottom={tabIndex === 1 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(1)}
 					>
 						<Tab color={tabIndex === 1 ? '#262626' : ''}>맞춤</Tab>
@@ -39,7 +39,7 @@ export default function Home() {
 					<StyledLink
 						to="follow"
 						margin="0 20px 0 0"
-						borderBottom={tabIndex === 2 ? '2px solid #262626' : ''}
+						borderbottom={tabIndex === 2 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(2)}
 					>
 						<Tab color={tabIndex === 1 ? '#262626' : ''}>팔로잉</Tab>
@@ -47,7 +47,7 @@ export default function Home() {
 					<StyledLink
 						to="question"
 						margin="0 20px 0 0"
-						borderBottom={tabIndex === 3 ? '2px solid #262626' : ''}
+						borderbottom={tabIndex === 3 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(3)}
 					>
 						<Tab color={tabIndex === 1 ? '#262626' : ''}>질문</Tab>
@@ -55,7 +55,7 @@ export default function Home() {
 					<StyledLink
 						to="event"
 						margin="0 20px 0 0"
-						borderBottom={tabIndex === 4 ? '2px solid #262626' : ''}
+						borderbottom={tabIndex === 4 ? '2px solid #262626' : ''}
 						onClick={() => toggleTab(4)}
 					>
 						<Tab color={tabIndex === 1 ? '#262626' : ''}>이벤트</Tab>
@@ -109,6 +109,6 @@ const StyledLink = styled(Link)`
 	text-decoration: none;
 	color: ${props => props.margin || '#8d8d8d'};
 	margin: ${props => props.margin || '0'};
-	border-bottom: ${props => props.borderBottom || 'none'};
+	border-bottom: ${props => props.borderbottom || 'none'};
 	transition: 1s ease;
 `;
