@@ -422,8 +422,8 @@ const Image = styled.div`
 		height: 9.5625rem;
 	}
 	@media screen and (width: 320px) {
-		width: 134.5px;
-		height: 134.5px;
+		width: 8.4063rem;
+		height: 8.4063rem;
 	}
 `;
 const RecommendUserWrap = styled.div`
