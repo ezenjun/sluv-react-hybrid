@@ -337,6 +337,39 @@ export default function Custom() {
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
+			<ItemContainer padding="10px 20px 50px 20px">
+				<TextWrap>
+					<MainText fontsize="1.5rem">
+						#스러버's LUV
+						<br />
+						HOT 아이템
+					</MainText>
+					<RightArrow></RightArrow>
+				</TextWrap>
+				<FilterWrap>
+					<SubText fontsize="14px" fontweight="bold">
+						일간
+					</SubText>
+					<VerticalLine />
+					<SubText fontsize="14px" color="#8d8d8d">
+						주간
+					</SubText>
+				</FilterWrap>
+				<HotItemWrap>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+					<HotItem></HotItem>
+				</HotItemWrap>
+			</ItemContainer>
 		</>
 	);
 }
@@ -362,7 +395,7 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 2.5rem 1.25rem 3.125rem 1.25rem;
+	padding: ${props => props.padding || '40px 20px 50px 20px'};
 `;
 const TextWrap = styled.div`
 	display: flex;
@@ -528,4 +561,34 @@ const Question = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+`;
+const HotItemWrap = styled.div`
+	display: grid;
+	gap: 10px;
+	height: 31.75rem;
+	.item:nth-child(1) {
+		grid-column: 1 / 4;
+		grid-row: 1 / 2;
+	}
+	.item:nth-child(2) {
+		grid-column-start: 2;
+		grid-column-end: 3;
+		grid-row-start: 1;
+		grid-row-end: 2;
+	}
+	.item:nth-child(3) {
+		grid-column: 4;
+	}
+	.item:nth-child(4) {
+		grid-column: 5;
+	}
+	.item:nth-child(5) {
+		grid-column: 6;
+	}
+	.item:nth-child(6) {
+		grid-column: 7;
+	}
+`;
+const HotItem = styled.div`
+	background-color: darkolivegreen;
 `;
