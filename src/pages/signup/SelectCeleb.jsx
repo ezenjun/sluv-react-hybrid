@@ -21,12 +21,12 @@ export default function SelectCeleb() {
 
 	const navigate = useNavigate();
 
-	// let singerChecklist = [];
-	// let actorChecklist = [];
+	const [checkStatusList, setCheckStatusList] = useState([]);
+	const [selectedCelebs, setSelectedCelebs] = useState([]);
 	
 	const [currentPage, setCurrentPage] = useState(0);
 	const [isCelebConfirm, setIsCelebConfirm] = useState(false);
-	const [selected, setSelected] = useState(0);
+	const [selectedNum, setSelectedNum] = useState(0);
 
 	const [searchInput, setSearchInput] = useState('');
 	const [currentCelebList, setCurrentCelebList] = useState([]);
@@ -42,7 +42,7 @@ export default function SelectCeleb() {
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
-		console.log(data);
+		
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -51,8 +51,10 @@ export default function SelectCeleb() {
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 
-		// let singerNum = data.result.filter(item => item.category === 'SINGER').length;
-		// console.log(singerNum);
+		let temp;
+		(temp = []).length = data.result.length;
+		temp.fill(false);
+		setCheckStatusList(temp);
 	};
 
 	const onClickTab = (idx, name) => {
@@ -69,35 +71,26 @@ export default function SelectCeleb() {
 		}
 	};
 
-	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
+	
 	const handleRemoveItem = celeb => {
-		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
+		// setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
 	};
 	const onSelectCeleb = (celeb, e) => {
-		console.log(celeb);
-
-		if(celeb.category === 'SINGER') {
-
-
-		} else if(celeb.category === 'ACTOR') {
-
-		}
-
-
-
-
-		if (!celeb.isSelected) {
-			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
-			setSelected(selected + 1);
-			celeb.isSelected = true;
-			setSingerList([...singerList]);
+		
+		if (!checkStatusList[celeb.celebIdx - 1]) {
+			setSelectedNum(selectedNum + 1);
+			// 배열에 셀럽 추가
 		} else {
-			handleRemoveItem(celeb);
-			setSelected(selected - 1);
-			celeb.isSelected = false;
-			setSingerList([...singerList]);
+			setSelectedNum(selectedNum - 1);
+			// 베열에서 셀럽 제거
 		}
-		// countGroup(selectedCelebsArray);
+		let temp = checkStatusList;
+		temp[celeb.celebIdx - 1] = !temp[celeb.celebIdx - 1];
+		setCheckStatusList(temp);
+
+		
+		
+
 		e.preventDefault();
 	};
 	// // var groupLen = 0;
@@ -119,12 +112,10 @@ export default function SelectCeleb() {
 				<MainContainer>
 					<TopNav>
 						<NavRight>
-							{selected > 0 ? (
+							{selectedNum > 0 && (
 								<SubText margin="0 1rem" color="#9e30f4">
-									{selected}개 선택
+									{selectedNum}개 선택
 								</SubText>
-							) : (
-								<></>
 							)}
 							<NextButton
 								status={isCelebConfirm}
@@ -197,7 +188,7 @@ export default function SelectCeleb() {
 										<Image
 											size="6.25rem"
 											key={celeb.id}
-											border={celeb.isSelected}
+											border={checkStatusList[celeb.celebIdx - 1]}
 										>
 											<img
 												className="celebImg"
@@ -206,6 +197,9 @@ export default function SelectCeleb() {
 											/>
 										</Image>
 										{celeb.name}
+										<CountBadge status={checkStatusList[celeb.celebIdx - 1]}>
+											<span className='badgeItem'>{selectedNum}</span>
+										</CountBadge>
 									</Celeb>
 								))}
 						</ListContainer>
@@ -215,7 +209,7 @@ export default function SelectCeleb() {
 								<PurpleButton
 									boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 									marginBottom="0"
-									onClick={()=>navigate('../../request/celebrity')}
+									onClick={() => navigate('../../request/celebrity')}
 								>
 									셀럽 추가 요청하기
 								</PurpleButton>
@@ -230,14 +224,14 @@ export default function SelectCeleb() {
 					<TopNav>
 						<BackButton onClick={() => setCurrentPage(currentPage - 1)} />
 						<NavRight>
-							{selected > 0 ? (
+							{selectedNum > 0 ? (
 								<SubText margin="0 1rem" color="#9e30f4">
-									{selected}개 선택
+									{selectedNum}개 선택
 								</SubText>
 							) : (
 								<></>
 							)}
-							{selected >= 3 ? (
+							{selectedNum >= 3 ? (
 								<NextButton onClick={undefined}>다음</NextButton>
 							) : (
 								<SubText color="#b1b1b1">다음</SubText>
@@ -394,7 +388,7 @@ const NextButton = styled.span`
 
 const ListContainer = styled.div`
 	display: grid;
-	padding: 1rem 1.25rem;
+	padding: 1rem 1.25rem 5.5rem;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-auto-rows: minmax(auto, auto);
 	justify-content: center;
@@ -416,6 +410,7 @@ const SearchTab = styled.div`
 `;
 const Celeb = styled.div`
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	align-items: center;
 	font-size: 0.8125rem;
@@ -459,7 +454,7 @@ const Image = styled.div`
 	border-radius: 50%;
 	margin-bottom: 0.5rem;
 	box-sizing: border-box;
-	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
+	border: ${props => (props.border ? '0.1875rem solid #9e30f4' : 'none')};
 
 	&:hover {
 		cursor: pointer;
@@ -482,6 +477,24 @@ const Image = styled.div`
 		bottom: -9999px;
 		margin: auto;
 	}
+`;
+
+const CountBadge = styled.span`
+	border: 1px solid black;
+	position: absolute;
+	top: 0.5rem;
+	right: 0.5rem;
+	display: ${props => (props.status ? 'flex' : 'none')};
+	justify-content: center;
+	align-items: center;
+	background-color: #9e30f4;
+	border: none;
+	color: #ffffff;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	border-radius: 50%;
+	width: 1.5rem;
+	height: 1.5rem;
 `;
 
 const InputWrap = styled.div`
