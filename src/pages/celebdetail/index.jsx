@@ -23,14 +23,14 @@ export default function CelebDetail() {
 	};
 
 	return (
-		<>
-			<TopNav style={{ position: 'relative' }}>
+		<MainContainer>
+			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
 					{params.celebIdx}'s LUV 아이템
 				</div>
 			</TopNav>
-			<ContentWrap padding="20px">
+			<FeedContainer>
 				<ChipWrap>
 					<Chip selected={true}>스트레이키즈</Chip>
 					<Chip>리노</Chip>
@@ -65,43 +65,149 @@ export default function CelebDetail() {
 						</Filter>
 					)}
 				</FilterWrap>
-				<ItemsContainer>
-					<Item>
-						<Image></Image>
-						<ItemTextWrap>
-							<SubText fontsize="1rem">마하그리드</SubText>
-							<VerticalLine></VerticalLine>
-							<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-						</ItemTextWrap>
-						<SubInfoWrap>
-							<ProfileImg></ProfileImg>
-							<SubText margin="0 "> 이리노순둥도리</SubText>
-							<Dot></Dot>
-							<SubText color="#8d8d8d"> 5분 전</SubText>
-						</SubInfoWrap>
-					</Item>
-				</ItemsContainer>
-				<HorizontalLine />
-				<ItemsContainer>
-					<Item>
-						<Image></Image>
-						<ItemTextWrap>
-							<SubText fontsize="1rem">마하그리드</SubText>
-							<VerticalLine></VerticalLine>
-							<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-						</ItemTextWrap>
-						<SubInfoWrap>
-							<ProfileImg></ProfileImg>
-							<SubText margin="0 "> 이리노순둥도리</SubText>
-							<Dot></Dot>
-							<SubText color="#8d8d8d"> 5분 전</SubText>
-						</SubInfoWrap>
-					</Item>
-				</ItemsContainer>
-			</ContentWrap>
-		</>
+				{view ? (
+					<ItemsContainer>
+						<Item>
+							<Image></Image>
+							<ItemTextWrap>
+								<SubText fontsize="1rem">마하그리드</SubText>
+								<VerticalLine></VerticalLine>
+								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
+							</ItemTextWrap>
+							<SubInfoWrap>
+								<ProfileImg></ProfileImg>
+								<SubText margin="0 "> 이리노순둥도리</SubText>
+								<Dot></Dot>
+								<SubText color="#8d8d8d"> 5분 전</SubText>
+							</SubInfoWrap>
+						</Item>
+						<HorizontalLine></HorizontalLine>
+						<Item>
+							<Image></Image>
+							<ItemTextWrap>
+								<SubText fontsize="1rem">더블유브이프로젝트</SubText>
+								<VerticalLine></VerticalLine>
+								<SubText fontsize="1rem">Round Lawn Short Shirt...</SubText>
+							</ItemTextWrap>
+							<SubInfoWrap>
+								<ProfileImg></ProfileImg>
+								<SubText margin="0 "> 이리노순둥도리</SubText>
+								<Dot></Dot>
+								<SubText color="#8d8d8d"> 5분 전</SubText>
+							</SubInfoWrap>
+						</Item>
+						<HorizontalLine></HorizontalLine>
+						<Item>
+							<Image></Image>
+							<ItemTextWrap>
+								<SubText fontsize="1rem">우알롱</SubText>
+								<VerticalLine></VerticalLine>
+								<SubText fontsize="1rem">Signature hood sip-up - ...</SubText>
+							</ItemTextWrap>
+							<SubInfoWrap>
+								<ProfileImg></ProfileImg>
+								<SubText margin="0 "> 이리노순둥도리</SubText>
+								<Dot></Dot>
+								<SubText color="#8d8d8d"> 5분 전</SubText>
+							</SubInfoWrap>
+						</Item>
+						<HorizontalLine></HorizontalLine>
+						<Item>
+							<Image></Image>
+							<ItemTextWrap>
+								<SubText fontsize="1rem">마하그리드</SubText>
+								<VerticalLine></VerticalLine>
+								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
+							</ItemTextWrap>
+							<SubInfoWrap>
+								<ProfileImg></ProfileImg>
+								<SubText margin="0 "> 이리노순둥도리</SubText>
+								<Dot></Dot>
+								<SubText color="#8d8d8d"> 5분 전</SubText>
+							</SubInfoWrap>
+						</Item>
+					</ItemsContainer>
+				) : (
+					<GridItemWrap>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								더블유브이프로젝트
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Round Lawn Short Shirt...</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								우알롱
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Signature hood sip-up - ...</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								더블유브이프로젝트
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Round Lawn Short Shirt...</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								우알롱
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Signature hood sip-up - ...</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage />
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<br />
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+					</GridItemWrap>
+				)}
+			</FeedContainer>
+		</MainContainer>
 	);
 }
+const FeedContainer = styled.div`
+	height: 100vh;
+	padding: 0 20px 20px 20px;
+	margin-top: 5px;
+	overflow-y: scroll;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
+`;
 const ChipWrap = styled.div`
 	overflow-x: scroll;
 	white-space: nowrap;
@@ -111,14 +217,14 @@ const ChipWrap = styled.div`
 `;
 const Chip = styled.div`
 	display: inline-block;
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 	padding: 0.625rem 1rem;
 	margin-right: 0.5rem;
 	border-radius: 1.9rem;
 	border: solid 1px #e2e0e0;
 	background-color: ${props => (props.selected ? '#2b1e34' : '#fff')};
 	color: ${props => (props.selected ? '#fff' : '#2b1e34')};
-	font-size: 0.875rem;
+	font-size: 14px;
 	font-weight: 600;
 `;
 const FilterWrap = styled.div`
@@ -136,13 +242,10 @@ const Filter = styled.div`
 `;
 const ItemsContainer = styled.div`
 	display: flex;
-	flex-wrap: wrap;
 	flex-direction: column;
 	box-sizing: border-box;
 	align-content: space-between;
-	/* height: 276px; */
-	overflow-x: scroll;
-	margin-top: 20px;
+	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
@@ -185,4 +288,32 @@ const Dot = styled.div`
 	border-radius: 50%;
 	background-color: #8d8d8d;
 	margin: 0 6px;
+`;
+const GridItemWrap = styled.div`
+	display: grid;
+	justify-items: center;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: minmax(6.25rem, auto);
+	row-gap: 0.6875rem;
+	column-gap: 0.6875rem;
+`;
+const GridItem = styled.div``;
+const GridImage = styled.div`
+	width: 10.125rem;
+	height: 10.125rem;
+	border-radius: 1rem;
+	background-color: blue;
+	margin-bottom: 1rem;
+	@media screen and (width: 360px) {
+		width: 9.5625rem;
+		height: 9.5625rem;
+	}
+	@media screen and (width: 320px) {
+		width: 8.4063rem;
+		height: 8.4063rem;
+	}
+	@media screen and (width: 280px) {
+		width: 8.125rem;
+		height: 8.125rem;
+	}
 `;

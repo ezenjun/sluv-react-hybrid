@@ -9,7 +9,6 @@ export const TopNav = styled.div`
 	font-size: 1.125rem;
 	width: 100%;
 	height: 3.0625rem;
-	/* height: 49px; */
 	padding: 0.9375rem 1.25rem;
 	align-items: center;
 	text-align: center;
