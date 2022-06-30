@@ -12,8 +12,13 @@ import { ReactComponent as KakaoIcon } from '../../assets/Icons/kakao_icon.svg';
 import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
+import { useSetRecoilState } from 'recoil';
+import { SignupProgressState } from '../../recoil/User';
+
 export default function Login() {
 	const navigate = useNavigate();
+
+	const setCurrentPage = useSetRecoilState(SignupProgressState);
 
 	async function handleCallbackResponse(response) {
 		// console.log("encoded JWT ID Token: " + response.credential);
@@ -30,6 +35,8 @@ export default function Login() {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			// 닉네임으로 페이지 변경
+			setCurrentPage(4);
+			navigate('/signup');
 		}
 	}
 
