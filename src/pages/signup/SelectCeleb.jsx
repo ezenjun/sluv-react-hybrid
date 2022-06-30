@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState } from 'recoil';
-import { ActorListState, SingerListState } from '../../recoil/Celebrity';
+import { celebCategoryList, SingerListState, TotalCelebListState } from '../../recoil/Celebrity';
 
 export default function SelectCeleb() {
 	const [groupLen, setGroupLen] = useState(0);
@@ -24,11 +24,11 @@ export default function SelectCeleb() {
 	const [selected, setSelected] = useState(0);
 
 	const [searchInput, setSearchInput] = useState('');
-	const [singerTabstatus, setSingerTabstatus] = useState(true);
-	const [actorTabstatus, setActorTabstatus] = useState(false);
+	const [currentCelebList, setCurrentCelebList] = useState([]);
 
+	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const [singerList, setSingerList] = useRecoilState(SingerListState);
-	const [actorList, setActorList] = useRecoilState(ActorListState);
+	const [selectedCategory, setSelectedCategory] = useState(1);
 
 	useEffect(() => {
 		// 셀럽 및 멤버 목록 조회 API 호출
@@ -43,17 +43,14 @@ export default function SelectCeleb() {
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
 
-		if(!data) return;
-		if(!data.isSuccess) {
+		if (!data) return;
+		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
 		}
-
-		setSingerList(data.result.filter(item => item.category === "SINGER"));
-		setActorList(data.result.filter(item => item.category === 'ACTOR'));
+		setTotalCelebList(data.result);
+		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 	};
-	console.log(singerList);
-	console.log(actorList);
 
 	const handleSearchInput = e => {
 		setSearchInput(e.target.value);
@@ -66,9 +63,18 @@ export default function SelectCeleb() {
 		navigate('../../request/celebrity');
 	};
 
-	const onClickTab = () => {
-		setSingerTabstatus(!singerTabstatus);
-		setActorTabstatus(!actorTabstatus);
+	const onClickTab = (idx, name) => {
+		
+		let tempArr = [];
+		if (idx === 1) {
+			setSelectedCategory(1);
+			tempArr = totalCelebList.filter(item => item.category === 'SINGER');
+			setCurrentCelebList(tempArr);
+		} else if (idx === 2) {
+			setSelectedCategory(2);
+			tempArr = totalCelebList.filter(item => item.category === 'ACTOR');
+			setCurrentCelebList(tempArr);
+		}
 	};
 
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
@@ -110,8 +116,6 @@ export default function SelectCeleb() {
 	const handleNextClick = () => {
 		setCurrentPage(currentPage + 1);
 	};
-
-	
 
 	return (
 		<>
@@ -172,18 +176,26 @@ export default function SelectCeleb() {
 								)}
 							</InputWrap>
 							<TabWrap>
-								<Tab status={singerTabstatus} onClick={onClickTab}>
-									가수
-								</Tab>
-								<Tab status={actorTabstatus} onClick={onClickTab}>
-									배우
-								</Tab>
+								{celebCategoryList.map(item => {
+									return (
+										<Tab
+											key={item.idx}
+											onClick={() => onClickTab(item.idx, item.name)}
+											status={selectedCategory === item.idx}
+										>
+											{item.name}
+										</Tab>
+									);
+								})}
 							</TabWrap>
 						</SearchTab>
 						<ListContainer>
-							{singerList.length > 0 &&
-								singerList.map(celeb => (
-									<Celeb key={celeb.celebIdx} onClick={e => onSelectCeleb(celeb, e)}>
+							{currentCelebList.length > 0 &&
+								currentCelebList.map(celeb => (
+									<Celeb
+										key={celeb.celebIdx}
+										onClick={e => onSelectCeleb(celeb, e)}
+									>
 										<Image
 											size="6.25rem"
 											key={celeb.id}
@@ -449,7 +461,7 @@ const Image = styled.div`
 	margin-bottom: 0.5rem;
 	box-sizing: border-box;
 	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
-	
+
 	&:hover {
 		cursor: pointer;
 	}
