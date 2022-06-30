@@ -18,31 +18,31 @@ import { useRecoilState } from 'recoil';
 import { celebCategoryList, SingerListState, TotalCelebListState } from '../../recoil/Celebrity';
 
 export default function SelectCeleb() {
-	const [groupLen, setGroupLen] = useState(0);
+
+	const navigate = useNavigate();
+
+	// let singerChecklist = [];
+	// let actorChecklist = [];
+	
 	const [currentPage, setCurrentPage] = useState(0);
-	const [pageComplete, setPageComplete] = useState(false);
+	const [isCelebConfirm, setIsCelebConfirm] = useState(false);
 	const [selected, setSelected] = useState(0);
 
 	const [searchInput, setSearchInput] = useState('');
 	const [currentCelebList, setCurrentCelebList] = useState([]);
-
+	const [selectedCategory, setSelectedCategory] = useState(1);
+	
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const [singerList, setSingerList] = useRecoilState(SingerListState);
-	const [selectedCategory, setSelectedCategory] = useState(1);
-
+	
 	useEffect(() => {
 		// 셀럽 및 멤버 목록 조회 API 호출
 		getCelebList();
-
-		if (selected === 3) {
-			setPageComplete(true);
-			setCurrentPage(1);
-		}
 	}, []);
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
-
+		console.log(data);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -50,17 +50,9 @@ export default function SelectCeleb() {
 		}
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
-	};
 
-	const handleSearchInput = e => {
-		setSearchInput(e.target.value);
-	};
-	const searchInputReset = () => {
-		setSearchInput('');
-	};
-	const navigate = useNavigate();
-	const handleRequestCeleb = () => {
-		navigate('../../request/celebrity');
+		// let singerNum = data.result.filter(item => item.category === 'SINGER').length;
+		// console.log(singerNum);
 	};
 
 	const onClickTab = (idx, name) => {
@@ -82,7 +74,18 @@ export default function SelectCeleb() {
 		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
 	};
 	const onSelectCeleb = (celeb, e) => {
-		console.log(celeb.celebIdx);
+		console.log(celeb);
+
+		if(celeb.category === 'SINGER') {
+
+
+		} else if(celeb.category === 'ACTOR') {
+
+		}
+
+
+
+
 		if (!celeb.isSelected) {
 			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
 			setSelected(selected + 1);
@@ -110,13 +113,6 @@ export default function SelectCeleb() {
 	// 	console.log('groupList length: ', groupList.length);
 	// };
 
-	const handleBackClick = () => {
-		setCurrentPage(currentPage - 1);
-	};
-	const handleNextClick = () => {
-		setCurrentPage(currentPage + 1);
-	};
-
 	return (
 		<>
 			{currentPage === 0 && (
@@ -130,11 +126,12 @@ export default function SelectCeleb() {
 							) : (
 								<></>
 							)}
-							{selected >= 3 ? (
-								<NextButton onClick={handleNextClick}>다음</NextButton>
-							) : (
-								<SubText color="#b1b1b1">다음</SubText>
-							)}
+							<NextButton
+								status={isCelebConfirm}
+								onClick={() => setCurrentPage(currentPage + 1)}
+							>
+								다음
+							</NextButton>
 						</NavRight>
 					</TopNav>
 
@@ -162,13 +159,13 @@ export default function SelectCeleb() {
 								</IconWrap>
 								<Input
 									value={searchInput}
-									onChange={handleSearchInput}
+									onChange={e => setSearchInput(e.target.value)}
 									type="text"
 									placeholder="활동명을 한글로 검색해주세요"
 									margin="0 0 0 0.375rem"
 								/>
 								{searchInput.length !== 0 ? (
-									<IconWrap onClick={searchInputReset}>
+									<IconWrap onClick={() => setSearchInput('')}>
 										<Delete />
 									</IconWrap>
 								) : (
@@ -189,6 +186,7 @@ export default function SelectCeleb() {
 								})}
 							</TabWrap>
 						</SearchTab>
+
 						<ListContainer>
 							{currentCelebList.length > 0 &&
 								currentCelebList.map(celeb => (
@@ -211,12 +209,13 @@ export default function SelectCeleb() {
 									</Celeb>
 								))}
 						</ListContainer>
+
 						<RequsetWrap>
 							<RequestButton>
 								<PurpleButton
 									boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 									marginBottom="0"
-									onClick={handleRequestCeleb}
+									onClick={()=>navigate('../../request/celebrity')}
 								>
 									셀럽 추가 요청하기
 								</PurpleButton>
@@ -229,7 +228,7 @@ export default function SelectCeleb() {
 			{currentPage === 1 && (
 				<MainContainer>
 					<TopNav>
-						<BackButton onClick={handleBackClick} />
+						<BackButton onClick={() => setCurrentPage(currentPage - 1)} />
 						<NavRight>
 							{selected > 0 ? (
 								<SubText margin="0 1rem" color="#9e30f4">
@@ -239,7 +238,7 @@ export default function SelectCeleb() {
 								<></>
 							)}
 							{selected >= 3 ? (
-								<NextButton onClick={handleNextClick}>다음</NextButton>
+								<NextButton onClick={undefined}>다음</NextButton>
 							) : (
 								<SubText color="#b1b1b1">다음</SubText>
 							)}
@@ -386,7 +385,7 @@ const NavRight = styled.div`
 const NextButton = styled.span`
 	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.color || '#262626'};
+	color: ${props => props.status ? '#262626' : '#b1b1b1'};
 	margin: ${props => props.margin || '0'};
 	&:hover {
 		cursor: pointer;
