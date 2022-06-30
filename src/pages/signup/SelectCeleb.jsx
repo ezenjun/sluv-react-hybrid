@@ -13,6 +13,7 @@ import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg'
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { customApiClient } from '../../utils/apiClient';
 
 export default function SelectCeleb() {
 	const [groupLen, setGroupLen] = useState(0);
@@ -23,6 +24,31 @@ export default function SelectCeleb() {
 	const [searchInput, setSearchInput] = useState('');
 	const [singerTabstatus, setSingerTabstatus] = useState(true);
 	const [actorTabstatus, setActorTabstatus] = useState(false);
+
+	useEffect(() => {
+		getCelebList();
+
+
+		if (selected === 3) {
+			setPageComplete(true);
+			setCurrentPage(1);
+		}
+	}, []);
+
+	const getCelebList = async () => {
+		const data = await customApiClient('get', '/celebs/members');
+
+		if(!data) return;
+		if(!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log(data.result);
+		
+
+	};
+
+
 
 	const handleSearchInput = e => {
 		setSearchInput(e.target.value);
@@ -250,12 +276,7 @@ export default function SelectCeleb() {
 		setCurrentPage(currentPage + 1);
 	};
 
-	useEffect(() => {
-		if (selected === 3) {
-			setPageComplete(true);
-			setCurrentPage(1);
-		}
-	}, []);
+	
 
 	return (
 		<>
