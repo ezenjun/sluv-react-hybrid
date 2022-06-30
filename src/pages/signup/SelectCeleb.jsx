@@ -40,6 +40,10 @@ export default function SelectCeleb() {
 		getCelebList();
 	}, []);
 
+	useEffect(() => {
+		console.log(selectedCelebs);
+	}, [selectedNum]);
+
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
 		
@@ -76,20 +80,22 @@ export default function SelectCeleb() {
 		// setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
 	};
 	const onSelectCeleb = (celeb, e) => {
-		
+		let temp2 = [];
 		if (!checkStatusList[celeb.celebIdx - 1]) {
 			setSelectedNum(selectedNum + 1);
-			// 배열에 셀럽 추가
+
+			temp2 = selectedCelebs;
+			temp2.push(celeb);
+			setSelectedCelebs(temp2);
 		} else {
 			setSelectedNum(selectedNum - 1);
-			// 베열에서 셀럽 제거
+
+			temp2 = selectedCelebs;
+			setSelectedCelebs(temp2.filter(item => item.celebIdx !== celeb.celebIdx));
 		}
 		let temp = checkStatusList;
 		temp[celeb.celebIdx - 1] = !temp[celeb.celebIdx - 1];
 		setCheckStatusList(temp);
-
-		
-		
 
 		e.preventDefault();
 	};
