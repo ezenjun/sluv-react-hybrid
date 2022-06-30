@@ -18,6 +18,9 @@ export const Input = styled.input`
 		}
 		cursor: not-allowed;
 	}
+	::placeholder {
+		color: #dadada;
+	}
 
 	::-webkit-inner-spin-button {
 		-webkit-appearance: none;

@@ -14,6 +14,8 @@ import { ContentWrap } from '../../components/containers/ContentWrap';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
+import { useRecoilState } from 'recoil';
+import { ActorListState, SingerListState } from '../../recoil/Celebrity';
 
 export default function SelectCeleb() {
 	const [groupLen, setGroupLen] = useState(0);
@@ -25,9 +27,12 @@ export default function SelectCeleb() {
 	const [singerTabstatus, setSingerTabstatus] = useState(true);
 	const [actorTabstatus, setActorTabstatus] = useState(false);
 
-	useEffect(() => {
-		getCelebList();
+	const [singerList, setSingerList] = useRecoilState(SingerListState);
+	const [actorList, setActorList] = useRecoilState(ActorListState);
 
+	useEffect(() => {
+		// 셀럽 및 멤버 목록 조회 API 호출
+		getCelebList();
 
 		if (selected === 3) {
 			setPageComplete(true);
@@ -43,12 +48,12 @@ export default function SelectCeleb() {
 			console.log(data.message);
 			return;
 		}
-		console.log(data.result);
-		
 
+		setSingerList(data.result.filter(item => item.category === "SINGER"));
+		setActorList(data.result.filter(item => item.category === 'ACTOR'));
 	};
-
-
+	console.log(singerList);
+	console.log(actorList);
 
 	const handleSearchInput = e => {
 		setSearchInput(e.target.value);
@@ -66,192 +71,22 @@ export default function SelectCeleb() {
 		setActorTabstatus(!actorTabstatus);
 	};
 
-	const [celebList, setCelebList] = useState([
-		{
-			id: 1,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 2,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 3,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 4,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 5,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 6,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 7,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 8,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 9,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 10,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 11,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 12,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 13,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 14,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 15,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 16,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 17,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 18,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 19,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: false,
-		},
-		{
-			id: 20,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 21,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 22,
-			celebname: 'velopert',
-			img: 'public.velopert@gmail.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 23,
-			celebname: 'tester',
-			img: 'tester@example.com',
-			selected: false,
-			isGroup: true,
-		},
-		{
-			id: 24,
-			celebname: 'liz',
-			img: 'liz@example.com',
-			selected: false,
-			isGroup: true,
-		},
-	]);
-
 	const [selectedCelebsArray, setSelectedCelebsArray] = useState([]);
 	const handleRemoveItem = celeb => {
 		setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
 	};
 	const onSelectCeleb = (celeb, e) => {
-		if (celeb.selected === false) {
+		console.log(celeb.celebIdx);
+		if (!celeb.isSelected) {
 			setSelectedCelebsArray(selectedCelebsArray => [...selectedCelebsArray, celeb]);
 			setSelected(selected + 1);
-			celeb.selected = true;
-			setCelebList([...celebList]);
+			celeb.isSelected = true;
+			setSingerList([...singerList]);
 		} else {
 			handleRemoveItem(celeb);
 			setSelected(selected - 1);
-			celeb.selected = false;
-			setCelebList([...celebList]);
+			celeb.isSelected = false;
+			setSingerList([...singerList]);
 		}
 		// countGroup(selectedCelebsArray);
 		e.preventDefault();
@@ -285,7 +120,7 @@ export default function SelectCeleb() {
 					<TopNav>
 						<NavRight>
 							{selected > 0 ? (
-								<SubText margin="0 16px" color="#9e30f4">
+								<SubText margin="0 1rem" color="#9e30f4">
 									{selected}개 선택
 								</SubText>
 							) : (
@@ -298,18 +133,19 @@ export default function SelectCeleb() {
 							)}
 						</NavRight>
 					</TopNav>
+
 					<ContentWrap padding="0">
 						<TextWrap>
-							<MainText fontsize="24px" margin="15px 0 8px 0">
+							<MainText fontsize="1.5rem" margin="1.625rem 0 0.5rem 0">
 								좋아하는 셀럽 태그를
 								<br />
 								3개 이상 선택해주세요
 							</MainText>
 							<SubText
 								color="#8d8d8d"
-								fontsize="14px"
+								fontsize="0.875rem"
 								fontweight="regular"
-								margin="0 0 20px 0"
+								margin="0 0 1.25rem 0"
 							>
 								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
 							</SubText>
@@ -325,7 +161,7 @@ export default function SelectCeleb() {
 									onChange={handleSearchInput}
 									type="text"
 									placeholder="활동명을 한글로 검색해주세요"
-									margin="0 0 0 6px"
+									margin="0 0 0 0.375rem"
 								/>
 								{searchInput.length !== 0 ? (
 									<IconWrap onClick={searchInputReset}>
@@ -345,16 +181,23 @@ export default function SelectCeleb() {
 							</TabWrap>
 						</SearchTab>
 						<ListContainer>
-							{celebList.map(celeb => (
-								<Celeb key={celeb.id} onClick={e => onSelectCeleb(celeb, e)}>
-									<Image
-										size="100px"
-										key={celeb.id}
-										border={celeb.selected}
-									></Image>
-									{celeb.celebname}
-								</Celeb>
-							))}
+							{singerList.length > 0 &&
+								singerList.map(celeb => (
+									<Celeb key={celeb.celebIdx} onClick={e => onSelectCeleb(celeb, e)}>
+										<Image
+											size="6.25rem"
+											key={celeb.id}
+											border={celeb.isSelected}
+										>
+											<img
+												className="celebImg"
+												src={celeb.celebImgUrl}
+												alt="셀럽이미지"
+											/>
+										</Image>
+										{celeb.name}
+									</Celeb>
+								))}
 						</ListContainer>
 						<RequsetWrap>
 							<RequestButton>
@@ -377,7 +220,7 @@ export default function SelectCeleb() {
 						<BackButton onClick={handleBackClick} />
 						<NavRight>
 							{selected > 0 ? (
-								<SubText margin="0 16px" color="#9e30f4">
+								<SubText margin="0 1rem" color="#9e30f4">
 									{selected}개 선택
 								</SubText>
 							) : (
@@ -392,16 +235,16 @@ export default function SelectCeleb() {
 					</TopNav>
 					<ContentWrap padding="0">
 						<TextWrap padding="0 1.25rem">
-							<MainText fontsize="24px" margin="15px 0 8px 0">
+							<MainText fontsize="1.5rem" margin="0.9375rem 0 0.5rem 0">
 								좋아하는 멤버를
 								<br />
 								자유롭게 선택해주세요
 							</MainText>
 							<SubText
 								color="#8d8d8d"
-								fontsize="14px"
+								fontsize="0.875rem"
 								fontweight="regular"
-								margin="0 0 20px 0"
+								margin="0 0 1.25rem 0"
 							>
 								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
 							</SubText>
@@ -418,10 +261,10 @@ export default function SelectCeleb() {
 						<MembersContainer>
 							{(function () {
 								let renderList = [];
-								for (let i = 0; i < celebList.length; i += 4) {
+								for (let i = 0; i < singerList.length; i += 4) {
 									renderList.push(
 										<RepeatWrap>
-											{celebList.slice(i, i + 4).map((celeb, index) => (
+											{singerList.slice(i, i + 4).map((celeb, index) => (
 												<>
 													{index % 4 === 0 ? (
 														<CelebLeftTop
@@ -540,7 +383,7 @@ const NextButton = styled.span`
 
 const ListContainer = styled.div`
 	display: grid;
-	padding: 1.25rem;
+	padding: 1rem 1.25rem;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-auto-rows: minmax(auto, auto);
 	justify-content: center;
@@ -558,13 +401,15 @@ const SearchTab = styled.div`
 	background-color: white;
 	position: sticky;
 	top: 0;
+	z-index: 10000;
 `;
 const Celeb = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	font-size: 0.875rem;
-	/* border: 1px solid black; */
+	font-size: 0.8125rem;
+	font-weight: 700;
+	color: #262626;
 `;
 const CelebLeftTop = styled.div`
 	position: relative;
@@ -590,18 +435,21 @@ const CelebRightBottom = styled.div`
 	font-size: 1rem;
 `;
 const Image = styled.div`
-	display: flex;
+	position: relative;
 	width: ${props => props.size || '6.25rem'};
 	height: ${props => props.size || '6.25rem'};
+	overflow: hidden;
+
+	display: flex;
+
 	justify-content: center;
 	align-items: flex-end;
-	padding-bottom: 12px;
 	color: white;
 	border-radius: 50%;
-	background-color: pink;
-	margin-bottom: 8px;
+	margin-bottom: 0.5rem;
 	box-sizing: border-box;
 	border: ${props => (props.border ? '2px solid #9e30f4' : 'none')};
+	
 	&:hover {
 		cursor: pointer;
 	}
@@ -615,6 +463,14 @@ const Image = styled.div`
 		height: 70px;
 		margin-bottom: 5px;
 	}
+	.celebImg {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+		right: -9999px;
+		bottom: -9999px;
+		margin: auto;
+	}
 `;
 
 const InputWrap = styled.div`
@@ -622,7 +478,7 @@ const InputWrap = styled.div`
 	align-items: center;
 	border-radius: 0.625rem;
 	padding: 16px;
-	border: 1px solid #e2e0e0;
+	border: solid 1px #c9c9c9;
 	margin: ${props => props.margin || '0'};
 	:focus {
 		border: 1px solid #9e30f4;
@@ -650,7 +506,7 @@ const TabWrap = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 16px 0;
+	margin: 1rem 0 0.75rem;
 `;
 
 const Tab = styled.div`
@@ -660,7 +516,7 @@ const Tab = styled.div`
 	border-radius: 30px;
 	font-size: 14px;
 	padding: 10px 16px;
-	margin: 0 12px;
+	margin: 0 6px;
 	&:hover {
 		cursor: pointer;
 	}
