@@ -456,8 +456,8 @@ const Image = styled.div`
 		height: 9.5625rem;
 	}
 	@media screen and (width: 320px) {
-		width: 8.4063rem;
-		height: 8.4063rem;
+		width: 9.375rem;
+		height: 9.375rem;
 	}
 	@media screen and (width: 280px) {
 		width: 8.125rem;
