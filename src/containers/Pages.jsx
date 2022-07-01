@@ -24,6 +24,8 @@ import Setting from '../pages/my/Setting';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
 import CelebDetail from '../pages/celebdetail';
+import RealtimeQuestion from '../pages/RealtimeQuestion';
+import HotItem from '../pages/HotItem';
 
 export default function Pages() {
 	return (
@@ -51,7 +53,9 @@ export default function Pages() {
 				<Route path="event" element={<Event />} />
 			</Route>
 
-			<Route path="celeb/detail/:celebIdx" element={<CelebDetail />} />
+			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
+			<Route path="/question/realtime" element={<RealtimeQuestion />} />
+			<Route path="/hot" element={<HotItem />} />
 
 			<Route path="/notice" element={<Notice />} />
 

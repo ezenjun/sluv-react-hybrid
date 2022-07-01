@@ -747,7 +747,6 @@ const Image = styled.div`
 	margin-bottom: 1rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
-	color: white;
 	font-size: 0.8125rem;
 	@media screen and (width: 360px) {
 		width: 9.5625rem;
