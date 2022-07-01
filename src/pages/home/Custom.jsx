@@ -7,6 +7,8 @@ import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as SpeakerPhone } from '../../assets/Icons/speakerphone.svg';
 import { ReactComponent as BubbleHeart } from '../../assets/Icons/bubbleHeart.svg';
+import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { useNavigate } from 'react-router-dom';
 export default function Custom() {
 	const navigate = useNavigate();
@@ -49,35 +51,59 @@ export default function Custom() {
 				</FilterWrap>
 				<ItemWrap>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									리노's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							더블유브이프로젝트
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Round Lawn Short Shirt...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							우알롱
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Signature hood sip-up - ...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									현진's luv
+								</SubText>
+								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
+						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									아이엔's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									필릭스's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 				</ItemWrap>
@@ -96,7 +122,7 @@ export default function Custom() {
 				<UserWrap>
 					<User>
 						<ProfileImg></ProfileImg>
-						<SubText fontsize="0.875rem" margin="8px 0 4px 0">
+						<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 							신류땡의 옷장
 						</SubText>
 						<SubText color="#8d8d8d">@ryujinee</SubText>
@@ -104,7 +130,7 @@ export default function Custom() {
 					</User>
 					<User>
 						<ProfileImg></ProfileImg>
-						<SubText fontsize="0.875rem" margin="8px 0 4px 0">
+						<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 							도영이 클로젯12
 						</SubText>
 						<SubText color="#8d8d8d">@doyoung12</SubText>
@@ -112,7 +138,7 @@ export default function Custom() {
 					</User>
 					<User>
 						<ProfileImg></ProfileImg>
-						<SubText fontsize="0.875rem" margin="8px 0 4px 0">
+						<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 							신류땡의 옷장
 						</SubText>
 						<SubText color="#8d8d8d">@ryujinee</SubText>
@@ -120,7 +146,7 @@ export default function Custom() {
 					</User>
 					<User>
 						<ProfileImg></ProfileImg>
-						<SubText fontsize="0.875rem" margin="8px 0 4px 0">
+						<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 							신류땡의 옷장
 						</SubText>
 						<SubText color="#8d8d8d">@ryujinee</SubText>
@@ -137,10 +163,11 @@ export default function Custom() {
 							color="#fff"
 							style={{ lineHeight: '1.28' }}
 						>
-							{' '}
 							나누자! 정보!
+							<br />
+							우리들만의 아지트에서!
 						</MainText>
-						<MainText
+						{/* <MainText
 							fontsize="1.125rem"
 							fontweight="600"
 							color="#fff"
@@ -148,17 +175,17 @@ export default function Custom() {
 						>
 							{' '}
 							우리들만의 아지트에서!
-						</MainText>
+						</MainText> */}
 						<SubText
 							fontweight="normal"
-							margin="6px 0 0 0"
+							// margin="6px 0 0 0"
 							color="rgba(255, 255, 255, 0.8)"
 						>
 							최애의 아이템 정보를 공유해 보아요!
 						</SubText>
 					</BannerText>
-					<BannerImg>
-						<SpeakerPhone />
+					<BannerImg padding="0.3125rem 0 0 0">
+						<SpeakerPhone style={{ width: '7.125rem', height: '6rem' }} />
 					</BannerImg>
 				</Banner>
 			</BannerWrap>
@@ -190,35 +217,59 @@ export default function Custom() {
 				</FilterWrap>
 				<ItemWrap>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									있지's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							더블유브이프로젝트
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Round Lawn Short Shirt...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							우알롱
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Signature hood sip-up - ...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									있지's luv
+								</SubText>
+								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
+						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									있지's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									있지's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 				</ItemWrap>
@@ -252,33 +303,34 @@ export default function Custom() {
 				<Banner backgroundcolor="#7000ff">
 					<BannerText>
 						<MainText
-							fontsize="1.125rem"
+							fontsize="1.0625rem"
 							fontweight="600"
 							color="#fff"
 							style={{ lineHeight: '1.28' }}
 						>
 							{' '}
 							오늘 셀럽이 착용한
+							<br />저 아이템 정보가 궁금해!
 						</MainText>
-						<MainText
-							fontsize="1.125rem"
+						{/* <MainText
+							fontsize="17px"
 							fontweight="600"
 							color="#fff"
 							style={{ lineHeight: '1.28' }}
 						>
 							{' '}
 							저 아이템 정보가 궁금해!
-						</MainText>
+						</MainText> */}
 						<SubText
 							fontweight="normal"
-							margin="6px 0 0 0"
+							// margin="6px 0 0 0"
 							color="rgba(255, 255, 255, 0.8)"
 						>
 							아이템 정보를 마구마구 물어보세요
 						</SubText>
 					</BannerText>
 					<BannerImg>
-						<BubbleHeart />
+						<BubbleHeart style={{ width: '7.8125rem', height: '5.9375rem' }} />
 					</BannerImg>
 				</Banner>
 			</BannerWrap>
@@ -310,36 +362,62 @@ export default function Custom() {
 				</FilterWrap>
 				<ItemWrap>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									우식's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
 					</Item>
 					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							더블유브이프로젝트
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Round Lawn Short Shirt...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
-							우알롱
-						</SubText>
-						<br />
-						<SubText fontsize="12px">Signature hood sip-up - ...</SubText>
-					</Item>
-					<Item>
-						<Image />
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 6px0 ">
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									우식's luv
+								</SubText>
+								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<br />
 						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									우식's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+					</Item>
+					<Item>
+						<Image>
+							<ImageText>
+								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+									우식's luv
+								</SubText>
+								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+							</ImageText>
+						</Image>
+						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px">
+							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
+						</SubText>
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -362,20 +440,230 @@ export default function Custom() {
 					</SubText>
 				</FilterWrap>
 				<HotItemWrap>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
-					<HotItem></HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
+					<HotItem>
+						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
+							필릭스's luv
+						</SubText>
+						<SubText
+							fontsize="13px"
+							fontweight="bold"
+							color="white"
+							margin="0.5rem 0 0 0 "
+						>
+							마하그리드
+						</SubText>
+						<SubText fontsize="12px" color="white">
+							Rugby Polo Ls TEE BLU sssssssss
+						</SubText>
+					</HotItem>
 				</HotItemWrap>
 			</ItemContainer>
 		</>
@@ -444,25 +732,40 @@ const ItemWrap = styled.div`
 	row-gap: 0.6875rem;
 	column-gap: 0.6875rem;
 `;
-const Item = styled.div``;
+const Item = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
 const Image = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
 	background-color: blue;
 	margin-bottom: 1rem;
+	box-sizing: border-box;
+	padding: 0.5rem 0.75rem;
+	font-size: 0.8125rem;
 	@media screen and (width: 360px) {
 		width: 9.5625rem;
 		height: 9.5625rem;
 	}
 	@media screen and (width: 320px) {
-		width: 8.4063rem;
-		height: 8.4063rem;
+		width: 9.375rem;
+		height: 9.375rem;
 	}
 	@media screen and (width: 280px) {
 		width: 8.125rem;
 		height: 8.125rem;
 	}
+`;
+const ImageText = styled.div`
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
 `;
 const RecommendUserWrap = styled.div`
 	display: flex;
@@ -526,12 +829,17 @@ const Banner = styled.div`
 `;
 const BannerText = styled.div`
 	display: flex;
+	justify-content: space-between;
 	flex-grow: 1;
 	padding: 20px 0 20px 26px;
 	flex-direction: column;
 `;
 const BannerImg = styled.div`
-	padding-top: 5px;
+	display: flex;
+	align-items: center;
+	padding: ${props => props.padding || '0'};
+	height: 100%;
+	/* padding-top: 5px; */
 `;
 const QuestionContainer = styled.div`
 	display: flex;
@@ -577,7 +885,6 @@ const HotItemWrap = styled.div`
 	grid-template-columns: repeat(8, minmax(10.125rem, auto));
 	grid-template-rows: 1fr 1fr 1fr;
 	/* box-sizing: border-box; */
-
 	::-webkit-scrollbar {
 		margin-top: 10px;
 		width: 5px;
@@ -656,6 +963,18 @@ const HotItemWrap = styled.div`
 	}
 `;
 const HotItem = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	box-sizing: border-box;
+	align-items: flex-start;
+	flex-direction: column;
 	background-color: darkolivegreen;
-	border-radius: 16px;
+	border-radius: 1rem;
+	padding: 0.75rem 1rem;
+	span {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%;
+	}
 `;

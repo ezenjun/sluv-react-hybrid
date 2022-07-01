@@ -12,7 +12,32 @@ export default function Home() {
 	const [tabIndex, setTabIndex] = useState(1);
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-
+	const tabList = [
+		{
+			idx: 1,
+			name: '맞춤',
+			to: '',
+		},
+		{
+			idx: 2,
+			name: '팔로잉',
+			to: 'follow',
+		},
+		{
+			idx: 3,
+			name: '질문',
+			to: 'question',
+		},
+		{
+			idx: 4,
+			name: '이벤트',
+			to: 'event',
+		},
+	];
+	const [selectedTab, setSelectedTab] = useState(1);
+	const onClickTab = (idx, name) => {
+		setSelectedTab(idx);
+	};
 	const toggleTab = idx => {
 		setTabIndex(idx);
 		console.log(tabIndex);
@@ -24,7 +49,7 @@ export default function Home() {
 
 	return (
 		<>
-			<MainContainer>
+			<MainContainer padding="0 0 1.25rem 0">
 				<TopNav style={{ justifyContent: 'space-between' }}>
 					<LogoWrap to="">
 						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
@@ -34,38 +59,18 @@ export default function Home() {
 					</NavRight>
 				</TopNav>
 				<TabContainer>
-					<StyledLink
-						to=""
-						margin="0 20px 0 0"
-						borderbottom={tabIndex === 1 ? '2px solid #262626' : ''}
-						onClick={() => toggleTab(1)}
-					>
-						<Tab color={tabIndex === 1 ? '#262626' : ''}>맞춤</Tab>
-					</StyledLink>
-					<StyledLink
-						to="follow"
-						margin="0 20px 0 0"
-						borderbottom={tabIndex === 2 ? '2px solid #262626' : ''}
-						onClick={() => toggleTab(2)}
-					>
-						<Tab color={tabIndex === 1 ? '#262626' : ''}>팔로잉</Tab>
-					</StyledLink>
-					<StyledLink
-						to="question"
-						margin="0 20px 0 0"
-						borderbottom={tabIndex === 3 ? '2px solid #262626' : ''}
-						onClick={() => toggleTab(3)}
-					>
-						<Tab color={tabIndex === 1 ? '#262626' : ''}>질문</Tab>
-					</StyledLink>
-					<StyledLink
-						to="event"
-						margin="0 20px 0 0"
-						borderbottom={tabIndex === 4 ? '2px solid #262626' : ''}
-						onClick={() => toggleTab(4)}
-					>
-						<Tab color={tabIndex === 1 ? '#262626' : ''}>이벤트</Tab>
-					</StyledLink>
+					{tabList.map(item => {
+						return (
+							<StyledLink
+								to={item.to}
+								key={item.idx}
+								onClick={() => onClickTab(item.idx, item.name)}
+								selected={selectedTab === item.idx}
+							>
+								<Tab selected={selectedTab === item.idx}>{item.name}</Tab>
+							</StyledLink>
+						);
+					})}
 				</TabContainer>
 				<FeedContainer>
 					<Outlet />
@@ -90,7 +95,7 @@ const TabContainer = styled.div`
 
 const Tab = styled.div`
 	box-sizing: border-box;
-	color: ${props => props.color || '#8d8d8d'};
+	color: ${props => (props.selected ? '#262626' : '#8d8d8d')};
 	margin-bottom: 0.6875rem;
 	font-size: 1.125rem;
 	font-weight: bold;
@@ -113,7 +118,6 @@ const StyledLink = styled(Link)`
 	margin: 0;
 	padding: 0;
 	text-decoration: none;
-	color: ${props => props.margin || '#8d8d8d'};
-	margin: ${props => props.margin || '0'};
-	border-bottom: ${props => props.borderbottom || 'none'};
+	margin: 0 20px 0 0;
+	border-bottom: ${props => (props.selected ? '2px solid #262626' : 'none')};
 `;
