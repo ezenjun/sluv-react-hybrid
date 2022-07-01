@@ -38,8 +38,6 @@ export default function Signup() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	
-
 
 	const allBtnEvent = () => {
 		if (allCheck === false) {
@@ -495,7 +493,7 @@ export default function Signup() {
 						<PageLabel>
 							<MainText>
 								휴대폰 번호 <br />
-								인증이 필요해요.
+								인증이 필요해요
 							</MainText>
 						</PageLabel>
 						<FormWrap>
@@ -536,7 +534,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!phoneNumberValid && phoneNumber.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 휴대폰 번호를 입력해주세요.
+										올바른 휴대폰 번호를 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -591,7 +589,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!authCodeValid && authCode.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 인증번호 형식이 아닙니다.
+										올바른 인증번호 형식이 아닙니다
 									</SubText>
 								) : (
 									<></>
@@ -645,7 +643,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!emailValid && email.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 이메일을 입력해주세요.
+										올바른 이메일을 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -679,7 +677,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!passwordValid && password.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.
+										영문, 숫자, 특수문자 포함 8자 이상 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -733,7 +731,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!nicknameValid && nickname.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 닉네임을 입력해주세요.
+										올바른 닉네임을 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -762,7 +760,7 @@ export default function Signup() {
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
 							<SubText fontsize="16px" color="#4A4A4A" margin="1.875rem">
-								스럽에서 다양한 활동 기대할게요.
+								스럽에서 다양한 활동 기대할게요
 							</SubText>
 						</CompletePageLabel>
 					</CompleteTopWrap>
@@ -856,7 +854,7 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border-radius: 0.625rem;
+	border-radius: 0.5rem;
 	padding: 1rem;
 	:focus {
 		border: 1px solid #9e30f4;
