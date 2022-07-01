@@ -19,6 +19,7 @@ export const TopNav = styled.div`
 		position: absolute;
 		left: 50%;
 		transform: translate(-50%);
+		white-space: nowrap;
 	}
 
 	// 상단바 우측 텍스트

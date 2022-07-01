@@ -8,13 +8,75 @@ import { ContentWrap } from '../../components/containers/ContentWrap';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { SubText } from '../../components/Texts/SubText';
+
+import { ChipWrap } from '../../components/Chip/ChipWrap';
+import { Chip } from '../../components/Chip/Chip';
+
+import { LargeViewWrap } from '../../components/LargeViewWrap/LargeViewWrap';
+import { LargeViewItem } from '../../components/LargeViewWrap/LargeViewItem';
+import { LargeViewImage } from '../../components/LargeViewWrap/LargeViewImage';
+
+import { GridItemWrap } from '../../components/GridItems/GridItemWrap';
+import { GridItem } from '../../components/GridItems/GridItem';
+import { GridImage } from '../../components/GridItems/GridImage';
+import { ImageText } from '../../components/ImageText';
+
 import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.svg';
 import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
+import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
+import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 
 export default function CelebDetail() {
 	let params = useParams();
 	const navigate = useNavigate();
-	const [view, setView] = useState(true);
+
+	// const [isGroup, setIsGroup] = useState(false); // 그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음
+	const membersList = [
+		{
+			idx: 1,
+			name: '스트레이키즈',
+		},
+		{
+			idx: 2,
+			name: '리노',
+		},
+		{
+			idx: 3,
+			name: '현진',
+		},
+		{
+			idx: 4,
+			name: '아이엔',
+		},
+		{
+			idx: 5,
+			name: '필릭스',
+		},
+		{
+			idx: 6,
+			name: '한',
+		},
+		{
+			idx: 7,
+			name: '창빈',
+		},
+		{
+			idx: 8,
+			name: '승민',
+		},
+		{
+			idx: 9,
+			name: '우진',
+		},
+	];
+
+	// const [latestList, setLatestList] = useState([]);
+	// const [hotList, setHotList] = useState([]);
+
+	const [currentItemList, setCurrentItemList] = useState([]);
+	const [selectedChip, setSelectedChip] = useState(1);
+
+	const [view, setView] = useState(true); //view = true 크게보기  false = 작게보기
 	const changeView = () => {
 		setView(!view);
 	};
@@ -22,23 +84,44 @@ export default function CelebDetail() {
 		navigate(-1);
 	};
 
+	const onClickTab = (idx, name) => {
+		setSelectedChip(idx);
+		let tempArr = [];
+		tempArr = currentItemList.filter(item => item.name === name); //item 리스트와 chip 이름 비교
+		setCurrentItemList(tempArr);
+	};
+
 	return (
-		<MainContainer>
+		<MainContainer padding="0 0 3.125rem 0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
-					{params.celebIdx}'s LUV 아이템
+					{membersList[0].name}'s LUV 아이템
 				</div>
 			</TopNav>
 			<FeedContainer>
-				<ChipWrap>
-					<Chip selected={true}>스트레이키즈</Chip>
-					<Chip>리노</Chip>
-					<Chip>현진</Chip>
-					<Chip>아이엔</Chip>
-					<Chip>필릭스</Chip>
-				</ChipWrap>
-				<HorizontalLine />
+				{/* /그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음 */}
+				{membersList.length > 1 ? (
+					<>
+						<ChipWrap>
+							{membersList.map(item => {
+								return (
+									<Chip
+										key={item.idx}
+										onClick={() => onClickTab(item.idx, item.name)}
+										selected={selectedChip === item.idx}
+									>
+										{item.name}
+									</Chip>
+								);
+							})}
+						</ChipWrap>
+						<HorizontalLine />
+					</>
+				) : (
+					<></>
+				)}
+
 				<FilterWrap>
 					<Filter>
 						<SubText fontsize="14px" fontweight="bold">
@@ -66,9 +149,16 @@ export default function CelebDetail() {
 					)}
 				</FilterWrap>
 				{view ? (
-					<ItemsContainer>
-						<Item>
-							<Image></Image>
+					<LargeViewWrap>
+						<LargeViewItem>
+							<LargeViewImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										리노's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</LargeViewImage>
 							<ItemTextWrap>
 								<SubText fontsize="1rem">마하그리드</SubText>
 								<VerticalLine></VerticalLine>
@@ -80,10 +170,17 @@ export default function CelebDetail() {
 								<Dot></Dot>
 								<SubText color="#8d8d8d"> 5분 전</SubText>
 							</SubInfoWrap>
-						</Item>
+						</LargeViewItem>
 						<HorizontalLine></HorizontalLine>
-						<Item>
-							<Image></Image>
+						<LargeViewItem>
+							<LargeViewImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										현진's luv
+									</SubText>
+									<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</LargeViewImage>
 							<ItemTextWrap>
 								<SubText fontsize="1rem">더블유브이프로젝트</SubText>
 								<VerticalLine></VerticalLine>
@@ -95,10 +192,17 @@ export default function CelebDetail() {
 								<Dot></Dot>
 								<SubText color="#8d8d8d"> 5분 전</SubText>
 							</SubInfoWrap>
-						</Item>
+						</LargeViewItem>
 						<HorizontalLine></HorizontalLine>
-						<Item>
-							<Image></Image>
+						<LargeViewItem>
+							<LargeViewImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										아이엔's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</LargeViewImage>
 							<ItemTextWrap>
 								<SubText fontsize="1rem">우알롱</SubText>
 								<VerticalLine></VerticalLine>
@@ -110,10 +214,17 @@ export default function CelebDetail() {
 								<Dot></Dot>
 								<SubText color="#8d8d8d"> 5분 전</SubText>
 							</SubInfoWrap>
-						</Item>
+						</LargeViewItem>
 						<HorizontalLine></HorizontalLine>
-						<Item>
-							<Image></Image>
+						<LargeViewItem>
+							<LargeViewImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										필릭스's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</LargeViewImage>
 							<ItemTextWrap>
 								<SubText fontsize="1rem">마하그리드</SubText>
 								<VerticalLine></VerticalLine>
@@ -125,72 +236,120 @@ export default function CelebDetail() {
 								<Dot></Dot>
 								<SubText color="#8d8d8d"> 5분 전</SubText>
 							</SubInfoWrap>
-						</Item>
-					</ItemsContainer>
+						</LargeViewItem>
+					</LargeViewWrap>
 				) : (
 					<GridItemWrap>
 						<GridItem>
-							<GridImage />
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<br />
 							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
 						</GridItem>
 						<GridItem>
-							<GridImage />
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
+							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+								마하그리드
+							</SubText>
+							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+						</GridItem>
+						<GridItem>
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								더블유브이프로젝트
 							</SubText>
-							<br />
 							<SubText fontsize="0.75rem">Round Lawn Short Shirt...</SubText>
 						</GridItem>
 						<GridItem>
-							<GridImage />
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								우알롱
-							</SubText>
-							<br />
-							<SubText fontsize="0.75rem">Signature hood sip-up - ...</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage />
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<br />
 							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
 						</GridItem>
 						<GridItem>
-							<GridImage />
+							<GridImage>
+								<ImageText>
+									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
+										우식's luv
+									</SubText>
+									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+								</ImageText>
+							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<br />
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage />
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								더블유브이프로젝트
-							</SubText>
-							<br />
-							<SubText fontsize="0.75rem">Round Lawn Short Shirt...</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage />
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								우알롱
-							</SubText>
-							<br />
-							<SubText fontsize="0.75rem">Signature hood sip-up - ...</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage />
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<br />
 							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
 						</GridItem>
 					</GridItemWrap>
@@ -208,25 +367,7 @@ const FeedContainer = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-const ChipWrap = styled.div`
-	overflow-x: scroll;
-	white-space: nowrap;
-	::-webkit-scrollbar {
-		display: none; /* for Chrome, Safari, and Opera */
-	}
-`;
-const Chip = styled.div`
-	display: inline-block;
-	/* box-sizing: border-box; */
-	padding: 0.625rem 1rem;
-	margin-right: 0.5rem;
-	border-radius: 1.9rem;
-	border: solid 1px #e2e0e0;
-	background-color: ${props => (props.selected ? '#2b1e34' : '#fff')};
-	color: ${props => (props.selected ? '#fff' : '#2b1e34')};
-	font-size: 14px;
-	font-weight: 600;
-`;
+
 const FilterWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -240,35 +381,13 @@ const Filter = styled.div`
 		cursor: pointer;
 	}
 `;
-const ItemsContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	align-content: space-between;
-	overflow-y: scroll;
-	::-webkit-scrollbar {
-		display: none; /* for Chrome, Safari, and Opera */
-	}
-`;
-const Item = styled.div`
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-`;
-const Image = styled.div`
-	width: 100%;
-	height: 14.375rem;
-	background-color: darkturquoise;
-	border-radius: 1rem;
-`;
+
 const ItemTextWrap = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin: 1rem 0 0.625rem 0;
+	margin: 1rem 0 10px 0;
 `;
 const SubInfoWrap = styled.div`
 	display: flex;
@@ -288,32 +407,4 @@ const Dot = styled.div`
 	border-radius: 50%;
 	background-color: #8d8d8d;
 	margin: 0 6px;
-`;
-const GridItemWrap = styled.div`
-	display: grid;
-	justify-items: center;
-	grid-template-columns: 1fr 1fr;
-	grid-auto-rows: minmax(6.25rem, auto);
-	row-gap: 0.6875rem;
-	column-gap: 0.6875rem;
-`;
-const GridItem = styled.div``;
-const GridImage = styled.div`
-	width: 10.125rem;
-	height: 10.125rem;
-	border-radius: 1rem;
-	background-color: blue;
-	margin-bottom: 1rem;
-	@media screen and (width: 360px) {
-		width: 9.5625rem;
-		height: 9.5625rem;
-	}
-	@media screen and (width: 320px) {
-		width: 8.4063rem;
-		height: 8.4063rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
-	}
 `;
