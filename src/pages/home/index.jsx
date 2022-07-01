@@ -24,7 +24,7 @@ export default function Home() {
 
 	return (
 		<>
-			<MainContainer>
+			<MainContainer padding="0 0 1.25rem 0">
 				<TopNav style={{ justifyContent: 'space-between' }}>
 					<LogoWrap to="">
 						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
