@@ -15,16 +15,17 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState } from 'recoil';
-import { celebCategoryList, SingerListState, TotalCelebListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, SingerListState, TotalCelebListState } from '../../recoil/Celebrity';
+import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 
 export default function SelectCeleb() {
 
 	const navigate = useNavigate();
 
 	const [checkStatusList, setCheckStatusList] = useState([]);
-	const [selectedCelebs, setSelectedCelebs] = useState([]);
+	const [selectedGroups, setSelectedGroups] = useState([]);
+	const [selectedCelebIdxArray, setSelectedCelebIdxArray] = useState([]);
 	
-	const [currentPage, setCurrentPage] = useState(0);
 	const [isCelebConfirm, setIsCelebConfirm] = useState(false);
 	const [selectedNum, setSelectedNum] = useState(0);
 
@@ -32,13 +33,28 @@ export default function SelectCeleb() {
 	const [currentCelebList, setCurrentCelebList] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(1);
 	
+	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
-	const [singerList, setSingerList] = useRecoilState(SingerListState);
+	
 	
 	useEffect(() => {
+		// 선택한 관심셀럽 수 초기화
+		setSelectedNum(0);
 		// 셀럽 및 멤버 목록 조회 API 호출
 		getCelebList();
 	}, []);
+
+	useEffect(() => {
+		console.log(`선택한 셀럽 수 : ${selectedNum}`);
+		console.log(selectedGroups);
+		console.log(selectedCelebIdxArray);
+
+		if (selectedNum < 3) {
+			setIsCelebConfirm(false);
+			return;
+		}
+		setIsCelebConfirm(true);
+	}, [selectedNum]);
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
@@ -71,40 +87,66 @@ export default function SelectCeleb() {
 		}
 	};
 
-	
-	const handleRemoveItem = celeb => {
-		// setSelectedCelebsArray(selectedCelebsArray.filter(item => item !== celeb));
-	};
 	const onSelectCeleb = (celeb, e) => {
-		
+		let tempGroup = [];
+		let tempWholeCeleb = [];
 		if (!checkStatusList[celeb.celebIdx - 1]) {
 			setSelectedNum(selectedNum + 1);
-			// 배열에 셀럽 추가
+
+			if (celeb.isGroup === 1) {
+				tempGroup = selectedGroups;
+				tempGroup.push(celeb);
+				setSelectedGroups(tempGroup);
+			}
+			tempWholeCeleb = selectedCelebIdxArray;
+			tempWholeCeleb.push({celebIdx: celeb.celebIdx});
+			setSelectedCelebIdxArray(tempWholeCeleb);
+
 		} else {
 			setSelectedNum(selectedNum - 1);
-			// 베열에서 셀럽 제거
-		}
-		let temp = checkStatusList;
-		temp[celeb.celebIdx - 1] = !temp[celeb.celebIdx - 1];
-		setCheckStatusList(temp);
 
-		
-		
+			if (celeb.isGroup === 1) {
+				tempGroup = selectedGroups;
+				setSelectedGroups(tempGroup.filter(item => item.celebIdx !== celeb.celebIdx));
+			}
+			tempWholeCeleb = selectedCelebIdxArray;
+			setSelectedCelebIdxArray(
+				tempWholeCeleb.filter(item => item.celebIdx !== celeb.celebIdx)
+			);
+		}
+		let tempCheckList = checkStatusList;
+		tempCheckList[celeb.celebIdx - 1] = !tempCheckList[celeb.celebIdx - 1];
+		setCheckStatusList(tempCheckList);
 
 		e.preventDefault();
 	};
-	// // var groupLen = 0;
-	// var groupList = [];
-	// const countGroup = () => {
-	// 	for (let i = 0; i < selectedCelebsArray.length; i++) {
-	// 		if (selectedCelebsArray[i].isGroup === true) {
-	// 			const member = selectedCelebsArray[i];
-	// 			console.log(member);
-	// 			groupList.push(member);
-	// 		}
-	// 	}
-	// 	console.log('groupList length: ', groupList.length);
-	// };
+
+	const onPostFavoriteCelebs = async () => {
+		const body = {
+			celebMemberList: selectedCelebIdxArray
+		};
+		const data = await customApiClient('post', '/interest', body);
+
+		if(!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log(data.message);
+		navigate('/home');
+	}
+
+	const onHandleNextButton = () => {
+		
+		if(isCelebConfirm) {
+			if(selectedGroups.length === 0) {
+				onPostFavoriteCelebs();
+				
+			} else {
+				setCurrentPage(currentPage + 1);
+			}
+		}
+	}
+
 
 	return (
 		<>
@@ -117,10 +159,7 @@ export default function SelectCeleb() {
 									{selectedNum}개 선택
 								</SubText>
 							)}
-							<NextButton
-								status={isCelebConfirm}
-								onClick={() => setCurrentPage(currentPage + 1)}
-							>
+							<NextButton status={isCelebConfirm} onClick={onHandleNextButton}>
 								다음
 							</NextButton>
 						</NavRight>
@@ -198,7 +237,7 @@ export default function SelectCeleb() {
 										</Image>
 										{celeb.name}
 										<CountBadge status={checkStatusList[celeb.celebIdx - 1]}>
-											<span className='badgeItem'>{selectedNum}</span>
+											<span className="badgeItem">{selectedNum}</span>
 										</CountBadge>
 									</Celeb>
 								))}
@@ -221,48 +260,10 @@ export default function SelectCeleb() {
 
 			{currentPage === 1 && (
 				<MainContainer>
-					<TopNav>
-						<BackButton onClick={() => setCurrentPage(currentPage - 1)} />
-						<NavRight>
-							{selectedNum > 0 ? (
-								<SubText margin="0 1rem" color="#9e30f4">
-									{selectedNum}개 선택
-								</SubText>
-							) : (
-								<></>
-							)}
-							{selectedNum >= 3 ? (
-								<NextButton onClick={undefined}>다음</NextButton>
-							) : (
-								<SubText color="#b1b1b1">다음</SubText>
-							)}
-						</NavRight>
-					</TopNav>
-					<ContentWrap padding="0">
-						<TextWrap padding="0 1.25rem">
-							<MainText fontsize="1.5rem" margin="0.9375rem 0 0.5rem 0">
-								좋아하는 멤버를
-								<br />
-								자유롭게 선택해주세요
-							</MainText>
-							<SubText
-								color="#8d8d8d"
-								fontsize="0.875rem"
-								fontweight="regular"
-								margin="0 0 1.25rem 0"
-							>
-								선택한 순서대로 더 빠른 정보를 제공받을 수 있어요!
-							</SubText>
-						</TextWrap>
-						<BottomWrap>
-							<SpeechBubbleWrap
-								backgroundColor="#9e30f4"
-								color="white"
-								borderRight="8px solid #9e30f4"
-							>
-								<div>스트레이키즈</div>
-							</SpeechBubbleWrap>
-						</BottomWrap>
+					<SelectMemberContainer data={selectedGroups} />
+
+					{/* <ContentWrap padding="0">
+
 						<MembersContainer>
 							{(function () {
 								let renderList = [];
@@ -327,7 +328,7 @@ export default function SelectCeleb() {
 								return renderList;
 							})()}
 						</MembersContainer>
-					</ContentWrap>
+					</ContentWrap> */}
 				</MainContainer>
 			)}
 		</>
@@ -347,7 +348,7 @@ const RequestButton = styled.div`
 	margin: 0;
 `;
 
-const BottomWrap = styled.div`
+export const BottomWrap = styled.div`
 	box-sizing: border-box;
 	padding: 0 20px;
 `;
@@ -371,12 +372,12 @@ const RepeatWrap = styled.div`
 	width: 370px;
 `;
 
-const NavRight = styled.div`
+export const NavRight = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	width: 100%;
 `;
-const NextButton = styled.span`
+export const NextButton = styled.span`
 	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.status ? '#262626' : '#b1b1b1'};
@@ -395,7 +396,7 @@ const ListContainer = styled.div`
 	gap: 16px 11px;
 `;
 
-const TextWrap = styled.div`
+export const TextWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	padding: ${props => props.padding || '0 1.25rem'};

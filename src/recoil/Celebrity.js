@@ -3,17 +3,19 @@ import { atom } from "recoil";
 export const TotalCelebListState = atom({
 	key: "TotalCelebListState",
 	default: [],
-})
-
-export const SingerListState = atom({
-	key: "SingerListState",
-	default: [],
 });
 
-export const ActorListState = atom({
-	key: 'ActorListState',
-	default: [],
+export const ChooseCelebCurrentPageState = atom({
+	key: 'ChooseCelebCurrentPageState',
+	default: 0,
 });
+
+
+
+
+
+
+
 
 export const celebCategoryList = [
 	{
@@ -25,3 +27,10 @@ export const celebCategoryList = [
 		name: '배우'
 	},
 ]
+
+// 삭제 예정
+export const SingerListState = atom({
+	key: 'SingerListState',
+	default: [],
+});
+
