@@ -96,7 +96,7 @@ export default function CelebDetail() {
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
-					{membersList[0].name}'s LUV 아이템
+					{membersList[0].name}'s 아이템
 				</div>
 			</TopNav>
 			<FeedContainer>
@@ -134,15 +134,15 @@ export default function CelebDetail() {
 					</Filter>
 					{view ? (
 						<Filter onClick={changeView}>
-							<FilterSmall style={{ marginRight: '4px' }}></FilterSmall>
-							<SubText fontsize="14px" color="#8d8d8d">
+							<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
+							<SubText fontsize="12px" color="#8d8d8d">
 								작게보기
 							</SubText>
 						</Filter>
 					) : (
 						<Filter onClick={changeView}>
-							<FilterBig style={{ marginRight: '4px' }}></FilterBig>
-							<SubText fontsize="14px" color="#8d8d8d">
+							<FilterBig style={{ marginRight: '2px' }}></FilterBig>
+							<SubText fontsize="12px" color="#8d8d8d">
 								크게보기
 							</SubText>
 						</Filter>
@@ -154,7 +154,7 @@ export default function CelebDetail() {
 							<LargeViewImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										리노's luv
+										리노's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -176,7 +176,7 @@ export default function CelebDetail() {
 							<LargeViewImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										현진's luv
+										현진's
 									</SubText>
 									<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -198,7 +198,7 @@ export default function CelebDetail() {
 							<LargeViewImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										아이엔's luv
+										아이엔's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -220,7 +220,7 @@ export default function CelebDetail() {
 							<LargeViewImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										필릭스's luv
+										필릭스's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -244,7 +244,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -258,7 +258,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -272,7 +272,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -286,7 +286,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -300,7 +300,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -314,7 +314,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -328,7 +328,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -342,7 +342,7 @@ export default function CelebDetail() {
 							<GridImage>
 								<ImageText>
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's luv
+										우식's
 									</SubText>
 									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 								</ImageText>
@@ -360,8 +360,8 @@ export default function CelebDetail() {
 }
 const FeedContainer = styled.div`
 	height: 100vh;
-	padding: 0 20px 20px 20px;
-	margin-top: 5px;
+	padding: 0 1.25rem 1.25rem 1.25rem;
+	margin-top: 0.3125rem;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -387,7 +387,7 @@ const ItemTextWrap = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin: 1rem 0 10px 0;
+	margin: 1rem 0 0.625rem 0;
 `;
 const SubInfoWrap = styled.div`
 	display: flex;
@@ -406,5 +406,5 @@ const Dot = styled.div`
 	height: 0.125rem;
 	border-radius: 50%;
 	background-color: #8d8d8d;
-	margin: 0 6px;
+	margin: 0 0.375rem;
 `;

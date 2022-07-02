@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export const PurpleButton = styled.button`
-	width: 100%;
-	height: 3rem;
+	/* width: 100%; */
+	height: ${props => props.height || '3rem'};
+	width: ${props => props.width || '100%'};
 	border: none;
 	font-family: Pretendard;
 	font-weight: bold;
