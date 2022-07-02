@@ -17,6 +17,8 @@ export const ChooseCelebCurrentPageState = atom({
 
 
 
+
+
 export const celebCategoryList = [
 	{
 		idx: 1,

@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, SingerListState, TotalCelebListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, TotalCelebListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 
 export default function SelectCeleb() {
@@ -261,74 +261,6 @@ export default function SelectCeleb() {
 			{currentPage === 1 && (
 				<MainContainer>
 					<SelectMemberContainer data={selectedGroups} />
-
-					{/* <ContentWrap padding="0">
-
-						<MembersContainer>
-							{(function () {
-								let renderList = [];
-								for (let i = 0; i < singerList.length; i += 4) {
-									renderList.push(
-										<RepeatWrap>
-											{singerList.slice(i, i + 4).map((celeb, index) => (
-												<>
-													{index % 4 === 0 ? (
-														<CelebLeftTop
-															key={celeb.id}
-															onClick={e => onSelectCeleb(celeb, e)}
-														>
-															<Image size="9.25rem" key={celeb.id}>
-																{celeb.celebname}
-															</Image>
-														</CelebLeftTop>
-													) : (
-														<></>
-													)}
-													{index % 4 === 1 ? (
-														<CelebLeftBottom
-															key={celeb.id}
-															onClick={e => onSelectCeleb(celeb, e)}
-														>
-															<Image size="9.25rem" key={celeb.id}>
-																{celeb.celebname}
-															</Image>
-														</CelebLeftBottom>
-													) : (
-														<></>
-													)}
-													{index % 4 === 2 ? (
-														<CelebRightTop
-															key={celeb.id}
-															onClick={e => onSelectCeleb(celeb, e)}
-														>
-															<Image size="9.25rem" key={celeb.id}>
-																{celeb.celebname}
-															</Image>
-														</CelebRightTop>
-													) : (
-														<></>
-													)}
-													{index % 4 === 3 ? (
-														<CelebRightBottom
-															key={celeb.id}
-															onClick={e => onSelectCeleb(celeb, e)}
-														>
-															<Image size="9.25rem" key={celeb.id}>
-																{celeb.celebname}
-															</Image>
-														</CelebRightBottom>
-													) : (
-														<></>
-													)}
-												</>
-											))}
-										</RepeatWrap>
-									);
-								}
-								return renderList;
-							})()}
-						</MembersContainer>
-					</ContentWrap> */}
 				</MainContainer>
 			)}
 		</>
@@ -352,7 +284,7 @@ export const BottomWrap = styled.div`
 	box-sizing: border-box;
 	padding: 0 20px;
 `;
-const MembersContainer = styled.div`
+export const MembersContainer = styled.div`
 	display: flex;
 	width: 100%;
 	flex-direction: row;
@@ -365,7 +297,7 @@ const MembersContainer = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-const RepeatWrap = styled.div`
+export const RepeatWrap = styled.div`
 	display: flex;
 	position: relative;
 	height: 370px;
@@ -418,24 +350,24 @@ const Celeb = styled.div`
 	font-weight: 700;
 	color: #262626;
 `;
-const CelebLeftTop = styled.div`
+export const CelebLeftTop = styled.div`
 	position: relative;
 	left: 1.25rem;
 	font-size: 1rem;
 `;
-const CelebLeftBottom = styled.div`
+export const CelebLeftBottom = styled.div`
 	position: absolute;
 	left: 1.25rem;
 	top: 10rem;
 	font-size: 1rem;
 `;
-const CelebRightTop = styled.div`
+export const CelebRightTop = styled.div`
 	position: relative;
 	top: 4.6875rem;
 	left: 1.125rem;
 	font-size: 1rem;
 `;
-const CelebRightBottom = styled.div`
+export const CelebRightBottom = styled.div`
 	position: absolute;
 	left: 10.625rem;
 	top: 14.6875rem;
@@ -463,12 +395,12 @@ const Image = styled.div`
 	@media screen and (max-width: 350px) {
 		width: 5.3125rem;
 		height: 5.3125rem;
-		margin-bottom: 6px;
+		margin-bottom: 0.375rem;
 	}
 	@media screen and (max-width: 320px) {
-		width: 70px;
-		height: 70px;
-		margin-bottom: 5px;
+		width: 4.375rem;
+		height: 4.375rem;
+		margin-bottom: 0.3125rem;
 	}
 	.celebImg {
 		position: absolute;
