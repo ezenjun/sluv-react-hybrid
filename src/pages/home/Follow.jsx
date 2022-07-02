@@ -13,7 +13,7 @@ import { SubText } from '../../components/Texts/SubText';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
 export default function Follow() {
-	const [followExist, setFollowExist] = useState(false);
+	const [followExist, setFollowExist] = useState(true);
 	return (
 		<FeedContainer>
 			{followExist ? (
