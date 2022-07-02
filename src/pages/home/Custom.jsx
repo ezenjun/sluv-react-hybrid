@@ -11,6 +11,7 @@ import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.sv
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as QuestionIcon } from '../../assets/Icons/question.svg';
 import { useNavigate } from 'react-router-dom';
+import img from './img.png';
 export default function Custom() {
 	const navigate = useNavigate();
 	const detailCelebClick = celebId => {
@@ -1126,7 +1127,16 @@ const Image = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
-	background-color: blue;
+	background-color: white;
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${img});
+	background-repeat: no-repeat;
+	background-size: contain;
 	margin-bottom: 1rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
