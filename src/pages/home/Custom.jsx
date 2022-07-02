@@ -1072,7 +1072,7 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: ${props => props.padding || '40px 20px 50px 20px'};
+	padding: ${props => props.padding || '2.5rem 1.25rem 3.125rem 1.25rem'};
 `;
 const TextWrap = styled.div`
 	display: flex;
@@ -1251,8 +1251,8 @@ const RealTimeItem = styled.div`
 	box-sizing: border-box;
 	width: 19.6875rem;
 	height: 8.125rem;
-	margin-bottom: 8px;
-	margin-right: 11px;
+	margin-bottom: 0.5rem;
+	margin-right: 0.6875rem;
 	padding: 1.25rem;
 	border-radius: 16px;
 	background-color: #fff;
