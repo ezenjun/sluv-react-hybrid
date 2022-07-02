@@ -83,8 +83,8 @@ export default function RealtimeQuestion() {
 						);
 					})}
 				</ChipWrap>
-				<HotItemsWrap>
-					<HotItem>
+				<RealTimeItemsWrap>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -122,8 +122,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -161,8 +161,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -200,8 +200,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -239,8 +239,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -278,8 +278,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -317,8 +317,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -356,8 +356,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -395,8 +395,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -434,8 +434,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-					<HotItem>
+					</RealTimeItem>
+					<RealTimeItem>
 						<ItemText>
 							<Top>
 								<SubText fontsize="0.875rem" color="#9e30f4">
@@ -473,8 +473,8 @@ export default function RealtimeQuestion() {
 							</Bottom>
 						</ItemText>
 						<ItemImage></ItemImage>
-					</HotItem>
-				</HotItemsWrap>
+					</RealTimeItem>
+				</RealTimeItemsWrap>
 			</FeedContainer>
 		</MainContainer>
 	);
@@ -489,7 +489,7 @@ const FeedContainer = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-const HotItemsWrap = styled.div`
+const RealTimeItemsWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -500,7 +500,7 @@ const HotItemsWrap = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-const HotItem = styled.div`
+const RealTimeItem = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;

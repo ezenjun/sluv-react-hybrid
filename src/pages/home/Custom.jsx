@@ -9,6 +9,7 @@ import { ReactComponent as SpeakerPhone } from '../../assets/Icons/speakerphone.
 import { ReactComponent as BubbleHeart } from '../../assets/Icons/bubbleHeart.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
+import { ReactComponent as QuestionIcon } from '../../assets/Icons/question.svg';
 import { useNavigate } from 'react-router-dom';
 export default function Custom() {
 	const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									현진's luv
+									현진's
 								</SubText>
 								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -82,7 +83,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									아이엔's luv
+									아이엔's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -96,7 +97,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									필릭스's luv
+									필릭스's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -113,7 +114,7 @@ export default function Custom() {
 					<MainText fontsize="1.5rem">인기 스러버 추천</MainText>
 				</TextWrap>
 				<ChipWrap>
-					<Chip selected={true}>전체 Best</Chip>
+					<Chip selected={true}>전체 셀럽</Chip>
 					<Chip>스트레이키즈</Chip>
 					<Chip>있지</Chip>
 					<Chip>최우식</Chip>
@@ -220,7 +221,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's luv
+									있지's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -234,7 +235,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's luv
+									있지's
 								</SubText>
 								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -248,7 +249,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's luv
+									있지's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -262,7 +263,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's luv
+									있지's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -287,16 +288,396 @@ export default function Custom() {
 					<Chip>블랙핑크</Chip>
 				</ChipWrap>
 				<QuestionWrap>
-					<Question>1</Question>
-					<Question>2</Question>
-					<Question>3</Question>
-					<Question>4</Question>
-					<Question>5</Question>
-					<Question>6</Question>
-					<Question>7</Question>
-					<Question>8</Question>
-					<Question>9</Question>
-					<Question>10</Question>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
+					<RealTimeItem>
+						<ItemText>
+							<Top>
+								<SubText fontsize="0.875rem" color="#9e30f4">
+									스트레이키즈 리노
+								</SubText>
+							</Top>
+							<Bottom>
+								<QuestionIcon
+									style={{
+										marginRight: '0.5rem',
+										width: '1.125rem',
+										height: '1.125rem',
+									}}
+								></QuestionIcon>
+								<QuestionText>
+									<Question>
+										<SubText fontsize="1rem">
+											220520 리노리방 반팔 가디건 정보가 궁금해요!
+										</SubText>
+									</Question>
+									<UploadInfo>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											빵짱
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											1분전
+										</SubText>
+										<Dot></Dot>
+										<SubText fontsize="0.75rem" color="#8d8d8d">
+											댓글 0
+										</SubText>
+									</UploadInfo>
+								</QuestionText>
+							</Bottom>
+						</ItemText>
+						<ItemImage></ItemImage>
+					</RealTimeItem>
 				</QuestionWrap>
 			</QuestionContainer>
 			<BannerWrap>
@@ -365,7 +746,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's luv
+									우식's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -379,7 +760,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's luv
+									우식's
 								</SubText>
 								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -393,7 +774,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's luv
+									우식's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -407,7 +788,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's luv
+									우식's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
@@ -424,7 +805,7 @@ export default function Custom() {
 			<ItemContainer padding="10px 0 50px 20px">
 				<TextWrap padding="0 20px 0 0">
 					<MainText fontsize="1.5rem">
-						#스러버's LUV
+						#스러버's
 						<br />
 						HOT 아이템
 					</MainText>
@@ -442,7 +823,7 @@ export default function Custom() {
 				<HotItemWrap>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -458,7 +839,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -474,7 +855,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -490,7 +871,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -506,7 +887,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -522,7 +903,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -538,7 +919,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -554,7 +935,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -570,7 +951,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -586,7 +967,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -602,7 +983,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -618,7 +999,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -634,7 +1015,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -650,7 +1031,7 @@ export default function Custom() {
 					</HotItem>
 					<HotItem>
 						<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-							필릭스's luv
+							필릭스's
 						</SubText>
 						<SubText
 							fontsize="13px"
@@ -721,6 +1102,8 @@ const Chip = styled.div`
 `;
 const FilterWrap = styled.div`
 	display: flex;
+	text-align: center;
+	align-items: center;
 	margin-bottom: 1rem;
 `;
 
@@ -861,13 +1244,16 @@ const QuestionWrap = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-const Question = styled.div`
+const RealTimeItem = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	box-sizing: border-box;
 	width: 19.6875rem;
 	height: 8.125rem;
 	margin-bottom: 8px;
 	margin-right: 11px;
-	padding: 20px;
+	padding: 1.25rem;
 	border-radius: 16px;
 	background-color: #fff;
 	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.05);
@@ -977,4 +1363,46 @@ const HotItem = styled.div`
 		text-overflow: ellipsis;
 		width: 100%;
 	}
+`;
+const ItemText = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+const Top = styled.div``;
+const Bottom = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	margin-top: 0.5rem;
+`;
+const QuestionText = styled.div`
+	display: flex;
+	flex-direction: column;
+	margin-right: 1rem;
+`;
+const Question = styled.div`
+	margin-bottom: 0.75rem;
+`;
+const UploadInfo = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+`;
+const ItemImage = styled.div`
+	width: 4.125rem;
+	height: 5.625rem;
+	background-color: brown;
+	border-radius: 0.5rem;
+	box-sizing: border-box;
+	flex-shrink: 0;
+`;
+
+const Dot = styled.div`
+	width: 2px;
+	height: 2px;
+	border-radius: 50%;
+	background-color: #8d8d8d;
+	margin: 0 6px;
+	flex-grow: 0;
+	display: flex;
 `;
