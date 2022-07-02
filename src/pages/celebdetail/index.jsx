@@ -360,8 +360,8 @@ export default function CelebDetail() {
 }
 const FeedContainer = styled.div`
 	height: 100vh;
-	padding: 0 20px 20px 20px;
-	margin-top: 5px;
+	padding: 0 1.25rem 1.25rem 1.25rem;
+	margin-top: 0.3125rem;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -387,7 +387,7 @@ const ItemTextWrap = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
-	margin: 1rem 0 10px 0;
+	margin: 1rem 0 0.625rem 0;
 `;
 const SubInfoWrap = styled.div`
 	display: flex;
@@ -406,5 +406,5 @@ const Dot = styled.div`
 	height: 0.125rem;
 	border-radius: 50%;
 	background-color: #8d8d8d;
-	margin: 0 6px;
+	margin: 0 0.375rem;
 `;
