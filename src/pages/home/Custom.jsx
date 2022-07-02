@@ -54,7 +54,7 @@ export default function Custom() {
 						<Image>
 							<ImageText>
 								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									리노's luv
+									리노's
 								</SubText>
 								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
 							</ImageText>
