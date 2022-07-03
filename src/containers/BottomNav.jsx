@@ -45,8 +45,6 @@ const BottomNavWrap = styled.div`
 `;
 
 const BottomNavItem = styled.div`
-
-
   height: 100%;
   text-align:center;
 
