@@ -29,10 +29,6 @@ import HotItem from '../pages/HotItem';
 import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
 
-import { DndProvider } from 'react-dnd';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { GridProvider } from '../GridContext';
-
 export default function Pages() {
 	return (
 		<Routes>

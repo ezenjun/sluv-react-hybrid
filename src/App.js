@@ -5,9 +5,6 @@ import Pages from './containers/Pages';
 
 import './App.scss';
 import { palette } from './styles/palette';
-import { DndProvider } from 'react-dnd';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { GridProvider } from './GridContext';
 import { useRecoilValue } from 'recoil';
 import {
 	ToastMessageBottomPositionState,
@@ -22,21 +19,16 @@ export default function App() {
 	const message = useRecoilValue(ToastMessageState);
 	const bottomPosition = useRecoilValue(ToastMessageBottomPositionState);
 	const options = {
-		delayTouchStart: 500,
+		delayTouchStart: 2000,
 		enableMouseEvents: true,
 	};
 	return (
 		<RootWrap>
 			<BrowserRouter>
-				<DndProvider backend={TouchBackend} options={options}>
-					<GridProvider>
-						<Pages />
-						{/* 하단바 */}
-						<BottomNav />
-					</GridProvider>
-				</DndProvider>
+				<Pages />
+				{/* 하단바 */}
+				<BottomNav />
 			</BrowserRouter>
-
 			{/* 토스트 메세지 */}
 			<ToastMessageWrap openStatus={toastMessageWrapStatus}>
 				<ToastMessage openStatus={toastMessageStatus} bottomPosition={bottomPosition}>
