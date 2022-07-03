@@ -53,7 +53,7 @@ const RootWrap = styled.div`
 	font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
 		'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 	/* (!!!임시 컬러)  background color는 확정되면 변경하기 */
-	background-color: ${palette.white.secondary};
+	background-color: #fff;
 
 	overflow: hidden;
 `;

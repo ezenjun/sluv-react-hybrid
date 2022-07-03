@@ -10,7 +10,5 @@ export const MainContainer = styled.div`
 	background-color: ${palette.white.primary};
 	padding: ${props => props.padding || '0'};
 	margin: ${props => props.margin || '0'};
-
-	border: 1px solid red;
 	/* overflow-y: scroll; */
 `;
