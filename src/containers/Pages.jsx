@@ -29,41 +29,36 @@ import HotItem from '../pages/HotItem';
 import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
 
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { GridProvider } from '../GridContext';
+
 export default function Pages() {
 	return (
 		<Routes>
 			<Route path="/" element={<Login />} />
-
 			<Route path="/auth/kakao-login" element={<KakaoRedirectHandler />} />
 			<Route path="/signup" element={<SignUp />} />
-
 			<Route path="/select/celebrity" element={<SelectCeleb />} />
-
 			<Route path="/request/celebrity" element={<RequestCeleb />} />
-
 			<Route path="/login" element={<LocalLogin />} />
 			<Route path="/find/email" element={<FindEmail />} />
 			<Route path="/find/email/result" element={<FindEmailResult />} />
 			<Route path="/find/password" element={<FindPassword />} />
 			<Route path="/find/password/result" element={<FindPasswordResult />} />
 			{/* 여기 결과페이지 어떻게 할지 고민 라우팅 나눌건지 아님 렌더링으로 처리할지 */}
-
 			<Route path="/home" element={<Home />}>
 				<Route path="" element={<Custom />} />
 				<Route path="follow" element={<Follow />} />
 				<Route path="question" element={<Question />} />
 				<Route path="event" element={<Event />} />
 			</Route>
-
 			<Route path="/upload/item" element={<UploadItem />} />
 			<Route path="/upload/question" element={<UploadQuestion />} />
-
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
 			<Route path="/question/realtime" element={<RealtimeQuestion />} />
 			<Route path="/hot" element={<HotItem />} />
-
 			<Route path="/notice" element={<Notice />} />
-
 			<Route path="/search" element={<Search />} />
 			<Route path="/search/result" element={<SearchResult />} />
 
