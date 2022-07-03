@@ -11,10 +11,17 @@ import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.sv
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as QuestionIcon } from '../../assets/Icons/question.svg';
 import { useNavigate } from 'react-router-dom';
+import img from './img.png';
 export default function Custom() {
 	const navigate = useNavigate();
-	const detailCelebClick = celebId => {
+	const onDetailCelebClick = celebId => {
 		navigate('/celeb/detail/' + celebId);
+	};
+	const onHotClick = () => {
+		navigate('/hot');
+	};
+	const onRealtimeQuestionClick = () => {
+		navigate('/question/realtime');
 	};
 	return (
 		<>
@@ -31,7 +38,7 @@ export default function Custom() {
 						<br />
 						LUV 아이템
 					</MainText>
-					<RightArrow onClick={() => detailCelebClick(1)}></RightArrow>
+					<RightArrow onClick={() => onDetailCelebClick(1)}></RightArrow>
 				</TextWrap>
 				<ChipWrap>
 					<Chip selected={true}>스트레이키즈</Chip>
@@ -278,7 +285,7 @@ export default function Custom() {
 			<QuestionContainer>
 				<TextWrap padding="0 20px 0 0">
 					<MainText fontsize="1.5rem">실시간 아이템 질문</MainText>
-					<RightArrow></RightArrow>
+					<RightArrow onClick={onRealtimeQuestionClick}></RightArrow>
 				</TextWrap>
 				<ChipWrap>
 					<Chip selected={true}>전체 Best</Chip>
@@ -809,7 +816,7 @@ export default function Custom() {
 						<br />
 						HOT 아이템
 					</MainText>
-					<RightArrow></RightArrow>
+					<RightArrow onClick={onHotClick}></RightArrow>
 				</TextWrap>
 				<FilterWrap>
 					<SubText fontsize="14px" fontweight="bold">
@@ -1126,7 +1133,16 @@ const Image = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
-	background-color: blue;
+	background-color: white;
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${img});
+	background-repeat: no-repeat;
+	background-size: contain;
 	margin-bottom: 1rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
@@ -1170,6 +1186,7 @@ const User = styled.div`
 	display: flex;
 	flex-shrink: 0;
 	flex-direction: column;
+	justify-content: center;
 	box-sizing: border-box;
 	align-items: center;
 	width: 9.0625rem;

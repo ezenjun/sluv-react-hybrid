@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BottomNavState } from '../../recoil/BottomNav';
+import { useSetRecoilState } from 'recoil';
+
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -91,8 +94,14 @@ export default function HotItem() {
 		setCurrentItemList(tempArr);
 	};
 
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	useEffect(() => {
+		// 하단바 띄워주기
+		setBottomNavStatus(false);
+	}, []);
+
 	return (
-		<MainContainer padding="0 0 3.125rem 0">
+		<MainContainer padding="0 0 0 0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
