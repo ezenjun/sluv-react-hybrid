@@ -28,6 +28,7 @@ import RealtimeQuestion from '../pages/RealtimeQuestion';
 import HotItem from '../pages/HotItem';
 import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
+import BinderDetail from '../pages/binder/BinderDetail';
 
 export default function Pages() {
 	return (
@@ -59,6 +60,7 @@ export default function Pages() {
 			<Route path="/search/result" element={<SearchResult />} />
 
 			<Route path="/binder" element={<Binder />} />
+			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
 
 			<Route path="/my" element={<My />} />

@@ -101,7 +101,7 @@ export default function CelebDetail() {
 	}, []);
 
 	return (
-		<MainContainer padding="0 0 0 0">
+		<MainContainer padding="0 0 3.125rem 0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
@@ -255,7 +255,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -269,7 +271,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -283,7 +287,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -297,7 +303,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -311,7 +319,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -325,7 +335,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -339,7 +351,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -353,7 +367,9 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">

@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { useSetRecoilState } from 'recoil';
-
+import { TopNav } from '../../components/containers/TopNav';
+import { BackButton } from '../../components/Buttons/BackButton';
+import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { GridItemWrap } from '../../components/GridItems/GridItemWrap';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 
-import { TopNav } from '../../components/containers/TopNav';
-import { MainText } from '../../components/Texts/MainText';
-import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as AddBinderButton } from '../../assets/Icons/addBinder.svg';
 
 import { SampleItems } from './sampleItems';
@@ -19,7 +19,7 @@ import { SampleItems } from './sampleItems';
 export default function Binder() {
 	const navigate = useNavigate();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [binderCnt, setBinderCnt] = useState(0);
+	const [binderCnt, setBinderCnt] = useState(2);
 	const imageList = [
 		{
 			src: 'https://images.pexels.com/photos/3075988/pexels-photo-3075988.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
@@ -61,6 +61,9 @@ export default function Binder() {
 	const onAddBinder = () => {
 		navigate('./add');
 	};
+	const onPrimaryBinderClick = () => {
+		navigate('./:1');
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
@@ -83,7 +86,7 @@ export default function Binder() {
 				<GridItemWrap>
 					{binderCnt > 0 ? (
 						<>
-							<GridItem>
+							<GridItem onClick={onPrimaryBinderClick}>
 								<GridImage
 									backgroundColor="linear-gradient(180deg, #F0FFF4 -1.86%, #ECEEFF 100%);"
 									marginbottom="0.6875rem"

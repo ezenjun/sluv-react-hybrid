@@ -14,6 +14,8 @@ export const TopNav = styled.div`
 	text-align: center;
 	// 상단바 중앙 텍스트
 	.centerText {
+		display: flex;
+		align-items: center;
 		font-size: 1.125rem;
 		color: #262626;
 		position: absolute;
