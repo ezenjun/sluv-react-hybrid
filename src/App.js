@@ -21,11 +21,14 @@ export default function App() {
 	const toastMessageWrapStatus = useRecoilValue(ToastMessageWrapStatusState);
 	const message = useRecoilValue(ToastMessageState);
 	const bottomPosition = useRecoilValue(ToastMessageBottomPositionState);
-
+	const options = {
+		delayTouchStart: 500,
+		enableMouseEvents: true,
+	};
 	return (
 		<RootWrap>
 			<BrowserRouter>
-				<DndProvider backend={TouchBackend}>
+				<DndProvider backend={TouchBackend} options={options}>
 					<GridProvider>
 						<Pages />
 						{/* 하단바 */}
