@@ -26,6 +26,8 @@ import FindPasswordResult from '../pages/login/FindPasswordResult';
 import CelebDetail from '../pages/celebdetail';
 import RealtimeQuestion from '../pages/RealtimeQuestion';
 import HotItem from '../pages/HotItem';
+import UploadItem from '../pages/upload/UploadItem';
+import UploadQuestion from '../pages/upload/UploadQuestion';
 
 export default function Pages() {
 	return (
@@ -52,6 +54,9 @@ export default function Pages() {
 				<Route path="question" element={<Question />} />
 				<Route path="event" element={<Event />} />
 			</Route>
+
+			<Route path="/upload/item" element={<UploadItem />} />
+			<Route path="/upload/question" element={<UploadQuestion />} />
 
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
 			<Route path="/question/realtime" element={<RealtimeQuestion />} />
