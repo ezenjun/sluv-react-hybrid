@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../../assets/Logo/LogoHome.svg';
-import { ReactComponent as Alarm } from '../../assets/Icons/alarm.svg';
+import { ReactComponent as Notice } from '../../assets/Icons/alarm.svg';
+import { ReactComponent as NoNotice } from '../../assets/Icons/noNotice.svg';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { useSetRecoilState } from 'recoil';
@@ -10,7 +11,7 @@ import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function Home() {
 	const [tabIndex, setTabIndex] = useState(1);
-
+	const [noticeState, setNoticeState] = useState(false);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const tabList = [
 		{
@@ -54,9 +55,7 @@ export default function Home() {
 					<LogoWrap to="">
 						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
 					</LogoWrap>
-					<NavRight to="../notice">
-						<Alarm />
-					</NavRight>
+					<NavRight to="../notice">{noticeState ? <Notice /> : <NoNotice />}</NavRight>
 				</TopNav>
 				<TabContainer>
 					{tabList.map(item => {
