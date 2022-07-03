@@ -23,6 +23,12 @@ export default function Custom() {
 	const onRealtimeQuestionClick = () => {
 		navigate('/question/realtime');
 	};
+	const onUploadQuestionClick = () => {
+		navigate('/upload/question');
+	};
+	const onUploadItemClick = () => {
+		navigate('/upload/item');
+	};
 	return (
 		<>
 			<EventContainer>
@@ -163,7 +169,7 @@ export default function Custom() {
 				</UserWrap>
 			</RecommendUserWrap>
 			<BannerWrap>
-				<Banner backgroundcolor="#ff006b">
+				<Banner backgroundcolor="#ff006b" onClick={onUploadItemClick}>
 					<BannerText>
 						<MainText
 							fontsize="1.125rem"
@@ -688,7 +694,7 @@ export default function Custom() {
 				</QuestionWrap>
 			</QuestionContainer>
 			<BannerWrap>
-				<Banner backgroundcolor="#7000ff">
+				<Banner backgroundcolor="#7000ff" onClick={onUploadQuestionClick}>
 					<BannerText>
 						<MainText
 							fontsize="1.0625rem"
