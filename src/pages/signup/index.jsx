@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
-import { SignupProgressState } from '../../recoil/User';
+import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -16,10 +16,16 @@ import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg
 import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
+	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
 	const [allCheck, setAllCheck] = useState(false);
 	const [ageCheck, setAgeCheck] = useState(false);
@@ -87,6 +93,7 @@ export default function Signup() {
 			setMarketingCheck(false);
 		}
 	};
+
 	useEffect(() => {
 		if (
 			ageCheck === true &&
@@ -255,7 +262,7 @@ export default function Signup() {
 			console.log('인증번호 인증 성공');
 		} else {
 			setAuthCodeValid(false);
-			
+
 			setToastMessageBottomPosition('5.125rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
@@ -280,7 +287,18 @@ export default function Signup() {
 			console.log('이메일 등록 성공');
 		} else {
 			setEmailValid(false);
-			alert(data.message);
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage(data.message);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+
 			console.log(data.message);
 		}
 	}
@@ -303,6 +321,9 @@ export default function Signup() {
 				alert('회원 생성 완료');
 				console.log('회원 생성 완료');
 				console.log(data.result.jwt);
+				//토큰저장
+				localStorage.setItem('x-access-token', data.result.jwt);
+
 				handleNextClick();
 			}
 		} else {
@@ -472,7 +493,7 @@ export default function Signup() {
 						<PageLabel>
 							<MainText>
 								휴대폰 번호 <br />
-								인증이 필요해요.
+								인증이 필요해요
 							</MainText>
 						</PageLabel>
 						<FormWrap>
@@ -513,7 +534,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!phoneNumberValid && phoneNumber.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 휴대폰 번호를 입력해주세요.
+										올바른 휴대폰 번호를 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -568,7 +589,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!authCodeValid && authCode.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 인증번호 형식이 아닙니다.
+										올바른 인증번호 형식이 아닙니다
 									</SubText>
 								) : (
 									<></>
@@ -622,7 +643,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!emailValid && email.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 이메일을 입력해주세요.
+										올바른 이메일을 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -656,7 +677,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!passwordValid && password.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.
+										영문, 숫자, 특수문자 포함 8자 이상 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -710,7 +731,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!nicknameValid && nickname.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 닉네임을 입력해주세요.
+										올바른 닉네임을 입력해주세요
 									</SubText>
 								) : (
 									<></>
@@ -739,7 +760,7 @@ export default function Signup() {
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
 							<SubText fontsize="16px" color="#4A4A4A" margin="1.875rem">
-								스럽에서 다양한 활동 기대할게요.
+								스럽에서 다양한 활동 기대할게요
 							</SubText>
 						</CompletePageLabel>
 					</CompleteTopWrap>
@@ -833,7 +854,7 @@ const InputWrap = styled.div`
 			: 'border: 1px solid #ef0000'};
 	display: flex;
 	align-items: center;
-	border-radius: 0.625rem;
+	border-radius: 0.5rem;
 	padding: 1rem;
 	:focus {
 		border: 1px solid #9e30f4;

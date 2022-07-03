@@ -4,10 +4,17 @@ import BottomNav from './containers/BottomNav';
 import Pages from './containers/Pages';
 
 import './App.scss';
-
 import { palette } from './styles/palette';
+import { DndProvider } from 'react-dnd';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { GridProvider } from './GridContext';
 import { useRecoilValue } from 'recoil';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from './recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from './recoil/ToastMessage';
 
 export default function App() {
 	const toastMessageStatus = useRecoilValue(ToastMessageStatusState);
@@ -18,9 +25,13 @@ export default function App() {
 	return (
 		<RootWrap>
 			<BrowserRouter>
-				<Pages />
-				{/* 하단바 */}
-				<BottomNav />
+				<DndProvider backend={TouchBackend}>
+					<GridProvider>
+						<Pages />
+						{/* 하단바 */}
+						<BottomNav />
+					</GridProvider>
+				</DndProvider>
 			</BrowserRouter>
 
 			{/* 토스트 메세지 */}
@@ -62,7 +73,7 @@ const ToastMessage = styled.div`
 	position: fixed;
 	left: 0;
 	right: 0;
-	bottom: ${props => (props.bottomPosition)};
+	bottom: ${props => props.bottomPosition};
 
 	padding: 0.625rem 0;
 	margin: 0 1.25rem;
