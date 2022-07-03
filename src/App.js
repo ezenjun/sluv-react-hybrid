@@ -6,6 +6,7 @@ import Pages from './containers/Pages';
 import './App.scss';
 import { palette } from './styles/palette';
 import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { GridProvider } from './GridContext';
 import { useRecoilValue } from 'recoil';
@@ -28,7 +29,7 @@ export default function App() {
 	return (
 		<RootWrap>
 			<BrowserRouter>
-				<DndProvider backend={TouchBackend} options={options}>
+				<DndProvider backend={HTML5Backend}>
 					<GridProvider>
 						<Pages />
 						{/* 하단바 */}
