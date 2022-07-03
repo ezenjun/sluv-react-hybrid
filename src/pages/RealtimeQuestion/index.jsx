@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BottomNavState } from '../../recoil/BottomNav';
+import { useSetRecoilState } from 'recoil';
+
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -61,6 +64,12 @@ export default function RealtimeQuestion() {
 		tempArr = currentItemList.filter(item => item.name === name); //item 리스트와 chip 이름 비교
 		setCurrentItemList(tempArr);
 	};
+
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	useEffect(() => {
+		// 하단바 띄워주기
+		setBottomNavStatus(false);
+	}, []);
 	return (
 		<MainContainer>
 			<TopNav>
