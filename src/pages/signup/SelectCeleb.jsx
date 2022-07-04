@@ -37,6 +37,7 @@ export default function SelectCeleb() {
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	
 	
+	
 	useEffect(() => {
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
@@ -260,7 +261,7 @@ export default function SelectCeleb() {
 
 			{currentPage === 1 && (
 				<MainContainer>
-					<SelectMemberContainer data={selectedGroups} />
+					<SelectMemberContainer data={selectedGroups} postIdxArray={selectedCelebIdxArray} setPostIdxArray={setSelectedCelebIdxArray}  />
 				</MainContainer>
 			)}
 		</>
@@ -292,6 +293,7 @@ export const MembersContainer = styled.div`
 	padding-right: 1.25rem;
 	margin-top: 55px;
 	overflow-x: scroll;
+	overflow-y: hidden;
 	height: 100%;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -301,7 +303,6 @@ export const RepeatWrap = styled.div`
 	display: flex;
 	position: relative;
 	height: 370px;
-	width: 370px;
 `;
 
 export const NavRight = styled.div`
@@ -355,16 +356,16 @@ export const CelebLeftTop = styled.div`
 	left: 1.25rem;
 	font-size: 1rem;
 `;
-export const CelebLeftBottom = styled.div`
-	position: absolute;
-	left: 1.25rem;
-	top: 10rem;
-	font-size: 1rem;
-`;
 export const CelebRightTop = styled.div`
 	position: relative;
 	top: 4.6875rem;
 	left: 1.125rem;
+	font-size: 1rem;
+`;
+export const CelebLeftBottom = styled.div`
+	position: absolute;
+	left: 1.25rem;
+	top: 10rem;
 	font-size: 1rem;
 `;
 export const CelebRightBottom = styled.div`
@@ -373,6 +374,30 @@ export const CelebRightBottom = styled.div`
 	top: 14.6875rem;
 	font-size: 1rem;
 `;
+export const CelebNextLeftBottom = styled.div`
+	position: relative;
+	top: 10rem;
+	left: 1.125rem;
+	font-size: 1rem;
+`;
+export const CelebNextLeftTop = styled.div`
+	position: absolute;
+	left: 20rem;
+	font-size: 1rem;
+`;
+export const CelebNextRightTop = styled.div`
+	position: relative;
+	left: 1.125rem;
+	top: 4.6875rem;
+	font-size: 1rem;
+`;
+export const CelebNextRightBottom = styled.div`
+	position: absolute;
+	top: 14.6875rem;
+	left: 29.375rem;
+	font-size: 1rem;
+`;
+
 const Image = styled.div`
 	position: relative;
 	width: ${props => props.size || '6.25rem'};
@@ -412,7 +437,7 @@ const Image = styled.div`
 	}
 `;
 
-const CountBadge = styled.span`
+export const CountBadge = styled.span`
 	border: 1px solid black;
 	position: absolute;
 	top: 0.5rem;
@@ -428,6 +453,7 @@ const CountBadge = styled.span`
 	border-radius: 50%;
 	width: 1.5rem;
 	height: 1.5rem;
+	z-index: 20000;
 `;
 
 const InputWrap = styled.div`
