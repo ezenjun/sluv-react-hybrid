@@ -16,12 +16,16 @@ import {
 
 import { ReactComponent as BinderHelp } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
+import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 
 export default function AddBinder() {
 	const navigate = useNavigate();
 	const [isConfirm, setIsConfirm] = useState(false);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [binderName, setBinderName] = useState('');
+	const [binderHelpStatus, setBinderHelpStatus] = useState(false);
+
+	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
 
 	const handleBinderName = e => {
 		setBinderName(e.target.value);
@@ -63,7 +67,23 @@ export default function AddBinder() {
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="centerText">
 					바인더 만들기
-					<BinderHelp style={{ margin: '0 0.25rem' }}></BinderHelp>
+					<BinderHelp style={{ margin: '0 0.25rem' }} onClick={onClickHelp}></BinderHelp>
+					<MiniInfoDialog openStatus={binderHelpStatus}>
+						<TopWrap>
+							<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
+								바인더 만들기
+							</SubText>
+							<Close onClick={onClickHelp}></Close>
+						</TopWrap>
+						<SubText
+							fontsize="0.875rem"
+							color="#564B5C"
+							style={{ whiteSpace: 'normal' }}
+						>
+							바인더 이름은 15자 이내로 입력해 주세요! <br />
+							이름과 커버 이미지는 언제 든지 수정이 가능해요
+						</SubText>
+					</MiniInfoDialog>
 				</div>
 
 				<div
@@ -77,7 +97,9 @@ export default function AddBinder() {
 			<FeedContainer>
 				<AddImage>
 					<PictureIconBackground>
-						<BinderAddPicture></BinderAddPicture>
+						<BinderAddPicture
+							style={{ width: '2rem', height: '2rem' }}
+						></BinderAddPicture>
 					</PictureIconBackground>
 
 					<SubText fontweight="normal" color="#b1b1b1">
@@ -127,6 +149,7 @@ const BinderName = styled.input`
 	text-align: center;
 	width: 9.375rem;
 	color: #262626;
+	text-decoration: none;
 	::placeholder {
 		color: #b1b1b1;
 	}
@@ -141,4 +164,25 @@ const PictureIconBackground = styled.div`
 	border-radius: 50%;
 	background-color: #ebebeb;
 	margin-bottom: 0.375rem;
+`;
+const MiniInfoDialog = styled.div`
+	display: ${props => (props.openStatus ? 'block' : 'none')};
+	position: absolute;
+	text-align: start;
+	top: 1.875rem;
+	left: -4.375rem;
+	z-index: 10000;
+
+	margin-top: 0.4063rem;
+	width: 14.9375rem;
+	padding: 1rem;
+	border-radius: 0.8125rem;
+	border: solid 1px #9e30f4;
+	background-color: #fbf6ff;
+	word-break: keep-all;
+`;
+const TopWrap = styled.div`
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 0.75rem;
 `;
