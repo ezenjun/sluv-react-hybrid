@@ -76,7 +76,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -90,7 +100,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -104,7 +124,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -118,7 +148,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -242,7 +282,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -256,7 +306,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -270,7 +330,16 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE ㅁㄴㅇㄹ ㅁㄴㅁ ㄴㄻㄴㄹㅇ
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -284,7 +353,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -767,7 +846,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -781,7 +870,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -795,7 +894,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -809,9 +918,20 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">
+						<SubText
+							fontsize="0.75rem"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
 							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
 						</SubText>
+						{/* <SubText fontsize="12px">
+							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
+						</SubText> */}
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -1131,6 +1251,10 @@ const ItemWrap = styled.div`
 const Item = styled.div`
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 const Image = styled.div`
 	display: flex;

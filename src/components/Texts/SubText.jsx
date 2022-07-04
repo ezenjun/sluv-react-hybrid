@@ -6,8 +6,9 @@ export const SubText = styled.span`
 	font-weight: ${props => props.fontweight || '600'};
 	color: ${props => props.color || '#262626'};
 	margin: ${props => props.margin || '0'};
-	width: ${props => props.width || ''};
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
+	/* width: ${props => props.width || ''}; */
+	text-overflow: 'ellipsis';
+	white-space: 'nowrap';
+	overflow: 'hidden';
+	width: '100%';
 `;
