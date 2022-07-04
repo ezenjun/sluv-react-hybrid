@@ -18,10 +18,6 @@ export default function App() {
 	const toastMessageWrapStatus = useRecoilValue(ToastMessageWrapStatusState);
 	const message = useRecoilValue(ToastMessageState);
 	const bottomPosition = useRecoilValue(ToastMessageBottomPositionState);
-	const options = {
-		delayTouchStart: 2000,
-		enableMouseEvents: true,
-	};
 	return (
 		<RootWrap>
 			<BrowserRouter>

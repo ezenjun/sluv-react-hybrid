@@ -6,6 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
+import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { SubText } from '../../components/Texts/SubText';
 import {
 	ToastMessageBottomPositionState,
@@ -13,6 +14,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
 import { ReactComponent as BinderHelp } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
@@ -24,7 +26,12 @@ export default function AddBinder() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [binderName, setBinderName] = useState('');
 	const [binderHelpStatus, setBinderHelpStatus] = useState(false);
-
+	const onAlbumClick = () => {
+		alert('앨범');
+	};
+	const onDefaultClick = () => {
+		alert('기본 커버');
+	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
 
 	const handleBinderName = e => {
@@ -56,6 +63,11 @@ export default function AddBinder() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+
+	const onAddCoverImage = () => {
+		setBottomMenuStatusState(true);
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
@@ -95,7 +107,7 @@ export default function AddBinder() {
 				</div>
 			</TopNav>
 			<FeedContainer>
-				<AddImage>
+				<AddImage onClick={onAddCoverImage}>
 					<PictureIconBackground>
 						<BinderAddPicture
 							style={{ width: '2rem', height: '2rem' }}
@@ -113,6 +125,14 @@ export default function AddBinder() {
 					onChange={handleBinderName}
 				/>
 			</FeedContainer>
+			<BottomSlideMenu>
+				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onAlbumClick}>
+					앨범에서 사진선택
+				</SubText>
+				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
+					기본 커버 선택
+				</SubText>
+			</BottomSlideMenu>
 		</MainContainer>
 	);
 }
@@ -120,7 +140,7 @@ export default function AddBinder() {
 const FeedContainer = styled.div`
 	height: 100vh;
 	padding: 4.375rem 1.25rem 1.25rem 1.25rem;
-	border: 1px solid black;
+	/* border: 1px solid black; */
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
