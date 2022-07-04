@@ -101,7 +101,7 @@ export default function CelebDetail() {
 	}, []);
 
 	return (
-		<MainContainer padding="0 0 0 0">
+		<MainContainer padding="0 0 3.125rem 0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
@@ -255,13 +255,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEEㄻㄴㅁㄴ라ㅣ;ㅁㄴㅇ러;ㄹ미나어 ㅁㄴㅇ리ㅏㅁ넝ㄹ
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -269,13 +280,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -283,13 +305,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -297,13 +330,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -311,13 +355,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -325,13 +380,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								더블유브이프로젝트
 							</SubText>
-							<SubText fontsize="0.75rem">Round Lawn Short Shirt...</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Round Lawn Short Shirt.Round Lawn Short ShirtRound Lawn Short Shirt.
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -339,13 +405,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 						<GridItem>
 							<GridImage>
@@ -353,13 +430,24 @@ export default function CelebDetail() {
 									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
 										우식's
 									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
+									<BinderWhite
+										style={{ width: '1.375rem', height: '1.375rem' }}
+									/>
 								</ImageText>
 							</GridImage>
 							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
 								마하그리드
 							</SubText>
-							<SubText fontsize="0.75rem">Rugby Polo Ls TEE BLUE</SubText>
+							<SubText
+								style={{
+									textOverflow: 'ellipsis',
+									whiteSpace: 'nowrap',
+									overflow: 'hidden',
+									width: '100%',
+								}}
+							>
+								Rugby Polo Ls TEE BLUE
+							</SubText>
 						</GridItem>
 					</GridItemWrap>
 				)}
