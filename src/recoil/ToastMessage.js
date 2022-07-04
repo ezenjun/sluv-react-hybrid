@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 export const ToastMessageStatusState = atom({
 	key: 'ToastMessageStatusState',
@@ -18,5 +18,4 @@ export const ToastMessageState = atom({
 export const ToastMessageBottomPositionState = atom({
 	key: 'ToastMessageBottomPositionState',
 	default: '',
-})
-
+});
