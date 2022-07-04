@@ -14,9 +14,10 @@ import { ContentWrap } from '../../components/containers/ContentWrap';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { celebCategoryList, ChooseCelebCurrentPageState, TotalCelebListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
+import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function SelectCeleb() {
 
@@ -32,17 +33,23 @@ export default function SelectCeleb() {
 	const [searchInput, setSearchInput] = useState('');
 	const [currentCelebList, setCurrentCelebList] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(1);
+	const [searchFailStatus, setSearchFailStatus] = useState(false);
+	const [popularCelebList, setPopularCelebList] = useState([]);
 	
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	
 	
 	
 	useEffect(() => {
+		// 하단바 사라지기
+		setBottomNavStatus(false);
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
 		// 셀럽 및 멤버 목록 조회 API 호출
 		getCelebList();
+		getPopularCelebList();
 	}, []);
 
 	useEffect(() => {
@@ -73,6 +80,16 @@ export default function SelectCeleb() {
 		temp.fill(false);
 		setCheckStatusList(temp);
 	};
+
+	const getPopularCelebList = async () => {
+		const data = await customApiClient('get', '/interest/top-choice');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setPopularCelebList(data.result);
+	}
 
 	const onClickTab = (idx, name) => {
 		
@@ -157,13 +174,16 @@ export default function SelectCeleb() {
 			return data.name.includes(value);
 		})
 
-		if(searchResult) {
+		if(searchResult.length > 0) {
 			if(searchResult[0].category === "SINGER") {
 				setSelectedCategory(1);
 			} else if(searchResult[0].category === "ACTOR") {
 				setSelectedCategory(2);
 			}
-		}
+			setSearchFailStatus(false);
+		} else {
+			setSearchFailStatus(true);
+		} 
 
 		setCurrentCelebList(searchResult);
 	}
@@ -172,6 +192,7 @@ export default function SelectCeleb() {
 		setSearchInput('');
 		setCurrentCelebList(totalCelebList);
 		setSelectedCategory(1);
+		setSearchFailStatus(false);
 	}
 
 
@@ -244,50 +265,119 @@ export default function SelectCeleb() {
 							</TabWrap>
 						</SearchTab>
 
-						<ListContainer>
-							{currentCelebList.length > 0 &&
-								currentCelebList.map(celeb => (
-									<Celeb
-										key={celeb.celebIdx}
-										onClick={e => onSelectCeleb(celeb, e)}
-									>
-										<Image
-											size="6.25rem"
-											key={celeb.id}
-											border={checkStatusList[celeb.celebIdx - 1]}
+						{!searchFailStatus && (
+							<ListContainer>
+								{currentCelebList.length > 0 &&
+									currentCelebList.map(celeb => (
+										<Celeb
+											key={celeb.celebIdx}
+											onClick={e => onSelectCeleb(celeb, e)}
 										>
-											<img
-												className="celebImg"
-												src={celeb.celebImgUrl}
-												alt="셀럽이미지"
-											/>
-										</Image>
-										{celeb.name}
-										<CountBadge status={checkStatusList[celeb.celebIdx - 1]}>
-											<span className="badgeItem">{selectedNum}</span>
-										</CountBadge>
-									</Celeb>
-								))}
-						</ListContainer>
+											<Image
+												size="6.25rem"
+												key={celeb.id}
+												border={checkStatusList[celeb.celebIdx - 1]}
+											>
+												<img
+													className="celebImg"
+													src={celeb.celebImgUrl}
+													alt="셀럽이미지"
+												/>
+											</Image>
+											{celeb.name}
+											<CountBadge
+												status={checkStatusList[celeb.celebIdx - 1]}
+											>
+												<span className="badgeItem">{selectedNum}</span>
+											</CountBadge>
+										</Celeb>
+									))}
+							</ListContainer>
+						)}
 
-						<RequsetWrap>
-							<RequestButton>
-								<PurpleButton
-									boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
-									marginBottom="0"
-									onClick={() => navigate('../../request/celebrity')}
-								>
-									셀럽 추가 요청하기
-								</PurpleButton>
-							</RequestButton>
-						</RequsetWrap>
+						{searchFailStatus && (
+							<SearchFailContainer>
+								<SearchFailDiv>
+									<SubText
+										color="#262626"
+										fontsize="1rem"
+										style={{ marginBottom: '0.5rem' }}
+									>
+										등록된 셀럽이 없어요
+									</SubText>
+									<SubText
+										color="#8d8d8d"
+										fontsize="0.875rem"
+										fontweight="regular"
+										style={{ textAlign: 'center', marginBottom: '1.25rem' }}
+									>
+										스럽에 추가 되었으면 하는
+										<br />
+										셀럽을 요청해 주세요!
+									</SubText>
+
+									<div
+										className="requestCelebBtn"
+										onClick={() => navigate('../../request/celebrity')}
+									>
+										셀럽 추가 요청하기
+									</div>
+								</SearchFailDiv>
+								<PopularCelebContainer>
+									<MainText fontsize="1.125rem" margin="0 0 0 1.25rem">
+										스러버들이 많이 선택한 셀럽
+									</MainText>
+									<div className="popularCelebDiv">
+										{popularCelebList.length > 0 &&
+											popularCelebList.map((popular, index) => (
+												<Celeb
+													key={popular.celebIdx}
+													onClick={undefined}
+													style={{ marginLeft: '0.6875rem' }}
+												>
+													<Image
+														size="6.25rem"
+														key={index}
+														border={false}
+													>
+														<img
+															className="celebImg"
+															src={popular.celebImgUrl}
+															alt="셀럽이미지"
+														/>
+													</Image>
+													{popular.name}
+												</Celeb>
+											))}
+									</div>
+								</PopularCelebContainer>
+							</SearchFailContainer>
+						)}
+
+						{!searchFailStatus && (
+							<RequsetWrap>
+								<RequestButton>
+									<PurpleButton
+										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
+										marginBottom="0"
+										onClick={() => navigate('../../request/celebrity')}
+									>
+										셀럽 추가 요청하기
+									</PurpleButton>
+								</RequestButton>
+							</RequsetWrap>
+						)}
 					</ContentWrap>
 				</MainContainer>
 			)}
 
 			{currentPage === 1 && (
 				<MainContainer>
-					<SelectMemberContainer data={selectedGroups} postIdxArray={selectedCelebIdxArray} setPostIdxArray={setSelectedCelebIdxArray}  />
+					<SelectMemberContainer
+						data={selectedGroups}
+						postIdxArray={selectedCelebIdxArray}
+						setPostIdxArray={setSelectedCelebIdxArray}
+					/>
 				</MainContainer>
 			)}
 		</>
@@ -528,5 +618,44 @@ const Tab = styled.div`
 	margin: 0 6px;
 	&:hover {
 		cursor: pointer;
+	}
+`;
+
+const SearchFailContainer = styled.div`
+	margin-top: 3rem;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+`;
+
+const SearchFailDiv = styled.div`
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 1.5rem;
+
+	.requestCelebBtn {
+		border-radius: 34.6px;
+		background-color: #f5eafe;
+		color: #9e30f4;
+		padding: 0.625rem 1.625rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+`;
+
+const PopularCelebContainer = styled.div`
+	margin-bottom: 0.9375rem;
+
+	.popularCelebDiv {
+		overflow-x: scroll;
+		margin-top: 1.25rem;
+		display: flex;
+		padding: 0 0.5625rem;
+
+		::-webkit-scrollbar {
+			display: none; /* for Chrome, Safari, and Opera */
+		}
 	}
 `;
