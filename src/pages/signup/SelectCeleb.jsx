@@ -148,6 +148,32 @@ export default function SelectCeleb() {
 		}
 	}
 
+	const onHandleChangeSearch = (e) => {
+		setSearchInput(e.target.value);
+
+		const value = e.target.value;
+
+		const searchResult = totalCelebList.filter((data) => {
+			return data.name.includes(value);
+		})
+
+		if(searchResult) {
+			if(searchResult[0].category === "SINGER") {
+				setSelectedCategory(1);
+			} else if(searchResult[0].category === "ACTOR") {
+				setSelectedCategory(2);
+			}
+		}
+
+		setCurrentCelebList(searchResult);
+	}
+
+	const onClickInputDelete = () => {
+		setSearchInput('');
+		setCurrentCelebList(totalCelebList);
+		setSelectedCategory(1);
+	}
+
 
 	return (
 		<>
@@ -190,13 +216,13 @@ export default function SelectCeleb() {
 								</IconWrap>
 								<Input
 									value={searchInput}
-									onChange={e => setSearchInput(e.target.value)}
+									onChange={onHandleChangeSearch}
 									type="text"
 									placeholder="활동명을 한글로 검색해주세요"
 									margin="0 0 0 0.375rem"
 								/>
 								{searchInput.length !== 0 ? (
-									<IconWrap onClick={() => setSearchInput('')}>
+									<IconWrap onClick={onClickInputDelete}>
 										<Delete />
 									</IconWrap>
 								) : (
