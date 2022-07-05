@@ -52,10 +52,11 @@ const BottomDialogDiv = styled.div`
 	width: 100%;
 	min-height: 8rem;
 	border-radius: 1rem 1rem 0 0;
-	padding: 1.25rem 1.25rem 10px 1.25rem;
+	padding: 1.25rem 0 1.25rem 0;
 	box-sizing: border-box;
 `;
 const CloseWrap = styled.div`
 	display: flex;
 	justify-content: flex-end;
+	padding: 0 1.25rem;
 `;
