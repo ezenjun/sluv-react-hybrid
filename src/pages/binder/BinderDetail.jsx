@@ -110,7 +110,7 @@ export default function BinderDetail() {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
 	}, []);
-	const cnt = 2;
+	const cnt = 0;
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav style={{ justifyContent: 'space-between' }}>
