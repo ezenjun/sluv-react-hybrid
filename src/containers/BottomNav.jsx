@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import { BottomNavState, UploadPopupState } from '../recoil/BottomNav';
 import { useLocation } from 'react-router-dom';
 
-import icon_home_selected from '../assets/Icons/bottom_nav_home_selected.svg'; 
-import icon_search_selected from '../assets/Icons/bottom_nav_search_selected.svg'; 
-import icon_binder_selected from '../assets/Icons/bottom_nav_binder_selected.svg'; 
-import icon_my_selected from '../assets/Icons/bottom_nav_my_selected.svg'; 
+import icon_home_selected from '../assets/Icons/bottom_nav_home_selected.svg';
+import icon_search_selected from '../assets/Icons/bottom_nav_search_selected.svg';
+import icon_binder_selected from '../assets/Icons/bottom_nav_binder_selected.svg';
+import icon_my_selected from '../assets/Icons/bottom_nav_my_selected.svg';
 
-import icon_home from '../assets/Icons/bottom_nav_home.svg'; 
-import icon_search from '../assets/Icons/bottom_nav_search.svg'; 
-import icon_binder from '../assets/Icons/bottom_nav_binder.svg'; 
-import icon_my from '../assets/Icons/bottom_nav_my.svg'; 
+import icon_home from '../assets/Icons/bottom_nav_home.svg';
+import icon_search from '../assets/Icons/bottom_nav_search.svg';
+import icon_binder from '../assets/Icons/bottom_nav_binder.svg';
+import icon_my from '../assets/Icons/bottom_nav_my.svg';
 import { ReactComponent as IconUpload } from '../assets/Icons/bottom_nav_upload.svg';
 import { ReactComponent as IconUploadSelected } from '../assets/Icons/bottom_nav_upload_selected.svg';
-
 
 import { palette } from '../styles/palette';
 
@@ -29,9 +28,8 @@ export default function BottomNav() {
 	const [iconBinder, setIconBinder] = useState(false);
 	const [iconMy, setIconMy] = useState(false);
 
-  const bottomNavStatus = useRecoilValue(BottomNavState);
+	const bottomNavStatus = useRecoilValue(BottomNavState);
 	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
-
 
 	useEffect(() => {
 		switch (location.pathname) {
@@ -72,7 +70,7 @@ export default function BottomNav() {
 		}
 	};
 
-  return (
+	return (
 		<BottomNavWrap openStatus={bottomNavStatus}>
 			<Link style={{ flex: 1 }} to="/home">
 				<BottomNavItem status={iconHome}>
@@ -137,7 +135,7 @@ export default function BottomNav() {
 				</BottomNavItem>
 			</Link>
 		</BottomNavWrap>
-  );
+	);
 }
 
 const BottomNavWrap = styled.div`
@@ -147,7 +145,7 @@ const BottomNavWrap = styled.div`
 	left: 0;
 	right: 0;
 	border-top: 0.0625rem solid #ebebeb;
-  height: 3.125rem;
+	height: 3.125rem;
 	background-color: ${palette.white.primary};
 	bottom: ${props => (props.openStatus ? '0' : '-2.9063rem')};
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
@@ -171,4 +169,3 @@ const BottomNavIcon = styled.img`
 	width: 1.5rem;
 	height: 1.5rem;
 `;
-
