@@ -14,7 +14,12 @@ a {
 
 
 //반응형
-@media screen and (max-width: 325px) {
+@media screen and (max-width: 290px) {
+	html {
+		font-size: 13px;
+	}
+}
+@media screen and (min-width: 290px) and (max-width: 325px) {
 	html {
 		font-size: 14px;
 	}

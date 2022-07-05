@@ -7,8 +7,11 @@ export const GridImage = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
-	background-color: blue;
-	margin-bottom: 1rem;
+	background-color: ${props => props.backgroundColor || 'blue'};
+	background-image: ${props => props.backgroundColor || `url("${props.src}")`};
+	background-size: cover;
+	background-position: 50%;
+	margin-bottom: ${props => props.marginbottom || '1rem'};
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
 	color: white;

@@ -5,14 +5,20 @@ export const TotalCelebListState = atom({
 	default: [],
 });
 
+export const PopularCelebListState = atom({
+	key: 'PopularCelebListState',
+	default: [],
+});
+
+export const FavoriteCelebListState = atom({
+	key: 'FavoriteCelebListState',
+	default: [],
+});
+
 export const ChooseCelebCurrentPageState = atom({
 	key: 'ChooseCelebCurrentPageState',
 	default: 0,
 });
-
-
-
-
 
 
 
@@ -28,9 +34,5 @@ export const celebCategoryList = [
 	},
 ]
 
-// 삭제 예정
-export const SingerListState = atom({
-	key: 'SingerListState',
-	default: [],
-});
+
 

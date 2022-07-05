@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../../assets/Logo/LogoHome.svg';
 import { ReactComponent as Notice } from '../../assets/Icons/alarm.svg';
 import { ReactComponent as NoNotice } from '../../assets/Icons/noNotice.svg';
+import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
+import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
-import { useSetRecoilState } from 'recoil';
-import { BottomNavState } from '../../recoil/BottomNav';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { PopUpModal } from '../../components/PopUpModal';
 
 export default function Home() {
+	const navigate = useNavigate();
+
 	const [tabIndex, setTabIndex] = useState(1);
 	const [noticeState, setNoticeState] = useState(false);
+
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+
 	const tabList = [
 		{
 			idx: 1,
@@ -74,6 +82,50 @@ export default function Home() {
 				<FeedContainer>
 					<Outlet />
 				</FeedContainer>
+
+				{/* 업로드 팝업 모달 */}
+				<UploadPopupWrap openStatus={uploadPopupStatus}>
+					<UploadPopup>
+						<div
+							onClick={() => navigate('/upload/item')}
+							className="uploadPopupBtn topBtn"
+						>
+							<IconUploadItem
+								style={{
+									width: '1.125rem',
+									height: '1.125rem',
+									marginRight: '0.5rem',
+								}}
+							/>
+							<span>정보 공유하기</span>
+						</div>
+						<div
+							onClick={() => navigate('/upload/question')}
+							className="uploadPopupBtn bottomBtn"
+						>
+							<IconUploadQuestion
+								style={{
+									width: '1.125rem',
+									height: '1.125rem',
+									marginRight: '0.5rem',
+								}}
+							/>
+							<span>질문 올리기</span>
+						</div>
+						<div
+							style={{
+								width: '20px',
+								height: '20px',
+								backgroundColor: '#9e30f4',
+								position: 'absolute',
+								left: '50%',
+								transform: 'translate(-50%,0)',
+								bottom: '-10px',
+								borderRadius: '50%',
+							}}
+						></div>
+					</UploadPopup>
+				</UploadPopupWrap>
 			</MainContainer>
 		</>
 	);
@@ -107,6 +159,7 @@ const Tab = styled.div`
 
 const FeedContainer = styled.div`
 	height: 100vh;
+	padding: 0 0 20px 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -119,4 +172,38 @@ const StyledLink = styled(Link)`
 	text-decoration: none;
 	margin: 0 20px 0 0;
 	border-bottom: ${props => (props.selected ? '2px solid #262626' : 'none')};
+`;
+
+const UploadPopupWrap = styled.div`
+	display: ${props => (props.openStatus ? 'block' : 'none')};
+	z-index: 10000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 3.125rem;
+
+	background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const UploadPopup = styled.div`
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 11.0625rem;
+	bottom: 1.125rem;
+	color: #fff;
+	font-size: 1.125rem;
+	font-weight: 700;
+	background-color: #9e30f4;
+	border-radius: 16px;
+
+	.uploadPopupBtn {
+		padding: 1.25rem 1.625rem;
+		display: flex;
+		align-items: center;
+	}
+	.topBtn {
+		border-bottom: 1px solid rgba(235, 235, 235, 0.3);
+	}
 `;

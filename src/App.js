@@ -1,14 +1,9 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BottomNav from './containers/BottomNav';
 import Pages from './containers/Pages';
-
 import './App.scss';
 import { palette } from './styles/palette';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { GridProvider } from './GridContext';
 import { useRecoilValue } from 'recoil';
 import {
 	ToastMessageBottomPositionState,
@@ -22,22 +17,13 @@ export default function App() {
 	const toastMessageWrapStatus = useRecoilValue(ToastMessageWrapStatusState);
 	const message = useRecoilValue(ToastMessageState);
 	const bottomPosition = useRecoilValue(ToastMessageBottomPositionState);
-	const options = {
-		delayTouchStart: 500,
-		enableMouseEvents: true,
-	};
 	return (
 		<RootWrap>
 			<BrowserRouter>
-				<DndProvider backend={HTML5Backend}>
-					<GridProvider>
-						<Pages />
-						{/* 하단바 */}
-						<BottomNav />
-					</GridProvider>
-				</DndProvider>
+				<Pages />
+				{/* 하단바 */}
+				<BottomNav />
 			</BrowserRouter>
-
 			{/* 토스트 메세지 */}
 			<ToastMessageWrap openStatus={toastMessageWrapStatus}>
 				<ToastMessage openStatus={toastMessageStatus} bottomPosition={bottomPosition}>
@@ -62,7 +48,7 @@ const RootWrap = styled.div`
 	font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
 		'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 	/* (!!!임시 컬러)  background color는 확정되면 변경하기 */
-	background-color: ${palette.white.secondary};
+	background-color: #fff;
 
 	overflow: hidden;
 `;
@@ -95,3 +81,4 @@ const ToastMessage = styled.div`
 	transition: opacity 300ms ease-out;
 	opacity: ${props => (props.openStatus ? '1' : '0')};
 `;
+

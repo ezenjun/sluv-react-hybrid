@@ -23,7 +23,7 @@ export const BackButton = ({ openStatus, onClick }) => {
 
 	return (
 		<ButtonWrap openStatus={socialLoginComplete} onClick={onClick}>
-			<LeftArrow />
+			<LeftArrow style={{ width: '1.5rem', height: '1.5rem' }}/>
 		</ButtonWrap>
 	);
 };

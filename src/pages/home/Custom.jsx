@@ -76,7 +76,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -90,7 +100,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -104,7 +124,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -118,7 +148,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -242,7 +282,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -256,7 +306,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -270,7 +330,16 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE ㅁㄴㅇㄹ ㅁㄴㅁ ㄴㄻㄴㄹㅇ
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -284,7 +353,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
@@ -317,11 +396,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -356,11 +435,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -395,11 +474,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -434,11 +513,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -473,11 +552,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -512,11 +591,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -551,11 +630,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -590,11 +669,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -629,11 +708,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -668,11 +747,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -767,7 +846,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -781,7 +870,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -795,7 +894,17 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">Rugby Polo Ls TEE BLUE</SubText>
+						<SubText
+							color="#262626"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
+							Rugby Polo Ls TEE BLUE
+						</SubText>
 					</Item>
 					<Item>
 						<Image>
@@ -809,14 +918,25 @@ export default function Custom() {
 						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
 							마하그리드
 						</SubText>
-						<SubText fontsize="12px">
+						<SubText
+							fontsize="0.75rem"
+							style={{
+								textOverflow: 'ellipsis',
+								whiteSpace: 'nowrap',
+								overflow: 'hidden',
+								width: '100%',
+							}}
+						>
 							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
 						</SubText>
+						{/* <SubText fontsize="12px">
+							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
+						</SubText> */}
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
-			<ItemContainer padding="10px 0 50px 20px">
-				<TextWrap padding="0 20px 0 0">
+			<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
+				<TextWrap padding="0 1.25rem 0 0">
 					<MainText fontsize="1.5rem">
 						#스러버's
 						<br />
@@ -1085,7 +1205,7 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: ${props => props.padding || '2.5rem 1.25rem 3.125rem 1.25rem'};
+	padding: ${props => props.padding || '2.5rem 1.25rem 1.25rem 1.25rem'};
 `;
 const TextWrap = styled.div`
 	display: flex;
@@ -1131,6 +1251,10 @@ const ItemWrap = styled.div`
 const Item = styled.div`
 	display: flex;
 	flex-direction: column;
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 const Image = styled.div`
 	display: flex;
@@ -1251,7 +1375,7 @@ const QuestionContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 40px 0 50px 20px;
+	padding: 2.5rem 0 3.125rem 1.25rem;
 	background-image: linear-gradient(to top, #f0fff4 102%, #f8f7fa 0%);
 `;
 const QuestionWrap = styled.div`
@@ -1288,7 +1412,7 @@ const HotItemWrap = styled.div`
 	display: grid;
 	gap: 0.625rem;
 	height: 31.75rem;
-	padding: 0 20px 20px 0;
+	padding: 0 1.25rem 1.25rem 0;
 	/*  margin-right: 20px; */
 	overflow-x: scroll;
 	grid-template-columns: repeat(8, minmax(10.125rem, auto));
@@ -1403,7 +1527,7 @@ const QuestionText = styled.div`
 	flex-direction: column;
 	margin-right: 1rem;
 `;
-const Question = styled.div`
+const QuestionInfo = styled.div`
 	margin-bottom: 0.75rem;
 `;
 const UploadInfo = styled.div`

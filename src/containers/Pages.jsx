@@ -28,10 +28,8 @@ import RealtimeQuestion from '../pages/RealtimeQuestion';
 import HotItem from '../pages/HotItem';
 import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
-
-import { DndProvider } from 'react-dnd';
-import { TouchBackend } from 'react-dnd-touch-backend';
-import { GridProvider } from '../GridContext';
+import BinderDetail from '../pages/binder/BinderDetail';
+import QuestionDetail from '../pages/QuestionDetail';
 
 export default function Pages() {
 	return (
@@ -55,14 +53,19 @@ export default function Pages() {
 			</Route>
 			<Route path="/upload/item" element={<UploadItem />} />
 			<Route path="/upload/question" element={<UploadQuestion />} />
+
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
+
+			<Route path="/question/:idx" element={<QuestionDetail />} />
 			<Route path="/question/realtime" element={<RealtimeQuestion />} />
+
 			<Route path="/hot" element={<HotItem />} />
 			<Route path="/notice" element={<Notice />} />
 			<Route path="/search" element={<Search />} />
 			<Route path="/search/result" element={<SearchResult />} />
 
 			<Route path="/binder" element={<Binder />} />
+			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
 
 			<Route path="/my" element={<My />} />
