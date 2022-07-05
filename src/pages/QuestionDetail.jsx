@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import { MainContainer } from '../components/containers/MainContainer';
 import { TopNav } from '../components/containers/TopNav';
@@ -14,9 +15,25 @@ import { ReactComponent as LikeIcon } from '../assets/Icons/likeButton.svg';
 import { ReactComponent as ComentIcon } from '../assets/Icons/commentIcon.svg';
 import { ReactComponent as Present } from '../assets/Icons/Present.svg';
 import { MainText } from '../components/Texts/MainText';
+
+import { BottomMenuStatusState } from '../recoil/BottomSlideMenu';
+import { BottomSlideMenu } from '../components/containers/BottomSlideMenu';
+
 const QuestionDetail = () => {
 	const navigate = useNavigate();
 	const [commentList, setCommentList] = useState([]);
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const onReport = () => {
+		setBottomMenuStatusState(true);
+	};
+	const onReportPost = () => {
+		setBottomMenuStatusState(false);
+		navigate('/report/post');
+	};
+	const onReportUser = () => {
+		setBottomMenuStatusState(false);
+		navigate('/report/user');
+	};
 	const comment = 0;
 	return (
 		<MainContainer padding="0 0 0 0">
@@ -27,7 +44,10 @@ const QuestionDetail = () => {
 					<ShareButton
 						style={{ width: '1.5rem', height: '1.5rem', marginRight: '1.25rem' }}
 					></ShareButton>
-					<EditButton style={{ width: '1.5rem', height: '1.5rem' }}></EditButton>
+					<EditButton
+						onClick={onReport}
+						style={{ width: '1.5rem', height: '1.5rem' }}
+					></EditButton>
 				</div>
 			</TopNav>
 			<FeedContainer>
@@ -105,6 +125,14 @@ const QuestionDetail = () => {
 					></UploadComment>
 				</InputWrap>
 			</BottomNavWrap>
+			<BottomSlideMenu>
+				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportPost}>
+					게시글 신고
+				</SubText>
+				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportUser}>
+					유저 신고
+				</SubText>
+			</BottomSlideMenu>
 		</MainContainer>
 	);
 };

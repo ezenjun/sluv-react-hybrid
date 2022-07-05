@@ -30,6 +30,9 @@ import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
 import BinderDetail from '../pages/binder/BinderDetail';
 import QuestionDetail from '../pages/QuestionDetail';
+import ReportUser from '../pages/Report/ReportUser';
+import ReportPost from '../pages/Report/ReportPost';
+import ReportComment from '../pages/Report/ReportComment';
 
 export default function Pages() {
 	return (
@@ -71,6 +74,10 @@ export default function Pages() {
 			<Route path="/my" element={<My />} />
 			<Route path="/profile/:idx" element={<UserProfile />} />
 			<Route path="/setting" element={<Setting />} />
+
+			<Route path="/report/user" element={<ReportUser />} />
+			<Route path="/report/post" element={<ReportPost />} />
+			<Route path="/report/comment" element={<ReportComment />} />
 		</Routes>
 	);
 }
