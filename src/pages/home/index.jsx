@@ -12,7 +12,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { PopUpModal } from '../../components/PopUpModal';
 
-
 export default function Home() {
 	const navigate = useNavigate();
 
@@ -113,19 +112,18 @@ export default function Home() {
 							/>
 							<span>질문 올리기</span>
 						</div>
-						<div style={{
-							width: '20px', 
-							height: '20px', 
-							backgroundColor: '#9e30f4', 
-							position:'absolute', 
-							left:'50%', 
-							transform: 'translate(-50%,0)',
-							bottom: '-10px',
-							borderRadius: '50%'	
-						}}
-							>
-
-						</div>
+						<div
+							style={{
+								width: '20px',
+								height: '20px',
+								backgroundColor: '#9e30f4',
+								position: 'absolute',
+								left: '50%',
+								transform: 'translate(-50%,0)',
+								bottom: '-10px',
+								borderRadius: '50%',
+							}}
+						></div>
 					</UploadPopup>
 				</UploadPopupWrap>
 			</MainContainer>
@@ -161,6 +159,7 @@ const Tab = styled.div`
 
 const FeedContainer = styled.div`
 	height: 100vh;
+	padding: 0 0 20px 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */

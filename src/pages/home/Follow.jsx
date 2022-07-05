@@ -441,8 +441,7 @@ export default function Follow() {
 
 const FeedContainer = styled.div`
 	height: 100vh;
-	padding: 1.25rem 0 3.125rem 0;
-	margin-top: 0.3125rem;
+	padding: 1.25rem 0 1.25rem 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -487,12 +486,11 @@ const RecommendFollow = styled.div`
 	display: flex;
 	padding: 0 1.25rem;
 	flex-direction: column;
-	padding-top: 1.25rem;
 `;
 const RecommendUser = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 2.25rem;
+	margin-bottom: 36px;
 `;
 const UserTop = styled.div`
 	display: flex;
