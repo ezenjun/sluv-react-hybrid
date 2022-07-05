@@ -1,8 +1,7 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import BottomNav from './containers/BottomNav';
 import Pages from './containers/Pages';
-
 import './App.scss';
 import { palette } from './styles/palette';
 import { useRecoilValue } from 'recoil';
@@ -82,3 +81,4 @@ const ToastMessage = styled.div`
 	transition: opacity 300ms ease-out;
 	opacity: ${props => (props.openStatus ? '1' : '0')};
 `;
+

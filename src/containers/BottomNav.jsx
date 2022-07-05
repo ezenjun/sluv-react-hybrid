@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components'
-import { BottomNavState } from '../recoil/BottomNav';
+import { BottomNavState, UploadPopupState } from '../recoil/BottomNav';
 import { useLocation } from 'react-router-dom';
 
 import icon_home_selected from '../assets/Icons/bottom_nav_home_selected.svg'; 
@@ -14,7 +14,9 @@ import icon_home from '../assets/Icons/bottom_nav_home.svg';
 import icon_search from '../assets/Icons/bottom_nav_search.svg'; 
 import icon_binder from '../assets/Icons/bottom_nav_binder.svg'; 
 import icon_my from '../assets/Icons/bottom_nav_my.svg'; 
-import { ReactComponent as IconUpload} from '../assets/Icons/bottom_nav_upload.svg';
+import { ReactComponent as IconUpload } from '../assets/Icons/bottom_nav_upload.svg';
+import { ReactComponent as IconUploadSelected } from '../assets/Icons/bottom_nav_upload_selected.svg';
+
 
 import { palette } from '../styles/palette';
 
@@ -23,10 +25,12 @@ export default function BottomNav() {
 
 	const [iconHome, setIconHome] = useState(false);
 	const [iconSearch, setIconSearch] = useState(false);
+	const [iconUpload, setIconUpload] = useState(false);
 	const [iconBinder, setIconBinder] = useState(false);
 	const [iconMy, setIconMy] = useState(false);
 
   const bottomNavStatus = useRecoilValue(BottomNavState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 
 
 	useEffect(() => {
@@ -60,6 +64,14 @@ export default function BottomNav() {
 		}
 	});
 
+	const onClickUploadBtn = () => {
+		if (!uploadPopupStatus) {
+			setUploadPopupStatus(true);
+		} else {
+			setUploadPopupStatus(false);
+		}
+	};
+
   return (
 		<BottomNavWrap openStatus={bottomNavStatus}>
 			<Link style={{ flex: 1 }} to="/home">
@@ -83,25 +95,26 @@ export default function BottomNav() {
 				</BottomNavItem>
 			</Link>
 
-			<Link style={{ flex: 1 }} to="/search">
-				<BottomNavItem>
-					<div
-						style={{
-							borderRadius: '50%',
-							backgroundColor: '#9e30f4',
-							width: '2.5rem',
-							height: '2.5rem',
-							margin: '0 auto',
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center'
-						}}
-					>
-						<IconUpload style={{ width: '1.5rem', height: '1.5rem' }}/>
-
-					</div>
-				</BottomNavItem>
-			</Link>
+			<BottomNavItem onClick={onClickUploadBtn} style={{ flex: 1 }}>
+				<div
+					style={{
+						borderRadius: '50%',
+						backgroundColor: '#9e30f4',
+						width: '2.5rem',
+						height: '2.5rem',
+						margin: '0 auto',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					{uploadPopupStatus ? (
+						<IconUploadSelected style={{ width: '1.5rem', height: '1.5rem' }} />
+					) : (
+						<IconUpload style={{ width: '1.5rem', height: '1.5rem' }} />
+					)}
+				</div>
+			</BottomNavItem>
 
 			<Link style={{ flex: 1 }} to="/binder">
 				<BottomNavItem status={iconBinder}>
@@ -157,5 +170,5 @@ const BottomNavItem = styled.div`
 const BottomNavIcon = styled.img`
 	width: 1.5rem;
 	height: 1.5rem;
-
 `;
+
