@@ -52,7 +52,7 @@ export default function Login() {
 			callback: handleCallbackResponse,
 		});
 
-		google.accounts.id.renderButton(document.getElementById('google'), {
+		google.accounts.id.renderButton(document.querySelector('#google'), {
 			type: 'icon',
 			theme: 'outline',
 			size: 'large',
