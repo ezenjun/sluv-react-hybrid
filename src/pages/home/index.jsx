@@ -189,8 +189,9 @@ const UploadPopupWrap = styled.div`
 
 const UploadPopup = styled.div`
 	position: absolute;
-	left: 6.1875rem;
-	right: 6.1875rem;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 11.0625rem;
 	bottom: 1.125rem;
 	color: #fff;
 	font-size: 1.125rem;
