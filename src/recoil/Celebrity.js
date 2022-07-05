@@ -13,12 +13,6 @@ export const ChooseCelebCurrentPageState = atom({
 
 
 
-
-
-
-
-
-
 export const celebCategoryList = [
 	{
 		idx: 1,
@@ -30,9 +24,5 @@ export const celebCategoryList = [
 	},
 ]
 
-// 삭제 예정
-export const SingerListState = atom({
-	key: 'SingerListState',
-	default: [],
-});
+
 
