@@ -92,7 +92,20 @@ export default function BinderDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-
+	const onChangeBinder = () => {
+		setBottomMenuStatusState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setEditStatus(false);
+		setToastMessage(`아이템이 '바인더이름' 바인더로 이동했어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
@@ -945,7 +958,7 @@ export default function BinderDetail() {
 					</SubText>
 				</RowWrap>
 				<HorizontalLine></HorizontalLine>
-				<RowWrap>
+				<RowWrap onClick={onChangeBinder}>
 					<ImageWrap></ImageWrap>
 					<SubText fontsize="1rem" margin="0.9375rem 0">
 						사고싶은거
