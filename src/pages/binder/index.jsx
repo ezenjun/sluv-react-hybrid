@@ -31,7 +31,7 @@ import { PopUpModalState } from '../../recoil/PopUpModal';
 export default function Binder() {
 	const navigate = useNavigate();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [binderCnt, setBinderCnt] = useState(2);
+	const [binderCnt, setBinderCnt] = useState(0);
 	const [currentPage, setCurrentPage] = useState('binder');
 
 	const imageList = [
