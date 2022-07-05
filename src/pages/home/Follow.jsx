@@ -9,9 +9,9 @@ import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
-import { SubText } from '../../components/Texts/SubText';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
 export default function Follow() {
 	const [followExist, setFollowExist] = useState(true);
 	return (
