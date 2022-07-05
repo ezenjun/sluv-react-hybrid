@@ -10,6 +10,11 @@ export const PopularCelebListState = atom({
 	default: [],
 });
 
+export const FavoriteCelebListState = atom({
+	key: 'FavoriteCelebListState',
+	default: [],
+});
+
 export const ChooseCelebCurrentPageState = atom({
 	key: 'ChooseCelebCurrentPageState',
 	default: 0,

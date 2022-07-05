@@ -367,7 +367,7 @@ export default function SelectCeleb() {
 						)}
 
 						{!searchFailStatus && (
-							<RequsetWrap>
+							<RequestWrap>
 								<RequestButton>
 									<PurpleButton
 										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
@@ -377,7 +377,7 @@ export default function SelectCeleb() {
 										셀럽 추가 요청하기
 									</PurpleButton>
 								</RequestButton>
-							</RequsetWrap>
+							</RequestWrap>
 						)}
 					</ContentWrap>
 				</MainContainer>
@@ -396,7 +396,7 @@ export default function SelectCeleb() {
 	);
 }
 
-const RequsetWrap = styled.div`
+export const RequestWrap = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -404,7 +404,7 @@ const RequsetWrap = styled.div`
 	position: fixed;
 	bottom: 1rem;
 `;
-const RequestButton = styled.div`
+export const RequestButton = styled.div`
 	width: 156px;
 	margin: 0;
 `;
@@ -633,14 +633,14 @@ export const Tab = styled.div`
 	}
 `;
 
-const SearchFailContainer = styled.div`
+export const SearchFailContainer = styled.div`
 	margin-top: 3rem;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 `;
 
-const SearchFailDiv = styled.div`
+export const SearchFailDiv = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -657,7 +657,7 @@ const SearchFailDiv = styled.div`
 	}
 `;
 
-const PopularCelebContainer = styled.div`
+export const PopularCelebContainer = styled.div`
 	margin-bottom: 0.9375rem;
 
 	.popularCelebDiv {
