@@ -29,6 +29,7 @@ import HotItem from '../pages/HotItem';
 import UploadItem from '../pages/upload/UploadItem';
 import UploadQuestion from '../pages/upload/UploadQuestion';
 import BinderDetail from '../pages/binder/BinderDetail';
+import QuestionDetail from '../pages/QuestionDetail';
 
 export default function Pages() {
 	return (
@@ -52,8 +53,12 @@ export default function Pages() {
 			</Route>
 			<Route path="/upload/item" element={<UploadItem />} />
 			<Route path="/upload/question" element={<UploadQuestion />} />
+
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
+
+			<Route path="/question/:idx" element={<QuestionDetail />} />
 			<Route path="/question/realtime" element={<RealtimeQuestion />} />
+
 			<Route path="/hot" element={<HotItem />} />
 			<Route path="/notice" element={<Notice />} />
 			<Route path="/search" element={<Search />} />
