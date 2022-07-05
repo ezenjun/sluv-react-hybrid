@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, TotalCelebListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
 
@@ -34,22 +34,34 @@ export default function SelectCeleb() {
 	const [currentCelebList, setCurrentCelebList] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(1);
 	const [searchFailStatus, setSearchFailStatus] = useState(false);
-	const [popularCelebList, setPopularCelebList] = useState([]);
-	
+
+	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	
-	
 	
 	useEffect(() => {
 		// 하단바 사라지기
 		setBottomNavStatus(false);
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
+
 		// 셀럽 및 멤버 목록 조회 API 호출
-		getCelebList();
-		getPopularCelebList();
+		if(totalCelebList.length < 1) {
+			getCelebList();
+		} else {
+			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+
+			let temp;
+			(temp = []).length = totalCelebList.length;
+			temp.fill(false);
+			setCheckStatusList(temp);
+		}
+		// 다른 스러버들이 많이 추가한 셀럽 API 호출
+		if(popularCelebList.length < 1) {
+			getPopularCelebList();
+		}
+		
 	}, []);
 
 	useEffect(() => {
@@ -436,7 +448,7 @@ export const NextButton = styled.span`
 	}
 `;
 
-const ListContainer = styled.div`
+export const ListContainer = styled.div`
 	display: grid;
 	padding: 1rem 1.25rem 5.5rem;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -458,7 +470,7 @@ export const SearchTab = styled.div`
 	top: 0;
 	z-index: 10000;
 `;
-const Celeb = styled.div`
+export const Celeb = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
@@ -514,7 +526,7 @@ export const CelebNextRightBottom = styled.div`
 	font-size: 1rem;
 `;
 
-const Image = styled.div`
+export const Image = styled.div`
 	position: relative;
 	width: ${props => props.size || '6.25rem'};
 	height: ${props => props.size || '6.25rem'};
@@ -601,14 +613,14 @@ export const IconWrap = styled.div.attrs(props => ({
 			: ''};
 `;
 
-const TabWrap = styled.div`
+export const TabWrap = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin: 1rem 0 0.75rem;
 `;
 
-const Tab = styled.div`
+export const Tab = styled.div`
 	background-color: ${props => (props.status ? '#2b1e34' : 'white')};
 	color: ${props => (props.status ? 'white' : '#2b1e34')};
 	border: ${props => (props.status ? 'none' : '1px solid #E2E0E0')};
