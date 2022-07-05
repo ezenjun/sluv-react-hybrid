@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, TotalCelebListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
 
@@ -34,22 +34,34 @@ export default function SelectCeleb() {
 	const [currentCelebList, setCurrentCelebList] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(1);
 	const [searchFailStatus, setSearchFailStatus] = useState(false);
-	const [popularCelebList, setPopularCelebList] = useState([]);
-	
+
+	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	
-	
 	
 	useEffect(() => {
 		// 하단바 사라지기
 		setBottomNavStatus(false);
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
+
 		// 셀럽 및 멤버 목록 조회 API 호출
-		getCelebList();
-		getPopularCelebList();
+		if(totalCelebList.length < 1) {
+			getCelebList();
+		} else {
+			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+
+			let temp;
+			(temp = []).length = totalCelebList.length;
+			temp.fill(false);
+			setCheckStatusList(temp);
+		}
+		// 다른 스러버들이 많이 추가한 셀럽 API 호출
+		if(popularCelebList.length < 1) {
+			getPopularCelebList();
+		}
+		
 	}, []);
 
 	useEffect(() => {
@@ -355,7 +367,7 @@ export default function SelectCeleb() {
 						)}
 
 						{!searchFailStatus && (
-							<RequsetWrap>
+							<RequestWrap>
 								<RequestButton>
 									<PurpleButton
 										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
@@ -365,7 +377,7 @@ export default function SelectCeleb() {
 										셀럽 추가 요청하기
 									</PurpleButton>
 								</RequestButton>
-							</RequsetWrap>
+							</RequestWrap>
 						)}
 					</ContentWrap>
 				</MainContainer>
@@ -384,7 +396,7 @@ export default function SelectCeleb() {
 	);
 }
 
-const RequsetWrap = styled.div`
+export const RequestWrap = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -392,7 +404,7 @@ const RequsetWrap = styled.div`
 	position: fixed;
 	bottom: 1rem;
 `;
-const RequestButton = styled.div`
+export const RequestButton = styled.div`
 	width: 156px;
 	margin: 0;
 `;
@@ -436,7 +448,7 @@ export const NextButton = styled.span`
 	}
 `;
 
-const ListContainer = styled.div`
+export const ListContainer = styled.div`
 	display: grid;
 	padding: 1rem 1.25rem 5.5rem;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -451,14 +463,14 @@ export const TextWrap = styled.div`
 	padding: ${props => props.padding || '0 1.25rem'};
 `;
 
-const SearchTab = styled.div`
+export const SearchTab = styled.div`
 	padding: 0 20px;
 	background-color: white;
 	position: sticky;
 	top: 0;
 	z-index: 10000;
 `;
-const Celeb = styled.div`
+export const Celeb = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: column;
@@ -514,7 +526,7 @@ export const CelebNextRightBottom = styled.div`
 	font-size: 1rem;
 `;
 
-const Image = styled.div`
+export const Image = styled.div`
 	position: relative;
 	width: ${props => props.size || '6.25rem'};
 	height: ${props => props.size || '6.25rem'};
@@ -572,7 +584,7 @@ export const CountBadge = styled.span`
 	z-index: 20000;
 `;
 
-const InputWrap = styled.div`
+export const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
 	border-radius: 0.625rem;
@@ -586,7 +598,7 @@ const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
-const IconWrap = styled.div.attrs(props => ({
+export const IconWrap = styled.div.attrs(props => ({
 	className: props.className,
 }))`
 	display: flex;
@@ -601,14 +613,14 @@ const IconWrap = styled.div.attrs(props => ({
 			: ''};
 `;
 
-const TabWrap = styled.div`
+export const TabWrap = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin: 1rem 0 0.75rem;
 `;
 
-const Tab = styled.div`
+export const Tab = styled.div`
 	background-color: ${props => (props.status ? '#2b1e34' : 'white')};
 	color: ${props => (props.status ? 'white' : '#2b1e34')};
 	border: ${props => (props.status ? 'none' : '1px solid #E2E0E0')};
@@ -621,14 +633,14 @@ const Tab = styled.div`
 	}
 `;
 
-const SearchFailContainer = styled.div`
+export const SearchFailContainer = styled.div`
 	margin-top: 3rem;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 `;
 
-const SearchFailDiv = styled.div`
+export const SearchFailDiv = styled.div`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -645,7 +657,7 @@ const SearchFailDiv = styled.div`
 	}
 `;
 
-const PopularCelebContainer = styled.div`
+export const PopularCelebContainer = styled.div`
 	margin-bottom: 0.9375rem;
 
 	.popularCelebDiv {
