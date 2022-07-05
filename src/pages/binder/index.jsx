@@ -102,6 +102,12 @@ export default function Binder() {
 
 	const [isConfirm, setIsConfirm] = useState(false);
 	const [binderName, setBinderName] = useState('');
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
+	const onEditBinder = () => {
+		setBottomMenuStatusState(true);
+	};
+
 	const onAlbumClick = () => {
 		alert('앨범');
 	};
@@ -129,7 +135,7 @@ export default function Binder() {
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
-		setToastMessage('바인더가 삭제되었어요');
+		setToastMessage(`'갖고 싶다아' 바인더가 삭제되었어요`);
 		setCurrentPage('binder');
 		setTimeout(() => {
 			setToastMessageStatus(false);
@@ -140,16 +146,6 @@ export default function Binder() {
 	};
 	const onAddCoverImage = () => {
 		setBottomMenuStatusState(true);
-	};
-
-	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
-	const onEditBinder = () => {
-		setBottomMenuStatusState(true);
-	};
-
-	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
-	const onDeleteBinder = () => {
-		setPopUpModalStatusState(true);
 	};
 
 	const handleBinderName = e => {

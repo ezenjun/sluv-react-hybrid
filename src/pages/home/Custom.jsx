@@ -396,11 +396,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -435,11 +435,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -474,11 +474,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -513,11 +513,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -552,11 +552,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -591,11 +591,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -630,11 +630,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -669,11 +669,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -708,11 +708,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -747,11 +747,11 @@ export default function Custom() {
 									}}
 								></QuestionIcon>
 								<QuestionText>
-									<Question>
+									<QuestionInfo>
 										<SubText fontsize="1rem">
 											220520 리노리방 반팔 가디건 정보가 궁금해요!
 										</SubText>
-									</Question>
+									</QuestionInfo>
 									<UploadInfo>
 										<SubText fontsize="0.75rem" color="#8d8d8d">
 											빵짱
@@ -935,8 +935,8 @@ export default function Custom() {
 					</Item>
 				</ItemWrap>
 			</ItemContainer>
-			<ItemContainer padding="10px 0 50px 20px">
-				<TextWrap padding="0 20px 0 0">
+			<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
+				<TextWrap padding="0 1.25rem 0 0">
 					<MainText fontsize="1.5rem">
 						#스러버's
 						<br />
@@ -1205,7 +1205,7 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: ${props => props.padding || '2.5rem 1.25rem 3.125rem 1.25rem'};
+	padding: ${props => props.padding || '2.5rem 1.25rem 1.25rem 1.25rem'};
 `;
 const TextWrap = styled.div`
 	display: flex;
@@ -1375,7 +1375,7 @@ const QuestionContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 40px 0 50px 20px;
+	padding: 2.5rem 0 3.125rem 1.25rem;
 	background-image: linear-gradient(to top, #f0fff4 102%, #f8f7fa 0%);
 `;
 const QuestionWrap = styled.div`
@@ -1412,7 +1412,7 @@ const HotItemWrap = styled.div`
 	display: grid;
 	gap: 0.625rem;
 	height: 31.75rem;
-	padding: 0 20px 20px 0;
+	padding: 0 1.25rem 1.25rem 0;
 	/*  margin-right: 20px; */
 	overflow-x: scroll;
 	grid-template-columns: repeat(8, minmax(10.125rem, auto));
@@ -1527,7 +1527,7 @@ const QuestionText = styled.div`
 	flex-direction: column;
 	margin-right: 1rem;
 `;
-const Question = styled.div`
+const QuestionInfo = styled.div`
 	margin-bottom: 0.75rem;
 `;
 const UploadInfo = styled.div`

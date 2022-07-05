@@ -92,7 +92,20 @@ export default function BinderDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-
+	const onChangeBinder = () => {
+		setBottomMenuStatusState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setEditStatus(false);
+		setToastMessage(`아이템이 '바인더이름' 바인더로 이동했어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
@@ -144,7 +157,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -181,7 +194,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -218,7 +231,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -255,7 +268,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -292,7 +305,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -329,7 +342,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -366,7 +379,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -403,7 +416,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -440,7 +453,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -477,7 +490,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -514,7 +527,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -551,7 +564,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -588,7 +601,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -625,7 +638,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -662,7 +675,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -699,7 +712,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -736,7 +749,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -773,7 +786,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -810,7 +823,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -847,7 +860,7 @@ export default function BinderDetail() {
 									</SubText>
 								</ImageText>
 							</Image>
-							<SubText fontsize="14px" fontweight="bold" margin="0 0 0.125rem 0 ">
+							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
 								마하그리드
 							</SubText>
 							<SubText
@@ -945,7 +958,7 @@ export default function BinderDetail() {
 					</SubText>
 				</RowWrap>
 				<HorizontalLine></HorizontalLine>
-				<RowWrap>
+				<RowWrap onClick={onChangeBinder}>
 					<ImageWrap></ImageWrap>
 					<SubText fontsize="1rem" margin="0.9375rem 0">
 						사고싶은거
@@ -1073,8 +1086,8 @@ const Image = styled.div`
 		height: 5.375rem;
 	}
 	@media screen and (width: 280px) {
-		width: 75px;
-		height: 75px;
+		width: 4.6875rem;
+		height: 4.6875rem;
 	}
 `;
 const ImageText = styled.div`
@@ -1135,9 +1148,9 @@ const ButtonWrap = styled.div`
 const Button = styled.div`
 	background-color: ${props => props.backgroundColor};
 	box-sizing: border-box;
-	width: 8.9375rem;
+	width: 47%;
 	height: 3rem;
-	padding: 15px 0;
+	padding: 0.9375rem 0;
 	font-family: Pretendard;
 	font-size: 1rem;
 	font-weight: bold;
