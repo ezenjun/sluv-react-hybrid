@@ -451,7 +451,7 @@ export const TextWrap = styled.div`
 	padding: ${props => props.padding || '0 1.25rem'};
 `;
 
-const SearchTab = styled.div`
+export const SearchTab = styled.div`
 	padding: 0 20px;
 	background-color: white;
 	position: sticky;
@@ -572,7 +572,7 @@ export const CountBadge = styled.span`
 	z-index: 20000;
 `;
 
-const InputWrap = styled.div`
+export const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
 	border-radius: 0.625rem;
@@ -586,7 +586,7 @@ const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
-const IconWrap = styled.div.attrs(props => ({
+export const IconWrap = styled.div.attrs(props => ({
 	className: props.className,
 }))`
 	display: flex;
