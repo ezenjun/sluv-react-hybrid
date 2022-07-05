@@ -121,6 +121,10 @@ export default function SelectUploadCelebContainer() {
 		}
 	};
 
+	const onClickUploadCeleb = () => {
+		
+	}
+
 
 	return (
 		<MainContainer>
@@ -187,7 +191,7 @@ export default function SelectUploadCelebContainer() {
 					<ListContainer>
 						{currentCelebList.length > 0 &&
 							currentCelebList.map(celeb => (
-								<Celeb key={celeb.celebIdx} onClick={undefined}>
+								<Celeb key={celeb.celebIdx} onClick={onClickUploadCeleb}>
 									<Image size="6.25rem" key={celeb.id}>
 										<img
 											className="celebImg"
