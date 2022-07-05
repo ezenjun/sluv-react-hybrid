@@ -50,19 +50,19 @@ export default function Login() {
 		setSocialLoginComplete(false);
 		/* global google*/
 
-		if(google.accounts.id) {
-			google.accounts.id.initialize({
-				client_id: GoogleClient_ID,
-				callback: handleCallbackResponse,
-			});
-			google.accounts.id.renderButton(document.querySelector('#google'), {
-				type: 'icon',
-				theme: 'outline',
-				size: 'large',
-				width: '40px',
-				shape: 'circle',
-			});
-		}
+		// if(google.accounts.id) {
+		// 	google.accounts.id.initialize({
+		// 		client_id: GoogleClient_ID,
+		// 		callback: handleCallbackResponse,
+		// 	});
+		// 	google.accounts.id.renderButton(document.querySelector('#google'), {
+		// 		type: 'icon',
+		// 		theme: 'outline',
+		// 		size: 'large',
+		// 		width: '40px',
+		// 		shape: 'circle',
+		// 	});
+		// }
 		// eslint-disable-next-line
 	}, []);
 
