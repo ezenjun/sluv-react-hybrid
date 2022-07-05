@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components'
-import { BottomNavState } from '../recoil/BottomNav';
+import { BottomNavState, UploadPopupState } from '../recoil/BottomNav';
 import { useLocation } from 'react-router-dom';
 
 import icon_home_selected from '../assets/Icons/bottom_nav_home_selected.svg'; 
@@ -16,8 +16,6 @@ import icon_binder from '../assets/Icons/bottom_nav_binder.svg';
 import icon_my from '../assets/Icons/bottom_nav_my.svg'; 
 import { ReactComponent as IconUpload } from '../assets/Icons/bottom_nav_upload.svg';
 import { ReactComponent as IconUploadSelected } from '../assets/Icons/bottom_nav_upload_selected.svg';
-import { ReactComponent as IconUploadItem } from '../assets/Icons/bottom_nav_upload_item.svg';
-import { ReactComponent as IconUploadQuestion } from '../assets/Icons/bottom_nav_upload_question.svg';
 
 
 import { palette } from '../styles/palette';
@@ -32,6 +30,7 @@ export default function BottomNav() {
 	const [iconMy, setIconMy] = useState(false);
 
   const bottomNavStatus = useRecoilValue(BottomNavState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 
 
 	useEffect(() => {
@@ -66,10 +65,10 @@ export default function BottomNav() {
 	});
 
 	const onClickUploadBtn = () => {
-		if(!iconUpload) {
-			setIconUpload(true);
+		if (!uploadPopupStatus) {
+			setUploadPopupStatus(true);
 		} else {
-			setIconUpload(false);
+			setUploadPopupStatus(false);
 		}
 	};
 
@@ -96,10 +95,7 @@ export default function BottomNav() {
 				</BottomNavItem>
 			</Link>
 
-			<BottomNavItem
-				onClick={onClickUploadBtn}
-				style={{ flex: 1 }}
-			>
+			<BottomNavItem onClick={onClickUploadBtn} style={{ flex: 1 }}>
 				<div
 					style={{
 						borderRadius: '50%',
@@ -112,24 +108,12 @@ export default function BottomNav() {
 						alignItems: 'center',
 					}}
 				>
-					{iconUpload ? (
+					{uploadPopupStatus ? (
 						<IconUploadSelected style={{ width: '1.5rem', height: '1.5rem' }} />
 					) : (
 						<IconUpload style={{ width: '1.5rem', height: '1.5rem' }} />
 					)}
 				</div>
-				<BackgroundBlurWrap openStatus={true}>
-					<ChooseUploadTypePopup>
-						<ChooseUploadTypeBtn>
-							<IconUploadItem style={{ width: '1.125rem', height: '1.125rem' }} />
-							<span>정보 공유하기</span>
-						</ChooseUploadTypeBtn>
-						<ChooseUploadTypeBtn>
-							<IconUploadQuestion style={{ width: '1.125rem', height: '1.125rem' }} />
-							<span>질문 올리기</span>
-						</ChooseUploadTypeBtn>
-					</ChooseUploadTypePopup>
-				</BackgroundBlurWrap>
 			</BottomNavItem>
 
 			<Link style={{ flex: 1 }} to="/binder">
@@ -188,33 +172,3 @@ const BottomNavIcon = styled.img`
 	height: 1.5rem;
 `;
 
-const BackgroundBlurWrap = styled.div`
-	display: ${props => (props.openStatus ? 'block' : 'none')};
-	z-index: 10000;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-
-	background-color: rgba(110, 110, 110, 0.35);
-`;
-
-const ChooseUploadTypePopup = styled.div`
-	position: absolute;
-	bottom: 100px;
-	left: 50%;
-	transform: translate(-50%, 0);
-	z-index: 30000;
-	color: white;
-	background-color: #9e30f4;
-
-	border: 1px red solid;
-`;
-
-const ChooseUploadTypeBtn = styled.div`
-	padding: 1.25rem 1.625rem;
-	display: flex;
-	font-size: 1.125rem;
-	font-weight: 700;
-`;
