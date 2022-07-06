@@ -57,3 +57,9 @@ export const SpeechBubbleTextArea = styled.textarea`
 		color: #c9c9c9;
 	}
 `;
+
+export const SpeechBubbleNoInput = styled.div`
+	caret-color: #9e30f4;
+	font-size: 0.875rem;
+	color: #c9c9c9;
+`;
