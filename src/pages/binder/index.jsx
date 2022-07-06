@@ -36,19 +36,6 @@ export default function Binder() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [currentPage, setCurrentPage] = useState('binder');
 
-	const onAddBinder = () => {
-		navigate('./add');
-	};
-	const onPrimaryBinderClick = () => {
-		navigate('./1');
-	};
-	const onEachBinderClick = (idx, name) => {
-		navigate(`./${idx}`, { state: name });
-	};
-	const exitEdit = () => {
-		setCurrentPage('binder');
-	};
-
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
@@ -63,6 +50,18 @@ export default function Binder() {
 
 	const [editBinderIdx, setEditBinderIdx] = useState(null);
 	const [binderEachIndexinList, setBinderEachIndexinList] = useState(null);
+	const onAddBinder = () => {
+		navigate('./add');
+	};
+	const onPrimaryBinderClick = () => {
+		navigate('./1');
+	};
+	const onEachBinderClick = (idx, name) => {
+		navigate(`./${idx}`, { state: name });
+	};
+	const exitEdit = () => {
+		setCurrentPage('binder');
+	};
 	const onEditBinder = (binderIdx, listIdx) => {
 		setBottomMenuStatusState(true);
 		setEditBinderIdx(binderIdx);
@@ -239,7 +238,8 @@ export default function Binder() {
 														<SubText
 															fontsize="1rem"
 															fontweight="bold"
-															margin="0 0 0.25rem 0 "
+															margin="0 0.125rem 0.25rem 0 "
+															style={{ whiteSpace: 'normal' }}
 														>
 															{item.name}
 														</SubText>
