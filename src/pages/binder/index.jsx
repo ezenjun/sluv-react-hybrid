@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BottomNavState } from '../../recoil/BottomNav';
-import { useSetRecoilState } from 'recoil';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -16,6 +16,8 @@ import { PopUpModal } from '../../components/PopUpModal';
 import { ReactComponent as AddBinderButton } from '../../assets/Icons/addBinder.svg';
 import { ReactComponent as EditBinder } from '../../assets/Icons/DotsThreeVertical.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
+import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
+import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
@@ -27,6 +29,7 @@ import {
 } from '../../recoil/ToastMessage';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { PopUpModalState } from '../../recoil/PopUpModal';
+import { UploadPopup, UploadPopupWrap } from '../home';
 
 export default function Binder() {
 	const navigate = useNavigate();
@@ -37,6 +40,8 @@ export default function Binder() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const uploadPopupStatus = useRecoilValue(UploadPopupState);
 
 	const [isConfirm, setIsConfirm] = useState(false);
 	const [binderName, setBinderName] = useState('');
@@ -380,6 +385,47 @@ export default function Binder() {
 					</ButtonWrap>
 				</PopUpModal>
 			)}
+
+			{/* 업로드 팝업 모달 */}
+			<UploadPopupWrap openStatus={uploadPopupStatus}>
+				<UploadPopup>
+					<div onClick={() => navigate('/upload/item')} className="uploadPopupBtn topBtn">
+						<IconUploadItem
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>정보 공유하기</span>
+					</div>
+					<div
+						onClick={() => navigate('/upload/question')}
+						className="uploadPopupBtn bottomBtn"
+					>
+						<IconUploadQuestion
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>질문 올리기</span>
+					</div>
+					<div
+						style={{
+							width: '20px',
+							height: '20px',
+							backgroundColor: '#9e30f4',
+							position: 'absolute',
+							left: '50%',
+							transform: 'translate(-50%,0)',
+							bottom: '-10px',
+							borderRadius: '50%',
+						}}
+					></div>
+				</UploadPopup>
+			</UploadPopupWrap>
 		</>
 	);
 }
