@@ -251,7 +251,24 @@ export default function Signup() {
 	async function handleAuthCodeSendAPI() {
 		const url = `/auth/sms?phone=${phoneNumber}`;
 		const data = await customApiClient('get', url);
-		if (data.isSuccess === true) beginTimer();
+		if(!data || data.isSuccess) {
+			
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage(data.message);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+
+			return;
+		}
+
+		beginTimer();
 	}
 	// 인증번호 확인 API
 	async function handleAuthCodeCheckAPI() {
