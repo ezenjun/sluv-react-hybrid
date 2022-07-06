@@ -9,11 +9,12 @@ import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg'
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { Input } from '../../components/Input';
-import { celebCategoryList, FavoriteCelebListState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
-import { useRecoilState } from 'recoil';
+import { celebCategoryList, ChooseCelebCurrentPageState, FavoriteCelebListState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { UploadCelebState } from '../../recoil/Upload';
 
 export default function SelectUploadCelebContainer() {
 	const navigate = useNavigate();
@@ -26,6 +27,8 @@ export default function SelectUploadCelebContainer() {
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [favoriteCelebList, setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
+	const setSelectedCeleb = useSetRecoilState(UploadCelebState);
+	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 
 	useEffect(() => {
 		// 셀럽 및 멤버 목록 조회 API 호출
@@ -121,8 +124,16 @@ export default function SelectUploadCelebContainer() {
 		}
 	};
 
-	const onClickUploadCeleb = () => {
+	const onClickUploadCeleb = (celeb, e) => {
+		console.log(celeb);
+		setSelectedCeleb(celeb);
+		if(celeb.isGroup === 1) {
+			setCurrentPage(1);
+		} else if(celeb.isGroup === 0) {
+			setCurrentPage(2);
+		}
 		
+		e.preventDefault();
 	}
 
 
@@ -191,7 +202,7 @@ export default function SelectUploadCelebContainer() {
 					<ListContainer>
 						{currentCelebList.length > 0 &&
 							currentCelebList.map(celeb => (
-								<Celeb key={celeb.celebIdx} onClick={onClickUploadCeleb}>
+								<Celeb key={celeb.celebIdx} onClick={(e)=> onClickUploadCeleb(celeb, e)}>
 									<Image size="6.25rem" key={celeb.id}>
 										<img
 											className="celebImg"
