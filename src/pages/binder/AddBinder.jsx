@@ -8,6 +8,7 @@ import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { SubText } from '../../components/Texts/SubText';
+import { customApiClient } from '../../utils/apiClient';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -45,19 +46,37 @@ export default function AddBinder() {
 			setIsConfirm(false);
 		}
 	};
-	const clickNext = () => {
-		setToastMessageBottomPosition('1.625rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setToastMessage('이미 같은 이름의 바인더가 있어요');
+	const onMakeBinder = async () => {
+		console.log('clicked');
+		const body = {
+			isBasic: 1,
+			name: binderName,
+			coverImgUrl:
+				'https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2F736x%2Fb1%2Fed%2F92%2Fb1ed92fb77d54b2fb88cd313b66882c6.jpg&type=sc960_832',
+		};
+		const data = await customApiClient('post', '/binders', body);
 
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log(data.message);
+		if (data.code === 3080) {
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('이미 같은 이름의 바인더가 있어요');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+		} else {
+			navigate('/binder');
+		}
 	};
+
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
@@ -101,7 +120,7 @@ export default function AddBinder() {
 				<div
 					className="rightText"
 					style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
-					onClick={clickNext}
+					onClick={onMakeBinder}
 				>
 					완료
 				</div>
