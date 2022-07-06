@@ -14,7 +14,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
-import { UploadCelebState } from '../../recoil/Upload';
+import { UploadCelebState, UploadMemberState } from '../../recoil/Upload';
 
 export default function SelectUploadCelebContainer() {
 	const navigate = useNavigate();
@@ -28,9 +28,12 @@ export default function SelectUploadCelebContainer() {
 	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [favoriteCelebList, setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
 	const setSelectedCeleb = useSetRecoilState(UploadCelebState);
+	const setSelectedMember = useSetRecoilState(UploadMemberState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 
 	useEffect(() => {
+		setSelectedCeleb({});
+		setSelectedMember({});
 		// 셀럽 및 멤버 목록 조회 API 호출
 		if (totalCelebList.length < 1) {
 			getCelebList();
