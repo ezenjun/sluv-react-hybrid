@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { useSetRecoilState } from 'recoil';
 
@@ -17,6 +17,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { customApiClient } from '../../utils/apiClient';
 
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
@@ -35,19 +36,41 @@ import { ReactComponent as DeleteBinderGrey } from '../../assets/Icons/deleteBin
 import { ReactComponent as MoveBinderWhite } from '../../assets/Icons/moveBinderWhite.svg';
 import { ReactComponent as DeleteBinderWhite } from '../../assets/Icons/deleteBinderWhite.svg';
 
-import img from './img.png';
-
 export default function BinderDetail() {
 	const navigate = useNavigate();
-	const [isConfirm, setIsConfirm] = useState(false);
-	const [itemList, setItemList] = useState([]);
 	const [editStatus, setEditStatus] = useState(false);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [eachStatus, setEachStatus] = useState(false);
-	const [selected, setSelected] = useState(false);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	// const [selectedItemList, setSelectedItemList] = useState([]);
+	const [selectedStatusList, setSelectedStatusList] = useState([]);
+
+	const [selectedItemList, setSelectedItemList] = useState([]);
+	const eachStatusClick = (index, itemIdx) => {
+		console.log('index', index);
+		let tempGroup = [];
+		if (editStatus) {
+			let newArr = selectedStatusList;
+			if (selectedStatusList[index]) {
+				newArr[index] = false;
+				setSelectedStatusList(newArr);
+				tempGroup = selectedItemList;
+				setSelectedItemList(tempGroup.filter(item => item !== itemIdx));
+				console.log(selectedStatusList[index]);
+				console.log('selectedItemList', selectedItemList);
+			} else {
+				// 선택 안되어있을 때
+				newArr[index] = true;
+				setSelectedStatusList(newArr);
+
+				setSelectedItemList([...selectedItemList, { itemIdx: itemIdx }]);
+				console.log(selectedStatusList[index]);
+				console.log('selectedItemList', selectedItemList);
+			}
+		}
+	};
 
 	const onMoveItem = () => {
+		getBinderList();
 		setBottomMenuStatusState(true);
 	};
 	const onCreateBinder = () => {
@@ -58,10 +81,7 @@ export default function BinderDetail() {
 	const onEdit = () => {
 		setEditStatus(!editStatus);
 	};
-	const onSelect = () => {
-		setEachStatus(!eachStatus);
-		setSelected(!selected);
-	};
+
 	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
 	const onDeleteItem = () => {
 		setPopUpModalStatusState(true);
@@ -77,10 +97,11 @@ export default function BinderDetail() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-
+	const params = useParams();
 	const confirmDelete = () => {
 		setPopUpModalStatusState(false);
 		setBottomMenuStatusState(false);
+		deleteDipList(params.idx);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
@@ -92,7 +113,9 @@ export default function BinderDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-	const onChangeBinder = () => {
+	const onChangeBinder = toidx => {
+		MoveDipList(params.idx, toidx);
+
 		setBottomMenuStatusState(false);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
@@ -106,30 +129,87 @@ export default function BinderDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
+	const location = useLocation();
+	const [binderName, setBinderName] = useState('');
+
+	const [dipList, setDipList] = useState([]);
+
+	const getDipList = async binderIdx => {
+		const data = await customApiClient('get', `/dibs/${binderIdx}`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setDipList(data.result);
+		let temp;
+		(temp = []).length = data.result.length;
+		temp.fill(false);
+		setSelectedStatusList(temp);
+		console.log('SelectedStatusList', selectedStatusList);
+	};
+
+	const deleteDipList = async binderIdx => {
+		const body = { itemIdxList: selectedItemList };
+		const data = await customApiClient('patch', `/dibs/${binderIdx}`, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		getDipList(params.idx);
+	};
+	const MoveDipList = async (binderIdx, toIdx) => {
+		const body = { itemIdxList: selectedItemList };
+		const data = await customApiClient('patch', `/dibs/${binderIdx}/${toIdx}`, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		getDipList(binderIdx);
+	};
+
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log(binderList);
+	};
+
 	useEffect(() => {
+		if (location.state) {
+			console.log(location.state);
+			setBinderName(location.state);
+		}
+		getDipList(params.idx);
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
 	}, []);
-	const cnt = 0;
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav style={{ justifyContent: 'space-between' }}>
 				<BackButton onClick={() => navigate(-1)} />
-				<div className="centerText">기본 바인더</div>
+				<div className="centerText">{binderName}</div>
 			</TopNav>
-			{cnt > 0 ? (
+			{dipList.length > 0 ? (
 				<FeedContainer>
 					<BinderTextWrap>
 						{editStatus ? (
 							<>
-								<SubText color="#8d8d8d">{selected}개 보관중</SubText>
+								<SubText color="#8d8d8d">{selectedItemList.length}개</SubText>
 								<SubText color="#8d8d8d" onClick={onEdit}>
 									취소
 								</SubText>
 							</>
 						) : (
 							<>
-								<SubText color="#8d8d8d">5개 보관중</SubText>
+								<SubText color="#8d8d8d">{dipList.length}개 보관중</SubText>
 								<SubText color="#8d8d8d" onClick={onEdit}>
 									편집
 								</SubText>
@@ -137,746 +217,51 @@ export default function BinderDetail() {
 						)}
 					</BinderTextWrap>
 					<ItemWrap>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
+						{dipList.map((dip, index) => (
+							<Item
+								key={dip.itemIdx}
+								onClick={() => eachStatusClick(index, dip.itemIdx)}
 							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
+								<Image src={dip.itemImgUrl}>
+									<CheckIconWrap showStatus={editStatus}>
+										{selectedStatusList[index] ? (
+											<CheckFull
+												style={{ width: '1.5rem', height: '1.5rem' }}
+											></CheckFull>
+										) : (
+											<CheckEmpty
+												style={{ width: '1.5rem', height: '1.5rem' }}
+											></CheckEmpty>
+										)}
+									</CheckIconWrap>
 
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
+									<ImageText>
+										<SubText fontweight="bold" color="white">
+											{dip.name}'s
+										</SubText>
+									</ImageText>
+								</Image>
+								<SubText
+									fontsize="0.875rem"
+									fontweight="bold"
+									margin="0 0 0.125rem 0 "
+								>
+									{dip.brandKr}
+								</SubText>
+								<SubText
+									fontweight="normal"
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
 
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
-						<Item onClick={onSelect}>
-							<Image>
-								<CheckIconWrap showStatus={editStatus}>
-									{eachStatus ? (
-										<CheckFull
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckFull>
-									) : (
-										<CheckEmpty
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										></CheckEmpty>
-									)}
-								</CheckIconWrap>
-
-								<ImageText>
-									<SubText fontweight="bold" color="white">
-										리노's
-									</SubText>
-								</ImageText>
-							</Image>
-							<SubText fontsize="0.875rem" fontweight="bold" margin="0 0 0.125rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								fontweight="normal"
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-								Rugby Polo Ls TEE BLUE Rugby Polo Ls TEE BLUE
-							</SubText>
-						</Item>
+										overflow: 'hidden',
+										width: '100%',
+									}}
+								>
+									{dip.itemName}
+								</SubText>
+							</Item>
+						))}
 					</ItemWrap>
 				</FeedContainer>
 			) : (
@@ -902,7 +287,7 @@ export default function BinderDetail() {
 			)}
 			{editStatus ? (
 				<EditBottomNav>
-					{selected ? (
+					{selectedItemList.length > 0 ? (
 						<>
 							<BottomButton onClick={onMoveItem}>
 								<MoveBinderWhite></MoveBinderWhite>
@@ -958,15 +343,17 @@ export default function BinderDetail() {
 					</SubText>
 				</RowWrap>
 				<HorizontalLine></HorizontalLine>
-				<RowWrap onClick={onChangeBinder}>
-					<ImageWrap></ImageWrap>
-					<SubText fontsize="1rem" margin="0.9375rem 0">
-						사고싶은거
-					</SubText>
-					<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
-						(0)
-					</SubText>
-				</RowWrap>
+				{binderList.map(binder => (
+					<RowWrap key={binder.name} onClick={() => onChangeBinder(binder.binderIdx)}>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							{binder.dibCount}
+						</SubText>
+					</RowWrap>
+				))}
 			</BottomSlideMenu>
 			<PopUpModal closeButton={true}>
 				<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
@@ -1060,14 +447,14 @@ const Image = styled.div`
 	/* align-items: flex-end; */
 	position: relative;
 	border-radius: 1rem;
-	background-color: white;
+	background-color: blue;
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
 			rgba(60, 60, 60, 0.77) 0%,
 			rgba(0, 0, 0, 0) 34%
 		),
-		url(${img});
+		url(${props => props.src});
 	background-repeat: no-repeat;
 	background-size: contain;
 	margin-bottom: 0.5rem;
@@ -1126,6 +513,7 @@ const RowWrap = styled.div`
 	display: flex;
 	width: 100%;
 	padding: 0 1.25rem;
+	margin-bottom: 1rem;
 	box-sizing: border-box;
 	text-align: center;
 	align-items: center;

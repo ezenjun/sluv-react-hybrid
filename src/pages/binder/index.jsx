@@ -16,7 +16,7 @@ import { PopUpModal } from '../../components/PopUpModal';
 import { ReactComponent as AddBinderButton } from '../../assets/Icons/addBinder.svg';
 import { ReactComponent as EditBinder } from '../../assets/Icons/DotsThreeVertical.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
-
+import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
 import {
@@ -31,70 +31,21 @@ import { PopUpModalState } from '../../recoil/PopUpModal';
 export default function Binder() {
 	const navigate = useNavigate();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [binderCnt, setBinderCnt] = useState(0);
 	const [currentPage, setCurrentPage] = useState('binder');
 
-	const imageList = [
-		{
-			src: 'https://images.pexels.com/photos/3075988/pexels-photo-3075988.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-			id: '1',
-		},
-		{
-			src: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '2',
-		},
-		{
-			src: 'https://images.pexels.com/photos/1405773/pexels-photo-1405773.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '3',
-		},
-		{
-			src: 'https://images.pexels.com/photos/269318/pexels-photo-269318.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '4',
-		},
-		{
-			src: 'https://images.pexels.com/photos/1084188/pexels-photo-1084188.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '5',
-		},
-		{
-			src: 'https://images.pexels.com/photos/2575279/pexels-photo-2575279.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '6',
-		},
-		{
-			src: 'https://images.pexels.com/photos/1029609/pexels-photo-1029609.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '7',
-		},
-		{
-			src: 'https://images.pexels.com/photos/1122414/pexels-photo-1122414.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '8',
-		},
-		{
-			src: 'https://images.pexels.com/photos/2698761/pexels-photo-2698761.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-			id: '9',
-		},
-	];
 	const onAddBinder = () => {
 		navigate('./add');
 	};
 	const onPrimaryBinderClick = () => {
-		navigate('./:1');
+		navigate('./1');
+	};
+	const onEachBinderClick = (idx, name) => {
+		navigate(`./${idx}`, { state: name });
 	};
 	const exitEdit = () => {
 		setCurrentPage('binder');
 	};
 
-	const clickNext = () => {
-		setToastMessageBottomPosition('1.625rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setToastMessage('이미 같은 이름의 바인더가 있어요');
-
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
-	};
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
@@ -104,8 +55,14 @@ export default function Binder() {
 	const [binderName, setBinderName] = useState('');
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
-	const onEditBinder = () => {
+
+	const [editBinderIdx, setEditBinderIdx] = useState(null);
+	const [binderEachIndexinList, setBinderEachIndexinList] = useState(null);
+	const onEditBinder = (binderIdx, listIdx) => {
 		setBottomMenuStatusState(true);
+		setEditBinderIdx(binderIdx);
+		setBinderEachIndexinList(listIdx);
+		setBinderName('');
 	};
 
 	const onAlbumClick = () => {
@@ -115,13 +72,12 @@ export default function Binder() {
 		alert('기본 커버');
 	};
 	const editBinder = () => {
-		// alert('수정');
 		setCurrentPage('edit');
 		setBottomMenuStatusState(false);
 	};
-	const deleteBinder = () => {
-		// alert('삭제');
+	const deleteBinder = editBinderIdx => {
 		setCurrentPage('delete');
+		deleteBInderAPI(editBinderIdx);
 		setPopUpModalStatusState(true);
 	};
 	const cancleDelete = () => {
@@ -130,12 +86,27 @@ export default function Binder() {
 		setBottomMenuStatusState(false);
 	};
 	const confirmDelete = () => {
+		getBinderList();
 		setPopUpModalStatusState(false);
 		setBottomMenuStatusState(false);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
-		setToastMessage(`'갖고 싶다아' 바인더가 삭제되었어요`);
+		setToastMessage(`바인더가 삭제되었어요`);
+		setCurrentPage('binder');
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	};
+	const onEditBinderFinish = () => {
+		editBinderApi(editBinderIdx);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`바인더가 수정되었어요`);
 		setCurrentPage('binder');
 		setTimeout(() => {
 			setToastMessageStatus(false);
@@ -160,9 +131,46 @@ export default function Binder() {
 		}
 	};
 
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log(binderList);
+	};
+	const deleteBInderAPI = async idx => {
+		const data = await customApiClient('patch', `/binders/${idx}/status`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+	};
+	const editBinderApi = async idx => {
+		console.log(idx);
+		const body = {
+			name: binderName,
+			// coverImgUrl:
+			// 	'https://cdnimg.melon.co.kr/cm2/album/images/105/54/246/10554246_20210325161233_500.jpg?304eb9ed9c07a16ec6d6e000dc0e7d91',
+		};
+		const data = await customApiClient('patch', `/binders/${idx}`, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		getBinderList();
+	};
+
 	useEffect(() => {
 		// 하단바 띄워주기
+		getBinderList();
 		setBottomNavStatus(true);
+		console.log(binderList);
 	}, []);
 
 	return (
@@ -182,84 +190,133 @@ export default function Binder() {
 							</SubText>
 						</BinderTextWrap>
 						<GridItemWrap>
-							{binderCnt > 0 ? (
+							{binderList.length > 1 ? ( // 생성 바인더 존재하는 경우
 								<>
-									<GridItem onClick={onPrimaryBinderClick}>
-										<GridImage
-											backgroundColor="linear-gradient(180deg, #F0FFF4 -1.86%, #ECEEFF 100%);"
-											marginbottom="0.6875rem"
-										></GridImage>
-										<SubText
-											fontsize="1rem"
-											fontweight="bold"
-											margin="0 0 0.25rem 0 "
-										>
-											기본 바인더
-										</SubText>
-										<SubText fontsize="0.75rem">0개 보관중</SubText>
-									</GridItem>
-									{imageList.map(item => (
-										<GridItem key={item.id}>
-											<GridImage
-												src={item.src}
-												marginbottom="0.6875rem"
-											></GridImage>
-											<GridItemInfo>
+									{binderList.map((item, index) => (
+										<>
+											{item.isBasic === 0 ? ( // 기본 바인더
+												<GridItem key={item.binderIdx}>
+													<GridImage
+														backgroundColor="linear-gradient(180deg, #F0FFF4 -1.86%, #ECEEFF 100%);"
+														marginbottom="0.6875rem"
+														onClick={() =>
+															onEachBinderClick(
+																item.binderIdx,
+																item.name
+															)
+														}
+													></GridImage>
+													<SubText
+														fontsize="1rem"
+														fontweight="bold"
+														margin="0 0 0.25rem 0 "
+													>
+														{item.name}
+													</SubText>
+													<SubText fontsize="0.75rem">
+														{item.dibCount} 개 보관중
+													</SubText>
+												</GridItem>
+											) : (
+												//생성 바인더들
+												<GridItem key={item.binderIdx}>
+													<GridImage
+														src={item.coverImgUrl}
+														marginbottom="0.6875rem"
+														onClick={() =>
+															onEachBinderClick(
+																item.binderIdx,
+																item.name
+															)
+														}
+													></GridImage>
+													<GridItemInfo>
+														<SubText
+															fontsize="1rem"
+															fontweight="bold"
+															margin="0 0 0.25rem 0 "
+														>
+															{item.name}
+														</SubText>
+
+														<EditBinder
+															onClick={() =>
+																onEditBinder(item.binderIdx, index)
+															}
+														></EditBinder>
+													</GridItemInfo>
+													<SubText fontsize="0.75rem">
+														{item.dibCount}개 보관중
+													</SubText>
+												</GridItem>
+											)}
+										</>
+									))}
+								</>
+							) : (
+								// 기본 바인더만 존재할때
+								<>
+									{binderList.map(item => (
+										<>
+											<GridItem key={item.binderIdx}>
+												<GridImage
+													backgroundColor="#f4f4f4"
+													marginbottom="0.6875rem"
+													onClick={() =>
+														onEachBinderClick(item.binderIdx, item.name)
+													}
+												></GridImage>
 												<SubText
 													fontsize="1rem"
 													fontweight="bold"
 													margin="0 0 0.25rem 0 "
 												>
-													{item.id} 바인더
+													{item.name}
 												</SubText>
-
-												<EditBinder onClick={onEditBinder}></EditBinder>
-											</GridItemInfo>
-											<SubText fontsize="0.75rem">{item.id}개 보관중</SubText>
-										</GridItem>
+												<SubText fontsize="0.75rem">
+													{item.dibCount}개 보관중
+												</SubText>
+											</GridItem>
+											<GridItem onClick={onAddBinder}>
+												<AddBinder
+													backgroundColor="#fbf6ff"
+													marginbottom="0.6875rem"
+												>
+													<AddBinderButton
+														style={{
+															width: '1.875rem',
+															height: '1.875rem',
+														}}
+													></AddBinderButton>
+													<SubText
+														fontsize="0.8125rem"
+														margin="0.375rem 0 0.25rem 0"
+													>
+														나만의 바인더를
+													</SubText>
+													<SubText fontsize="0.8125rem">
+														만들어봐요!
+													</SubText>
+												</AddBinder>
+											</GridItem>
+										</>
 									))}
-								</>
-							) : (
-								<>
-									<GridItem>
-										<GridImage
-											backgroundColor="#f4f4f4"
-											marginbottom="0.6875rem"
-										></GridImage>
-										<SubText
-											fontsize="1rem"
-											fontweight="bold"
-											margin="0 0 0.25rem 0 "
-										>
-											기본 바인더
-										</SubText>
-										<SubText fontsize="0.75rem">0개 보관중</SubText>
-									</GridItem>
-									<GridItem onClick={onAddBinder}>
-										<AddBinder
-											backgroundColor="#fbf6ff"
-											marginbottom="0.6875rem"
-										>
-											<AddBinderButton
-												style={{ width: '1.875rem', height: '1.875rem' }}
-											></AddBinderButton>
-											<SubText
-												fontsize="0.8125rem"
-												margin="0.375rem 0 0.25rem 0"
-											>
-												나만의 바인더를
-											</SubText>
-											<SubText fontsize="0.8125rem">만들어봐요!</SubText>
-										</AddBinder>
-									</GridItem>
 								</>
 							)}
 						</GridItemWrap>
 						<BottomSlideMenu>
-							<SubText fontsize="1rem" margin="0.9375rem 0" onClick={editBinder}>
+							<SubText
+								fontsize="1rem"
+								margin="0.9375rem 0"
+								onClick={() => editBinder(editBinderIdx)}
+							>
 								바인더 수정하기
 							</SubText>
-							<SubText fontsize="1rem" margin="0.9375rem 0" onClick={deleteBinder}>
+							<SubText
+								fontsize="1rem"
+								margin="0.9375rem 0"
+								onClick={() => deleteBinder(editBinderIdx)}
+							>
 								바인더 삭제하기
 							</SubText>
 						</BottomSlideMenu>
@@ -276,25 +333,18 @@ export default function Binder() {
 						<div
 							className="rightText"
 							style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
-							onClick={clickNext}
+							onClick={() => onEditBinderFinish(editBinderIdx)}
 						>
 							완료
 						</div>
 					</TopNav>
 					<FeedContainerEdit>
-						<AddImage onClick={onAddCoverImage}>
-							<PictureIconBackground>
-								<BinderAddPicture
-									style={{ width: '2rem', height: '2rem' }}
-								></BinderAddPicture>
-							</PictureIconBackground>
-
-							<SubText fontweight="normal" color="#b1b1b1">
-								커버 이미지 추가
-							</SubText>
-						</AddImage>
+						<AddImage
+							onClick={onAddCoverImage}
+							src={binderList[binderEachIndexinList].coverImgUrl}
+						></AddImage>
 						<BinderName
-							placeholder="내 바인더 이름"
+							placeholder={binderList[binderEachIndexinList].name}
 							value={binderName}
 							type="text"
 							onChange={handleBinderName}
@@ -399,7 +449,17 @@ const AddImage = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
-	background-color: #f6f6f6;
+	/* background-color: #f6f6f6; */
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${props => props.src});
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
 `;
 const BinderName = styled.input`
 	margin-top: 0.75rem;
@@ -424,7 +484,7 @@ const PictureIconBackground = styled.div`
 	width: 3.125rem;
 	height: 3.125rem;
 	border-radius: 50%;
-	background-color: #ebebeb;
+	background-color: grey;
 	margin-bottom: 0.375rem;
 `;
 
