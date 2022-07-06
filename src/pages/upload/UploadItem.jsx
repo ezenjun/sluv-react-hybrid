@@ -16,6 +16,7 @@ import SelectUploadCelebContainer from './SelectUploadCelebContainer';
 import SelectUploadMemberContainer from './SelectUploadMemberContainer';
 import { ReactComponent as InfoIcon } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as Plus } from '../../assets/Icons/img_upload_plus_icon.svg';
 import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 
@@ -197,7 +198,10 @@ export default function UploadItem() {
 								onClick={() => setInfoDialogStatus(!infoDialogStatus)}
 								style={{ width: '1rem', height: '1rem', marginLeft: '0.25rem' }}
 							/>
-							<MiniInfoDialog style={{top: '35px', right: '0'}} openStatus={infoDialogStatus}>
+							<MiniInfoDialog
+								style={{ top: '35px', right: '0' }}
+								openStatus={infoDialogStatus}
+							>
 								<TopWrap>
 									<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
 										바인더 만들기
@@ -216,13 +220,13 @@ export default function UploadItem() {
 								</SubText>
 							</MiniInfoDialog>
 						</SpeechBubbleWrap>
-						
+
 						<ImgUploadBubbleWrap>
-							<input type='file'>
-
-							</input>
+							<UploadButtonWrap>
+								<Plus style={{ width: '24px', height: '24px' }} />
+							</UploadButtonWrap>
+							<input type="file" accept="image/*" />
 						</ImgUploadBubbleWrap>
-
 					</TopRadiusContainer>
 				</MainContainer>
 			)}
@@ -248,6 +252,16 @@ const NoTailBubbleWrap = styled.div`
 	.redStar {
 		color: #ff365f;
 	}
+`;
+
+const UploadButtonWrap = styled.button`
+	width: 5rem;
+	height: 5rem;
+	border-radius: 13px;
+	border: solid 1px #94849d;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 
