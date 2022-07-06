@@ -1376,7 +1376,7 @@ const QuestionContainer = styled.div`
 	flex-direction: column;
 	box-sizing: border-box;
 	padding: 2.5rem 0 3.125rem 1.25rem;
-	background-image: linear-gradient(to top, #f0fff4 102%, #f8f7fa 0%);
+	background: linear-gradient(#f0fff4 -1.86%, #f8f7fa 100%);
 `;
 const QuestionWrap = styled.div`
 	display: flex;
