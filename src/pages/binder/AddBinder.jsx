@@ -36,8 +36,9 @@ export default function AddBinder() {
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
 
 	const handleBinderName = e => {
-		setBinderName(e.target.value);
-		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\s]{1,5}$/; // 한글 영문 숫자 1글자 이상 regex
+		const { value, maxLength } = e.target;
+		setBinderName(value.slice(0, maxLength));
+		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\s]{1,15}$/; // 한글 영문 숫자 1글자 이상 regex
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
@@ -99,7 +100,10 @@ export default function AddBinder() {
 				<div className="centerText">
 					바인더 만들기
 					<BinderHelp style={{ margin: '0 0.25rem' }} onClick={onClickHelp}></BinderHelp>
-					<MiniInfoDialog openStatus={binderHelpStatus}>
+					<MiniInfoDialog
+						style={{ top: '1.875rem', left: '-4.375rem' }}
+						openStatus={binderHelpStatus}
+					>
 						<TopWrap>
 							<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
 								바인더 만들기
@@ -121,6 +125,7 @@ export default function AddBinder() {
 					className="rightText"
 					style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
 					onClick={onMakeBinder}
+					disabled={!isConfirm}
 				>
 					완료
 				</div>
@@ -204,12 +209,10 @@ const PictureIconBackground = styled.div`
 	background-color: #ebebeb;
 	margin-bottom: 0.375rem;
 `;
-const MiniInfoDialog = styled.div`
+export const MiniInfoDialog = styled.div`
 	display: ${props => (props.openStatus ? 'block' : 'none')};
 	position: absolute;
 	text-align: start;
-	top: 1.875rem;
-	left: -4.375rem;
 	z-index: 10000;
 
 	margin-top: 0.4063rem;
@@ -220,7 +223,7 @@ const MiniInfoDialog = styled.div`
 	background-color: #fbf6ff;
 	word-break: keep-all;
 `;
-const TopWrap = styled.div`
+export const TopWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 0.75rem;
