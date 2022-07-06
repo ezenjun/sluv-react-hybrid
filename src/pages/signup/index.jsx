@@ -251,7 +251,10 @@ export default function Signup() {
 	async function handleAuthCodeSendAPI() {
 		const url = `/auth/sms?phone=${phoneNumber}`;
 		const data = await customApiClient('get', url);
-		if (data.isSuccess === true) beginTimer();
+		if(!data) return;
+		if(data.isSuccess) {
+			beginTimer();
+		}
 	}
 	// 인증번호 확인 API
 	async function handleAuthCodeCheckAPI() {

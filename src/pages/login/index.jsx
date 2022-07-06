@@ -23,6 +23,8 @@ export default function Login() {
 
 	async function handleCallbackResponse(response) {
 		// console.log("encoded JWT ID Token: " + response.credential);
+		
+
 		const url = `/auth/google-login?code=${response.credential}`;
 		const data = await customApiClient('get', url);
 		console.log(data);
@@ -47,18 +49,20 @@ export default function Login() {
 		setCurrentPage(1);
 		setSocialLoginComplete(false);
 		/* global google*/
-		google.accounts.id.initialize({
-			client_id: GoogleClient_ID,
-			callback: handleCallbackResponse,
-		});
 
-		google.accounts.id.renderButton(document.getElementById('google'), {
-			type: 'icon',
-			theme: 'outline',
-			size: 'large',
-			width: '40px',
-			shape: 'circle',
-		});
+		// if(google.accounts.id) {
+		// 	google.accounts.id.initialize({
+		// 		client_id: GoogleClient_ID,
+		// 		callback: handleCallbackResponse,
+		// 	});
+		// 	google.accounts.id.renderButton(document.querySelector('#google'), {
+		// 		type: 'icon',
+		// 		theme: 'outline',
+		// 		size: 'large',
+		// 		width: '40px',
+		// 		shape: 'circle',
+		// 	});
+		// }
 		// eslint-disable-next-line
 	}, []);
 
