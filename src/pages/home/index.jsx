@@ -174,9 +174,9 @@ const StyledLink = styled(Link)`
 	border-bottom: ${props => (props.selected ? '2px solid #262626' : 'none')};
 `;
 
-const UploadPopupWrap = styled.div`
+export const UploadPopupWrap = styled.div`
 	display: ${props => (props.openStatus ? 'block' : 'none')};
-	z-index: 10000;
+	z-index: 100000;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -186,7 +186,7 @@ const UploadPopupWrap = styled.div`
 	background-color: rgba(0, 0, 0, 0.7);
 `;
 
-const UploadPopup = styled.div`
+export const UploadPopup = styled.div`
 	position: absolute;
 	left: 50%;
 	transform: translate(-50%, 0);
