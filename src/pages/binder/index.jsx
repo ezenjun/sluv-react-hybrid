@@ -238,7 +238,8 @@ export default function Binder() {
 														<SubText
 															fontsize="1rem"
 															fontweight="bold"
-															margin="0 0 0.25rem 0 "
+															margin="0 0.125rem 0.25rem 0 "
+															style={{ whiteSpace: 'normal' }}
 														>
 															{item.name}
 														</SubText>
