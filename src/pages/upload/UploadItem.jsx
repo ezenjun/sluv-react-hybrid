@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { InputSpeechBubbleWrap, SpeechBubbleInput, SpeechBubbleNoInput, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
+import {
+	InputSpeechBubbleWrap,
+	SpeechBubbleInput,
+	SpeechBubbleNoInput,
+	SpeechBubbleTextArea,
+} from '../../components/Bubbles/InputSpeechBubble';
 import { ImgUploadBubbleWrap, SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -16,8 +21,11 @@ import SelectUploadCelebContainer from './SelectUploadCelebContainer';
 import SelectUploadMemberContainer from './SelectUploadMemberContainer';
 import { ReactComponent as InfoIcon } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as Plus } from '../../assets/Icons/img_upload_plus_icon.svg';
 import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
+import AWS from 'aws-sdk';
+import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -28,54 +36,100 @@ export default function UploadItem() {
 	const selectedMember = useRecoilValue(UploadMemberState);
 
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
+	const [selectedFileList, setSelectedFileList] = useState([]);
+	const [imgUrlList, setImgUrlList] = useState([]);
+
+	const imgInput = useRef();
+
+	AWS.config.update({
+		region: REGION,
+		accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+		secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+	})
+
+	const myBucket = new AWS.S3({
+		params: { Bucket: ITEM_UPLOAD_S3_BUCKET },
+		region: REGION,
+	});
 
 	useEffect(() => {
 		setBottomNavStatus(false);
 		setCurrentPage(0);
-	},[]);
+	}, []);
 
-	const onClickItemCatgeorySelect = () => {
-
+	const onClickItemCatgeorySelect = () => {};
+	const onClickItemBrandSelect = () => {};
+	const onClickItemDateSelect = () => {};
+	const onClickItemPriceSelect = () => {};
+	const onClickItemImgSelect = e => {
+		e.preventDefault();
+		imgInput.current.click();
 	};
-	const onClickItemBrandSelect = () => {
-
-	};
-	const onClickItemDateSelect = () => {
-
-	};
-	const onClickItemPriceSelect = () => {
-
+	const onChangeImg = (e) => {
+		const files = e.target.files;
+		console.log(files);
+		setSelectedFileList(files);
 	};
 
-	const onClickUploadItem = () => {
-		const body = {
-			celebIdx: selectedCeleb.celebIdx,
-			memberIdx: 1,
-			parentCategory: '상의',
-			subCategory: '반소매',
-			brandIdx: 1,
-			name: '어느브랜드의 어느옷',
-			whenDiscovery: '2022-06-30',
-			price: 1,
-			content: '아 추가 정보에요~',
-			sellerSite: 'https://sellerSite.test',
-			itemUrlList: [
-				{
-					isRepresent: 1,
-					itemImgUrl: 'https://test-image-01',
-				},
-				{
-					isRepresent: 0,
-					itemImgUrl: 'https://test-image-02',
-				},
-				{
-					isRepresent: 0,
-					itemImgUrl: 'https://test-image-03',
-				},
-			],
+	const s3ImgUpload = (file) => {
+		const params = {
+			ACL: 'public-read',
+			Body: file,
+			Bucket: ITEM_UPLOAD_S3_BUCKET,
+			Key: file.name,
+			ContentType: 'image/jpeg',
 		};
 
+		myBucket
+			.putObject(params)
+			.on('httpUploadProgress', evt => {
+				console.log(evt);
+			})
+			.on('complete', evt => {
+				console.log(evt);
+				const temp = [];
+				// temp.push({ itemImgUrl: url });
+				setImgUrlList(temp);
+			})
+			.send(err => {
+				if (err) console.log(err);
+			});
 	}
+
+
+	const onClickUploadItem = async (fileList) => {
+
+		fileList.map((_file) => {
+			s3ImgUpload(_file);
+		})
+
+		// const body = {
+		// 	celebIdx: selectedCeleb.celebIdx,
+		// 	memberIdx: 1,
+		// 	parentCategory: '상의',
+		// 	subCategory: '반소매',
+		// 	brandIdx: 1,
+		// 	name: '어느브랜드의 어느옷',
+		// 	whenDiscovery: '2022-06-30',
+		// 	price: 1,
+		// 	content: '아 추가 정보에요~',
+		// 	sellerSite: 'https://sellerSite.test',
+		// 	itemUrlList: [
+		// 		{
+		// 			isRepresent: 1,
+		// 			itemImgUrl: 'https://test-image-01',
+		// 		},
+		// 		{
+		// 			isRepresent: 0,
+		// 			itemImgUrl: 'https://test-image-02',
+		// 		},
+		// 		{
+		// 			isRepresent: 0,
+		// 			itemImgUrl: 'https://test-image-03',
+		// 		},
+		// 	],
+		// };
+	};
 
 	return (
 		<>
@@ -88,7 +142,7 @@ export default function UploadItem() {
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							정보 공유하기
 						</MainText>
-						<div className="rightText" onClick={onClickUploadItem}>
+						<div className="rightText" onClick={() => onClickUploadItem(selectedFileList)}>
 							등록
 						</div>
 					</TopNav>
@@ -197,7 +251,10 @@ export default function UploadItem() {
 								onClick={() => setInfoDialogStatus(!infoDialogStatus)}
 								style={{ width: '1rem', height: '1rem', marginLeft: '0.25rem' }}
 							/>
-							<MiniInfoDialog style={{top: '35px', right: '0'}} openStatus={infoDialogStatus}>
+							<MiniInfoDialog
+								style={{ top: '35px', right: '0' }}
+								openStatus={infoDialogStatus}
+							>
 								<TopWrap>
 									<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
 										바인더 만들기
@@ -216,13 +273,20 @@ export default function UploadItem() {
 								</SubText>
 							</MiniInfoDialog>
 						</SpeechBubbleWrap>
-						
+
 						<ImgUploadBubbleWrap>
-							<input type='file'>
-
-							</input>
+							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
+								<Plus style={{ width: '24px', height: '24px' }} />
+							</UploadButtonWrap>
+							<input
+								type="file"
+								accept="image/*"
+								ref={imgInput}
+								style={{ display: 'none' }}
+								onChange={onChangeImg}
+								multiple
+							/>
 						</ImgUploadBubbleWrap>
-
 					</TopRadiusContainer>
 				</MainContainer>
 			)}
@@ -250,6 +314,12 @@ const NoTailBubbleWrap = styled.div`
 	}
 `;
 
-
-
-
+const UploadButtonWrap = styled.button`
+	width: 5rem;
+	height: 5rem;
+	border-radius: 13px;
+	border: solid 1px #94849d;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
