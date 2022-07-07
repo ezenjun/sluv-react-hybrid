@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
-import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
+import { SignupProgressState, SocialLoginCompleteState, SocialLoginUserIdxState } from '../../recoil/User';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -26,6 +26,7 @@ import {
 export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
+	const socialLoginUserIdx = useRecoilValue(SocialLoginUserIdxState);
 
 	const [allCheck, setAllCheck] = useState(false);
 	const [ageCheck, setAgeCheck] = useState(false);
@@ -306,30 +307,54 @@ export default function Signup() {
 		}
 	}
 	// 최종 회원가입 용 API
+	const onPostLocalSignUp = async () => {
+		const body = {
+			phoneNumber: phoneNumber,
+			email: email,
+			pwd: password,
+			nickName: nickname,
+		};
+		const postUserSignupUri = '/auth/signup';
+		const data = await customApiClient('post', postUserSignupUri, body);
+
+		if(!data) return;
+		if(!data.isSuccess) return;
+
+		console.log(data.result.jwt);
+		localStorage.setItem('x-access-token', data.result.jwt);
+
+		handleNextClick();
+	}
+
+	const onPatchNickname = async () => {
+		const body = {
+			nickName: nickname,
+		};
+		const uri = `/users/${socialLoginUserIdx}/nickname`;
+		const data = await customApiClient('patch', uri, body);
+		console.log(data);
+		if (!data) return;
+		if (!data.isSuccess) return;
+
+		handleNextClick();
+	}
 
 	async function handleSignUpAPI() {
 		const url = `/users/nickname-check?nickname=${nickname}`;
 		const data = await customApiClient('get', url);
-		if (data.isSuccess === true) {
-			console.log('닉네임 등록 성공');
-			const body = {
-				phoneNumber: phoneNumber,
-				email: email,
-				pwd: password,
-				nickName: nickname,
-			};
-			const postUserSignupUri = '/auth/signup';
-			const data = await customApiClient('post', postUserSignupUri, body);
-			if (data.isSuccess === true) {
-				alert('회원 생성 완료');
-				console.log('회원 생성 완료');
-				console.log(data.result.jwt);
-				//토큰저장
-				localStorage.setItem('x-access-token', data.result.jwt);
-
-				handleNextClick();
+		if (data.isSuccess) {
+			if (localStorage.getItem('x-access-token')) {
+				// 소셜로그인 사용자
+				// 닉네임 변경 API 호출
+				onPatchNickname();
+			} else {
+				// 최초 사용자
+				// 회원가입 API 호출
+				console.log('hi');
+				onPostLocalSignUp();
 			}
 		} else {
+
 			setNicknameValid(false);
 			alert(data.message);
 			console.log(data.message);
