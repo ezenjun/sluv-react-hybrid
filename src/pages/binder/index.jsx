@@ -53,9 +53,7 @@ export default function Binder() {
 	const onAddBinder = () => {
 		navigate('./add');
 	};
-	const onPrimaryBinderClick = () => {
-		navigate('./1');
-	};
+
 	const onEachBinderClick = (idx, name) => {
 		navigate(`./${idx}`, { state: name });
 	};
@@ -79,9 +77,8 @@ export default function Binder() {
 		setCurrentPage('edit');
 		setBottomMenuStatusState(false);
 	};
-	const deleteBinder = editBinderIdx => {
+	const deleteBinder = () => {
 		setCurrentPage('delete');
-		deleteBInderAPI(editBinderIdx);
 		setPopUpModalStatusState(true);
 	};
 	const cancleDelete = () => {
@@ -91,33 +88,10 @@ export default function Binder() {
 	};
 	const confirmDelete = () => {
 		getBinderList();
-		setPopUpModalStatusState(false);
-		setBottomMenuStatusState(false);
-		setToastMessageBottomPosition('3.875rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setToastMessage(`바인더가 삭제되었어요`);
-		setCurrentPage('binder');
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
+		deleteBInderAPI(editBinderIdx);
 	};
 	const onEditBinderFinish = () => {
 		editBinderApi(editBinderIdx);
-		setToastMessageBottomPosition('3.875rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setToastMessage(`바인더가 수정되었어요`);
-		setCurrentPage('binder');
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
 	};
 	const onAddCoverImage = () => {
 		setBottomMenuStatusState(true);
@@ -148,10 +122,27 @@ export default function Binder() {
 	};
 	const deleteBInderAPI = async idx => {
 		const data = await customApiClient('patch', `/binders/${idx}/status`);
+		const binderIndex = binderList.findIndex(binder => binder.binderIdx === idx);
+		const name = binderList[binderIndex].name;
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
-			return;
+			if (data.code) return;
+		} else {
+			setPopUpModalStatusState(false);
+			setBottomMenuStatusState(false);
+			setToastMessageBottomPosition('3.875rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage(`${name} 바인더가 삭제되었어요`);
+			getBinderList();
+			setCurrentPage('binder');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
 		}
 	};
 	const editBinderApi = async idx => {
@@ -164,10 +155,35 @@ export default function Binder() {
 		const data = await customApiClient('patch', `/binders/${idx}`, body);
 		if (!data) return;
 		if (!data.isSuccess) {
-			console.log(data.message);
+			if (data.code === 3080) {
+				setToastMessageBottomPosition('3.875rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage(`이미 같은 이름의 바인더가 있어요`);
+				setCurrentPage('edit');
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
+			}
 			return;
+		} else {
+			setToastMessageBottomPosition('3.875rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage(`바인더 이름이 변경되었어요`);
+			setCurrentPage('edit');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+			setCurrentPage('binder');
+			getBinderList();
 		}
-		getBinderList();
 	};
 
 	useEffect(() => {
@@ -366,7 +382,7 @@ export default function Binder() {
 				</MainContainer>
 			)}
 			{currentPage === 'delete' && (
-				<PopUpModal closeButton={true}>
+				<PopUpModal closeButton={true} closeFunction={cancleDelete}>
 					<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
 						선택하신 바인더를 <br />
 						삭제하시나요?

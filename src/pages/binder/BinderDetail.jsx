@@ -115,19 +115,6 @@ export default function BinderDetail() {
 	};
 	const onChangeBinder = toidx => {
 		MoveDipList(params.idx, toidx);
-
-		setBottomMenuStatusState(false);
-		setToastMessageBottomPosition('3.875rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setEditStatus(false);
-		setToastMessage(`아이템이 '바인더이름' 바인더로 이동했어요`);
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
 	};
 	const location = useLocation();
 	const [binderName, setBinderName] = useState('');
@@ -161,13 +148,29 @@ export default function BinderDetail() {
 	};
 	const MoveDipList = async (binderIdx, toIdx) => {
 		const body = { itemIdxList: selectedItemList };
+		const binderIndex = binderList.findIndex(binder => binder.binderIdx === toIdx);
+		const name = binderList[binderIndex].name;
 		const data = await customApiClient('patch', `/dibs/${binderIdx}/${toIdx}`, body);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			console.log(data.code);
 			return;
+		} else {
+			setBottomMenuStatusState(false);
+			setToastMessageBottomPosition('3.875rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setEditStatus(false);
+			setToastMessage(`아이템이 ${name} 바인더로 이동했어요`);
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+			getDipList(binderIdx);
 		}
-		getDipList(binderIdx);
 	};
 
 	const [binderList, setBinderList] = useState([]);
@@ -350,7 +353,7 @@ export default function BinderDetail() {
 							{binder.name}
 						</SubText>
 						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
-							{binder.dibCount}
+							&nbsp;({binder.dibCount})
 						</SubText>
 					</RowWrap>
 				))}
@@ -447,7 +450,7 @@ const Image = styled.div`
 	/* align-items: flex-end; */
 	position: relative;
 	border-radius: 1rem;
-	background-color: blue;
+	background-color: ${props => props.backgroundColor || '#f6f6f6'};
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
