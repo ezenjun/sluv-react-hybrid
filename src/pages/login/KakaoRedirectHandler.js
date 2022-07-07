@@ -2,9 +2,14 @@ import React, { useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { customApiClient } from "../../utils/apiClient";
+import { useSetRecoilState } from "recoil";
+import { SignupProgressState, SocialLoginUserIdxState } from "../../recoil/User";
 
 export default function KakaoRedirectHandler (){
     const navigate = useNavigate();
+
+    const setCurrentPage = useSetRecoilState(SignupProgressState); 
+    const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
 
     useEffect(() => {
         getKakaoJwt();
@@ -17,14 +22,19 @@ export default function KakaoRedirectHandler (){
         const data = await customApiClient('get', url);
 
         if(data.code === 3001) {
+            console.log('중복된 사용자입니다.');
             console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt); 
             navigate('/home'); 
         } 
         if(data.code === 1000) {
+            console.log('최초 회원가입 사용자입니다.');
             console.log(data.result.jwt);
             localStorage.setItem('x-access-token', data.result.jwt);  
             // 닉네임으로 페이지 변경
+            setCurrentPage(4);
+            setUserIdx(data.result.userIdx);
+            navigate('/signup');
         }
         
     }
