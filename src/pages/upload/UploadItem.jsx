@@ -25,7 +25,7 @@ import { ReactComponent as Plus } from '../../assets/Icons/img_upload_plus_icon.
 import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 import AWS from 'aws-sdk';
-import { myBucket, REGION, S3_BUCKET } from '../../utils/s3Module';
+import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -36,7 +36,8 @@ export default function UploadItem() {
 	const selectedMember = useRecoilValue(UploadMemberState);
 
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
-	const [selectedFile, setSelectedFile] = useState(null);
+	const [selectedFileList, setSelectedFileList] = useState([]);
+	const [imgUrlList, setImgUrlList] = useState([]);
 
 	const imgInput = useRef();
 
@@ -44,13 +45,12 @@ export default function UploadItem() {
 		region: REGION,
 		accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
 		secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-	});
+	})
 
 	const myBucket = new AWS.S3({
-		params: { Bucket: S3_BUCKET },
+		params: { Bucket: ITEM_UPLOAD_S3_BUCKET },
 		region: REGION,
 	});
-
 
 	useEffect(() => {
 		setBottomNavStatus(false);
@@ -65,23 +65,20 @@ export default function UploadItem() {
 		e.preventDefault();
 		imgInput.current.click();
 	};
-	const onChangeImg = async (e) => {
-		const file = e.target.files[0];
-		setSelectedFile(file);
-
-
-		
+	const onChangeImg = (e) => {
+		const files = e.target.files;
+		console.log(files);
+		setSelectedFileList(files);
 	};
 
-	const onClickUploadItem = file => {
+	const s3ImgUpload = (file) => {
 		const params = {
 			ACL: 'public-read',
 			Body: file,
-			Bucket: S3_BUCKET,
+			Bucket: ITEM_UPLOAD_S3_BUCKET,
 			Key: file.name,
 			ContentType: 'image/jpeg',
 		};
-
 
 		myBucket
 			.putObject(params)
@@ -90,10 +87,21 @@ export default function UploadItem() {
 			})
 			.on('complete', evt => {
 				console.log(evt);
+				const temp = [];
+				// temp.push({ itemImgUrl: url });
+				setImgUrlList(temp);
 			})
 			.send(err => {
 				if (err) console.log(err);
 			});
+	}
+
+
+	const onClickUploadItem = async (fileList) => {
+
+		fileList.map((_file) => {
+			s3ImgUpload(_file);
+		})
 
 		// const body = {
 		// 	celebIdx: selectedCeleb.celebIdx,
@@ -134,7 +142,7 @@ export default function UploadItem() {
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							정보 공유하기
 						</MainText>
-						<div className="rightText" onClick={() => onClickUploadItem(selectedFile)}>
+						<div className="rightText" onClick={() => onClickUploadItem(selectedFileList)}>
 							등록
 						</div>
 					</TopNav>
@@ -276,6 +284,7 @@ export default function UploadItem() {
 								ref={imgInput}
 								style={{ display: 'none' }}
 								onChange={onChangeImg}
+								multiple
 							/>
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>

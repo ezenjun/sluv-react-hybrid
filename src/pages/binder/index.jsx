@@ -144,7 +144,7 @@ export default function Binder() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log(binderList);
+		console.log(data.result);
 	};
 	const deleteBInderAPI = async idx => {
 		const data = await customApiClient('patch', `/binders/${idx}/status`);
