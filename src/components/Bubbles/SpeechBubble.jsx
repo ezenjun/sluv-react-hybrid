@@ -34,17 +34,18 @@ export const SpeechBubbleWrap = styled.div`
 `;
 
 export const ImgUploadBubbleWrap = styled.div`
-	display: inline-block;
+	overflow-x: auto;
+	float: right;
 	display: flex;
 	background-color: white;
 	position: relative;
 	padding: 0.625rem;
 	margin-right: 0.5rem;
+	margin-top: 1rem;
 	border-radius: 13px;
 	-moz-border-radius: 13px;
 	-webkit-border-radius: 13px;
 	border: solid 1px #e5cff6;
-	height: 5.625rem;
 
 	::before {
 		content: '';
@@ -55,6 +56,9 @@ export const ImgUploadBubbleWrap = styled.div`
 		height: 0;
 		border-bottom: 0.5rem solid transparent;
 		border-left: 0.5rem solid white;
+	}
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
 
