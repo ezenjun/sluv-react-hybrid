@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { BottomNavState } from '../../recoil/BottomNav';
@@ -20,20 +20,62 @@ import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { ReactComponent as BinderHelp } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import AWS from 'aws-sdk';
+import { BINDER_COVER_IMAGE_S3_BUCKET, REGION } from '../../utils/s3Module';
+
+AWS.config.update({
+	region: REGION,
+	accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+});
 
 export default function AddBinder() {
 	const navigate = useNavigate();
-	const [isConfirm, setIsConfirm] = useState(false);
+
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [binderName, setBinderName] = useState('');
 	const [binderHelpStatus, setBinderHelpStatus] = useState(false);
-	const onAlbumClick = () => {
-		alert('앨범');
+
+	const [binderName, setBinderName] = useState('');
+	const [isConfirm, setIsConfirm] = useState(false);
+	const [selectedFile, setSelectedFile] = useState('');
+	const [coverImgUrl, setCoverImgUrl] = useState('');
+
+	const coverImgInput = useRef();
+
+	useEffect(() => {
+		if(binderName && coverImgUrl && isConfirm) {
+			onPostBinder();
+		}
+	},[binderName, coverImgUrl, isConfirm])
+
+	const myBucket = new AWS.S3({
+		params: { Bucket: BINDER_COVER_IMAGE_S3_BUCKET },
+		region: REGION,
+	});
+
+	const onAlbumClick = e => {
+		e.preventDefault();
+		coverImgInput.current.click();
 	};
 	const onDefaultClick = () => {
 		alert('기본 커버');
 	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
+
+	const onChangeCoverImg = e => {
+		const file = e.target.files[0];
+
+		if (!file) return;
+
+		setSelectedFile(file);
+
+		const imgEL = document.querySelector('.img__box');
+		const reader = new FileReader();
+		reader.onload = () => (imgEL.style.backgroundImage = `url(${reader.result})`);
+		reader.readAsDataURL(file);
+
+		setBottomMenuStatusState(false);
+	};
 
 	const handleBinderName = e => {
 		const { value, maxLength } = e.target;
@@ -47,14 +89,50 @@ export default function AddBinder() {
 			setIsConfirm(false);
 		}
 	};
-	const onMakeBinder = async () => {
-		console.log('clicked');
-		const body = {
-			isBasic: 1,
-			name: binderName,
-			coverImgUrl:
-				'https://search.pstatic.net/sunny/?src=https%3A%2F%2Fi.pinimg.com%2F736x%2Fb1%2Fed%2F92%2Fb1ed92fb77d54b2fb88cd313b66882c6.jpg&type=sc960_832',
+
+	const s3ImgUpload = (file) => {
+		const params = {
+			ACL: 'public-read',
+			Body: file,
+			Bucket: BINDER_COVER_IMAGE_S3_BUCKET,
+			Key: file.name,
+			ContentType: 'image/jpeg',
 		};
+		myBucket
+			.putObject(params)
+			.on('httpUploadProgress', evt => {
+				console.log(evt);
+			})
+			.on('complete', evt => {
+				console.log(
+					'https://' +
+						evt.request.httpRequest.endpoint.host +
+						evt.request.httpRequest.path
+				);
+				setCoverImgUrl(
+					'https://' +
+						evt.request.httpRequest.endpoint.host +
+						evt.request.httpRequest.path
+				);
+			})
+			.send(err => {
+				if (err) console.log(err);
+			});
+	}
+	const onPostBinder = async () => {
+		let body = {};
+		if(coverImgUrl) {
+			body = {
+				isBasic: 1,
+				name: binderName,
+				coverImgUrl: coverImgUrl,
+			}
+		} else {
+			body = {
+				isBasic: 1,
+				name: binderName,
+			};
+		}
 		const data = await customApiClient('post', '/binders', body);
 
 		if (!data.isSuccess) {
@@ -75,6 +153,15 @@ export default function AddBinder() {
 			}, 2300);
 		} else {
 			navigate('/binder');
+		}
+	}
+
+	const onMakeBinder = async () => {
+		// 이미지 업로드 
+		if(selectedFile) {
+			s3ImgUpload(selectedFile);
+		} else {
+			onPostBinder();
 		}
 	};
 
@@ -132,16 +219,28 @@ export default function AddBinder() {
 			</TopNav>
 			<FeedContainer>
 				<AddImage onClick={onAddCoverImage}>
-					<PictureIconBackground>
-						<BinderAddPicture
-							style={{ width: '2rem', height: '2rem' }}
-						></BinderAddPicture>
-					</PictureIconBackground>
+					{!selectedFile && (
+						<>
+							<PictureIconBackground>
+								<BinderAddPicture
+									style={{ width: '2rem', height: '2rem' }}
+								></BinderAddPicture>
+							</PictureIconBackground>
 
-					<SubText fontweight="normal" color="#b1b1b1">
-						커버 이미지 추가
-					</SubText>
+							<SubText fontweight="normal" color="#b1b1b1">
+								커버 이미지 추가
+							</SubText>
+						</>
+					)}
+					<CoverImage className="img__box" />
 				</AddImage>
+				<input
+					type="file"
+					accept="image/*"
+					ref={coverImgInput}
+					style={{ display: 'none' }}
+					onChange={onChangeCoverImg}
+				/>
 				<BinderName
 					placeholder="내 바인더 이름"
 					value={binderName}
@@ -150,12 +249,16 @@ export default function AddBinder() {
 				/>
 			</FeedContainer>
 			<BottomSlideMenu>
-				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onAlbumClick}>
-					앨범에서 사진선택
-				</SubText>
-				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
-					기본 커버 선택
-				</SubText>
+				<div style={{ padding: '0.9375rem 0' }}>
+					<SubText fontsize="1rem" onClick={onAlbumClick}>
+						앨범에서 사진선택
+					</SubText>
+				</div>
+				<div style={{ padding: '0.9375rem 0' }}>
+					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
+						기본 커버 선택
+					</SubText>
+				</div>
 			</BottomSlideMenu>
 		</MainContainer>
 	);
@@ -175,6 +278,7 @@ const FeedContainer = styled.div`
 `;
 const AddImage = styled.div`
 	display: flex;
+	postion: relative;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -183,6 +287,16 @@ const AddImage = styled.div`
 	border-radius: 1rem;
 	background-color: #f6f6f6;
 `;
+
+const CoverImage = styled.div`
+	position: absolute;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	width: 10.125rem;
+	height: 10.125rem;
+`;
+
 const BinderName = styled.input`
 	margin-top: 0.75rem;
 	outline: none;
