@@ -3,7 +3,7 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
-export function BottomSlideMenu({ children, props }) {
+export function BottomSlideMenu({ menu, children, filter }) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const closeDialog = () => {
@@ -16,8 +16,33 @@ export function BottomSlideMenu({ children, props }) {
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
 			<BottomDialogDiv>
 				<CloseWrap>
+					{filter ? <></> : <></>}
+					{menu ? (
+						<div
+							style={{
+								display: 'flex',
+								position: 'relative',
+								left: '50%',
+								transform: 'translate(-50%)',
+								height: '1.5rem',
+								alignItems: 'center',
+								fontSize: '1.125rem',
+								fontWeight: 'bold',
+							}}
+						>
+							{menu}
+						</div>
+					) : (
+						<div></div>
+					)}
+
 					<Close
-						style={{ width: '1.5rem', height: '1.5rem' }}
+						style={{
+							width: '1.5rem',
+							height: '1.5rem',
+							position: 'absolute',
+							right: '1.25rem',
+						}}
 						onClick={closeDialog}
 					></Close>
 				</CloseWrap>
@@ -57,6 +82,6 @@ const BottomDialogDiv = styled.div`
 `;
 const CloseWrap = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	/* justify-content: flex-end; */
 	padding: 0 1.25rem;
 `;

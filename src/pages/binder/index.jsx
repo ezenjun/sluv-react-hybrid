@@ -309,7 +309,7 @@ export default function Binder() {
 								</>
 							)}
 						</GridItemWrap>
-						<BottomSlideMenu>
+						<BottomSlideMenu menu="수정하기">
 							<SubText
 								fontsize="1rem"
 								margin="0.9375rem 0"
@@ -355,7 +355,7 @@ export default function Binder() {
 							onChange={handleBinderName}
 						/>
 					</FeedContainerEdit>
-					<BottomSlideMenu>
+					<BottomSlideMenu menu="아이템 종류">
 						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onAlbumClick}>
 							앨범에서 사진선택
 						</SubText>
