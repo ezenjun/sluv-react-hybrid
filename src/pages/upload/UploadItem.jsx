@@ -26,6 +26,7 @@ import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 import AWS from 'aws-sdk';
 import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
+import { BottomDialogWrap } from '../../components/containers/BottomSlideMenu';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -58,7 +59,10 @@ export default function UploadItem() {
 	}, []);
 
 	const onClickItemCatgeorySelect = () => {};
-	const onClickItemBrandSelect = () => {};
+	const onClickItemBrandSelect = () => {
+
+
+	};
 	const onClickItemDateSelect = () => {};
 	const onClickItemPriceSelect = () => {};
 	const onClickItemImgSelect = e => {
@@ -288,6 +292,10 @@ export default function UploadItem() {
 							/>
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>
+
+					<BottomDialogWrap>
+						
+					</BottomDialogWrap>
 				</MainContainer>
 			)}
 		</>

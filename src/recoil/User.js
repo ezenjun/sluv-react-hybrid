@@ -9,3 +9,8 @@ export const SocialLoginCompleteState = atom({
 	key: 'SocialLoginCompleteState',
 	default: false,
 });
+
+export const SocialLoginUserIdxState = atom({
+	key: 'SocialLoginUserIdxState',
+	default: -1,
+});
