@@ -18,9 +18,19 @@ export default function PriceFilter() {
 		{ idx: 10, name: '갈색', color: '#9A6B41' },
 		{ idx: 11, name: '회색', color: '#BEBEBE' },
 		{ idx: 12, name: '검정', color: '#000000' },
-		{ idx: 13, name: '흰색', color: '#FFFFFF', border: 'solid 1px #c9c9c9;' },
-		{ idx: 14, name: '실버', color: 'linear-gradient(179deg, #c7c7c7 1%, #eee 69%)' },
-		{ idx: 15, name: '골드', color: 'linear-gradient(to bottom, #f2a840 -6%, #fbe779 106%)' },
+		{ idx: 13, name: '흰색', color: '#FFFFFF', border: 'solid 1px #c9c9c9;', checkBlack: true },
+		{
+			idx: 14,
+			name: '실버',
+			color: 'linear-gradient(179deg, #c7c7c7 1%, #eee 69%)',
+			// checkBlack: true,
+		},
+		{
+			idx: 15,
+			name: '골드',
+			color: 'linear-gradient(to bottom, #f2a840 -6%, #fbe779 106%)',
+			// checkBlack: true,
+		},
 	];
 
 	const [selectedStatusList, setSelectedStatusList] = useState([]);
@@ -37,6 +47,7 @@ export default function PriceFilter() {
 		let temp = selectedStatusList;
 		temp[index] = !temp[index];
 		setSelectedStatusList(temp);
+		console.log('clickedIndex', index);
 		console.log(selectedFilterList);
 	};
 
@@ -46,13 +57,19 @@ export default function PriceFilter() {
 				<Filter
 					key={filter.idx}
 					selected={selectedStatusList[index] === filter.idx}
-					onClick={() => eachStatusClick(filter.idx)}
+					onClick={() => eachStatusClick(filter.idx, index)}
 				>
 					<Color color={filter.color} border={filter.border}>
-						{filter.name === ('흰색' || '베이지' || '골드' || '실버') ? (
-							<BlackCheck></BlackCheck>
+						{selectedStatusList[index] ? (
+							<>
+								{filter.checkBlack ? (
+									<BlackCheck></BlackCheck>
+								) : (
+									<WhiteCheck></WhiteCheck>
+								)}
+							</>
 						) : (
-							<WhiteCheck></WhiteCheck>
+							<></>
 						)}
 					</Color>
 					{filter.name}
@@ -65,7 +82,7 @@ export default function PriceFilter() {
 const FilterContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	padding: 1.25rem;
+	padding: 0 1.25rem;
 	flex-direction: row;
 	flex-wrap: wrap;
 	box-sizing: border-box;
