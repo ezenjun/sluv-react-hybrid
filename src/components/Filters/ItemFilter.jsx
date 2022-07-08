@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
-export default function ItemFilter() {
+export function ItemFilter() {
 	const filterList = [
 		{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
 		{ idx: 2, name: '하의', list: ['바지', '치마'] },
