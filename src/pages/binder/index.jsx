@@ -564,9 +564,9 @@ const ButtonWrap = styled.div`
 const Button = styled.div`
 	background-color: ${props => props.backgroundColor};
 	box-sizing: border-box;
-	width: 8.9375rem;
+	width: 47%;
 	height: 3rem;
-	padding: 15px 0;
+	padding: 0.9375rem 0;
 	font-family: Pretendard;
 	font-size: 1rem;
 	font-weight: bold;

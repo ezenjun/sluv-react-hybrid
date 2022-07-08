@@ -38,67 +38,88 @@ import { ReactComponent as DeleteBinderWhite } from '../../assets/Icons/deleteBi
 
 export default function BinderDetail() {
 	const navigate = useNavigate();
+	const params = useParams();
+	const location = useLocation();
+
+	const [binderName, setBinderName] = useState('');
+	const [dipList, setDipList] = useState([]);
 	const [editStatus, setEditStatus] = useState(false);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
-	// const [selectedItemList, setSelectedItemList] = useState([]);
+
 	const [selectedStatusList, setSelectedStatusList] = useState([]);
-
 	const [selectedItemList, setSelectedItemList] = useState([]);
-	const eachStatusClick = (index, itemIdx) => {
-		console.log('index', index);
-		let tempGroup = [];
-		if (editStatus) {
-			let newArr = selectedStatusList;
-			if (selectedStatusList[index]) {
-				newArr[index] = false;
-				setSelectedStatusList(newArr);
-				tempGroup = selectedItemList;
-				setSelectedItemList(tempGroup.filter(item => item !== itemIdx));
-				console.log(selectedStatusList[index]);
-				console.log('selectedItemList', selectedItemList);
-			} else {
-				// 선택 안되어있을 때
-				newArr[index] = true;
-				setSelectedStatusList(newArr);
-
-				setSelectedItemList([...selectedItemList, { itemIdx: itemIdx }]);
-				console.log(selectedStatusList[index]);
-				console.log('selectedItemList', selectedItemList);
-			}
-		}
-	};
-
-	const onMoveItem = () => {
-		getBinderList();
-		setBottomMenuStatusState(true);
-	};
-	const onCreateBinder = () => {
-		navigate('../binder/add');
-		setBottomMenuStatusState(false);
-	};
-
-	const onEdit = () => {
-		setEditStatus(!editStatus);
-	};
 
 	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
-	const onDeleteItem = () => {
-		setPopUpModalStatusState(true);
-		setEditStatus(false);
-	};
-
-	const cancleDelete = () => {
-		setPopUpModalStatusState(false);
-		setBottomMenuStatusState(false);
-	};
-
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	const params = useParams();
-	const confirmDelete = () => {
+
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log(binderList);
+	};
+
+	useEffect(() => {
+		if (location.state) {
+			setBinderName(location.state);
+		}
+		getDipList(params.idx);
+		// 하단바 띄워주기
+		setBottomNavStatus(false);
+	}, []);
+
+	const eachStatusClick = (index, itemIdx) => {
+		if (editStatus) {
+			if (selectedStatusList[index]) {
+				//선택되어있을 때
+				setSelectedItemList(selectedItemList.filter(item => item.itemIdx !== itemIdx));
+			} else {
+				// 선택 안되어있을 때
+				setSelectedItemList([...selectedItemList, { itemIdx: itemIdx }]);
+			}
+			let temp = selectedStatusList;
+			temp[index] = !temp[index];
+			setSelectedStatusList(temp);
+		}
+	};
+
+	//바인더 상세 편집버튼 클릭
+	const onEdit = () => {
+		setEditStatus(!editStatus);
+	};
+	// 아이템 선택 후 이동 버튼
+	const onMoveItem = () => {
+		getBinderList();
+		setBottomMenuStatusState(true);
+	};
+	// 아이템 선택 후 새로운 바인더 생성 후 새 바인더로 이동
+	const onCreateBinder = () => {
+		navigate('../binder/add', {
+			state: { fromBinderIdx: params.idx, selectedList: selectedItemList },
+		});
+		setBottomMenuStatusState(false);
+	};
+	// 아이템 선택 후 하단 삭제 버튼
+	const onDeleteItem = () => {
+		setPopUpModalStatusState(true);
+		setEditStatus(false);
+	};
+	// 아이템 삭제 선택 후 팹업 모달에서 삭제 취소
+	const onCancleDelete = () => {
+		setPopUpModalStatusState(false);
+		setBottomMenuStatusState(false);
+	};
+	// 아이템 삭제 선택 후 팹업 모달에서 삭제 확인
+	const onConfirmDelete = () => {
 		setPopUpModalStatusState(false);
 		setBottomMenuStatusState(false);
 		deleteDipList(params.idx);
@@ -113,14 +134,7 @@ export default function BinderDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-	const onChangeBinder = toidx => {
-		MoveDipList(params.idx, toidx);
-	};
-	const location = useLocation();
-	const [binderName, setBinderName] = useState('');
-
-	const [dipList, setDipList] = useState([]);
-
+	// 바인더 내 찜 목록
 	const getDipList = async binderIdx => {
 		const data = await customApiClient('get', `/dibs/${binderIdx}`);
 		if (!data) return;
@@ -135,7 +149,7 @@ export default function BinderDetail() {
 		setSelectedStatusList(temp);
 		console.log('SelectedStatusList', selectedStatusList);
 	};
-
+	// 바인더 내 선택 찜 삭제
 	const deleteDipList = async binderIdx => {
 		const body = { itemIdxList: selectedItemList };
 		const data = await customApiClient('patch', `/dibs/${binderIdx}`, body);
@@ -146,7 +160,14 @@ export default function BinderDetail() {
 		}
 		getDipList(params.idx);
 	};
+	// 바인더 내 선택 찜 타 바인더로 이동
+	const onChangeBinder = toidx => {
+		MoveDipList(params.idx, toidx);
+	};
 	const MoveDipList = async (binderIdx, toIdx) => {
+		console.log(toIdx);
+		console.log(binderIdx);
+		console.log(selectedItemList);
 		const body = { itemIdxList: selectedItemList };
 		const binderIndex = binderList.findIndex(binder => binder.binderIdx === toIdx);
 		const name = binderList[binderIndex].name;
@@ -173,27 +194,6 @@ export default function BinderDetail() {
 		}
 	};
 
-	const [binderList, setBinderList] = useState([]);
-	const getBinderList = async () => {
-		const data = await customApiClient('get', '/binders');
-		if (!data) return;
-		if (!data.isSuccess) {
-			console.log(data.message);
-			return;
-		}
-		setBinderList(data.result);
-		console.log(binderList);
-	};
-
-	useEffect(() => {
-		if (location.state) {
-			console.log(location.state);
-			setBinderName(location.state);
-		}
-		getDipList(params.idx);
-		// 하단바 띄워주기
-		setBottomNavStatus(false);
-	}, []);
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav style={{ justifyContent: 'space-between' }}>
@@ -340,7 +340,6 @@ export default function BinderDetail() {
 					<ImageWrap>
 						<PlusButton></PlusButton>
 					</ImageWrap>
-
 					<SubText fontsize="1rem" margin="0.9375rem 0">
 						바인더 만들기
 					</SubText>
@@ -369,10 +368,10 @@ export default function BinderDetail() {
 					삭제되어 복구하실 수 없어요
 				</SubText>
 				<ButtonWrap>
-					<Button backgroundColor="#c9c9c9" onClick={cancleDelete}>
+					<Button backgroundColor="#c9c9c9" onClick={() => onCancleDelete}>
 						취소
 					</Button>
-					<Button backgroundColor="#9e30f4" onClick={confirmDelete}>
+					<Button backgroundColor="#9e30f4" onClick={() => onConfirmDelete}>
 						삭제
 					</Button>
 				</ButtonWrap>

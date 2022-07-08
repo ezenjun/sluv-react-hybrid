@@ -32,6 +32,8 @@ AWS.config.update({
 
 export default function AddBinder() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const coverImgInput = useRef();
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [binderHelpStatus, setBinderHelpStatus] = useState(false);
@@ -41,7 +43,12 @@ export default function AddBinder() {
 	const [selectedFile, setSelectedFile] = useState('');
 	const [coverImgUrl, setCoverImgUrl] = useState('');
 
-	const coverImgInput = useRef();
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
 	useEffect(() => {
 		if (binderName && coverImgUrl && isConfirm) {
@@ -62,7 +69,6 @@ export default function AddBinder() {
 		alert('기본 커버');
 	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
-
 	const onChangeCoverImg = e => {
 		const file = e.target.files[0];
 
@@ -121,10 +127,6 @@ export default function AddBinder() {
 			});
 	};
 
-	const [selectedItemList, setSelectedItemList] = useState([]);
-	const [toIndex, setToIndex] = useState(0);
-	const [fromIndex, setFromIndex] = useState(0);
-
 	const onPostBinder = async () => {
 		let body = {};
 		if (coverImgUrl) {
@@ -158,33 +160,37 @@ export default function AddBinder() {
 			}
 			return;
 		} else {
-			navigate('/binder');
-			// setToIndex(data.result.addedBinder);
-			// if (location.list) {
-			// 	const body = { itemIdxList: selectedItemList };
-			// 	const data = await customApiClient('patch', `/dibs/${fromIndex}/${toIndex}`, body);
-			// 	if (!data) return;
-			// 	if (!data.isSuccess) {
-			// 		console.log(data.message);
-			// 		console.log(data.code);
-			// 		return;
-			// 	} else {
-			// 		setBottomMenuStatusState(false);
-			// 		setToastMessageBottomPosition('3.875rem');
-			// 		setToastMessageWrapStatus(true);
-			// 		setToastMessageStatus(true);
-			// 		setToastMessage(`아이템이 새로운 바인더로 이동했어요`);
-			// 		setTimeout(() => {
-			// 			setToastMessageStatus(false);
-			// 		}, 2000);
-			// 		setTimeout(() => {
-			// 			setToastMessageWrapStatus(false);
-			// 		}, 2300);
-			// 		navigate('/binder');
-			// 	}
-			// } else {
-			// 	navigate('/binder');
-			// }
+			// navigate('/binder');
+			const to = data.result.addedBinder;
+			if (location.state) {
+				const body = { itemIdxList: location.state.selectedList };
+				const data = await customApiClient(
+					'patch',
+					`/dibs/${location.state.fromBinderIdx}/${to}`,
+					body
+				);
+				if (!data) return;
+				if (!data.isSuccess) {
+					console.log(data.message);
+					console.log(data.code);
+					return;
+				} else {
+					setBottomMenuStatusState(false);
+					setToastMessageBottomPosition('3.875rem');
+					setToastMessageWrapStatus(true);
+					setToastMessageStatus(true);
+					setToastMessage(`아이템이 ${binderName} 바인더로 이동했어요`);
+					setTimeout(() => {
+						setToastMessageStatus(false);
+					}, 2000);
+					setTimeout(() => {
+						setToastMessageWrapStatus(false);
+					}, 2300);
+					navigate(-1);
+				}
+			} else {
+				navigate(-1);
+			}
 		}
 	};
 
@@ -197,26 +203,11 @@ export default function AddBinder() {
 		}
 	};
 
-	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
-	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
-	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
-	const setToastMessage = useSetRecoilState(ToastMessageState);
-
-	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
-
 	const onAddCoverImage = () => {
 		setBottomMenuStatusState(true);
 	};
-	const location = useLocation();
 
 	useEffect(() => {
-		if (location.list) {
-			let temp = location.list;
-			setSelectedItemList(temp);
-		}
-		if (location.toIdx) {
-			setFromIndex(location.fromIdx);
-		}
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
 	}, []);
