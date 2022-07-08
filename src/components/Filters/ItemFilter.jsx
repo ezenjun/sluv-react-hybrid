@@ -13,52 +13,36 @@ export default function ItemFilter() {
 		{ idx: 7, name: '기타', list: [] },
 	];
 	const [selectedMainFilter, setSelectedMainFilter] = useState(0);
-	const [selectedSubfilterState, setSelectedSubfilterState] = useState([]);
-	const [selectedSubfilterList, setSelectedSubfilterList] = useState([]);
+	const [selectedStatusList, setSelectedStatusList] = useState([]);
+	const [selectedFilterList, setSelectedFilterList] = useState([]);
 
 	const onMainSelect = idx => {
 		if (selectedMainFilter === idx) {
 			setSelectedMainFilter(0);
-			setSelectedSubfilterList([]);
+			let temp = [];
+			setSelectedFilterList(temp);
 		} else {
 			setSelectedMainFilter(idx);
 			let temp;
 			(temp = []).length = filterList[idx - 1].list.length;
 			temp.fill(false);
-			setSelectedSubfilterState(temp);
-			setSelectedSubfilterList([]);
+			setSelectedStatusList(temp);
+			temp = [];
+			setSelectedFilterList(temp);
 		}
 	};
-	const onEachSubSelect = (sub, idx) => {
-		console.log(idx);
-		console.log(selectedSubfilterState[idx]);
-		let selectedList = [];
-
-		if (!selectedSubfilterState[idx]) {
-			//선택 안되어있는 경우
-			selectedList = selectedSubfilterList;
-			selectedList.push(filterList[selectedMainFilter - 1].list[idx]);
-			setSelectedSubfilterList(selectedList);
+	const eachStatusClick = (subfilter, index) => {
+		if (selectedStatusList[index]) {
+			//선택되어있을 때
+			setSelectedFilterList(selectedFilterList.filter(item => item !== subfilter));
 		} else {
-			//선택되어있는 경우
-			console.log('else');
-
-			selectedList = selectedSubfilterList;
-			console.log(sub);
-			console.log(selectedList[idx]);
-			console.log(
-				'ㅅㅂ',
-				selectedList.filter(item => item !== sub)
-			);
-			let temp = selectedList.filter(item => item !== sub);
-			setSelectedSubfilterList(temp);
+			// 선택 안되어있을 때
+			setSelectedFilterList([...selectedFilterList, subfilter]);
 		}
-		let temp = selectedSubfilterState;
-		temp[idx] = !temp[idx];
-		setSelectedSubfilterState(temp);
-		// console.log(selectedSubfilterState[idx]);
-		console.log(selectedSubfilterList);
-		console.log(selectedSubfilterState);
+		let temp = selectedStatusList;
+		temp[index] = !temp[index];
+		setSelectedStatusList(temp);
+		console.log(selectedFilterList);
 	};
 
 	return (
@@ -81,8 +65,8 @@ export default function ItemFilter() {
 						{filterList[selectedMainFilter - 1].list.map((subfilter, index) => (
 							<Filter
 								key={subfilter}
-								selected={selectedSubfilterState[index]}
-								onClick={() => onEachSubSelect(subfilter, index)}
+								selected={selectedStatusList[index]}
+								onClick={() => eachStatusClick(subfilter, index)}
 							>
 								{subfilter}
 							</Filter>
