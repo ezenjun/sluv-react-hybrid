@@ -52,7 +52,7 @@ export function BottomSlideMenu({ menu, children, filters }) {
 	);
 }
 
-const BottomDialogWrap = styled.div`
+export const BottomDialogWrap = styled.div`
 	display: ${props => (props.openStatus ? 'block' : 'none')};
 	z-index: 10000;
 	position: absolute;
