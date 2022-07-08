@@ -4,12 +4,14 @@ import { ReactComponent as Close } from '../assets/Icons/CloseX.svg';
 import { PopUpModalState } from '../recoil/PopUpModal';
 import { MainText } from './Texts/MainText';
 import { SubText } from './Texts/SubText';
+import { useNavigate } from 'react-router-dom';
 
-export function PopUpModal({ children, closeButton }) {
+export function PopUpModal({ children, closeButton, closeFunction }) {
 	const popUpModalStatusState = useRecoilValue(PopUpModalState);
 	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 	const closeDialog = () => {
 		setPopUpModalState(false);
+		closeFunction();
 		console.log(PopUpModalState);
 	};
 	return (

@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { SubText } from '../Texts/SubText';
 
-export function BottomSlideMenu({ menu, children, filter }) {
+export function BottomSlideMenu({ menu, children, filters }) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const closeDialog = () => {
@@ -16,7 +17,6 @@ export function BottomSlideMenu({ menu, children, filter }) {
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
 			<BottomDialogDiv>
 				<CloseWrap>
-					{filter ? <></> : <></>}
 					{menu ? (
 						<div
 							style={{
