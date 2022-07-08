@@ -12,6 +12,7 @@ import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as UpArrow } from '../../assets/Icons/upArrow.svg';
 import { ReactComponent as DownArrow } from '../../assets/Icons/downArrow.svg';
+import { ReactComponent as X } from '../../assets/Icons/TagDeleteX.svg';
 
 export default function Search() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
@@ -29,6 +30,18 @@ export default function Search() {
 		'미주 스커트',
 		'오마이걸',
 	];
+	const [recentSearchList, setRecentSearchList] = useState([
+		'아이유 니트',
+		'스트레이키즈 모자',
+		'방탄소년단',
+		'레드벨벳',
+		'블랙핑크',
+		'트와이스',
+		'나연 후드티',
+		'리노 모자',
+		'미주 스커트',
+		'오마이걸',
+	]);
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
 
@@ -37,6 +50,7 @@ export default function Search() {
 	const onClickInputDelete = () => {
 		setSearchInput('');
 	};
+
 	const settings = {
 		dots: true,
 		fade: true,
@@ -242,7 +256,36 @@ export default function Search() {
 						</HotKeyword>
 					</SearchBottom>
 				) : (
-					<SearchBottom></SearchBottom>
+					<SearchBottom>
+						<RecentSearchTextWrap>
+							<MainText fontsize="1.25rem">최근 검색어</MainText>
+							<SubText
+								onClick={() => alert('전체삭제')}
+								color="#8D8D8D"
+								fontweight="normal"
+							>
+								전체삭제
+							</SubText>
+						</RecentSearchTextWrap>
+						<RecentKeywordWrap>
+							{recentSearchList.map(search => (
+								<Keyword>
+									<SubText
+										fontsize="14px"
+										fontweight="600"
+										margin="0 0.5rem 0 0"
+										onClick={() => setSearchInput(search)}
+									>
+										{search}
+									</SubText>
+									<X
+										onClick={() => alert('삭제')}
+										style={{ width: '1.125rem', height: '1.125rem' }}
+									></X>
+								</Keyword>
+							))}
+						</RecentKeywordWrap>
+					</SearchBottom>
 				)}
 			</FeedContainer>
 		</MainContainer>
@@ -330,6 +373,38 @@ const HashTag = styled.div`
 	font-weight: 600;
 	font-family: Pretendard;
 	color: #564b5c;
+`;
+
+const RecentSearchTextWrap = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding-right: 1.25rem;
+`;
+const RecentKeywordWrap = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	overflow-x: scroll;
+	white-space: nowrap;
+	margin-top: 1rem;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
+`;
+const Keyword = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-align: center;
+	box-sizing: border-box;
+	height: 2.375rem;
+	padding: 0.6875rem 1rem;
+	border-radius: 8rem;
+	border: solid 1px #f8f7fa;
+	background-color: #f8f7fa;
+	margin-right: 0.5rem;
 `;
 
 export const IconWrap = styled.div.attrs(props => ({
