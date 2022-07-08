@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { useSetRecoilState } from 'recoil';
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -9,6 +9,7 @@ import { BackButton } from '../../components/Buttons/BackButton';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { SubText } from '../../components/Texts/SubText';
 import { customApiClient } from '../../utils/apiClient';
+
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -31,6 +32,8 @@ AWS.config.update({
 
 export default function AddBinder() {
 	const navigate = useNavigate();
+	const location = useLocation();
+	const coverImgInput = useRef();
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [binderHelpStatus, setBinderHelpStatus] = useState(false);
@@ -40,13 +43,18 @@ export default function AddBinder() {
 	const [selectedFile, setSelectedFile] = useState('');
 	const [coverImgUrl, setCoverImgUrl] = useState('');
 
-	const coverImgInput = useRef();
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
 	useEffect(() => {
-		if(binderName && coverImgUrl && isConfirm) {
+		if (binderName && coverImgUrl && isConfirm) {
 			onPostBinder();
 		}
-	},[binderName, coverImgUrl, isConfirm])
+	}, [binderName, coverImgUrl, isConfirm]);
 
 	const myBucket = new AWS.S3({
 		params: { Bucket: BINDER_COVER_IMAGE_S3_BUCKET },
@@ -61,7 +69,6 @@ export default function AddBinder() {
 		alert('기본 커버');
 	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
-
 	const onChangeCoverImg = e => {
 		const file = e.target.files[0];
 
@@ -90,7 +97,7 @@ export default function AddBinder() {
 		}
 	};
 
-	const s3ImgUpload = (file) => {
+	const s3ImgUpload = file => {
 		const params = {
 			ACL: 'public-read',
 			Body: file,
@@ -118,15 +125,16 @@ export default function AddBinder() {
 			.send(err => {
 				if (err) console.log(err);
 			});
-	}
+	};
+
 	const onPostBinder = async () => {
 		let body = {};
-		if(coverImgUrl) {
+		if (coverImgUrl) {
 			body = {
 				isBasic: 1,
 				name: binderName,
 				coverImgUrl: coverImgUrl,
-			}
+			};
 		} else {
 			body = {
 				isBasic: 1,
@@ -137,44 +145,68 @@ export default function AddBinder() {
 
 		if (!data.isSuccess) {
 			console.log(data.message);
+			if (data.code === 3080) {
+				console.log('3080', data.message);
+				setToastMessageBottomPosition('1.625rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage('이미 같은 이름의 바인더가 있어요');
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
+			}
 			return;
-		}
-		console.log(data.message);
-		if (data.code === 3080) {
-			setToastMessageBottomPosition('1.625rem');
-			setToastMessageWrapStatus(true);
-			setToastMessageStatus(true);
-			setToastMessage('이미 같은 이름의 바인더가 있어요');
-			setTimeout(() => {
-				setToastMessageStatus(false);
-			}, 2000);
-			setTimeout(() => {
-				setToastMessageWrapStatus(false);
-			}, 2300);
 		} else {
-			navigate('/binder');
+			// navigate('/binder');
+			const to = data.result.addedBinder;
+			if (location.state) {
+				const body = { itemIdxList: location.state.selectedList };
+				const data = await customApiClient(
+					'patch',
+					`/dibs/${location.state.fromBinderIdx}/${to}`,
+					body
+				);
+				if (!data) return;
+				if (!data.isSuccess) {
+					console.log(data.message);
+					console.log(data.code);
+					return;
+				} else {
+					setBottomMenuStatusState(false);
+					setToastMessageBottomPosition('3.875rem');
+					setToastMessageWrapStatus(true);
+					setToastMessageStatus(true);
+					setToastMessage(`아이템이 ${binderName} 바인더로 이동했어요`);
+					setTimeout(() => {
+						setToastMessageStatus(false);
+					}, 2000);
+					setTimeout(() => {
+						setToastMessageWrapStatus(false);
+					}, 2300);
+					navigate(-1);
+				}
+			} else {
+				navigate(-1);
+			}
 		}
-	}
+	};
 
 	const onMakeBinder = async () => {
-		// 이미지 업로드 
-		if(selectedFile) {
+		// 이미지 업로드
+		if (selectedFile) {
 			s3ImgUpload(selectedFile);
 		} else {
 			onPostBinder();
 		}
 	};
 
-	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
-	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
-	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
-	const setToastMessage = useSetRecoilState(ToastMessageState);
-
-	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
-
 	const onAddCoverImage = () => {
 		setBottomMenuStatusState(true);
 	};
+
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
@@ -182,7 +214,7 @@ export default function AddBinder() {
 
 	return (
 		<MainContainer padding="0 0 0 0">
-			<TopNav style={{ justifyContent: 'space-between' }}>
+			<TopNav style={{ justifyContent: 'space-between', zIndex: '10001' }}>
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="centerText">
 					바인더 만들기
@@ -278,7 +310,7 @@ const FeedContainer = styled.div`
 `;
 const AddImage = styled.div`
 	display: flex;
-	postion: relative;
+	/* position: relative; */
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
@@ -295,6 +327,7 @@ const CoverImage = styled.div`
 	background-size: cover;
 	width: 10.125rem;
 	height: 10.125rem;
+	border-radius: 1rem;
 `;
 
 const BinderName = styled.input`
