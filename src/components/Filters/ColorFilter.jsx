@@ -4,7 +4,7 @@ import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { ReactComponent as WhiteCheck } from '../../assets/Icons/whiteCheck.svg';
 import { ReactComponent as BlackCheck } from '../../assets/Icons/blackCheck.svg';
 
-export default function PriceFilter() {
+export function ColorFilter() {
 	const filterList = [
 		{ idx: 1, name: '빨강', color: '#ea3323' },
 		{ idx: 2, name: '주확', color: '#FE9150' },
@@ -53,36 +53,44 @@ export default function PriceFilter() {
 
 	return (
 		<FilterContainer>
-			{filterList.map((filter, index) => (
-				<Filter
-					key={filter.idx}
-					selected={selectedStatusList[index] === filter.idx}
-					onClick={() => eachStatusClick(filter.idx, index)}
-				>
-					<Color color={filter.color} border={filter.border}>
-						{selectedStatusList[index] ? (
-							<>
-								{filter.checkBlack ? (
-									<BlackCheck></BlackCheck>
-								) : (
-									<WhiteCheck></WhiteCheck>
-								)}
-							</>
-						) : (
-							<></>
-						)}
-					</Color>
-					{filter.name}
-				</Filter>
-			))}
+			<FilterWrap>
+				{filterList.map((filter, index) => (
+					<Filter
+						key={filter.idx}
+						selected={selectedStatusList[index] === filter.idx}
+						onClick={() => eachStatusClick(filter.idx, index)}
+					>
+						<Color color={filter.color} border={filter.border}>
+							{selectedStatusList[index] ? (
+								<>
+									{filter.checkBlack ? (
+										<BlackCheck></BlackCheck>
+									) : (
+										<WhiteCheck></WhiteCheck>
+									)}
+								</>
+							) : (
+								<></>
+							)}
+						</Color>
+						{filter.name}
+					</Filter>
+				))}
+			</FilterWrap>
 		</FilterContainer>
 	);
 }
 
 const FilterContainer = styled.div`
+	display: flex;
+	padding: 1.25rem;
+	flex-direction: column;
+	height: 18.5625rem;
+`;
+const FilterWrap = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-	padding: 0 1.25rem;
+
 	flex-direction: row;
 	flex-wrap: wrap;
 	box-sizing: border-box;
@@ -90,7 +98,6 @@ const FilterContainer = styled.div`
 	align-items: center;
 	align-content: center;
 	width: 100%;
-	height: 18.5625rem;
 `;
 const Filter = styled.div`
 	display: flex;
@@ -115,8 +122,12 @@ const Color = styled.div`
 	border-radius: 50%;
 	margin-bottom: 0.375rem;
 `;
-
+export const TopWrap = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+`;
 export const BottomWrap = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+	height: 18.5625rem;
 `;

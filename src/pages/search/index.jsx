@@ -361,7 +361,7 @@ const SearchBottom = styled.div`
 	padding: 1.25rem 0 1.25rem 1.25rem;
 `;
 
-const FeedContainer = styled.div`
+export const FeedContainer = styled.div`
 	height: 100vh;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
