@@ -39,6 +39,8 @@ export default function UploadItem() {
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
 	const [imgUrlList, setImgUrlList] = useState([]);
+	const [productName, setProductName] = useState('');
+	const [isProductName, setIsProductName] = useState(false);
 
 	const imgInput = useRef();
 
@@ -61,8 +63,16 @@ export default function UploadItem() {
 	const onClickItemCatgeorySelect = () => {};
 	const onClickItemBrandSelect = () => {
 
-
 	};
+	const onChangeProductName = (e) => {
+		if (e.target.value) {
+			setIsProductName(true);
+		} else {
+			setIsProductName(false);
+		}
+		setProductName(e.target.value);
+	};
+
 	const onClickItemDateSelect = () => {};
 	const onClickItemPriceSelect = () => {};
 	const onClickItemImgSelect = e => {
@@ -146,7 +156,10 @@ export default function UploadItem() {
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							정보 공유하기
 						</MainText>
-						<div className="rightText" onClick={() => onClickUploadItem(selectedFileList)}>
+						<div
+							className="rightText"
+							onClick={() => onClickUploadItem(selectedFileList)}
+						>
 							등록
 						</div>
 					</TopNav>
@@ -191,13 +204,13 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap notEmpty={false}>
+						<InputSpeechBubbleWrap notEmpty={isProductName}>
 							<SpeechBubbleInput
-								notEmpty={false}
+								notEmpty={isProductName}
 								type="text"
 								placeholder="제품명을 정확하게 입력해주세요"
-								value={''}
-								onChange={undefined}
+								value={productName}
+								onChange={onChangeProductName}
 							/>
 						</InputSpeechBubbleWrap>
 
@@ -293,9 +306,7 @@ export default function UploadItem() {
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>
 
-					<BottomDialogWrap>
-						
-					</BottomDialogWrap>
+					<BottomDialogWrap></BottomDialogWrap>
 				</MainContainer>
 			)}
 		</>
