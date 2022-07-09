@@ -10,4 +10,5 @@ export const ContentWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+
 `;
