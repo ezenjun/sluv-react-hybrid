@@ -49,7 +49,10 @@ export default function SearchResult() {
 	const changeView = () => {
 		setView(!view);
 	};
-	setBottomMenuStatusState(true);
+	const onFilterClick = () => {
+		setBottomMenuStatusState(true);
+	};
+
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
 		const value = e.target.value;
@@ -96,7 +99,7 @@ export default function SearchResult() {
 				</InputWrap>
 			</div>
 			<FilterContainer>
-				<Filter>
+				<Filter onClick={onFilterClick}>
 					아이템 종류{' '}
 					<DownArrow
 						style={{
@@ -106,7 +109,7 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter>
+				<Filter onClick={onFilterClick}>
 					가격대
 					<DownArrow
 						style={{
@@ -116,7 +119,7 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter>
+				<Filter onClick={onFilterClick}>
 					정렬
 					<DownArrow
 						style={{
@@ -126,7 +129,7 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter>
+				<Filter onClick={onFilterClick}>
 					색상
 					<DownArrow
 						style={{

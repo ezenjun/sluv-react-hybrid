@@ -65,7 +65,7 @@ export function SearchBottomSlideMenu() {
 							position: 'absolute',
 							right: '1.25rem',
 						}}
-						onClick={() => closeDialog}
+						onClick={closeDialog}
 					></Close>
 				</CloseWrap>
 				{selectedTab === 1 && <ItemFilter></ItemFilter>}
