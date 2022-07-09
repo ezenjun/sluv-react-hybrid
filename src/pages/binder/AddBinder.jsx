@@ -87,7 +87,7 @@ export default function AddBinder() {
 	const handleBinderName = e => {
 		const { value, maxLength } = e.target;
 		setBinderName(value.slice(0, maxLength));
-		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\s]{1,15}$/; // 한글 영문 숫자 1글자 이상 regex
+		const regex = /^.{1,20}$/; 
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
@@ -320,7 +320,7 @@ const AddImage = styled.div`
 	background-color: #f6f6f6;
 `;
 
-const CoverImage = styled.div`
+export const CoverImage = styled.div`
 	position: absolute;
 	background-repeat: no-repeat;
 	background-position: center center;
