@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { HorizontalLine } from '../../components/Lines/HorizontalLine';
+import { HorizontalLine } from '../Lines/HorizontalLine';
 
-export default function PriceFilter() {
+export function AlignFilter(props) {
 	const filterList = [
-		{ idx: 1, name: '5만원 이하' },
-		{ idx: 2, name: '5만원 ~ 10만원' },
-		{ idx: 3, name: '10만원 ~ 20만원' },
-		{ idx: 4, name: '20만원 ~ 30만원' },
-		{ idx: 5, name: '30만원 이상' },
+		{ idx: 1, name: '최신순' },
+		{ idx: 2, name: '인기순' },
 	];
-	const [selectedMainFilter, setSelectedMainFilter] = useState(0);
-	const [selectedFilterList, setSelectedFilterList] = useState([]);
+	const setSelectedMainFilter = input => {
+		props.getSelectedMainFilter(input);
+	};
 
 	const onMainSelect = idx => {
-		if (selectedMainFilter === idx) {
+		if (props.selectedMainFilter === idx) {
 			setSelectedMainFilter(0);
 		} else {
 			setSelectedMainFilter(idx);
@@ -27,7 +25,7 @@ export default function PriceFilter() {
 				{filterList.map(filter => (
 					<Filter
 						key={filter.idx}
-						selected={selectedMainFilter === filter.idx}
+						selected={props.selectedMainFilter === filter.idx}
 						onClick={() => onMainSelect(filter.idx)}
 					>
 						{filter.name}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
-export default function ItemFilter() {
+export function ItemFilter(props) {
 	const filterList = [
 		{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
 		{ idx: 2, name: '하의', list: ['바지', '치마'] },
@@ -12,12 +12,19 @@ export default function ItemFilter() {
 		{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
 		{ idx: 7, name: '기타', list: [] },
 	];
-	const [selectedMainFilter, setSelectedMainFilter] = useState(0);
-	const [selectedStatusList, setSelectedStatusList] = useState([]);
-	const [selectedFilterList, setSelectedFilterList] = useState([]);
+
+	const setSelectedMainFilter = input => {
+		props.getSelectedMainFilter(input);
+	};
+	const setSelectedStatusList = input => {
+		props.getSelectedStatusList(input);
+	};
+	const setSelectedFilterList = input => {
+		props.getSelectedFilterList(input);
+	};
 
 	const onMainSelect = idx => {
-		if (selectedMainFilter === idx) {
+		if (props.selectedMainFilter === idx) {
 			setSelectedMainFilter(0);
 			let temp = [];
 			setSelectedFilterList(temp);
@@ -32,17 +39,17 @@ export default function ItemFilter() {
 		}
 	};
 	const eachStatusClick = (subfilter, index) => {
-		if (selectedStatusList[index]) {
+		if (props.selectedStatusList[index]) {
 			//선택되어있을 때
-			setSelectedFilterList(selectedFilterList.filter(item => item !== subfilter));
+			setSelectedFilterList(props.selectedFilterList.filter(item => item !== subfilter));
 		} else {
 			// 선택 안되어있을 때
-			setSelectedFilterList([...selectedFilterList, subfilter]);
+			setSelectedFilterList([...props.selectedFilterList, subfilter]);
 		}
-		let temp = selectedStatusList;
+		let temp = props.selectedStatusList;
 		temp[index] = !temp[index];
 		setSelectedStatusList(temp);
-		console.log(selectedFilterList);
+		console.log(props.selectedFilterList);
 	};
 
 	return (
@@ -51,7 +58,7 @@ export default function ItemFilter() {
 				{filterList.map(filter => (
 					<Filter
 						key={filter.idx}
-						selected={selectedMainFilter === filter.idx}
+						selected={props.selectedMainFilter === filter.idx}
 						onClick={() => onMainSelect(filter.idx)}
 					>
 						{filter.name}
@@ -60,12 +67,12 @@ export default function ItemFilter() {
 			</TopWrap>
 			<HorizontalLine margin="0.5rem 0 1.25rem"></HorizontalLine>
 			<BottomWrap>
-				{selectedMainFilter > 0 && (
+				{props.selectedMainFilter > 0 && (
 					<>
-						{filterList[selectedMainFilter - 1].list.map((subfilter, index) => (
+						{filterList[props.selectedMainFilter - 1].list.map((subfilter, index) => (
 							<Filter
 								key={subfilter}
-								selected={selectedStatusList[index]}
+								selected={props.selectedStatusList[index]}
 								onClick={() => eachStatusClick(subfilter, index)}
 							>
 								{subfilter}

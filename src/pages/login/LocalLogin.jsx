@@ -38,7 +38,7 @@ export default function LocalLogin() {
 		setEmail(e.target.value);
 		const regex =
 			/^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i; // email regex
-		if (regex.test(email)) {
+		if (regex.test(e.target.value)) {
 			setEmailValid(true);
 		} else {
 			setEmailValid(false);

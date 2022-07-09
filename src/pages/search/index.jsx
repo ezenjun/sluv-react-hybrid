@@ -5,7 +5,7 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { BottomNavState } from '../../recoil/BottomNav';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { Input } from '../../components/Input';
 import Slider from 'react-slick';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
@@ -13,9 +13,17 @@ import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg'
 import { ReactComponent as UpArrow } from '../../assets/Icons/upArrow.svg';
 import { ReactComponent as DownArrow } from '../../assets/Icons/downArrow.svg';
 import { ReactComponent as X } from '../../assets/Icons/TagDeleteX.svg';
+import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
+import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
+import { UploadPopup, UploadPopupWrap } from '../home';
+import { useNavigate } from 'react-router-dom';
 
 export default function Search() {
+	const navigate = useNavigate();
+
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+
 	const [searchInput, setSearchInput] = useState('');
 	const [isCollapsed, setIsCollapsed] = useState(true);
 	const hotSearchList = [
@@ -242,7 +250,9 @@ export default function Search() {
 								인기 검색어
 							</MainText>
 							<HashTagWrap>
-								<HashTag>#아이유 선글라스</HashTag>
+								<HashTag onClick={() => navigate('/search/result')}>
+									#아이유 선글라스
+								</HashTag>
 								<HashTag>#로제 원피스</HashTag>
 								<HashTag>#있지 류진 후드티</HashTag>
 								<HashTag>#영케이 안경</HashTag>
@@ -288,6 +298,47 @@ export default function Search() {
 					</SearchBottom>
 				)}
 			</FeedContainer>
+
+			{/* 업로드 팝업 모달 */}
+			<UploadPopupWrap openStatus={uploadPopupStatus}>
+				<UploadPopup>
+					<div onClick={() => navigate('/upload/item')} className="uploadPopupBtn topBtn">
+						<IconUploadItem
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>정보 공유하기</span>
+					</div>
+					<div
+						onClick={() => navigate('/upload/question')}
+						className="uploadPopupBtn bottomBtn"
+					>
+						<IconUploadQuestion
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>질문 올리기</span>
+					</div>
+					<div
+						style={{
+							width: '20px',
+							height: '20px',
+							backgroundColor: '#9e30f4',
+							position: 'absolute',
+							left: '50%',
+							transform: 'translate(-50%,0)',
+							bottom: '-10px',
+							borderRadius: '50%',
+						}}
+					></div>
+				</UploadPopup>
+			</UploadPopupWrap>
 		</MainContainer>
 	);
 }
@@ -312,7 +363,7 @@ const SearchBottom = styled.div`
 	padding: 1.25rem 0 1.25rem 1.25rem;
 `;
 
-const FeedContainer = styled.div`
+export const FeedContainer = styled.div`
 	height: 100vh;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
