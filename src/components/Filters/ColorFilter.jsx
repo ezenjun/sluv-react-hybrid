@@ -4,7 +4,7 @@ import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { ReactComponent as WhiteCheck } from '../../assets/Icons/whiteCheck.svg';
 import { ReactComponent as BlackCheck } from '../../assets/Icons/blackCheck.svg';
 
-export function ColorFilter() {
+export function ColorFilter(props) {
 	const filterList = [
 		{ idx: 1, name: '빨강', color: '#ea3323' },
 		{ idx: 2, name: '주확', color: '#FE9150' },
@@ -33,22 +33,26 @@ export function ColorFilter() {
 		},
 	];
 
-	const [selectedStatusList, setSelectedStatusList] = useState([]);
-	const [selectedFilterList, setSelectedFilterList] = useState([]);
+	const setSelectedStatusList = input => {
+		props.getSelectedStatusList(input);
+	};
+	const setSelectedFilterList = input => {
+		props.getSelectedFilterList(input);
+	};
 
 	const eachStatusClick = (subfilter, index) => {
-		if (selectedStatusList[index]) {
+		if (props.selectedStatusList[index]) {
 			//선택되어있을 때
-			setSelectedFilterList(selectedFilterList.filter(item => item !== subfilter));
+			setSelectedFilterList(props.selectedFilterList.filter(item => item !== subfilter));
 		} else {
 			// 선택 안되어있을 때
-			setSelectedFilterList([...selectedFilterList, subfilter]);
+			setSelectedFilterList([...props.selectedFilterList, subfilter]);
 		}
-		let temp = selectedStatusList;
+		let temp = props.selectedStatusList;
 		temp[index] = !temp[index];
 		setSelectedStatusList(temp);
 		console.log('clickedIndex', index);
-		console.log(selectedFilterList);
+		console.log(props.selectedFilterList);
 	};
 
 	return (
@@ -57,11 +61,11 @@ export function ColorFilter() {
 				{filterList.map((filter, index) => (
 					<Filter
 						key={filter.idx}
-						selected={selectedStatusList[index] === filter.idx}
+						selected={props.selectedStatusList[index] === filter.idx}
 						onClick={() => eachStatusClick(filter.idx, index)}
 					>
 						<Color color={filter.color} border={filter.border}>
-							{selectedStatusList[index] ? (
+							{props.selectedStatusList[index] ? (
 								<>
 									{filter.checkBlack ? (
 										<BlackCheck></BlackCheck>

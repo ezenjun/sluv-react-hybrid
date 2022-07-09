@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
-import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { BottomMenuStatusState, TotalSelectedFilterState } from '../../recoil/BottomSlideMenu';
 import { AlignFilter } from '../Filters/AlignFilter';
 import { PriceFilter } from '../Filters/PriceFilter';
 import { ColorFilter } from '../Filters/ColorFilter';
@@ -13,6 +13,43 @@ import { SubText } from '../Texts/SubText';
 export function SearchBottomSlideMenu() {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+
+	// 아이템 종류
+	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
+	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
+	const [selectedItemFilterList, setSelectedItemFilterList] = useState([]);
+
+	const getSelectedItemMainFilter = input => {
+		setSelectedItemMainFilter(input);
+	};
+	const getSelectedItemStatusList = input => {
+		setSelectedItemStatusList(input);
+	};
+	const getSelectedItemFilterList = input => {
+		setSelectedItemFilterList(input);
+	};
+
+	// 가격대
+	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(0);
+	const getSelectedPriceMainFilter = input => {
+		setSelectedPriceMainFilter(input);
+	};
+
+	// 정렬
+	const [selectedAlignMainFilter, setSelectedAlignMainFilter] = useState(0);
+	const getSelectedAlignMainFilter = input => {
+		setSelectedAlignMainFilter(input);
+	};
+
+	// 색상
+	const [selectedColorStatusList, setSelectedColorStatusList] = useState([]);
+	const [selectedColorFilterList, setSelectedColorFilterList] = useState([]);
+	const getSelectedColorStatusList = input => {
+		setSelectedColorStatusList(input);
+	};
+	const getSelectedColorFilterList = input => {
+		setSelectedColorFilterList(input);
+	};
 
 	const closeDialog = () => {
 		setBottomMenuStatusState(false);
@@ -68,10 +105,36 @@ export function SearchBottomSlideMenu() {
 						onClick={closeDialog}
 					></Close>
 				</CloseWrap>
-				{selectedTab === 1 && <ItemFilter></ItemFilter>}
-				{selectedTab === 2 && <PriceFilter></PriceFilter>}
-				{selectedTab === 3 && <AlignFilter></AlignFilter>}
-				{selectedTab === 4 && <ColorFilter></ColorFilter>}
+				{selectedTab === 1 && (
+					<ItemFilter
+						selectedMainFilter={selectedItemMainFilter}
+						selectedStatusList={selectedItemStatusList}
+						selectedFilterList={selectedItemFilterList}
+						getSelectedMainFilter={getSelectedItemMainFilter}
+						getSelectedStatusList={getSelectedItemStatusList}
+						getSelectedFilterList={getSelectedItemFilterList}
+					></ItemFilter>
+				)}
+				{selectedTab === 2 && (
+					<PriceFilter
+						selectedMainFilter={selectedPriceMainFilter}
+						getSelectedMainFilter={getSelectedPriceMainFilter}
+					></PriceFilter>
+				)}
+				{selectedTab === 3 && (
+					<AlignFilter
+						selectedMainFilter={selectedAlignMainFilter}
+						getSelectedMainFilter={getSelectedAlignMainFilter}
+					></AlignFilter>
+				)}
+				{selectedTab === 4 && (
+					<ColorFilter
+						selectedStatusList={selectedColorStatusList}
+						selectedFilterList={selectedColorFilterList}
+						getSelectedStatusList={getSelectedColorStatusList}
+						getSelectedFilterList={getSelectedColorFilterList}
+					></ColorFilter>
+				)}
 
 				<ButtonWrap>
 					<ResetButton active={true}>초기화</ResetButton>

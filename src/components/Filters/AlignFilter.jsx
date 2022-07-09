@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { HorizontalLine } from '../Lines/HorizontalLine';
 
-export function AlignFilter() {
+export function AlignFilter(props) {
 	const filterList = [
 		{ idx: 1, name: '최신순' },
 		{ idx: 2, name: '인기순' },
 	];
-	const [selectedMainFilter, setSelectedMainFilter] = useState(0);
+	const setSelectedMainFilter = input => {
+		props.getSelectedMainFilter(input);
+	};
 
 	const onMainSelect = idx => {
-		if (selectedMainFilter === idx) {
+		if (props.selectedMainFilter === idx) {
 			setSelectedMainFilter(0);
 		} else {
 			setSelectedMainFilter(idx);
@@ -23,7 +25,7 @@ export function AlignFilter() {
 				{filterList.map(filter => (
 					<Filter
 						key={filter.idx}
-						selected={selectedMainFilter === filter.idx}
+						selected={props.selectedMainFilter === filter.idx}
 						onClick={() => onMainSelect(filter.idx)}
 					>
 						{filter.name}
