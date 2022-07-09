@@ -22,6 +22,8 @@ import {
 } from '../../recoil/ToastMessage';
 
 export default function LocalLogin() {
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [emailValid, setEmailValid] = useState(false);
@@ -77,10 +79,17 @@ export default function LocalLogin() {
 			setRememberIdCheck(false);
 		}
 	};
-	const navigate = useNavigate();
+	
 	const handleBackClick = () => {
 		navigate('/');
 	};
+
+	const handleEnterEvent = () => {
+		if(window.event.keyCode===13) {
+			handleLoginAPI();
+		}
+	};
+
 	// 이메일 비밀번호 확인 API
 	async function handleLoginAPI() {
 		const body = {
@@ -160,6 +169,7 @@ export default function LocalLogin() {
 						<SubText margin="0 0 0.5rem 0">비밀번호</SubText>
 						<InputWrap valid={passwordValid} value={password}>
 							<Input
+								onKeyUp={handleEnterEvent}
 								value={password}
 								onChange={handlePassword}
 								type="password"
