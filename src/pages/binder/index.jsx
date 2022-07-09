@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
@@ -30,11 +30,30 @@ import {
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { PopUpModalState } from '../../recoil/PopUpModal';
 import { UploadPopup, UploadPopupWrap } from '../home';
+import { CoverImage } from './AddBinder';
+
+import AWS from 'aws-sdk';
+import { BINDER_COVER_IMAGE_S3_BUCKET, REGION } from '../../utils/s3Module';
+
+AWS.config.update({
+	region: REGION,
+	accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+});
 
 export default function Binder() {
+	// Bucket Init
+	const myBucket = new AWS.S3({
+		params: { Bucket: BINDER_COVER_IMAGE_S3_BUCKET },
+		region: REGION,
+	});
+
+	// Hooks
 	const navigate = useNavigate();
+	const coverImgInput = useRef();
+
+	// Global State
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [currentPage, setCurrentPage] = useState('binder');
 
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -43,13 +62,36 @@ export default function Binder() {
 
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
 
-	const [isConfirm, setIsConfirm] = useState(false);
-	const [binderName, setBinderName] = useState('');
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
 
+	// Local State
+	const [currentPage, setCurrentPage] = useState('binder');
+
+	const [isConfirm, setIsConfirm] = useState(false);
+	const [binderName, setBinderName] = useState('');
+	const [editedCoverImgUrl, setEditedCoverImgUrl] = useState('');
+	const [isUploadSuccess, setIsUploadSuccess] = useState(false);
+	const [selectedFile, setSelectedFile] = useState('');
+
 	const [editBinderIdx, setEditBinderIdx] = useState(null);
 	const [binderEachIndexinList, setBinderEachIndexinList] = useState(null);
+
+	// UseEffect
+	useEffect(() => {
+		// 하단바 띄워주기
+		getBinderList();
+		setBottomNavStatus(true);
+		console.log(binderList);
+	}, []);
+
+	useEffect(() => {
+		if (binderName && editedCoverImgUrl && isConfirm && isUploadSuccess) {
+			editBinderApi(editBinderIdx);
+		}
+	}, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
+	
+	// Function
 	const onAddBinder = () => {
 		navigate('./add');
 	};
@@ -67,8 +109,9 @@ export default function Binder() {
 		setBinderName('');
 	};
 
-	const onAlbumClick = () => {
-		alert('앨범');
+	const onAlbumClick = e => {
+		e.preventDefault();
+		coverImgInput.current.click();
 	};
 	const onDefaultClick = () => {
 		alert('기본 커버');
@@ -76,6 +119,7 @@ export default function Binder() {
 	const editBinder = () => {
 		setCurrentPage('edit');
 		setBottomMenuStatusState(false);
+		setIsUploadSuccess(false);
 	};
 	const deleteBinder = () => {
 		setCurrentPage('delete');
@@ -91,7 +135,11 @@ export default function Binder() {
 		deleteBInderAPI(editBinderIdx);
 	};
 	const onEditBinderFinish = () => {
-		editBinderApi(editBinderIdx);
+		if (selectedFile) {
+			s3ImgUpload(selectedFile);
+		} else {
+			editBinderApi(editBinderIdx);
+		}
 	};
 	const onAddCoverImage = () => {
 		setBottomMenuStatusState(true);
@@ -99,7 +147,7 @@ export default function Binder() {
 
 	const handleBinderName = e => {
 		setBinderName(e.target.value);
-		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\s]{1,5}$/; // 한글 영문 숫자 1글자 이상 regex
+		const regex = /^.{1,20}$/;
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
@@ -145,14 +193,54 @@ export default function Binder() {
 			}, 2300);
 		}
 	};
-	const editBinderApi = async idx => {
-		console.log(idx);
-		const body = {
-			name: binderName,
-			// coverImgUrl:
-			// 	'https://cdnimg.melon.co.kr/cm2/album/images/105/54/246/10554246_20210325161233_500.jpg?304eb9ed9c07a16ec6d6e000dc0e7d91',
+
+	const s3ImgUpload = file => {
+		const params = {
+			ACL: 'public-read',
+			Body: file,
+			Bucket: BINDER_COVER_IMAGE_S3_BUCKET,
+			Key: file.name,
+			ContentType: 'image/jpeg',
 		};
+		myBucket
+			.putObject(params)
+			.on('httpUploadProgress', evt => {
+				console.log(evt);
+			})
+			.on('complete', evt => {
+				console.log(
+					'https://' +
+						evt.request.httpRequest.endpoint.host +
+						evt.request.httpRequest.path
+				);
+				setEditedCoverImgUrl(
+					'https://' +
+						evt.request.httpRequest.endpoint.host +
+						evt.request.httpRequest.path
+				);
+				setIsUploadSuccess(true);
+			})
+			.send(err => {
+				if (err) console.log(err);
+			});
+	};
+
+	const editBinderApi = async idx => {
+		console.log('patch API 호출 전 마지막 데이터 확인' + binderName);
+		console.log('patch API 호출 전 마지막 데이터 확인' + editedCoverImgUrl);
+		let body = {};
+		if (isUploadSuccess) {
+			body = {
+				coverImgUrl: editedCoverImgUrl,
+				name: binderName,
+			};
+		} else {
+			body = { name: binderName };
+		}
+		console.log(idx);
 		const data = await customApiClient('patch', `/binders/${idx}`, body);
+		console.log(data);
+
 		if (!data) return;
 		if (!data.isSuccess) {
 			if (data.code === 3080) {
@@ -186,12 +274,20 @@ export default function Binder() {
 		}
 	};
 
-	useEffect(() => {
-		// 하단바 띄워주기
-		getBinderList();
-		setBottomNavStatus(true);
-		console.log(binderList);
-	}, []);
+	const onChangeCoverImg = e => {
+		const file = e.target.files[0];
+
+		if (!file) return;
+
+		setSelectedFile(file);
+
+		const imgEL = document.querySelector('.img__box');
+		const reader = new FileReader();
+		reader.onload = () => (imgEL.style.backgroundImage = `url(${reader.result})`);
+		reader.readAsDataURL(file);
+
+		setBottomMenuStatusState(false);
+	};
 
 	return (
 		<>
@@ -363,7 +459,16 @@ export default function Binder() {
 						<AddImage
 							onClick={onAddCoverImage}
 							src={binderList[binderEachIndexinList].coverImgUrl}
-						></AddImage>
+						>
+							<CoverImage className="img__box" />
+						</AddImage>
+						<input
+							type="file"
+							accept="image/*"
+							ref={coverImgInput}
+							style={{ display: 'none' }}
+							onChange={onChangeCoverImg}
+						/>
 						<BinderName
 							placeholder={binderList[binderEachIndexinList].name}
 							value={binderName}
