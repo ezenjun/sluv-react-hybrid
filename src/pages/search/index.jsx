@@ -250,7 +250,9 @@ export default function Search() {
 								인기 검색어
 							</MainText>
 							<HashTagWrap>
-								<HashTag>#아이유 선글라스</HashTag>
+								<HashTag onClick={() => navigate('/search/result')}>
+									#아이유 선글라스
+								</HashTag>
 								<HashTag>#로제 원피스</HashTag>
 								<HashTag>#있지 류진 후드티</HashTag>
 								<HashTag>#영케이 안경</HashTag>
