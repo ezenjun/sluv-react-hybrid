@@ -14,7 +14,7 @@ export function ColorFilter() {
 		{ idx: 6, name: '남색', color: '#1C358F' },
 		{ idx: 7, name: '보라', color: '#8C3ED9' },
 		{ idx: 8, name: '분홍', color: '#EC658B' },
-		{ idx: 9, name: '베이지', color: '#EFE2C6' },
+		{ idx: 9, name: '베이지', color: '#EFE2C6', checkBlack: true },
 		{ idx: 10, name: '갈색', color: '#9A6B41' },
 		{ idx: 11, name: '회색', color: '#BEBEBE' },
 		{ idx: 12, name: '검정', color: '#000000' },
