@@ -38,7 +38,6 @@ export default function SelectCeleb() {
 	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
-	const setUserFavoriteIdxList = useSetRecoilState(UserFavoriteCelebIdxListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	
 	useEffect(() => {
@@ -163,7 +162,7 @@ export default function SelectCeleb() {
 			console.log(data.message);
 			return;
 		}
-		setUserFavoriteIdxList(selectedCelebIdxArray);
+
 		console.log(data.message);
 		navigate('/home');
 	}
