@@ -14,7 +14,7 @@ export function BottomSlideMenu({ menu, children, filters }) {
 
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
-			<div onClick={() => closeDialog} style={{ height: '100%', width: '100%' }}></div>
+			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
 			<BottomDialogDiv>
 				<CloseWrap>
 					{menu ? (
@@ -43,7 +43,7 @@ export function BottomSlideMenu({ menu, children, filters }) {
 							position: 'absolute',
 							right: '1.25rem',
 						}}
-						onClick={() => closeDialog}
+						onClick={closeDialog}
 					></Close>
 				</CloseWrap>
 				{children}
