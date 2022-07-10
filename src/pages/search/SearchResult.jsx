@@ -36,6 +36,7 @@ import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.sv
 import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
 
 export default function SearchResult() {
 	const navigate = useNavigate();
@@ -46,11 +47,64 @@ export default function SearchResult() {
 	const [isCollapsed, setIsCollapsed] = useState(true);
 	const [view, setView] = useState(true); //view = true 크게보기  false = 작게보기
 
+	const [selectedItemFilter, setSelectedItemFilter] = useState();
+	const [selectedPriceFilter, setSelectedPriceFilter] = useState();
+	const [selectedAlignFilter, setSelectedAlignFilter] = useState();
+	const [selectedColorFilter, setSelectedColorFilter] = useState();
+
+	const [isSelected, setIsSelected] = useState(false);
+	const getIsSelected = input => {
+		setIsSelected(input);
+	};
+
+	const tabList = [
+		{
+			idx: 1,
+			name: '아이템 종류',
+		},
+		{
+			idx: 2,
+			name: '가격대',
+		},
+		{
+			idx: 3,
+			name: '정렬',
+		},
+		{
+			idx: 4,
+			name: '색상',
+		},
+	];
+	const [selectedTab, setSelectedTab] = useState(1);
+	const getSelectedTab = input => {
+		setSelectedTab(input);
+	};
+
+	const childFunc = React.useRef(null);
+	const getResetFunction = input => {};
+	const getSelectedItemFilter = input => {
+		setSelectedItemFilter(input);
+		console.log(selectedItemFilter);
+	};
+	const getSelectedPriceFilter = input => {
+		setSelectedPriceFilter(input);
+		console.log(selectedPriceFilter);
+	};
+	const getSelectedAlignFilter = input => {
+		setSelectedAlignFilter(input);
+		console.log(selectedAlignFilter);
+	};
+	const getSelectedColorFilter = input => {
+		setSelectedColorFilter(input);
+		console.log(selectedColorFilter);
+	};
+
 	const changeView = () => {
 		setView(!view);
 	};
-	const onFilterClick = () => {
+	const onFilterClick = idx => {
 		setBottomMenuStatusState(true);
+		setSelectedTab(idx);
 	};
 
 	const onHandleChangeSearch = e => {
@@ -63,9 +117,9 @@ export default function SearchResult() {
 	const onBackClick = () => {
 		navigate('../search');
 	};
-	useEffect(() => {
-		setBottomMenuStatusState(true);
-	});
+	// useEffect(() => {
+	// 	setBottomMenuStatusState(true);
+	// });
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav>
@@ -99,8 +153,22 @@ export default function SearchResult() {
 				</InputWrap>
 			</div>
 			<FilterContainer>
-				<Filter onClick={onFilterClick}>
-					아이템 종류{' '}
+				{isSelected ? (
+					<Refresh
+						onClick={() => childFunc.current()}
+						style={{
+							width: '32px',
+							height: '32px',
+							marginRight: '0.5rem',
+							flexShrink: 0,
+						}}
+					></Refresh>
+				) : (
+					<></>
+				)}
+				<Filter onClick={() => onFilterClick(1)} selected={selectedItemFilter}>
+					{selectedItemFilter ? selectedItemFilter : '아이템 종류'}
+
 					<DownArrow
 						style={{
 							width: '1.125rem',
@@ -109,8 +177,8 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter onClick={onFilterClick}>
-					가격대
+				<Filter onClick={() => onFilterClick(2)} selected={selectedPriceFilter}>
+					{selectedPriceFilter ? selectedPriceFilter : '가격대'}
 					<DownArrow
 						style={{
 							width: '1.125rem',
@@ -119,8 +187,8 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter onClick={onFilterClick}>
-					정렬
+				<Filter onClick={() => onFilterClick(3)} selected={selectedAlignFilter}>
+					{selectedAlignFilter ? selectedAlignFilter : '정렬'}
 					<DownArrow
 						style={{
 							width: '1.125rem',
@@ -129,8 +197,8 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter onClick={onFilterClick}>
-					색상
+				<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
+					{selectedColorFilter ? selectedColorFilter : '색상'}
 					<DownArrow
 						style={{
 							width: '1.125rem',
@@ -513,7 +581,16 @@ export default function SearchResult() {
 					)}
 				</ItemContainer>
 			</FeedContainer>
-			<SearchBottomSlideMenu></SearchBottomSlideMenu>
+			<SearchBottomSlideMenu
+				childFunc={childFunc}
+				selectedTab={selectedTab}
+				getSelectedTab={getSelectedTab}
+				getSelectedItemFilter={getSelectedItemFilter}
+				getSelectedPriceFilter={getSelectedPriceFilter}
+				getSelectedAlignFilter={getSelectedAlignFilter}
+				getSelectedColorFilter={getSelectedColorFilter}
+				getIsSelected={getIsSelected}
+			></SearchBottomSlideMenu>
 		</MainContainer>
 	);
 }
@@ -521,9 +598,10 @@ export default function SearchResult() {
 const FilterContainer = styled.div`
 	display: flex;
 	flex-shrink: 0;
+	flex-grow: 1;
+	overflow-x: scroll;
 	flex-direction: row;
 	align-items: center;
-	overflow-x: scroll;
 	white-space: nowrap;
 	box-sizing: border-box;
 	margin: 4px 0 0 0;
@@ -543,13 +621,14 @@ const Filter = styled.div`
 	height: 2rem;
 	padding: 0.5rem 0.625rem;
 	border-radius: 8rem;
-	border: solid 1px #d9d9d9;
-	background-color: #fff;
+	border: ${props => (props.selected ? 'solid 1px #9E30F4' : 'solid 1px #d9d9d9')};
+	background-color: ${props => (props.selected ? '#9E30F4' : 'white')};
 	margin-right: 0.5rem;
 	font-family: Pretendard;
-	font-size: 13px;
+	font-size: 0.8125rem;
 	font-weight: 600;
-	color: #564b5c;
+	color: ${props => (props.selected ? 'white' : '564B5C')};
+	/* ${props => (props.selected ? 'white' : '564B5C')} */
 `;
 const FilterWrap = styled.div`
 	display: flex;

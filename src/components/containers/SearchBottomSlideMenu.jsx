@@ -10,10 +10,79 @@ import { ItemFilter } from '../Filters/ItemFilter';
 
 import { SubText } from '../Texts/SubText';
 
-export function SearchBottomSlideMenu() {
+export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const [isSelected, setIsSelected] = useState(false);
+	const filterList = [
+		{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
+		{ idx: 2, name: '하의', list: ['바지', '치마'] },
+		{ idx: 3, name: '원피스', list: ['원피스', '점프슈트'] },
+		{ idx: 4, name: '뷰티', list: ['메이트업', '스킨케어', '향수', '헤어 & 바디'] },
+		{ idx: 5, name: '액세서리', list: ['신발', '모자', '가방'] },
+		{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
+		{ idx: 7, name: '기타', list: [] },
+	];
 
+	const onReset = () => {
+		props.getSelectedItemFilter();
+		props.getSelectedPriceFilter();
+		props.getSelectedAlignFilter();
+		props.getSelectedColorFilter();
+		setSelectedItemMainFilter(0);
+		setSelectedItemStatusList([]);
+		setSelectedItemFilterList([]);
+		setSelectedPriceMainFilter(null);
+		setSelectedAlignMainFilter(null);
+		setSelectedColorStatusList([]);
+		setSelectedColorFilterList([]);
+	};
+	const onSubmit = e => {
+		setBottomMenuStatusState(false);
+		if (selectedItemMainFilter !== 0) {
+			if (selectedItemFilterList.length === 0) {
+				props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
+				console.log(selectedItemFilterList.length);
+			} else {
+				if (selectedItemFilterList.length === 1) {
+					props.getSelectedItemFilter(`${selectedItemFilterList[0]}`);
+				} else {
+					props.getSelectedItemFilter(
+						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
+					);
+				}
+
+				console.log(selectedItemFilterList.length);
+			}
+		} else {
+			props.getSelectedItemFilter();
+		}
+
+		if (selectedPriceMainFilter !== null) {
+			props.getSelectedPriceFilter(selectedPriceMainFilter);
+		} else {
+			props.getSelectedPriceFilter();
+		}
+
+		if (selectedAlignMainFilter !== null) {
+			props.getSelectedAlignFilter(selectedAlignMainFilter);
+		} else {
+			props.getSelectedAlignFilter();
+		}
+
+		if (selectedColorFilterList.length > 0) {
+			if (selectedColorFilterList.length === 1) {
+				props.getSelectedColorFilter(selectedColorFilterList[0].name);
+			} else {
+				props.getSelectedColorFilter(
+					`${selectedColorFilterList[0].name} 외 ${selectedColorFilterList.length - 1}`
+				);
+			}
+		} else {
+			props.getSelectedColorFilter();
+		}
+		e.preventDefault();
+	};
 	// 아이템 종류
 	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
 	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
@@ -30,13 +99,13 @@ export function SearchBottomSlideMenu() {
 	};
 
 	// 가격대
-	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(0);
+	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(null);
 	const getSelectedPriceMainFilter = input => {
 		setSelectedPriceMainFilter(input);
 	};
 
 	// 정렬
-	const [selectedAlignMainFilter, setSelectedAlignMainFilter] = useState(0);
+	const [selectedAlignMainFilter, setSelectedAlignMainFilter] = useState(null);
 	const getSelectedAlignMainFilter = input => {
 		setSelectedAlignMainFilter(input);
 	};
@@ -50,6 +119,29 @@ export function SearchBottomSlideMenu() {
 	const getSelectedColorFilterList = input => {
 		setSelectedColorFilterList(input);
 	};
+	useEffect(() => {
+		props.childFunc.current = onReset;
+	}, []);
+
+	useEffect(() => {
+		if (
+			selectedItemMainFilter === 0 &&
+			selectedPriceMainFilter === null &&
+			selectedAlignMainFilter === null &&
+			selectedColorFilterList.length === 0
+		) {
+			setIsSelected(false);
+			props.getIsSelected(false);
+		} else {
+			setIsSelected(true);
+			props.getIsSelected(true);
+		}
+	}, [
+		selectedItemMainFilter,
+		selectedPriceMainFilter,
+		selectedAlignMainFilter,
+		selectedColorFilterList,
+	]);
 
 	const closeDialog = () => {
 		setBottomMenuStatusState(false);
@@ -73,9 +165,10 @@ export function SearchBottomSlideMenu() {
 			name: '색상',
 		},
 	];
-	const [selectedTab, setSelectedTab] = useState(1);
+	// const [selectedTab, setSelectedTab] = useState(1);
 	const onClickTab = idx => {
-		setSelectedTab(idx);
+		props.getSelectedTab(idx);
+		console.log(props.selectedTab);
 	};
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
@@ -89,7 +182,8 @@ export function SearchBottomSlideMenu() {
 								fontsize="1.125rem"
 								margin="0 1rem 0 0 "
 								onClick={() => onClickTab(item.idx, item.name)}
-								selected={selectedTab === item.idx}
+								selected={props.selectedTab === item.idx}
+								color={props.selectedTab === item.idx ? '#262626' : '#8D8D8D'}
 							>
 								{item.name}
 							</SubText>
@@ -105,8 +199,9 @@ export function SearchBottomSlideMenu() {
 						onClick={closeDialog}
 					></Close>
 				</CloseWrap>
-				{selectedTab === 1 && (
+				{props.selectedTab === 1 && (
 					<ItemFilter
+						filterList={filterList}
 						selectedMainFilter={selectedItemMainFilter}
 						selectedStatusList={selectedItemStatusList}
 						selectedFilterList={selectedItemFilterList}
@@ -115,19 +210,19 @@ export function SearchBottomSlideMenu() {
 						getSelectedFilterList={getSelectedItemFilterList}
 					></ItemFilter>
 				)}
-				{selectedTab === 2 && (
+				{props.selectedTab === 2 && (
 					<PriceFilter
 						selectedMainFilter={selectedPriceMainFilter}
 						getSelectedMainFilter={getSelectedPriceMainFilter}
 					></PriceFilter>
 				)}
-				{selectedTab === 3 && (
+				{props.selectedTab === 3 && (
 					<AlignFilter
 						selectedMainFilter={selectedAlignMainFilter}
 						getSelectedMainFilter={getSelectedAlignMainFilter}
 					></AlignFilter>
 				)}
-				{selectedTab === 4 && (
+				{props.selectedTab === 4 && (
 					<ColorFilter
 						selectedStatusList={selectedColorStatusList}
 						selectedFilterList={selectedColorFilterList}
@@ -137,8 +232,12 @@ export function SearchBottomSlideMenu() {
 				)}
 
 				<ButtonWrap>
-					<ResetButton active={true}>초기화</ResetButton>
-					<SubmitButton active={true}>선택 완료</SubmitButton>
+					<ResetButton active={isSelected} onClick={onReset}>
+						초기화
+					</ResetButton>
+					<SubmitButton active={isSelected} onClick={e => onSubmit(e)}>
+						선택 완료
+					</SubmitButton>
 				</ButtonWrap>
 			</BottomDialogDiv>
 		</BottomDialogWrap>
