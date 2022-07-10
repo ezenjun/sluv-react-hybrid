@@ -40,7 +40,6 @@ export default function UploadItem() {
 	const selectedCeleb = useRecoilValue(UploadCelebState);
 	const selectedMember = useRecoilValue(UploadMemberState);
 	const [ bottomMenuStatusState, setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
-		
 
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
@@ -54,6 +53,10 @@ export default function UploadItem() {
 	const [isExtraInfo, setIsExtraInfo] = useState(false);
 	const [link, setLink] = useState('');
 	const [isLink, setIsLink] = useState(false);
+
+	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
+	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
+	const [selectedItemFilterList, setSelectedItemFilterList] = useState([]);
 
 	AWS.config.update({
 		region: REGION,
@@ -179,6 +182,16 @@ export default function UploadItem() {
 		// 		},
 		// 	],
 		// };
+	};
+
+	const getSelectedItemMainFilter = input => {
+		setSelectedItemMainFilter(input);
+	};
+	const getSelectedItemStatusList = input => {
+		setSelectedItemStatusList(input);
+	};
+	const getSelectedItemFilterList = input => {
+		setSelectedItemFilterList(input);
 	};
 
 	return (
@@ -361,7 +374,15 @@ export default function UploadItem() {
 					</TopRadiusContainer>
 
 					<BottomSlideMenu menu={'아이템 종류'}>
-						<ItemFilter filterList={filterList} />
+						<ItemFilter
+							filterList={filterList}
+							selectedMainFilter={selectedItemMainFilter}
+							selectedStatusList={selectedItemStatusList}
+							selectedFilterList={selectedItemFilterList}
+							getSelectedMainFilter={getSelectedItemMainFilter}
+							getSelectedStatusList={getSelectedItemStatusList}
+							getSelectedFilterList={getSelectedItemFilterList}
+						/>
 					</BottomSlideMenu>
 				</MainContainer>
 			)}
