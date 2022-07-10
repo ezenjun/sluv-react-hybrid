@@ -1,29 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { customApiClient } from '../../../utils/apiClient';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 
-export function RecommendUserComponent(props) {
+import { FavoriteCelebListState } from '../../../recoil/Celebrity';
+
+export function RecommendUserComponent() {
+	const favoriteCelebList = useRecoilValue(FavoriteCelebListState);
+
 	const [selected, setSelected] = useState(0);
 	const onChipClick = idx => {
 		setSelected(idx);
+		if (!userRecommendList[idx]) {
+			getEachCelebRecommendList(idx);
+			console.log('호출');
+		}
 	};
 
-	const [userInterestList, setUserInterestList] = useState([]);
-	const getUserInterestList = async () => {
-		const data = await customApiClient('get', '/interest');
+	const [userRecommendList, setUserRecommendList] = useState([]);
+
+	const getTotalCelebRecommendList = async () => {
+		const data = await customApiClient('get', '/homes/hot-users');
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
 		}
-		setUserInterestList(data.result);
+		setUserRecommendList([...userRecommendList, data.result]);
+		console.log(data.result);
+	};
+	const getEachCelebRecommendList = async idx => {
+		const data = await customApiClient('get', `/homes/hot-users?celebIdx=${idx}`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setUserRecommendList([...userRecommendList, data.result]);
+		console.log(idx, userRecommendList);
 		console.log(data.result);
 	};
 	useEffect(() => {
-		getUserInterestList();
+		getTotalCelebRecommendList();
 	}, []);
 
 	return (
@@ -35,7 +56,7 @@ export function RecommendUserComponent(props) {
 				<Chip selected={selected === 0} onClick={() => onChipClick(0)}>
 					전체 셀럽
 				</Chip>
-				{props.userInterestList.map((celeb, idx) => (
+				{favoriteCelebList.map((celeb, idx) => (
 					<Chip
 						key={celeb.idx}
 						selected={selected === idx + 1}
@@ -46,38 +67,27 @@ export function RecommendUserComponent(props) {
 				))}
 			</ChipWrap>
 			<UserWrap>
-				<User>
-					<ProfileImg></ProfileImg>
-					<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-						신류땡의 옷장
-					</SubText>
-					<SubText color="#8d8d8d">@ryujinee</SubText>
-					<FollowButton follow={false}>팔로우</FollowButton>
-				</User>
-				<User>
-					<ProfileImg></ProfileImg>
-					<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-						도영이 클로젯12
-					</SubText>
-					<SubText color="#8d8d8d">@doyoung12</SubText>
-					<FollowButton follow={true}>팔로잉</FollowButton>
-				</User>
-				<User>
-					<ProfileImg></ProfileImg>
-					<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-						신류땡의 옷장
-					</SubText>
-					<SubText color="#8d8d8d">@ryujinee</SubText>
-					<FollowButton follow={false}>팔로우</FollowButton>
-				</User>
-				<User>
-					<ProfileImg></ProfileImg>
-					<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-						신류땡의 옷장
-					</SubText>
-					<SubText color="#8d8d8d">@ryujinee</SubText>
-					<FollowButton follow={true}>팔로잉</FollowButton>
-				</User>
+				{userRecommendList[selected] ? (
+					<>
+						{userRecommendList[selected].map(user => (
+							<User key={user.userIdx}>
+								<ProfileImg src={user.profileImgUrl}></ProfileImg>
+								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
+									{user.nickName}
+								</SubText>
+								<SubText color="#8d8d8d">@{user.id}</SubText>
+								<FollowButton follow={user.isFollow}>팔로우</FollowButton>
+							</User>
+						))}
+					</>
+				) : (
+					<>
+						<User></User>
+						<User></User>
+						<User></User>
+						<User></User>
+					</>
+				)}
 			</UserWrap>
 		</RecommendUserWrap>
 	);
@@ -114,11 +124,17 @@ const User = styled.div`
 	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.05);
 	background-color: rgba(255, 255, 255, 0.4);
 `;
+const SkeletonProfileImg = styled.div`
+	width: 3.875rem;
+	height: 3.875rem;
+	border-radius: 50%;
+	background-color: #8d8d8d;
+`;
 const ProfileImg = styled.div`
 	width: 3.875rem;
 	height: 3.875rem;
 	border-radius: 50%;
-	background-color: chocolate;
+	background-image: url(${props => props.src});
 `;
 const FollowButton = styled.div`
 	padding: 10px 16px;
