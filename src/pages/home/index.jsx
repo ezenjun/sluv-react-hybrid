@@ -71,7 +71,7 @@ export default function Home() {
 			console.log(data.message);
 			return;
 		}
-		console.log(data.result);
+		console.log('ggetFavoriteCeleb', data.result);
 		setFavoriteCelebList(data.result);
 	};
 
