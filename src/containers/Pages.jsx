@@ -19,7 +19,6 @@ import Event from '../pages/home/Event';
 import Notice from '../pages/notice';
 import SearchResult from '../pages/search/SearchResult';
 import AddBinder from '../pages/binder/AddBinder';
-import UserProfile from '../pages/my/UserProfile';
 import Settings from '../pages/my/Settings';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
@@ -74,7 +73,7 @@ export default function Pages() {
 			<Route path="/users/:id" element={<My />} />
 			<Route path="/settings" element={<Settings />} />
 
-			<Route path="/report/user" element={<ReportUser />} />
+			<Route path="/report/user/:id" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />
 			<Route path="/report/comment" element={<ReportComment />} />
 		</Routes>
