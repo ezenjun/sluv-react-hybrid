@@ -16,7 +16,6 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	const navigate = useNavigate();
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
-	const setUserFavoriteIdxList = useSetRecoilState(UserFavoriteCelebIdxListState);
 
 	const [currentMemberPage, setCurrentMemberPage] = useState(0);
 	const [selectedMemberNum, setSelectedMemberNum] = useState(0);
@@ -101,7 +100,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 			console.log(data.message);
 			return;
 		}
-		setUserFavoriteIdxList(postIdxArray);
+
 		// API 호출 성공하면
 		console.log(data.message);
 		navigate('/home');
