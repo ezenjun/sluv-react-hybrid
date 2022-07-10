@@ -402,7 +402,7 @@ export default function Signup() {
 									</IconWrap>
 								)}
 
-								<SubText fontweight="bold" fontsize="16px">
+								<SubText fontweight="bold" fontsize="1rem">
 									약관 전체동의
 								</SubText>
 							</TermsWrap>
@@ -425,8 +425,8 @@ export default function Signup() {
 										<CheckOff />
 									</IconWrap>
 								)}
-								<SubText fontweight="normal" fontsize="14px">
-									<SubText color="#9e30f4" fontsize="14px">
+								<SubText fontweight="normal" fontsize="0.875rem">
+									<SubText color="#9e30f4" fontsize="0.875rem">
 										[필수]{' '}
 									</SubText>
 									만 14세 이상
@@ -450,11 +450,22 @@ export default function Signup() {
 										<CheckOff />
 									</IconWrap>
 								)}
-								<SubText fontweight="normal" fontsize="14px">
-									<SubText color="#9e30f4" fontsize="14px">
+								<SubText fontweight="normal" fontsize="0.875rem">
+									<SubText color="#9e30f4" fontsize="0.875rem">
 										[필수]{' '}
 									</SubText>
 									이용약관 동의
+									<span
+										onClick={() => navigate('/settings/terms-of-use')}
+										style={{
+											marginLeft: '0.5rem',
+											fontSize: '0.75rem',
+											color: '#b1b1b1',
+											textDecoration: 'underline',
+										}}
+									>
+										보기
+									</span>
 								</SubText>
 							</TermsWrap>
 							<TermsWrap>
@@ -475,11 +486,22 @@ export default function Signup() {
 										<CheckOff />
 									</IconWrap>
 								)}
-								<SubText fontweight="normal" fontsize="14px">
-									<SubText color="#9e30f4" fontsize="14px">
+								<SubText fontweight="normal" fontsize="0.875rem">
+									<SubText color="#9e30f4" fontsize="0.875rem">
 										[필수]{' '}
 									</SubText>
 									개인정보 처리방침 동의
+									<span
+										onClick={() => navigate('/settings/privacy')}
+										style={{
+											marginLeft: '0.5rem',
+											fontSize: '0.75rem',
+											color: '#b1b1b1',
+											textDecoration: 'underline',
+										}}
+									>
+										보기
+									</span>
 								</SubText>
 							</TermsWrap>
 							<TermsWrap>
@@ -500,7 +522,7 @@ export default function Signup() {
 										<CheckOff />
 									</IconWrap>
 								)}
-								<SubText fontweight="normal" fontsize="14px">
+								<SubText fontweight="normal" fontsize="0.875rem">
 									[선택] 광고성 정보 수신 및 마케팅 활용 동의
 								</SubText>
 							</TermsWrap>
@@ -787,7 +809,7 @@ export default function Signup() {
 						<CompletePageLabel>
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
-							<SubText fontsize="16px" color="#4A4A4A" margin="1.875rem">
+							<SubText fontsize="1rem" color="#4A4A4A" margin="1.875rem">
 								스럽에서 다양한 활동 기대할게요
 							</SubText>
 						</CompletePageLabel>

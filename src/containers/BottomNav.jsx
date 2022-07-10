@@ -51,7 +51,7 @@ export default function BottomNav() {
 				setIconBinder(true);
 				setIconMy(false);
 				break;
-			case '/my':
+			case '/users/:id':
 				setIconHome(false);
 				setIconSearch(false);
 				setIconBinder(false);
@@ -124,7 +124,7 @@ export default function BottomNav() {
 					<div className="bottomNavItemText">바인더</div>
 				</BottomNavItem>
 			</Link>
-			<Link style={{ flex: 1 }} to="/my">
+			<Link style={{ flex: 1 }} to="/users/:id">
 				<BottomNavItem status={iconMy}>
 					{iconMy ? (
 						<BottomNavIcon src={icon_my_selected} />
