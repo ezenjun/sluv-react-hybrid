@@ -26,7 +26,10 @@ import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 import AWS from 'aws-sdk';
 import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
-import { BottomDialogWrap } from '../../components/containers/BottomSlideMenu';
+import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { ItemFilter } from '../../components/Filters/ItemFilter';
+import { filterList } from '../../components/containers/SearchBottomSlideMenu';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -36,6 +39,8 @@ export default function UploadItem() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const selectedCeleb = useRecoilValue(UploadCelebState);
 	const selectedMember = useRecoilValue(UploadMemberState);
+	const [ bottomMenuStatusState, setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
+		
 
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
@@ -49,8 +54,6 @@ export default function UploadItem() {
 	const [isExtraInfo, setIsExtraInfo] = useState(false);
 	const [link, setLink] = useState('');
 	const [isLink, setIsLink] = useState(false);
-
-
 
 	AWS.config.update({
 		region: REGION,
@@ -68,7 +71,9 @@ export default function UploadItem() {
 		setCurrentPage(0);
 	}, []);
 
-	const onClickItemCatgeorySelect = () => {};
+	const onClickItemCategorySelect = () => {
+		setBottomMenuStatusState(true);
+	};
 	const onClickItemBrandSelect = () => {
 
 	};
@@ -141,7 +146,6 @@ export default function UploadItem() {
 				if (err) console.log(err);
 			});
 	}
-
 
 	const onClickUploadItem = async (fileList) => {
 
@@ -219,7 +223,7 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</NoTailBubbleWrap>
-						<InputSpeechBubbleWrap onClick={onClickItemCatgeorySelect} notEmpty={false}>
+						<InputSpeechBubbleWrap onClick={onClickItemCategorySelect} notEmpty={false}>
 							<SpeechBubbleNoInput>아이템 종류를 선택해 주세요</SpeechBubbleNoInput>
 						</InputSpeechBubbleWrap>
 
@@ -356,7 +360,9 @@ export default function UploadItem() {
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>
 
-					<BottomDialogWrap></BottomDialogWrap>
+					<BottomSlideMenu menu={'아이템 종류'}>
+						<ItemFilter filterList={filterList} />
+					</BottomSlideMenu>
 				</MainContainer>
 			)}
 		</>
