@@ -8,10 +8,11 @@ import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { PopUpModal } from '../../components/PopUpModal';
-import { UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
+import { FavoriteCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
+import { customApiClient } from '../../utils/apiClient';
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -21,8 +22,7 @@ export default function Home() {
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
-	const userFavoriteIdxList = useRecoilValue(UserFavoriteCelebIdxListState);
-	console.log(userFavoriteIdxList);
+	const [favoriteCelebList, setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
 
 	const tabList = [
 		{
@@ -57,7 +57,23 @@ export default function Home() {
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
+
+		// 관심셀럽 조회 API 호출
+		if (favoriteCelebList.length < 1) {
+			getFavoriteCeleb();
+		}
 	}, []);
+
+	const getFavoriteCeleb = async () => {
+		const data = await customApiClient('get', '/interest');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log(data.result);
+		setFavoriteCelebList(data.result);
+	};
 
 	return (
 		<>
