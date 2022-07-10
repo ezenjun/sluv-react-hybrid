@@ -60,7 +60,7 @@ export function RecommendUserComponent() {
 					<Chip
 						key={celeb.idx}
 						selected={selected === idx + 1}
-						onClick={() => onChipClick(idx + 1, celeb.idx)}
+						onClick={() => onChipClick(idx + 1)}
 					>
 						{celeb.name}
 					</Chip>
