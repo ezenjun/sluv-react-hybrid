@@ -7,7 +7,7 @@ import { ReactComponent as BlackCheck } from '../../assets/Icons/blackCheck.svg'
 export function ColorFilter(props) {
 	const filterList = [
 		{ idx: 1, name: '빨강', color: '#ea3323' },
-		{ idx: 2, name: '주확', color: '#FE9150' },
+		{ idx: 2, name: '주황', color: '#FE9150' },
 		{ idx: 3, name: '노랑', color: '#F8D748' },
 		{ idx: 4, name: '초록', color: '#459949' },
 		{ idx: 5, name: '파랑', color: '#4166ED' },
@@ -43,7 +43,9 @@ export function ColorFilter(props) {
 	const eachStatusClick = (subfilter, index) => {
 		if (props.selectedStatusList[index]) {
 			//선택되어있을 때
-			setSelectedFilterList(props.selectedFilterList.filter(item => item !== subfilter));
+			setSelectedFilterList(
+				props.selectedFilterList.filter(item => item.idx !== subfilter.idx)
+			);
 		} else {
 			// 선택 안되어있을 때
 			setSelectedFilterList([...props.selectedFilterList, subfilter]);
@@ -62,7 +64,7 @@ export function ColorFilter(props) {
 					<Filter
 						key={filter.idx}
 						selected={props.selectedStatusList[index] === filter.idx}
-						onClick={() => eachStatusClick(filter.idx, index)}
+						onClick={() => eachStatusClick(filter, index)}
 					>
 						<Color color={filter.color} border={filter.border}>
 							{props.selectedStatusList[index] ? (

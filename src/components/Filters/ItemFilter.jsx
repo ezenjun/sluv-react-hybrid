@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
 export function ItemFilter(props) {
-	const filterList = [
-		{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
-		{ idx: 2, name: '하의', list: ['바지', '치마'] },
-		{ idx: 3, name: '원피스', list: ['원피스', '점프슈트'] },
-		{ idx: 4, name: '뷰티', list: ['메이트업', '스킨케어', '향수', '헤어 & 바디'] },
-		{ idx: 5, name: '액세서리', list: ['신발', '모자', '가방'] },
-		{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
-		{ idx: 7, name: '기타', list: [] },
-	];
+	// const filterList = [
+	// 	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
+	// 	{ idx: 2, name: '하의', list: ['바지', '치마'] },
+	// 	{ idx: 3, name: '원피스', list: ['원피스', '점프슈트'] },
+	// 	{ idx: 4, name: '뷰티', list: ['메이트업', '스킨케어', '향수', '헤어 & 바디'] },
+	// 	{ idx: 5, name: '액세서리', list: ['신발', '모자', '가방'] },
+	// 	{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
+	// 	{ idx: 7, name: '기타', list: [] },
+	// ];
 
 	const setSelectedMainFilter = input => {
 		props.getSelectedMainFilter(input);
@@ -31,7 +31,7 @@ export function ItemFilter(props) {
 		} else {
 			setSelectedMainFilter(idx);
 			let temp;
-			(temp = []).length = filterList[idx - 1].list.length;
+			(temp = []).length = props.filterList[idx - 1].list.length;
 			temp.fill(false);
 			setSelectedStatusList(temp);
 			temp = [];
@@ -55,7 +55,7 @@ export function ItemFilter(props) {
 	return (
 		<FilterContainer>
 			<TopWrap>
-				{filterList.map(filter => (
+				{props.filterList.map(filter => (
 					<Filter
 						key={filter.idx}
 						selected={props.selectedMainFilter === filter.idx}
@@ -69,15 +69,17 @@ export function ItemFilter(props) {
 			<BottomWrap>
 				{props.selectedMainFilter > 0 && (
 					<>
-						{filterList[props.selectedMainFilter - 1].list.map((subfilter, index) => (
-							<Filter
-								key={subfilter}
-								selected={props.selectedStatusList[index]}
-								onClick={() => eachStatusClick(subfilter, index)}
-							>
-								{subfilter}
-							</Filter>
-						))}
+						{props.filterList[props.selectedMainFilter - 1].list.map(
+							(subfilter, index) => (
+								<Filter
+									key={subfilter}
+									selected={props.selectedStatusList[index]}
+									onClick={() => eachStatusClick(subfilter, index)}
+								>
+									{subfilter}
+								</Filter>
+							)
+						)}
 					</>
 				)}
 			</BottomWrap>
