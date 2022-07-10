@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { customApiClient } from '../../../utils/apiClient';
 
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
@@ -12,27 +14,81 @@ import { ReactComponent as BinderWhite } from '../../../assets/Icons/binderWhite
 import { ReactComponent as BinderRed } from '../../../assets/Icons/binderRed.svg';
 import img from '../img.png';
 
-export const CelebsLuvItem = () => {
+export const CelebsLuvItem = ({ celeb }) => {
 	const navigate = useNavigate();
 	const onDetailCelebClick = celebId => {
 		navigate('/celeb/detail/' + celebId);
 	};
+	// console.log('celeb', celeb);
+	// console.log('celeb.memberList', celeb.memberList);
+	const [selected, setSelected] = useState(0);
+	const onChipClick = idx => {
+		setSelected(idx);
+	};
+
+	const [latestList, setLatestList] = useState([]);
+	const [hotList, setHotList] = useState([]);
+
+	const getTotalLatestList = async () => {
+		const data = await customApiClient('get', '/homes/hot-users');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setLatestList([...latestList, data.result]);
+		console.log(data.result);
+	};
+	const getTotalHotList = async () => {
+		const data = await customApiClient('get', '/homes/hot-users');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setHotList([...latestList, data.result]);
+		console.log(data.result);
+	};
+
+	const getEachCelebRecommendList = async idx => {
+		const data = await customApiClient('get', `/homes/hot-users?celebIdx=${idx}`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setLatestList([...latestList, data.result]);
+		console.log(idx, latestList);
+		console.log(data.result);
+	};
+	useEffect(() => {
+		getTotalLatestList();
+		getTotalHotList();
+	}, []);
+
 	return (
 		<ItemContainer>
 			<TextWrap>
 				<MainText fontsize="1.5rem">
-					#스트레이키즈's
+					#{celeb.name}'s
 					<br />
 					LUV 아이템
 				</MainText>
 				<RightArrow onClick={() => onDetailCelebClick(1)}></RightArrow>
 			</TextWrap>
 			<ChipWrap>
-				<Chip selected={true}>스트레이키즈</Chip>
-				<Chip>리노</Chip>
-				<Chip>현진</Chip>
-				<Chip>아이엔</Chip>
-				<Chip>필릭스</Chip>
+				<Chip selected={selected === 0} onClick={() => onChipClick(0)}>
+					{celeb.name}
+				</Chip>
+				{celeb.memberList.map((member, idx) => (
+					<Chip
+						key={idx}
+						selected={selected === idx + 1}
+						onClick={() => onChipClick(idx + 1)}
+					>
+						{member.name}
+					</Chip>
+				))}
 			</ChipWrap>
 			<HorizontalLine />
 			<FilterWrap>

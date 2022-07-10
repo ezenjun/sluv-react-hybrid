@@ -17,18 +17,28 @@ import { customApiClient } from '../../utils/apiClient';
 export default function Custom() {
 	// 해당 유저 관심셀럽 리스트 //
 	const favoriteCelebList = useRecoilValue(FavoriteCelebListState);
+	console.log(favoriteCelebList);
 
 	return (
 		<>
-			<EventComponent></EventComponent>
-			<CelebsLuvItem></CelebsLuvItem>
-			<RecommendUserComponent></RecommendUserComponent>
-			<BannerComponent color="#ff006b" icon={SpeakerPhone}></BannerComponent>
-			<CelebsLuvItem></CelebsLuvItem>
-			<BannerComponent color="#7000ff" icon={BubbleHeart}></BannerComponent>
-
-			<CelebsLuvItem></CelebsLuvItem>
-			<HotItemComponent></HotItemComponent>
+			{favoriteCelebList.length > 0 && (
+				<>
+					<EventComponent></EventComponent>
+					<CelebsLuvItem celeb={favoriteCelebList[0]}></CelebsLuvItem>
+					<RecommendUserComponent></RecommendUserComponent>
+					<BannerComponent color="#ff006b" icon={SpeakerPhone}></BannerComponent>
+					<CelebsLuvItem celeb={favoriteCelebList[1]}></CelebsLuvItem>
+					<BannerComponent color="#7000ff" icon={BubbleHeart}></BannerComponent>
+					<CelebsLuvItem celeb={favoriteCelebList[2]}></CelebsLuvItem>
+					{favoriteCelebList[3] && (
+						<CelebsLuvItem celeb={favoriteCelebList[3]}></CelebsLuvItem>
+					)}
+					{favoriteCelebList[4] && (
+						<CelebsLuvItem celeb={favoriteCelebList[4]}></CelebsLuvItem>
+					)}
+					<HotItemComponent></HotItemComponent>
+				</>
+			)}
 		</>
 	);
 }
