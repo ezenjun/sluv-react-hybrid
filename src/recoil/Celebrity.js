@@ -20,6 +20,12 @@ export const ChooseCelebCurrentPageState = atom({
 	default: 0,
 });
 
+// 확정된 관심셀럽 인덱스 리스트(전역적으로 사용)
+export const UserFavoriteCelebIdxListState = atom({
+	key: 'UserFavoriteCelebIdxListState',
+	default: [],
+});
+
 
 
 

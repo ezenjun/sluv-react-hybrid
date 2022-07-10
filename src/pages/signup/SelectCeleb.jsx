@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, PopularCelebListState, TotalCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
 
@@ -38,6 +38,7 @@ export default function SelectCeleb() {
 	const [popularCelebList, setPopularCelebList] = useRecoilState(PopularCelebListState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
+	const setUserFavoriteIdxList = useSetRecoilState(UserFavoriteCelebIdxListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	
 	useEffect(() => {
@@ -156,11 +157,13 @@ export default function SelectCeleb() {
 			celebMemberList: selectedCelebIdxArray
 		};
 		const data = await customApiClient('post', '/interest', body);
+		
 
 		if(!data.isSuccess) {
 			console.log(data.message);
 			return;
 		}
+		setUserFavoriteIdxList(selectedCelebIdxArray);
 		console.log(data.message);
 		navigate('/home');
 	}
