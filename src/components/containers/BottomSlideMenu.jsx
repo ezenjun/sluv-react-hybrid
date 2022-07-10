@@ -63,7 +63,7 @@ export const BottomDialogWrap = styled.div`
 	background-color: rgba(0, 0, 0, 0.7);
 `;
 
-const BottomDialogDiv = styled.div`
+export const BottomDialogDiv = styled.div`
 	position: absolute;
 	bottom: 0;
 	display: flex;
@@ -80,7 +80,7 @@ const BottomDialogDiv = styled.div`
 	padding: 1.25rem 0 1.25rem 0;
 	box-sizing: border-box;
 `;
-const CloseWrap = styled.div`
+export const CloseWrap = styled.div`
 	display: flex;
 	/* justify-content: flex-end; */
 	padding: 0 1.25rem;

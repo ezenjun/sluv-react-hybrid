@@ -19,8 +19,9 @@ import Event from '../pages/home/Event';
 import Notice from '../pages/notice';
 import SearchResult from '../pages/search/SearchResult';
 import AddBinder from '../pages/binder/AddBinder';
-import UserProfile from '../pages/my/UserProfile';
-import Setting from '../pages/my/Setting';
+import Settings from '../pages/my/Settings';
+import Privacy from '../pages/my/Privacy';
+import TermsOfUse from '../pages/my/TermsOfUse';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
 import CelebDetail from '../pages/celebdetail';
@@ -71,11 +72,12 @@ export default function Pages() {
 			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
 
-			<Route path="/my" element={<My />} />
-			<Route path="/profile/:idx" element={<UserProfile />} />
-			<Route path="/setting" element={<Setting />} />
+			<Route path="/users/:id" element={<My />} />
+			<Route path="/settings" element={<Settings />} />
+			<Route path="/settings/privacy" element={<Privacy />} />
+			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 
-			<Route path="/report/user" element={<ReportUser />} />
+			<Route path="/report/user/:id" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />
 			<Route path="/report/comment" element={<ReportComment />} />
 		</Routes>

@@ -30,6 +30,7 @@ import { BottomDialogWrap } from '../../components/containers/BottomSlideMenu';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
+	const imgInput = useRef();
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
@@ -39,10 +40,17 @@ export default function UploadItem() {
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
 	const [imgUrlList, setImgUrlList] = useState([]);
+
 	const [productName, setProductName] = useState('');
 	const [isProductName, setIsProductName] = useState(false);
+	const [place, setPlace] = useState('');
+	const [isPlace, setIsPlace] = useState(false);
+	const [extraInfo, setExtraInfo] = useState('');
+	const [isExtraInfo, setIsExtraInfo] = useState(false);
+	const [link, setLink] = useState('');
+	const [isLink, setIsLink] = useState(false);
 
-	const imgInput = useRef();
+
 
 	AWS.config.update({
 		region: REGION,
@@ -72,6 +80,30 @@ export default function UploadItem() {
 		}
 		setProductName(e.target.value);
 	};
+	const onChangePlace = (e) => {
+		if (e.target.value) {
+			setIsPlace(true);
+		} else {
+			setIsPlace(false);
+		}
+		setPlace(e.target.value);
+	};
+	const onChangeExtraInfo = (e) => {
+		if (e.target.value) {
+			setIsExtraInfo(true);
+		} else {
+			setIsExtraInfo(false);
+		}
+		setExtraInfo(e.target.value);
+	}
+	const onChangeLink = (e) => {
+		if (e.target.value) {
+			setIsLink(true);
+		} else {
+			setIsLink(false);
+		}
+		setLink(e.target.value);
+	}
 
 	const onClickItemDateSelect = () => {};
 	const onClickItemPriceSelect = () => {};
@@ -164,7 +196,10 @@ export default function UploadItem() {
 						</div>
 					</TopNav>
 
-					<TopRadiusContainer style={{ flex: '1', overflowY: 'scroll' }}>
+					<TopRadiusContainer
+						backgroundColor="linear-gradient(to top, #ffecf0 0%, #f0fff4 102%)"
+						style={{ flex: '1', overflowY: 'scroll' }}
+					>
 						<SpeechBubbleWrap>
 							<div>
 								{selectedCeleb && (
@@ -226,6 +261,21 @@ export default function UploadItem() {
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
 							<div>
+								어디서 해당 아이템을 보셨나요?<span className="redStar">*</span>
+							</div>
+						</SpeechBubbleWrap>
+						<InputSpeechBubbleWrap notEmpty={isPlace}>
+							<SpeechBubbleInput
+								notEmpty={isPlace}
+								type="text"
+								placeholder="Ex) VLive"
+								value={place}
+								onChange={onChangePlace}
+							/>
+						</InputSpeechBubbleWrap>
+
+						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
+							<div>
 								가격대가 궁금해요
 								<span className="redStar">*</span>
 							</div>
@@ -237,26 +287,26 @@ export default function UploadItem() {
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
 							<div>추가 정보를 자유롭게 이야기 해주세요</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap notEmpty={false} style={{ height: '100px' }}>
+						<InputSpeechBubbleWrap notEmpty={isExtraInfo} style={{ height: '100px' }}>
 							<SpeechBubbleTextArea
-								notEmpty={false}
+								notEmpty={isExtraInfo}
 								type="text"
 								placeholder="내용을 입력해 주세요(최대 1,000자)"
-								value={''}
-								onChange={undefined}
+								value={extraInfo}
+								onChange={onChangeExtraInfo}
 							/>
 						</InputSpeechBubbleWrap>
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
 							<div>아이템 구매가 가능한 링크를 알려주세요</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap notEmpty={false}>
+						<InputSpeechBubbleWrap notEmpty={isLink}>
 							<SpeechBubbleInput
-								notEmpty={false}
+								notEmpty={isLink}
 								type="text"
 								placeholder="Ex) www.sluv.com"
-								value={''}
-								onChange={undefined}
+								value={link}
+								onChange={onChangeLink}
 							/>
 						</InputSpeechBubbleWrap>
 
