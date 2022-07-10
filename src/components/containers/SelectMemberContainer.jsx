@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BottomWrap, CelebLeftBottom, CelebLeftTop, CelebNextLeftBottom, CelebNextLeftTop, CelebNextRightBottom, CelebNextRightTop, CelebRightBottom, CelebRightTop, CountBadge, MembersContainer, NavRight, NextButton, RepeatWrap, TextWrap } from '../../pages/signup/SelectCeleb';
-import { ChooseCelebCurrentPageState } from '../../recoil/Celebrity';
+import { ChooseCelebCurrentPageState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import { customApiClient } from '../../utils/apiClient';
 import { SpeechBubbleWrap } from '../Bubbles/SpeechBubble';
 import { BackButton } from '../Buttons/BackButton';
@@ -16,6 +16,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	const navigate = useNavigate();
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
+	const setUserFavoriteIdxList = useSetRecoilState(UserFavoriteCelebIdxListState);
 
 	const [currentMemberPage, setCurrentMemberPage] = useState(0);
 	const [selectedMemberNum, setSelectedMemberNum] = useState(0);
@@ -100,7 +101,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 			console.log(data.message);
 			return;
 		}
-
+		setUserFavoriteIdxList(postIdxArray);
 		// API 호출 성공하면
 		console.log(data.message);
 		navigate('/home');

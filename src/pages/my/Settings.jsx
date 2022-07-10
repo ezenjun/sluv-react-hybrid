@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { MainContainer } from '../../components/containers/MainContainer'
 import { TopNav } from '../../components/containers/TopNav'
 import { MainText } from '../../components/Texts/MainText';
+import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function Settings() {
     const navigate = useNavigate();
+
+		const setBottomNavStatus = useSetRecoilState(BottomNavState);
+
+		useEffect(() => {
+			setBottomNavStatus(false);
+		}, []);
 
     return (
 		<MainContainer>

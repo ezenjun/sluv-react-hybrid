@@ -11,6 +11,7 @@ import { TopNav } from '../../components/containers/TopNav';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { PopUpModal } from '../../components/PopUpModal';
+import { UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -20,6 +21,8 @@ export default function Home() {
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+	const userFavoriteIdxList = useRecoilValue(UserFavoriteCelebIdxListState);
+	console.log(userFavoriteIdxList);
 
 	const tabList = [
 		{
