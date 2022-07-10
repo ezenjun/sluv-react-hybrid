@@ -11,11 +11,11 @@ export function AlignFilter(props) {
 		props.getSelectedMainFilter(input);
 	};
 
-	const onMainSelect = idx => {
-		if (props.selectedMainFilter === idx) {
-			setSelectedMainFilter(0);
+	const onMainSelect = filter => {
+		if (props.selectedMainFilter === filter.name) {
+			setSelectedMainFilter(null);
 		} else {
-			setSelectedMainFilter(idx);
+			setSelectedMainFilter(filter.name);
 		}
 	};
 
@@ -25,8 +25,8 @@ export function AlignFilter(props) {
 				{filterList.map(filter => (
 					<Filter
 						key={filter.idx}
-						selected={props.selectedMainFilter === filter.idx}
-						onClick={() => onMainSelect(filter.idx)}
+						selected={props.selectedMainFilter === filter.name}
+						onClick={() => onMainSelect(filter)}
 					>
 						{filter.name}
 					</Filter>
