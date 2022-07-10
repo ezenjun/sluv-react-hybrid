@@ -420,7 +420,7 @@ export default function TermsOfUse() {
 	);
 }
 
-const ContentParagraphWrap = styled.div`
+export const ContentParagraphWrap = styled.div`
 	font-size: 0.8125rem;
 
 	line-height: 1.3125rem;
