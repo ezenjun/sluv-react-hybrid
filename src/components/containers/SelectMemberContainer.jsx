@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BottomWrap, CelebLeftBottom, CelebLeftTop, CelebNextLeftBottom, CelebNextLeftTop, CelebNextRightBottom, CelebNextRightTop, CelebRightBottom, CelebRightTop, CountBadge, MembersContainer, NavRight, NextButton, RepeatWrap, TextWrap } from '../../pages/signup/SelectCeleb';
-import { ChooseCelebCurrentPageState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
+import { ChooseCelebCurrentPageState, FavoriteCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import { customApiClient } from '../../utils/apiClient';
 import { SpeechBubbleWrap } from '../Bubbles/SpeechBubble';
 import { BackButton } from '../Buttons/BackButton';
@@ -16,6 +16,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	const navigate = useNavigate();
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
+	const setFavoriteCelebList = useSetRecoilState(FavoriteCelebListState);
 
 	const [currentMemberPage, setCurrentMemberPage] = useState(0);
 	const [selectedMemberNum, setSelectedMemberNum] = useState(0);
@@ -102,6 +103,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		}
 
 		// API 호출 성공하면
+		setFavoriteCelebList([]);
 		console.log(data.message);
 		navigate('/home');
 	};

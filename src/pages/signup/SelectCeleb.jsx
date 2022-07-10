@@ -15,7 +15,7 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, PopularCelebListState, TotalCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
+import { celebCategoryList, ChooseCelebCurrentPageState, FavoriteCelebListState, PopularCelebListState, TotalCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
 
@@ -39,6 +39,7 @@ export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const setFavoriteCelebList = useSetRecoilState(FavoriteCelebListState);
 	
 	useEffect(() => {
 		// 하단바 사라지기
@@ -163,6 +164,7 @@ export default function SelectCeleb() {
 			return;
 		}
 
+		setFavoriteCelebList([]);
 		console.log(data.message);
 		navigate('/home');
 	}
