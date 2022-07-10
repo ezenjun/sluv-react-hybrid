@@ -6,23 +6,29 @@ import { IconWrap, InputWrap } from '../../signup/SelectCeleb';
 import { ReactComponent as Delete } from '../../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../../assets/Icons/searchIcon.svg';
 import { ReactComponent as SelectIcon } from '../../../assets/Icons/icon_select_brand.svg';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { BrandListState } from '../../../recoil/Upload';
 import { useEffect } from 'react';
 import { customApiClient } from '../../../utils/apiClient';
+import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
 
-export default function SelectBrandDialog() {
+export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 
-	const [searchInput, setSearchInput] = useState('');
+	
 	const [brandList, setBrandList] = useRecoilState(BrandListState);
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const [currentBrandList, setCurrentBrandList] = useState([]);
+	const [searchInput, setSearchInput] = useState('');
 
 	useEffect(() => {
 		if(brandList.length < 1) {
 			getBrandList();
 		} else {
+			setCurrentBrandList(brandList);
 			console.log('brandList : 데이터 있어서 조회 안해!!');
 		}
 	},[]);
+
 	const getBrandList = async () => {
 		const data = await customApiClient('get', '/brands');
 
@@ -31,13 +37,35 @@ export default function SelectBrandDialog() {
 
 		console.log(data.result);
 		setBrandList(data.result);
+		setCurrentBrandList(data.result);
 	}
+
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
+
+		const value = e.target.value;
+
+		const searchResult = brandList.filter(brand => {
+			if(brand.brandKr.includes(value)) {
+				return brand.brandKr.includes(value);
+			} else if (brand.brandEn.includes(value)) {
+				return brand.brandEn.includes(value);
+			}
+		});
+
+		setCurrentBrandList(searchResult);
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
+		setCurrentBrandList(brandList);
 	};
+
+	const onClickBrandItem = (brand) => {
+		setFlag(true);
+		setBrandObj(brand);
+		setBrand(brand.brandKr + ' ' + brand.brandEn);
+		setBottomMenuStatusState(false);
+	}
 
 	return (
 		<SelectBrandDialogContainer>
@@ -60,15 +88,16 @@ export default function SelectBrandDialog() {
 			</InputWrap>
 
 			<BrandListWrap>
-			{brandList.length > 0 && brandList.map((brand) => {
-				return (
-					<BrandListItem key={brand.brandIdx}>
-						<SelectIcon style={{ width: '1.5rem', height: '1.5rem' }} />
-						<span className="brandKr">{brand.brandKr}</span>
-						<span className="brandEn">{brand.brandEn}</span>
-					</BrandListItem>
-				);
-			})}
+				{currentBrandList.length > 0 &&
+					currentBrandList.map(brand => {
+						return (
+							<BrandListItem onClick={() => onClickBrandItem(brand)} key={brand.brandIdx}>
+								<SelectIcon style={{ width: '1.5rem', height: '1.5rem' }} />
+								<span className="brandKr">{brand.brandKr}</span>
+								<span className="brandEn">{brand.brandEn}</span>
+							</BrandListItem>
+						);
+					})}
 			</BrandListWrap>
 		</SelectBrandDialogContainer>
 	);
