@@ -1,17 +1,26 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Slider from 'react-slick';
+
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
+
+import { EventComponent } from './CustomComponents/Event';
+import { CelebsLuvItem } from './CustomComponents/CelebsLuvItem';
+import { BannerComponent } from './CustomComponents/Banner';
+
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as SpeakerPhone } from '../../assets/Icons/speakerphone.svg';
 import { ReactComponent as BubbleHeart } from '../../assets/Icons/bubbleHeart.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as QuestionIcon } from '../../assets/Icons/question.svg';
-import { useNavigate } from 'react-router-dom';
+
 import img from './img.png';
+
 export default function Custom() {
 	const navigate = useNavigate();
 	const onDetailCelebClick = celebId => {
@@ -29,139 +38,22 @@ export default function Custom() {
 	const onUploadItemClick = () => {
 		navigate('/upload/item');
 	};
+	const settings = {
+		dots: false,
+		// fade: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		autoplay: true,
+		autoplaySpeed: 5000,
+		cssEase: 'linear',
+		arrows: true,
+	};
 	return (
 		<>
-			<EventContainer>
-				<Events>이벤트 배너</Events>
-				<Events bg="red">이벤트 배너</Events>
-				<Events>이벤트 배너</Events>
-				<Events bg="red">이벤트 배너</Events>
-			</EventContainer>
-			<ItemContainer>
-				<TextWrap>
-					<MainText fontsize="1.5rem">
-						#스트레이키즈's
-						<br />
-						LUV 아이템
-					</MainText>
-					<RightArrow onClick={() => onDetailCelebClick(1)}></RightArrow>
-				</TextWrap>
-				<ChipWrap>
-					<Chip selected={true}>스트레이키즈</Chip>
-					<Chip>리노</Chip>
-					<Chip>현진</Chip>
-					<Chip>아이엔</Chip>
-					<Chip>필릭스</Chip>
-				</ChipWrap>
-				<HorizontalLine />
-				<FilterWrap>
-					<SubText fontsize="14px" fontweight="bold">
-						최신순
-					</SubText>
-					<VerticalLine />
-					<SubText fontsize="14px" color="#8d8d8d">
-						인기순
-					</SubText>
-				</FilterWrap>
-				<ItemWrap>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									리노's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									현진's
-								</SubText>
-								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									아이엔's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									필릭스's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-				</ItemWrap>
-			</ItemContainer>
+			<EventComponent></EventComponent>
+			<CelebsLuvItem></CelebsLuvItem>
 			<RecommendUserWrap>
 				<TextWrap>
 					<MainText fontsize="1.5rem">인기 스러버 추천</MainText>
@@ -208,165 +100,8 @@ export default function Custom() {
 					</User>
 				</UserWrap>
 			</RecommendUserWrap>
-			<BannerWrap>
-				<Banner backgroundcolor="#ff006b" onClick={onUploadItemClick}>
-					<BannerText>
-						<MainText
-							fontsize="1.125rem"
-							fontweight="600"
-							color="#fff"
-							style={{ lineHeight: '1.28' }}
-						>
-							나누자! 정보!
-							<br />
-							우리들만의 아지트에서!
-						</MainText>
-						{/* <MainText
-							fontsize="1.125rem"
-							fontweight="600"
-							color="#fff"
-							style={{ lineHeight: '1.28' }}
-						>
-							{' '}
-							우리들만의 아지트에서!
-						</MainText> */}
-						<SubText
-							fontweight="normal"
-							// margin="6px 0 0 0"
-							color="rgba(255, 255, 255, 0.8)"
-						>
-							최애의 아이템 정보를 공유해 보아요!
-						</SubText>
-					</BannerText>
-					<BannerImg padding="0.3125rem 0 0 0">
-						<SpeakerPhone style={{ width: '7.125rem', height: '6rem' }} />
-					</BannerImg>
-				</Banner>
-			</BannerWrap>
-			<ItemContainer>
-				<TextWrap>
-					<MainText fontsize="1.5rem">
-						#있지's
-						<br />
-						LUV 아이템
-					</MainText>
-					<RightArrow></RightArrow>
-				</TextWrap>
-				<ChipWrap>
-					<Chip selected={true}>스트레이키즈</Chip>
-					<Chip>리노</Chip>
-					<Chip>현진</Chip>
-					<Chip>아이엔</Chip>
-					<Chip>필릭스</Chip>
-				</ChipWrap>
-				<HorizontalLine />
-				<FilterWrap>
-					<SubText fontsize="14px" fontweight="bold">
-						최신순
-					</SubText>
-					<VerticalLine />
-					<SubText fontsize="14px" color="#8d8d8d">
-						인기순
-					</SubText>
-				</FilterWrap>
-				<ItemWrap>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's
-								</SubText>
-								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE ㅁㄴㅇㄹ ㅁㄴㅁ ㄴㄻㄴㄹㅇ
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									있지's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-				</ItemWrap>
-			</ItemContainer>
+			<BannerComponent color="#ff006b" icon={SpeakerPhone}></BannerComponent>
+			<CelebsLuvItem></CelebsLuvItem>
 			<QuestionContainer>
 				<TextWrap padding="0 20px 0 0">
 					<MainText fontsize="1.5rem">실시간 아이템 질문</MainText>
@@ -772,7 +507,8 @@ export default function Custom() {
 					</RealTimeItem>
 				</QuestionWrap>
 			</QuestionContainer>
-			<BannerWrap>
+			<BannerComponent color="#7000ff" icon={BubbleHeart}></BannerComponent>
+			{/* <BannerWrap>
 				<Banner backgroundcolor="#7000ff" onClick={onUploadQuestionClick}>
 					<BannerText>
 						<MainText
@@ -785,15 +521,6 @@ export default function Custom() {
 							오늘 셀럽이 착용한
 							<br />저 아이템 정보가 궁금해!
 						</MainText>
-						{/* <MainText
-							fontsize="17px"
-							fontweight="600"
-							color="#fff"
-							style={{ lineHeight: '1.28' }}
-						>
-							{' '}
-							저 아이템 정보가 궁금해!
-						</MainText> */}
 						<SubText
 							fontweight="normal"
 							// margin="6px 0 0 0"
@@ -806,135 +533,8 @@ export default function Custom() {
 						<BubbleHeart style={{ width: '7.8125rem', height: '5.9375rem' }} />
 					</BannerImg>
 				</Banner>
-			</BannerWrap>
-			<ItemContainer>
-				<TextWrap>
-					<MainText fontsize="1.5rem">
-						#최우식's
-						<br />
-						LUV 아이템
-					</MainText>
-					<RightArrow></RightArrow>
-				</TextWrap>
-				<ChipWrap>
-					<Chip selected={true}>스트레이키즈</Chip>
-					<Chip>리노</Chip>
-					<Chip>현진</Chip>
-					<Chip>아이엔</Chip>
-					<Chip>필릭스</Chip>
-				</ChipWrap>
-				<HorizontalLine />
-				<FilterWrap>
-					<SubText fontsize="14px" fontweight="bold">
-						최신순
-					</SubText>
-					<VerticalLine />
-					<SubText fontsize="14px" color="#8d8d8d">
-						인기순
-					</SubText>
-				</FilterWrap>
-				<ItemWrap>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's
-								</SubText>
-								<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							color="#262626"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE
-						</SubText>
-					</Item>
-					<Item>
-						<Image>
-							<ImageText>
-								<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-									우식's
-								</SubText>
-								<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-							</ImageText>
-						</Image>
-						<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-							마하그리드
-						</SubText>
-						<SubText
-							fontsize="0.75rem"
-							style={{
-								textOverflow: 'ellipsis',
-								whiteSpace: 'nowrap',
-								overflow: 'hidden',
-								width: '100%',
-							}}
-						>
-							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
-						</SubText>
-						{/* <SubText fontsize="12px">
-							Rugby Polo Ls TEE BLUE sss ss asdfksadfkjasdlf asdfkljasdf
-						</SubText> */}
-					</Item>
-				</ItemWrap>
-			</ItemContainer>
+			</BannerWrap> */}
+			<CelebsLuvItem></CelebsLuvItem>
 			<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
 				<TextWrap padding="0 1.25rem 0 0">
 					<MainText fontsize="1.5rem">
@@ -1189,7 +789,7 @@ const EventContainer = styled.div`
 	grid-auto-flow: column;
 	grid-auto-columns: 100%;
 	box-sizing: border-box;
-	height: 400px;
+	/* height: 400px; */
 	overflow-x: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -1343,34 +943,34 @@ const FollowButton = styled.div`
 	font-size: 0.875rem;
 	font-weight: 600;
 `;
-const BannerWrap = styled.div`
-	margin-top: 32px;
-	padding: 0 20px;
-`;
-const Banner = styled.div`
-	display: flex;
-	justify-content: space-between;
-	box-sizing: border-box;
-	width: 100%;
-	height: 6.625rem;
-	border-radius: 16px;
-	background-color: ${props => props.backgroundcolor};
-	/*  */
-`;
-const BannerText = styled.div`
-	display: flex;
-	justify-content: space-between;
-	flex-grow: 1;
-	padding: 20px 0 20px 26px;
-	flex-direction: column;
-`;
-const BannerImg = styled.div`
-	display: flex;
-	align-items: center;
-	padding: ${props => props.padding || '0'};
-	height: 100%;
-	/* padding-top: 5px; */
-`;
+// const BannerWrap = styled.div`
+// 	margin-top: 32px;
+// 	padding: 0 20px;
+// `;
+// const Banner = styled.div`
+// 	display: flex;
+// 	justify-content: space-between;
+// 	box-sizing: border-box;
+// 	width: 100%;
+// 	height: 6.625rem;
+// 	border-radius: 16px;
+// 	background-color: ${props => props.backgroundcolor};
+// 	/*  */
+// `;
+// const BannerText = styled.div`
+// 	display: flex;
+// 	justify-content: space-between;
+// 	flex-grow: 1;
+// 	padding: 20px 0 20px 26px;
+// 	flex-direction: column;
+// `;
+// const BannerImg = styled.div`
+// 	display: flex;
+// 	align-items: center;
+// 	padding: ${props => props.padding || '0'};
+// 	height: 100%;
+// 	/* padding-top: 5px; */
+// `;
 const QuestionContainer = styled.div`
 	display: flex;
 	flex-direction: column;
