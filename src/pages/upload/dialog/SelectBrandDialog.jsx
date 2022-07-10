@@ -35,7 +35,6 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		if (!data) return;
 		if (!data.isSuccess) return;
 
-		console.log(data.result);
 		setBrandList(data.result);
 		setCurrentBrandList(data.result);
 	}

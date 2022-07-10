@@ -169,7 +169,7 @@ export default function UploadItem() {
 		// 	memberIdx: 1,
 		// 	parentCategory: '상의',
 		// 	subCategory: '반소매',
-		// 	brandIdx: 1,
+		// 	brandIdx: brandObj.brandIdx,
 		// 	name: '어느브랜드의 어느옷',
 		// 	whenDiscovery: '2022-06-30',
 		// 	price: 1,
