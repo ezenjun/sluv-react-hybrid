@@ -9,7 +9,6 @@ export function BottomSlideMenu({ menu, children, filters }) {
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const closeDialog = () => {
 		setBottomMenuStatusState(false);
-		console.log(BottomMenuStatusState);
 	};
 
 	return (

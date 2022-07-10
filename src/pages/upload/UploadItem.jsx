@@ -54,6 +54,9 @@ export default function UploadItem() {
 	const [isExtraInfo, setIsExtraInfo] = useState(false);
 	const [link, setLink] = useState('');
 	const [isLink, setIsLink] = useState(false);
+	const [brand, setBrand] = useState('');
+	const [brandObj, setBrandObj] = useState({});
+	const [isBrand, setIsBrand] = useState(false);
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
 
@@ -166,7 +169,7 @@ export default function UploadItem() {
 		// 	memberIdx: 1,
 		// 	parentCategory: '상의',
 		// 	subCategory: '반소매',
-		// 	brandIdx: 1,
+		// 	brandIdx: brandObj.brandIdx,
 		// 	name: '어느브랜드의 어느옷',
 		// 	whenDiscovery: '2022-06-30',
 		// 	price: 1,
@@ -241,8 +244,14 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap onClick={onClickItemBrandSelect} notEmpty={false}>
-							<SpeechBubbleNoInput>브랜드를 선택해 주세요</SpeechBubbleNoInput>
+						<InputSpeechBubbleWrap onClick={onClickItemBrandSelect} notEmpty={isBrand}>
+							<SpeechBubbleInput
+								placeholder="브랜드를 선택해 주세요"
+								type="text"
+								value={brand}
+								notEmpty={isBrand}
+								readOnly
+							/>
 						</InputSpeechBubbleWrap>
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
@@ -372,7 +381,10 @@ export default function UploadItem() {
 
 					{popUpPageNum === 2 && (
 						<BottomSlideMenu menu={'브랜드'}>
-							<SelectBrandDialog />
+							<SelectBrandDialog
+								setBrandObj={setBrandObj}
+								setFlag={setIsBrand}
+								setBrand={setBrand} />
 						</BottomSlideMenu>
 					)}
 
