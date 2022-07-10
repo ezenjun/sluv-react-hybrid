@@ -10,6 +10,10 @@ import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../components/containers/BottomSlideMenu';
+import styled from 'styled-components';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import MyPageContainer from './MyPageContainer';
+import ProfileContainer from './ProfileContainer';
 
 export default function My() {
 
@@ -47,7 +51,10 @@ export default function My() {
 							마이페이지
 						</MainText>
 						<div style={{ flex: '1' }}></div>
-						<Settings onClick={onClickSettings} style={{ width: '24px', height: '24px' }} />
+						<Settings
+							onClick={onClickSettings}
+							style={{ width: '24px', height: '24px' }}
+						/>
 					</>
 				) : (
 					<>
@@ -63,9 +70,43 @@ export default function My() {
 				)}
 			</TopNav>
 
-			<ContentWrap padding="0 1.25rem 0 1.25rem"></ContentWrap>
+			<ContentWrap padding="0">
+				<ProfileWrap>
+					<ProfileContentsWrap>
+						<img
+							className="userProfileImg"
+							src="https://sluv-actor-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B9%80%EA%B3%A0%EC%9D%80/%EA%B9%80%EA%B3%A0%EC%9D%80.png"
+							alt="유저 프로필 사진"
+						/>
+						<div>
+							<span>닉네임</span>
+							<span>아이디</span>
+						</div>
+						<div>
+							<span>팔로잉</span>
+							<span>10</span>
+							<span>팔로워</span>
+							<span>12</span>
+						</div>
+						<div>CHIP</div>
+						{!isAuthUser && (
+							<PurpleButton
+								disabled={true}
+								marginBottom="0"
+							></PurpleButton>
+						)}
+					</ProfileContentsWrap>
+				</ProfileWrap>
 
-      {/* 유저 신고하기 팝업  */}
+				{isAuthUser ? (
+					<MyPageContainer />
+				) : (
+					<ProfileContainer />
+				)
+				}
+			</ContentWrap>
+
+			{/* 유저 신고하기 팝업  */}
 			<BottomDialogWrap openStatus={reportPopupStatus}>
 				<div
 					onClick={() => setReportPopupStatus(false)}
@@ -88,3 +129,29 @@ export default function My() {
 		</MainContainer>
   );
 }
+
+const ProfileWrap = styled.div`
+	padding: 4.375rem 1.25rem 1.875rem;
+	background-color: #ff365f;
+`;
+
+const ProfileContentsWrap = styled.div`
+	background-color: #fff;
+	border-radius: 16px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 3.25rem 1.25rem 1.625rem;
+
+	.userProfileImg {
+		width: 5rem;
+		height: 5rem;
+		border-radius: 50%;
+		position: absolute;
+		top: -2.5rem;
+		left: 50%;
+		transform: translate(-50%, 0);
+	}
+`;
+
