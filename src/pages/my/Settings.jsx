@@ -49,7 +49,7 @@ export default function Settings() {
 				<ItemWrap>
 					<TitleWrap>서비스 정보</TitleWrap>
 					<div className="buttonWrap">
-						<div className="marginBottom">서비스 이용 약관</div>
+						<div className="marginBottom" onClick={() => navigate('/settings/terms-of-use')}>서비스 이용 약관</div>
 						<div className="marginBottom">개인정보처리방침</div>
 						<div>수정필요</div>
 					</div>
