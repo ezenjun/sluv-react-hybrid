@@ -9,3 +9,8 @@ export const UploadMemberState = atom({
 	key: 'UploadMemberState',
 	default: {},
 });
+
+export const BrandListState= atom({
+	key: 'BrandListState',
+	default: [],
+})
