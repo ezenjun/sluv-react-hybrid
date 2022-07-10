@@ -30,6 +30,7 @@ import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { ItemFilter } from '../../components/Filters/ItemFilter';
 import { filterList } from '../../components/containers/SearchBottomSlideMenu';
+import SelectBrandDialog from './dialog/SelectBrandDialog';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function UploadItem() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const selectedCeleb = useRecoilValue(UploadCelebState);
 	const selectedMember = useRecoilValue(UploadMemberState);
-	const [ bottomMenuStatusState, setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
+	const [ bottomMenuStatusState, setBottomMenuStatusState ] = useRecoilState(BottomMenuStatusState);
 
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
@@ -54,9 +55,7 @@ export default function UploadItem() {
 	const [link, setLink] = useState('');
 	const [isLink, setIsLink] = useState(false);
 
-	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
-	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
-	const [selectedItemFilterList, setSelectedItemFilterList] = useState([]);
+	const [popUpPageNum, setPopUpPageNum] = useState(0);
 
 	AWS.config.update({
 		region: REGION,
@@ -70,15 +69,18 @@ export default function UploadItem() {
 	});
 
 	useEffect(() => {
+		setBottomMenuStatusState(false);
 		setBottomNavStatus(false);
 		setCurrentPage(0);
 	}, []);
 
 	const onClickItemCategorySelect = () => {
+		setPopUpPageNum(1);
 		setBottomMenuStatusState(true);
 	};
 	const onClickItemBrandSelect = () => {
-
+		setPopUpPageNum(2);
+		setBottomMenuStatusState(true);
 	};
 	const onChangeProductName = (e) => {
 		if (e.target.value) {
@@ -114,7 +116,10 @@ export default function UploadItem() {
 	}
 
 	const onClickItemDateSelect = () => {};
-	const onClickItemPriceSelect = () => {};
+	const onClickItemPriceSelect = () => {
+		setPopUpPageNum(4);
+		setBottomMenuStatusState(true);
+	};
 	const onClickItemImgSelect = e => {
 		e.preventDefault();
 		imgInput.current.click();
@@ -182,16 +187,6 @@ export default function UploadItem() {
 		// 		},
 		// 	],
 		// };
-	};
-
-	const getSelectedItemMainFilter = input => {
-		setSelectedItemMainFilter(input);
-	};
-	const getSelectedItemStatusList = input => {
-		setSelectedItemStatusList(input);
-	};
-	const getSelectedItemFilterList = input => {
-		setSelectedItemFilterList(input);
 	};
 
 	return (
@@ -373,17 +368,15 @@ export default function UploadItem() {
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>
 
-					<BottomSlideMenu menu={'아이템 종류'}>
-						<ItemFilter
-							filterList={filterList}
-							selectedMainFilter={selectedItemMainFilter}
-							selectedStatusList={selectedItemStatusList}
-							selectedFilterList={selectedItemFilterList}
-							getSelectedMainFilter={getSelectedItemMainFilter}
-							getSelectedStatusList={getSelectedItemStatusList}
-							getSelectedFilterList={getSelectedItemFilterList}
-						/>
-					</BottomSlideMenu>
+					{popUpPageNum === 1 && <BottomSlideMenu menu={'아이템 종류'}></BottomSlideMenu>}
+
+					{popUpPageNum === 2 && (
+						<BottomSlideMenu menu={'브랜드'}>
+							<SelectBrandDialog />
+						</BottomSlideMenu>
+					)}
+
+					{popUpPageNum === 4 && <BottomSlideMenu menu={'가격대'}></BottomSlideMenu>}
 				</MainContainer>
 			)}
 		</>
