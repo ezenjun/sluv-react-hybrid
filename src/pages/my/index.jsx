@@ -7,6 +7,8 @@ import { MainText } from '../../components/Texts/MainText';
 import { ReactComponent as Settings } from '../../assets/Icons/icon_setting.svg';
 import { ReactComponent as ThreeDots } from '../../assets/Icons/icon_three_dots_row.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
+import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../components/containers/BottomSlideMenu';
@@ -14,6 +16,9 @@ import styled from 'styled-components';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import MyPageContainer from './MyPageContainer';
 import ProfileContainer from './ProfileContainer';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { UploadPopup, UploadPopupWrap } from '../home';
 
 export default function My() {
 
@@ -21,10 +26,14 @@ export default function My() {
   const navigate = useNavigate();
 
   const [isAuthUser, setIsAuthUser] = useState(true);
-
   const [reportPopupStatus, setReportPopupStatus] = useState(false);
+
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const uploadPopupStatus = useRecoilValue(UploadPopupState);
   
   useEffect(() => {
+		setBottomNavStatus(true);
+
     // 유저페이지 조회 API
     // if 사용자 본인이면
     // => 하단바 생기기
@@ -90,20 +99,12 @@ export default function My() {
 						</div>
 						<div>CHIP</div>
 						{!isAuthUser && (
-							<PurpleButton
-								disabled={true}
-								marginBottom="0"
-							></PurpleButton>
+							<PurpleButton disabled={true} marginBottom="0"></PurpleButton>
 						)}
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser ? (
-					<MyPageContainer />
-				) : (
-					<ProfileContainer />
-				)
-				}
+				{isAuthUser ? <MyPageContainer /> : <ProfileContainer />}
 			</ContentWrap>
 
 			{/* 유저 신고하기 팝업  */}
@@ -126,6 +127,46 @@ export default function My() {
 					</CloseWrap>
 				</BottomDialogDiv>
 			</BottomDialogWrap>
+
+			<UploadPopupWrap openStatus={uploadPopupStatus}>
+				<UploadPopup>
+					<div onClick={() => navigate('/upload/item')} className="uploadPopupBtn topBtn">
+						<IconUploadItem
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>정보 공유하기</span>
+					</div>
+					<div
+						onClick={() => navigate('/upload/question')}
+						className="uploadPopupBtn bottomBtn"
+					>
+						<IconUploadQuestion
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginRight: '0.5rem',
+							}}
+						/>
+						<span>질문 올리기</span>
+					</div>
+					<div
+						style={{
+							width: '20px',
+							height: '20px',
+							backgroundColor: '#9e30f4',
+							position: 'absolute',
+							left: '50%',
+							transform: 'translate(-50%,0)',
+							bottom: '-10px',
+							borderRadius: '50%',
+						}}
+					></div>
+				</UploadPopup>
+			</UploadPopupWrap>
 		</MainContainer>
   );
 }
