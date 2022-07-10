@@ -20,6 +20,8 @@ import Notice from '../pages/notice';
 import SearchResult from '../pages/search/SearchResult';
 import AddBinder from '../pages/binder/AddBinder';
 import Settings from '../pages/my/Settings';
+import Privacy from '../pages/my/Privacy';
+import TermsOfUse from '../pages/my/TermsOfUse';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
 import CelebDetail from '../pages/celebdetail';
@@ -72,6 +74,8 @@ export default function Pages() {
 
 			<Route path="/users/:id" element={<My />} />
 			<Route path="/settings" element={<Settings />} />
+			<Route path="/settings/privacy" element={<Privacy />} />
+			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 
 			<Route path="/report/user/:id" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />
