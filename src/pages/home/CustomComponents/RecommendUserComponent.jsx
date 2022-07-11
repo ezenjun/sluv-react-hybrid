@@ -20,6 +20,40 @@ export function RecommendUserComponent() {
 		}
 	};
 
+	const onFollow = userIdx => {
+		FollowUser(userIdx);
+		// let temp = [];
+		setUserRecommendList([]);
+		console.log('팔로우 클릭 후', userRecommendList);
+		getTotalCelebRecommendList();
+	};
+	const onUnFollow = userIdx => {
+		UnFollowUser(userIdx);
+		// let temp = [];
+		setUserRecommendList([]);
+		console.log('언팔로우 클릭 후', userRecommendList);
+		getTotalCelebRecommendList();
+	};
+	const FollowUser = async userIdx => {
+		const data = await customApiClient('post', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('FollowUser', data.message);
+	};
+	const UnFollowUser = async userIdx => {
+		const data = await customApiClient('delete', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+
+		console.log('UnFollowUser', data.message);
+	};
+
 	const [userRecommendList, setUserRecommendList] = useState([]);
 
 	const getTotalCelebRecommendList = async () => {
@@ -30,7 +64,7 @@ export function RecommendUserComponent() {
 			return;
 		}
 		setUserRecommendList([...userRecommendList, data.result]);
-		console.log(data.result);
+		console.log('getTotalCelebRecommendList', data.result);
 	};
 	const getEachCelebRecommendList = async idx => {
 		const data = await customApiClient('get', `/homes/hot-users?celebIdx=${idx}`);
@@ -45,7 +79,7 @@ export function RecommendUserComponent() {
 	};
 	useEffect(() => {
 		getTotalCelebRecommendList();
-	}, []);
+	}, [userRecommendList]);
 
 	return (
 		<RecommendUserWrap>
@@ -76,7 +110,21 @@ export function RecommendUserComponent() {
 									{user.nickName}
 								</SubText>
 								<SubText color="#8d8d8d">@{user.id}</SubText>
-								<FollowButton follow={user.isFollow}>팔로우</FollowButton>
+								{user.isFollow === 'Y' ? (
+									<FollowButton
+										onClick={() => onUnFollow(user.userIdx)}
+										follow={user.isFollow === 'Y'}
+									>
+										팔로잉
+									</FollowButton>
+								) : (
+									<FollowButton
+										onClick={() => onFollow(user.userIdx)}
+										follow={user.isFollow === 'Y'}
+									>
+										팔로우
+									</FollowButton>
+								)}
 							</User>
 						))}
 					</>
