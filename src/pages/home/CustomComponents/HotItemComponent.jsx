@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { customApiClient } from '../../../utils/apiClient';
 
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
@@ -13,6 +14,55 @@ export const HotItemComponent = () => {
 	const onHotClick = () => {
 		navigate('/hot');
 	};
+	const [selectedFilter, setSelectedFilter] = useState(1);
+	const tabList = [
+		{
+			idx: 1,
+			name: '일간',
+		},
+		{
+			idx: 2,
+			name: '주간',
+		},
+	];
+	const onFilterClick = idx => {
+		setSelectedFilter(idx);
+	};
+
+	const [dailyList, setDailyList] = useState([]);
+	const [weeklyList, setWeeklyList] = useState([]);
+
+	const getDailyHotList = async () => {
+		const data = await customApiClient('get', `/homes/hot-items?period=daily`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+
+		let temp = data.result;
+		setDailyList(temp);
+		console.log('daily', dailyList);
+		console.log(data.result);
+	};
+	const getWeeklyHotList = async () => {
+		const data = await customApiClient('get', `/homes/hot-items?period=weekly`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		let temp = data.result;
+		setWeeklyList(temp);
+		console.log('weekly', weeklyList);
+		console.log(data.result);
+	};
+	useEffect(() => {
+		getDailyHotList();
+		console.log(dailyList);
+		getWeeklyHotList();
+		console.log(weeklyList);
+	}, []);
 	return (
 		<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
 			<TextWrap padding="0 1.25rem 0 0">
@@ -24,169 +74,86 @@ export const HotItemComponent = () => {
 				<RightArrow onClick={onHotClick}></RightArrow>
 			</TextWrap>
 			<FilterWrap>
-				<SubText fontsize="14px" fontweight="bold">
-					일간
-				</SubText>
-				<VerticalLine />
-				<SubText fontsize="14px" color="#8d8d8d">
-					주간
-				</SubText>
+				{tabList.map(item => {
+					return (
+						<SubText
+							key={item.idx}
+							fontsize="0.875rem"
+							fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
+							margin="0 1rem 0 0 "
+							onClick={() => onFilterClick(item.idx)}
+							selected={selectedFilter === item.idx}
+							color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
+						>
+							{item.name}
+						</SubText>
+					);
+				})}
 			</FilterWrap>
 			<HotItemWrap>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
-				<HotItem>
-					<SubText fontsize="0.8125rem" fontweight="bold" color="#6de98d">
-						필릭스's
-					</SubText>
-					<SubText fontsize="13px" fontweight="bold" color="white" margin="0.5rem 0 0 0 ">
-						마하그리드
-					</SubText>
-					<SubText fontsize="12px" color="white">
-						Rugby Polo Ls TEE BLU sssssssss
-					</SubText>
-				</HotItem>
+				{selectedFilter === 1 ? ( // 인기순
+					<>
+						{dailyList ? (
+							<>
+								{dailyList.map(hotitem => (
+									<HotItem key={hotitem.itemidx}>
+										<SubText
+											fontsize="0.8125rem"
+											fontweight="bold"
+											color="#6de98d"
+										>
+											{hotitem.name}'s
+										</SubText>
+										<SubText
+											fontsize="13px"
+											fontweight="bold"
+											color="white"
+											margin="0.5rem 0 0 0 "
+										>
+											{hotitem.brandKr}
+										</SubText>
+										<SubText fontsize="12px" color="white">
+											{hotitem.itemName}
+										</SubText>
+									</HotItem>
+								))}
+							</>
+						) : (
+							<></>
+						)}
+					</>
+				) : (
+					<>
+						{weeklyList ? (
+							<>
+								{weeklyList.map(hotitem => (
+									<HotItem key={hotitem.itemidx}>
+										<SubText
+											fontsize="0.8125rem"
+											fontweight="bold"
+											color="#6de98d"
+										>
+											{hotitem.name}'s
+										</SubText>
+										<SubText
+											fontsize="13px"
+											fontweight="bold"
+											color="white"
+											margin="0.5rem 0 0 0 "
+										>
+											{hotitem.brandKr}
+										</SubText>
+										<SubText fontsize="12px" color="white">
+											{hotitem.itemName}
+										</SubText>
+									</HotItem>
+								))}
+							</>
+						) : (
+							<></>
+						)}
+					</>
+				)}
 			</HotItemWrap>
 		</ItemContainer>
 	);

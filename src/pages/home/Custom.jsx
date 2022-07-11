@@ -6,7 +6,7 @@ import { CelebsLuvItem } from './CustomComponents/CelebsLuvItem';
 import { BannerComponent } from './CustomComponents/Banner';
 import { RecommendUserComponent } from './CustomComponents/RecommendUserComponent';
 import { HotItemComponent } from './CustomComponents/HotItemComponent';
-
+import { HotKeyword } from './CustomComponents/HotKeyword';
 import { ReactComponent as SpeakerPhone } from '../../assets/Icons/speakerphone.svg';
 import { ReactComponent as BubbleHeart } from '../../assets/Icons/bubbleHeart.svg';
 
@@ -37,6 +37,7 @@ export default function Custom() {
 						<CelebsLuvItem celeb={favoriteCelebList[4]}></CelebsLuvItem>
 					)}
 					<HotItemComponent></HotItemComponent>
+					<HotKeyword></HotKeyword>
 				</>
 			)}
 		</>
