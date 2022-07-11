@@ -12,27 +12,52 @@ export function RecommendUserComponent() {
 	const favoriteCelebList = useRecoilValue(FavoriteCelebListState);
 
 	const [selected, setSelected] = useState(0);
-	const onChipClick = idx => {
+	const [selectedCelebIdx, setSelectedCelebIdx] = useState(0);
+
+	const onChipClick = (idx, celebIdx) => {
 		setSelected(idx);
+		console.log('celebIdx', celebIdx);
+		setSelectedCelebIdx(celebIdx);
+		console.log('celebIdx', celebIdx);
 		if (!userRecommendList[idx]) {
-			getEachCelebRecommendList(idx);
+			getEachCelebRecommendList(celebIdx);
 			console.log('호출');
 		}
 	};
 
 	const onFollow = userIdx => {
 		FollowUser(userIdx);
-		// let temp = [];
-		setUserRecommendList([]);
-		console.log('팔로우 클릭 후', userRecommendList);
-		getTotalCelebRecommendList();
+		let tempList = userRecommendList;
+		let length = userRecommendList.length;
+		for (var i = 0; i < length; i++) {
+			for (var j = 0; j < tempList[i].length; j++) {
+				if (tempList[i][j].userIdx === userIdx) {
+					if (tempList[i][j].isFollow === 'N') {
+						tempList[i][j].isFollow = 'Y';
+					}
+				}
+			}
+		}
+		console.log('tempList', tempList);
+		setUserRecommendList(tempList);
+		// setUserRecommendList([...userRecommendList, tempList]);
 	};
 	const onUnFollow = userIdx => {
 		UnFollowUser(userIdx);
-		// let temp = [];
+		let tempList = userRecommendList;
+		let length = userRecommendList.length;
+		for (var i = 0; i < length; i++) {
+			for (var j = 0; j < tempList[i].length; j++) {
+				if (tempList[i][j].userIdx === userIdx) {
+					if (tempList[i][j].isFollow === 'Y') {
+						tempList[i][j].isFollow = 'N';
+					}
+				}
+			}
+		}
+		console.log('tempList', tempList);
 		setUserRecommendList([]);
-		console.log('언팔로우 클릭 후', userRecommendList);
-		getTotalCelebRecommendList();
+		setUserRecommendList([...userRecommendList, tempList]);
 	};
 	const FollowUser = async userIdx => {
 		const data = await customApiClient('post', `/users/${userIdx}/follow`);
@@ -42,6 +67,7 @@ export function RecommendUserComponent() {
 			return;
 		}
 		console.log('FollowUser', data.message);
+		console.log('userRecommendList', userRecommendList);
 	};
 	const UnFollowUser = async userIdx => {
 		const data = await customApiClient('delete', `/users/${userIdx}/follow`);
@@ -50,7 +76,6 @@ export function RecommendUserComponent() {
 			console.log(data.message);
 			return;
 		}
-
 		console.log('UnFollowUser', data.message);
 	};
 
@@ -79,7 +104,7 @@ export function RecommendUserComponent() {
 	};
 	useEffect(() => {
 		getTotalCelebRecommendList();
-	}, [userRecommendList]);
+	}, []);
 
 	return (
 		<RecommendUserWrap>
@@ -94,7 +119,7 @@ export function RecommendUserComponent() {
 					<Chip
 						key={celeb.idx}
 						selected={selected === idx + 1}
-						onClick={() => onChipClick(idx + 1)}
+						onClick={() => onChipClick(idx + 1, celeb.celebIdx)}
 					>
 						{celeb.name}
 					</Chip>
