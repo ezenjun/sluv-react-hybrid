@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -28,9 +28,14 @@ import AWS from 'aws-sdk';
 import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
-import { filterList } from '../../components/containers/SearchBottomSlideMenu';
+import { ButtonWrap, filterList } from '../../components/containers/SearchBottomSlideMenu';
 import SelectBrandDialog from './dialog/SelectBrandDialog';
 import SelectItemCategoryDialog from './dialog/SelectItemCategoryDialog';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { PriceFilter } from '../../components/Filters/PriceFilter';
+import { DatePicker } from 'antd-mobile';
+import { customApiClient } from '../../utils/apiClient';
+
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -59,11 +64,40 @@ export default function UploadItem() {
 	const [isBrand, setIsBrand] = useState(false);
 	const [category, setCategory] = useState('');
 	const [isCategory, setIsCategory] = useState(false);
+	const [price, setPrice] = useState('');
+	const [isPrice, setIsPrice] = useState(false);
+	const [date, setDate] = useState('');
+	const [isDate, setIsDate] = useState(false);
 
 	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
 	const [selectedItemSubFilter, setSelectedItemSubFilter] = useState(0);
+	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(null);
+	const [selectedPriceMainFilterIdx, setSelectedPriceMainFilterIdx] = useState(0);
+	const [visible, setVisible] = useState(false);
+	const now = new Date();
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
+
+	const labelRenderer = useCallback((type, data) => {
+		switch (type) {
+			case 'year':
+				return data + '년';
+			case 'month':
+				return data + '월';
+			case 'day':
+				return data + '일';
+			case 'hour':
+				return data + '时';
+			case 'minute':
+				return data + '分';
+			case 'second':
+				return data + '秒';
+			default:
+				return data;
+		}
+	}, []);
+
+	
 
 	AWS.config.update({
 		region: REGION,
@@ -90,9 +124,11 @@ export default function UploadItem() {
 		setPopUpPageNum(2);
 		setBottomMenuStatusState(true);
 	};
-
+	
 	const getSelectedItemMainFilter = input => setSelectedItemMainFilter(input);
 	const getSelectedItemSubFilter = input => setSelectedItemSubFilter(input);
+	const getSelectedPriceMainFilter = input => setSelectedPriceMainFilter(input);
+	const getSelectedPriceMainFilterIdx = input => setSelectedPriceMainFilterIdx(input);
 
 	const onChangeProductName = (e) => {
 		setProductName(e.target.value);
@@ -127,10 +163,32 @@ export default function UploadItem() {
 		setLink(e.target.value);
 	}
 
-	const onClickItemDateSelect = () => {};
+	const onClickItemDateSelect = () => {
+		setPopUpPageNum(3);
+		setVisible(true);
+	};
+	const onConfirmDatePick = (val) => {
+		const dd = String(val.getMonth()).padStart(2, '0');
+		const mm = String(val.getMonth()).padStart(2, '0');
+		const yyyy = val.getFullYear();
+		console.log(yyyy + '-' + mm + '-' + dd);
+		setDate(yyyy+'-'+mm+'-'+dd);
+		setIsDate(true);
+		setVisible(false);
+	} 
 	const onClickItemPriceSelect = () => {
 		setPopUpPageNum(4);
 		setBottomMenuStatusState(true);
+	};
+	const onClickSetPriceBtn = () => {
+		if (selectedPriceMainFilter) {
+			setPrice(selectedPriceMainFilter);
+			setIsPrice(true);
+		} else {
+			setPrice('');
+			setIsPrice(false);
+		}
+		setBottomMenuStatusState(false);
 	};
 	const onClickItemImgSelect = e => {
 		e.preventDefault();
@@ -161,6 +219,7 @@ export default function UploadItem() {
 				const temp = [];
 				// temp.push({ itemImgUrl: url });
 				setImgUrlList(temp);
+				onPostUpload();
 			})
 			.send(err => {
 				if (err) console.log(err);
@@ -168,38 +227,42 @@ export default function UploadItem() {
 	}
 
 	const onClickUploadItem = async (fileList) => {
-
-		fileList.map((_file) => {
+		
+		const arr = Array.from(fileList);
+		arr.map(_file => {
 			s3ImgUpload(_file);
-		})
+		});
+	};
 
+	const onPostUpload = async () => {
 		const body = {
 			celebIdx: selectedCeleb.celebIdx,
-			memberIdx: 1,
+			memberIdx: selectedMember.memberIdx,
 			parentCategory: filterList[selectedItemMainFilter - 1].name,
 			subCategory: selectedItemSubFilter,
 			brandIdx: brandObj.brandIdx,
-			name: '어느브랜드의 어느옷',
-			whenDiscovery: '2022-06-30',
-			price: 1,
-			content: '아 추가 정보에요~',
-			sellerSite: 'https://sellerSite.test',
-			itemUrlList: [
+			name: productName,
+			whenDiscovery: date,
+			whereDiscovery: place,
+			price: selectedPriceMainFilterIdx,
+			content: extraInfo,
+			sellerSite: link,
+			itemImgUrlList: [
 				{
 					isRepresent: 1,
-					itemImgUrl: 'https://test-image-01',
-				},
-				{
-					isRepresent: 0,
-					itemImgUrl: 'https://test-image-02',
-				},
-				{
-					isRepresent: 0,
-					itemImgUrl: 'https://test-image-03',
+					itemImgUrl:
+						'https://sluv-singer-image-bucket.s3.ap-northeast-2.amazonaws.com/김세정/김세정.png',
 				},
 			],
 		};
-	};
+		console.log(body);
+		const data = await customApiClient('post', '/items', body);
+		console.log(data);
+		if(!data) return;
+		if(!data.isSuccess) return;
+
+		
+	}
 
 	return (
 		<>
@@ -294,8 +357,14 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap onClick={onClickItemDateSelect} notEmpty={false}>
-							<SpeechBubbleNoInput>날짜를 선택해 주세요</SpeechBubbleNoInput>
+						<InputSpeechBubbleWrap onClick={onClickItemDateSelect} notEmpty={isDate}>
+							<SpeechBubbleInput
+								notEmpty={isDate}
+								type="text"
+								placeholder="날짜를 선택해주세요"
+								value={date}
+								readOnly
+							/>
 						</InputSpeechBubbleWrap>
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
@@ -319,8 +388,14 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</SpeechBubbleWrap>
-						<InputSpeechBubbleWrap onClick={onClickItemPriceSelect} notEmpty={false}>
-							<SpeechBubbleNoInput>가격대를 선택해 주세요</SpeechBubbleNoInput>
+						<InputSpeechBubbleWrap onClick={onClickItemPriceSelect} notEmpty={isPrice}>
+							<SpeechBubbleInput
+								placeholder="가격대를 선택해 주세요"
+								type="text"
+								value={price}
+								notEmpty={isPrice}
+								readOnly
+							/>
 						</InputSpeechBubbleWrap>
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
@@ -363,7 +438,7 @@ export default function UploadItem() {
 							>
 								<TopWrap>
 									<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
-										바인더 만들기
+										대표 이미지 지정 방법
 									</SubText>
 									<Close
 										onClick={() => setInfoDialogStatus(!infoDialogStatus)}
@@ -374,8 +449,8 @@ export default function UploadItem() {
 									color="#564B5C"
 									style={{ whiteSpace: 'normal' }}
 								>
-									바인더 이름은 15자 이내로 입력해 주세요! <br />
-									이름과 커버 이미지는 언제 든지 수정이 가능해요
+									가장 마음에 드는 이미지를 클릭하면 대표 이미지로 지정할 수
+									있어요!
 								</SubText>
 							</MiniInfoDialog>
 						</SpeechBubbleWrap>
@@ -416,7 +491,38 @@ export default function UploadItem() {
 						</BottomSlideMenu>
 					)}
 
-					{popUpPageNum === 4 && <BottomSlideMenu menu={'가격대'}></BottomSlideMenu>}
+					{popUpPageNum === 3 && (
+						<DatePicker
+							title=""
+							visible={visible}
+							onClose={() => {
+								setVisible(false);
+							}}
+							defaultValue={now}
+							max={now}
+							onConfirm={val => onConfirmDatePick(val)}
+							renderLabel={labelRenderer}
+						/>
+					)}
+
+					{popUpPageNum === 4 && (
+						<BottomSlideMenu menu={'가격대'}>
+							<PriceFilter
+								selectedMainFilter={selectedPriceMainFilter}
+								getSelectedMainFilter={getSelectedPriceMainFilter}
+								getSelectedMainFilterIdx={getSelectedPriceMainFilterIdx}
+							></PriceFilter>
+							<ButtonWrap>
+								<PurpleButton
+									onClick={onClickSetPriceBtn}
+									style={{ fontSize: '1rem' }}
+									marginBottom="0"
+								>
+									선택 완료
+								</PurpleButton>
+							</ButtonWrap>
+						</BottomSlideMenu>
+					)}
 				</MainContainer>
 			)}
 		</>
