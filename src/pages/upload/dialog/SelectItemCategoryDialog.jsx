@@ -10,23 +10,25 @@ import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
 
 export default function SelectItemCategoryDialog(props) {
 
-	const [subFilterList, setSubFilterList] = useState([]);
-
 	const [bottomMenuStatusState,setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
 
 	const closeDialog = () => {
-		props.setCategory(filterList[props.selectedMainFilter - 1].name);
-		props.setIsCategory(true);
-
-
+		if (props.selectedMainFilter) {
+			if (props.selectedSubFilter) {
+				props.setCategory(
+					filterList[props.selectedMainFilter - 1].name + ' > ' + props.selectedSubFilter
+				);
+			} else {
+				props.setCategory(
+					filterList[props.selectedMainFilter - 1].name);
+			}
+			props.setIsCategory(true);
+		}
 		setBottomMenuStatusState(false);
 	};
 
 	const setSelectedMainFilter = input => {
 		props.getSelectedMainFilter(input);
-	};
-	const setSelectedStatusList = input => {
-		props.getSelectedStatusList(input);
 	};
 	const setSelectedSubFilter = input => {
 		props.getSelectedSubFilter(input);
@@ -36,24 +38,20 @@ export default function SelectItemCategoryDialog(props) {
 		if (props.selectedMainFilter === idx) {
 			setSelectedMainFilter(0);
 			props.setCategory('');
-			let temp = [];
-			setSubFilterList(temp);
+			props.setIsCategory(false);
+			setSelectedSubFilter('');
 		} else {
 			setSelectedMainFilter(idx);
-			let temp;
-			(temp = []).length = filterList[idx - 1].list.length;
-			temp.fill(false);
-			setSelectedStatusList(temp);
-			temp = [];
-			setSubFilterList(temp);
+			setSelectedSubFilter(filterList[idx-1].list[0]);
+			
 		}
 	};
 
-	const onSubSelect = (index) => {
-		if(props.selectedSubFilter === index) {
-			setSelectedSubFilter(0);
+	const onSubSelect = (subfilter, index) => {
+		if (props.selectedSubFilter === subfilter) {
+			setSelectedSubFilter('');
 		} else {
-			setSelectedSubFilter(index);
+			setSelectedSubFilter(subfilter);
 		}
 		
 	}
@@ -108,7 +106,7 @@ export default function SelectItemCategoryDialog(props) {
 									(subfilter, index) => (
 										<Filter
 											key={subfilter}
-											selected={props.selectedSubFilter === index}
+											selected={props.selectedSubFilter === subfilter}
 											onClick={() => onSubSelect(subfilter, index)}
 										>
 											{subfilter}

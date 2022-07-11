@@ -61,7 +61,6 @@ export default function UploadItem() {
 	const [isCategory, setIsCategory] = useState(false);
 
 	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
-	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
 	const [selectedItemSubFilter, setSelectedItemSubFilter] = useState(0);
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
@@ -93,16 +92,15 @@ export default function UploadItem() {
 	};
 
 	const getSelectedItemMainFilter = input => setSelectedItemMainFilter(input);
-	const getSelectedItemStatusList = input => setSelectedItemStatusList(input);
 	const getSelectedItemSubFilter = input => setSelectedItemSubFilter(input);
 
 	const onChangeProductName = (e) => {
+		setProductName(e.target.value);
 		if (e.target.value) {
 			setIsProductName(true);
 		} else {
 			setIsProductName(false);
 		}
-		setProductName(e.target.value);
 	};
 	const onChangePlace = (e) => {
 		if (e.target.value) {
@@ -175,32 +173,32 @@ export default function UploadItem() {
 			s3ImgUpload(_file);
 		})
 
-		// const body = {
-		// 	celebIdx: selectedCeleb.celebIdx,
-		// 	memberIdx: 1,
-		// 	parentCategory: '상의',
-		// 	subCategory: '반소매',
-		// 	brandIdx: brandObj.brandIdx,
-		// 	name: '어느브랜드의 어느옷',
-		// 	whenDiscovery: '2022-06-30',
-		// 	price: 1,
-		// 	content: '아 추가 정보에요~',
-		// 	sellerSite: 'https://sellerSite.test',
-		// 	itemUrlList: [
-		// 		{
-		// 			isRepresent: 1,
-		// 			itemImgUrl: 'https://test-image-01',
-		// 		},
-		// 		{
-		// 			isRepresent: 0,
-		// 			itemImgUrl: 'https://test-image-02',
-		// 		},
-		// 		{
-		// 			isRepresent: 0,
-		// 			itemImgUrl: 'https://test-image-03',
-		// 		},
-		// 	],
-		// };
+		const body = {
+			celebIdx: selectedCeleb.celebIdx,
+			memberIdx: 1,
+			parentCategory: filterList[selectedItemMainFilter - 1].name,
+			subCategory: selectedItemSubFilter,
+			brandIdx: brandObj.brandIdx,
+			name: '어느브랜드의 어느옷',
+			whenDiscovery: '2022-06-30',
+			price: 1,
+			content: '아 추가 정보에요~',
+			sellerSite: 'https://sellerSite.test',
+			itemUrlList: [
+				{
+					isRepresent: 1,
+					itemImgUrl: 'https://test-image-01',
+				},
+				{
+					isRepresent: 0,
+					itemImgUrl: 'https://test-image-02',
+				},
+				{
+					isRepresent: 0,
+					itemImgUrl: 'https://test-image-03',
+				},
+			],
+		};
 	};
 
 	return (
@@ -400,10 +398,8 @@ export default function UploadItem() {
 					{popUpPageNum === 1 && (
 						<SelectItemCategoryDialog
 							selectedMainFilter={selectedItemMainFilter}
-							selectedStatusList={selectedItemStatusList}
 							selectedSubFilter={selectedItemSubFilter}
 							getSelectedMainFilter={getSelectedItemMainFilter}
-							getSelectedStatusList={getSelectedItemStatusList}
 							getSelectedSubFilter={getSelectedItemSubFilter}
 							setCategory={setCategory}
 							setIsCategory={setIsCategory}
