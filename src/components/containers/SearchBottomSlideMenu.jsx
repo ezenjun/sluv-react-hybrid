@@ -279,7 +279,7 @@ const CloseWrap = styled.div`
 	/* justify-content: flex-end; */
 	padding: 0 1.25rem;
 `;
-const ButtonWrap = styled.div`
+export const ButtonWrap = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

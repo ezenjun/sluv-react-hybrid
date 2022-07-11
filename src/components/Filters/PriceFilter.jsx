@@ -13,12 +13,17 @@ export function PriceFilter(props) {
 	const setSelectedMainFilter = input => {
 		props.getSelectedMainFilter(input);
 	};
+	const setSelectedMainFilterIdx = input => {
+		props.getSelectedMainFilterIdx(input);
+	};
 
 	const onMainSelect = filter => {
 		if (props.selectedMainFilter === filter.name) {
 			setSelectedMainFilter(null);
+			setSelectedMainFilterIdx(0);
 		} else {
 			setSelectedMainFilter(filter.name);
+			setSelectedMainFilterIdx(filter.idx);
 		}
 		console.log(props.selectedMainFilter);
 	};
@@ -40,13 +45,13 @@ export function PriceFilter(props) {
 	);
 }
 
-const FilterContainer = styled.div`
+export const FilterContainer = styled.div`
 	display: flex;
 	padding: 1.25rem;
 	flex-direction: column;
 	height: 18.5625rem;
 `;
-const Filter = styled.div`
+export const Filter = styled.div`
 	display: flex;
 	align-items: center;
 	height: 48px;
