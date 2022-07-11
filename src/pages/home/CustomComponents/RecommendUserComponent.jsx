@@ -20,8 +20,8 @@ export function RecommendUserComponent() {
 		setSelectedCelebIdx(celebIdx);
 		console.log('cIdx', idx);
 		if (!userRecommendList[idx]) {
-			//userRecommendList[chip의 셀럽 위치 idx]가 존재하지 않을 때
-			getEachCelebRecommendList(celebIdx, idx); // 셀럽별 인기 스러버 요청API 호출
+			//userRecommendList[chip의 셀럽 위치 dix]가 존재하지 않을 때
+			getEachCelebRecommendList(celebIdx, idx); // 셀럽별 인기 스러버 요청API ㅎ
 			console.log('호출');
 		}
 	};
@@ -29,38 +29,45 @@ export function RecommendUserComponent() {
 	const onFollow = userIdx => {
 		FollowUser(userIdx);
 		let tempList = userRecommendList;
+		console.log('팔로우 클릭');
 		// let length = userRecommendList.length;
 		for (var i = 0; i < tempList.length; i++) {
 			//	userRecommendList 전체를 돌면서 팔로잉 플래그 변환(팔로잉 -> 팔로우)
-			for (var j = 0; j < tempList[i].length; j++) {
-				if (tempList[i][j].userIdx === userIdx) {
-					if (tempList[i][j].isFollow === 'N') {
-						tempList[i][j].isFollow = 'Y';
+			if (tempList[i]) {
+				for (var j = 0; j < tempList[i].length; j++) {
+					if (tempList[i][j].userIdx === userIdx) {
+						if (tempList[i][j].isFollow === 'N') {
+							tempList[i][j].isFollow = 'Y';
+						}
 					}
 				}
 			}
 		}
-		console.log('tempList', tempList);
-		setUserRecommendList([]);
-		setUserRecommendList([...userRecommendList, tempList]); // userRecommendList를 templist로 초기화
+
+		// console.log('tempList', tempList);
+		setUserRecommendList([...tempList]);
+		// console.log(userRecommendList);
 	};
 	const onUnFollow = userIdx => {
 		UnFollowUser(userIdx);
 		let tempList = userRecommendList;
-		console.log(tempList);
+		console.log('언팔 클릭');
 		for (var i = 0; i < tempList.length; i++) {
 			//	userRecommendList 전체를 돌면서 팔로잉 플래그 변환(팔로우 -> 팔로잉)
-			for (var j = 0; j < tempList[i].length; j++) {
-				if (tempList[i][j].userIdx === userIdx) {
-					if (tempList[i][j].isFollow === 'Y') {
-						tempList[i][j].isFollow = 'N';
+			if (tempList[i]) {
+				for (var j = 0; j < tempList[i].length; j++) {
+					if (tempList[i][j].userIdx === userIdx) {
+						if (tempList[i][j].isFollow === 'Y') {
+							tempList[i][j].isFollow = 'N';
+						}
 					}
 				}
 			}
 		}
-		console.log('tempList', tempList);
-		setUserRecommendList([]);
-		setUserRecommendList([...userRecommendList, tempList]); // userRecommendList를 templist로 초기화
+
+		// console.log('tempList', tempList);
+		setUserRecommendList([...tempList]);
+		// console.log(userRecommendList);
 	};
 	const FollowUser = async userIdx => {
 		// 팔로우 버튼 클릭
@@ -71,7 +78,7 @@ export function RecommendUserComponent() {
 			return;
 		}
 		console.log('FollowUser', data.message);
-		console.log('userRecommendList', userRecommendList);
+		// console.log('userRecommendList', userRecommendList);
 	};
 	const UnFollowUser = async userIdx => {
 		// 팔로잉 버튼 클릭(언팔)
@@ -108,13 +115,12 @@ export function RecommendUserComponent() {
 		let temp = userRecommendList;
 		temp[idx] = data.result;
 		console.log('temp[selected]', temp);
-		setUserRecommendList(temp); // userRecommendList[클릭한 관심셀럽 이름 위치 idx] 에 셀럽별 인기 스러버 저장
+		setUserRecommendList([...temp]); // userRecommendList[클릭한 관심셀럽 이름 위치 idx] 에 셀럽별 인기 스러버 저장
 		console.log(userRecommendList);
 	};
 	useEffect(() => {
 		getTotalCelebRecommendList();
 	}, []);
-	useEffect(() => {}, [userRecommendList]);
 
 	return (
 		<RecommendUserWrap>

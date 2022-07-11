@@ -16,8 +16,10 @@ import img from '../img.png';
 
 export const CelebsLuvItem = ({ celeb }) => {
 	const navigate = useNavigate();
-	const onDetailCelebClick = celebId => {
-		navigate('/celeb/detail/' + celebId);
+	const onDetailCelebClick = celeb => {
+		navigate(`/celeb/detail/${celeb.celebIdx}`, {
+			state: celeb,
+		});
 	};
 	// console.log('celeb', celeb);
 	// console.log('celeb.memberList', celeb.memberList);
@@ -131,7 +133,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 					<br />
 					LUV 아이템
 				</MainText>
-				<RightArrow onClick={() => onDetailCelebClick(1)}></RightArrow>
+				<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
 			</TextWrap>
 			<ChipWrap>
 				<Chip selected={selected === 0} onClick={() => onChipClick(0)}>
