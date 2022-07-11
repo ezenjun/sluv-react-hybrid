@@ -28,9 +28,9 @@ import AWS from 'aws-sdk';
 import { REGION, ITEM_UPLOAD_S3_BUCKET } from '../../utils/s3Module';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
-import { ItemFilter } from '../../components/Filters/ItemFilter';
 import { filterList } from '../../components/containers/SearchBottomSlideMenu';
 import SelectBrandDialog from './dialog/SelectBrandDialog';
+import SelectItemCategoryDialog from './dialog/SelectItemCategoryDialog';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -57,6 +57,12 @@ export default function UploadItem() {
 	const [brand, setBrand] = useState('');
 	const [brandObj, setBrandObj] = useState({});
 	const [isBrand, setIsBrand] = useState(false);
+	const [category, setCategory] = useState('');
+	const [isCategory, setIsCategory] = useState(false);
+
+	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
+	const [selectedItemStatusList, setSelectedItemStatusList] = useState([]);
+	const [selectedItemSubFilter, setSelectedItemSubFilter] = useState(0);
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
 
@@ -85,6 +91,11 @@ export default function UploadItem() {
 		setPopUpPageNum(2);
 		setBottomMenuStatusState(true);
 	};
+
+	const getSelectedItemMainFilter = input => setSelectedItemMainFilter(input);
+	const getSelectedItemStatusList = input => setSelectedItemStatusList(input);
+	const getSelectedItemSubFilter = input => setSelectedItemSubFilter(input);
+
 	const onChangeProductName = (e) => {
 		if (e.target.value) {
 			setIsProductName(true);
@@ -234,8 +245,17 @@ export default function UploadItem() {
 								<span className="redStar">*</span>
 							</div>
 						</NoTailBubbleWrap>
-						<InputSpeechBubbleWrap onClick={onClickItemCategorySelect} notEmpty={false}>
-							<SpeechBubbleNoInput>아이템 종류를 선택해 주세요</SpeechBubbleNoInput>
+						<InputSpeechBubbleWrap
+							onClick={onClickItemCategorySelect}
+							notEmpty={isCategory}
+						>
+							<SpeechBubbleInput
+								placeholder="아이템 종류를 선택해 주세요"
+								type="text"
+								value={category}
+								notEmpty={isCategory}
+								readOnly
+							/>
 						</InputSpeechBubbleWrap>
 
 						<SpeechBubbleWrap style={{ marginTop: '2.5rem' }}>
@@ -377,14 +397,26 @@ export default function UploadItem() {
 						</ImgUploadBubbleWrap>
 					</TopRadiusContainer>
 
-					{popUpPageNum === 1 && <BottomSlideMenu menu={'아이템 종류'}></BottomSlideMenu>}
+					{popUpPageNum === 1 && (
+						<SelectItemCategoryDialog
+							selectedMainFilter={selectedItemMainFilter}
+							selectedStatusList={selectedItemStatusList}
+							selectedSubFilter={selectedItemSubFilter}
+							getSelectedMainFilter={getSelectedItemMainFilter}
+							getSelectedStatusList={getSelectedItemStatusList}
+							getSelectedSubFilter={getSelectedItemSubFilter}
+							setCategory={setCategory}
+							setIsCategory={setIsCategory}
+						/>
+					)}
 
 					{popUpPageNum === 2 && (
 						<BottomSlideMenu menu={'브랜드'}>
 							<SelectBrandDialog
 								setBrandObj={setBrandObj}
 								setFlag={setIsBrand}
-								setBrand={setBrand} />
+								setBrand={setBrand}
+							/>
 						</BottomSlideMenu>
 					)}
 

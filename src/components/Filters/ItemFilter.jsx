@@ -87,13 +87,13 @@ export function ItemFilter(props) {
 	);
 }
 
-const FilterContainer = styled.div`
+export const FilterContainer = styled.div`
 	display: flex;
 	padding: 1.25rem;
 	flex-direction: column;
 	height: 18.5625rem;
 `;
-const Filter = styled.div`
+export const Filter = styled.div`
 	display: flex;
 	align-items: center;
 	height: 48px;
