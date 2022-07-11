@@ -37,18 +37,18 @@ export function HotKeyword() {
 			<ChipContainer>
 				<ChipWrap>
 					{keywordList.slice(0, 5).map(keyword => (
-						<Chip>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
 					))}
 				</ChipWrap>
 
 				<ChipWrap style={{ padding: '0 1.75rem' }}>
 					{keywordList.slice(5, 10).map(keyword => (
-						<Chip>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
 					))}
 				</ChipWrap>
 				<ChipWrap>
 					{keywordList.slice(10, 15).map(keyword => (
-						<Chip>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
 					))}
 				</ChipWrap>
 			</ChipContainer>
