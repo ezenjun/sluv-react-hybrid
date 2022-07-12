@@ -11,13 +11,20 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { TopRadiusContainer } from '../../components/containers/TopRadiusContainer';
 import { MainText } from '../../components/Texts/MainText';
+import { PopUpModal } from '../../components/PopUp/PopUpModal';
 
 import { ReactComponent as Unchecked } from '../../assets/Icons/icon_circular_checkbox_empty.svg';
 import { ReactComponent as Checked } from '../../assets/Icons/icon_circular_checkbox_fill.svg';
+import { customApiClient } from '../../utils/apiClient';
+import { useSetRecoilState } from 'recoil';
+import { PopUpModalState } from '../../recoil/PopUpModal';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function ReportUser() {
 	const navigate = useNavigate();
-	const { id } = useParams();
+	const { idx } = useParams();
+
+	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
 	const [extraOpinion, setExtraOpinion] = useState('');
 	const [isExtraOpinion, setIsExtraOpinion] = useState(false);
@@ -58,13 +65,24 @@ export default function ReportUser() {
 		setIsConfirm(true);
 		setCheckedElement(e.target.value);
 	};
-	const onClickConfirm = () => {
-		const body = {
-			// 유제인덱스 들어가야 함
-			// 신고 이유 5가지 중 택 1 들어가야함
-			// 추가적인 의견 들어가야함
-		}
+	const onClickConfirm = async () => {
 		
+		const body = {
+			category: checkedElement,
+			content: extraOpinion,
+		};
+		const data = await customApiClient('post', `/users/${idx}/report`, body);
+
+		if(!data) return;
+		if(!data.isSuccess) return;
+		console.log(data);
+
+		setPopUpModalState(true);
+	}
+
+	const onClickYes = () => {
+		setPopUpModalState(false);
+		navigate(-1);
 	}
 
 	return (
@@ -123,6 +141,32 @@ export default function ReportUser() {
 					/>
 				</InputSpeechBubbleWrap>
 			</TopRadiusContainer>
+
+			<PopUpModal closeButton={false}>
+				<div
+					style={{
+						marginTop: '1.5rem',
+						fontSize: '1.125rem',
+						fontWeight: 'bold',
+						color: '#262626',
+					}}
+				>
+					게시글이 신고되었어요
+				</div>
+				<div
+					style={{
+						fontSize: '0.875rem',
+						color: '#8d8d8d',
+						margin: '0.75rem 0 2rem',
+						lineHeight: '1.36'
+					}}
+				>
+					해당 게시글을 검수할게요
+					<br />
+					조금만 기다려 주세요!
+				</div>
+				<PurpleButton onClick={onClickYes} marginBottom="0">확인</PurpleButton>
+			</PopUpModal>
 		</MainContainer>
 	);
 }

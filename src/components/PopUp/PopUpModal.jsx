@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { ReactComponent as Close } from '../assets/Icons/CloseX.svg';
-import { PopUpModalState } from '../recoil/PopUpModal';
-import { MainText } from './Texts/MainText';
-import { SubText } from './Texts/SubText';
-import { useNavigate } from 'react-router-dom';
+import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { PopUpModalState } from '../../recoil/PopUpModal';
+import { MainText } from '../Texts/MainText';
+import { SubText } from '../Texts/SubText';
 
 export function PopUpModal({ children, closeButton, closeFunction }) {
 	const popUpModalStatusState = useRecoilValue(PopUpModalState);
