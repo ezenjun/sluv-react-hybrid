@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { BackButton } from '../../components/Buttons/BackButton';
-import { ContentWrap } from '../../components/containers/ContentWrap';
-import { MainContainer } from '../../components/containers/MainContainer'
-import { TopNav } from '../../components/containers/TopNav'
-import { MainText } from '../../components/Texts/MainText';
-import { BottomNavState } from '../../recoil/BottomNav';
+import { BackButton } from '../../../components/Buttons/BackButton';
+import { ContentWrap } from '../../../components/containers/ContentWrap';
+import { MainContainer } from '../../../components/containers/MainContainer'
+import { TopNav } from '../../../components/containers/TopNav'
+import { MainText } from '../../../components/Texts/MainText';
+import { BottomNavState } from '../../../recoil/BottomNav';
 
 export default function Settings() {
     const navigate = useNavigate();
@@ -31,7 +31,12 @@ export default function Settings() {
 				<ItemWrap>
 					<TitleWrap>계정</TitleWrap>
 					<div className="buttonWrap">
-						<div className="marginBottom">프로필 수정</div>
+						<div
+							onClick={() => navigate('/settings/edit/profile')}
+							className="marginBottom"
+						>
+							프로필 수정
+						</div>
 						<div className="marginBottom">비밀번호 변경</div>
 						<div>셀럽 선택 편집</div>
 					</div>
@@ -63,10 +68,7 @@ export default function Settings() {
 						>
 							서비스 이용약관
 						</div>
-						<div
-							className="marginBottom"
-							onClick={() => navigate('/settings/privacy')}
-						>
+						<div className="marginBottom" onClick={() => navigate('/settings/privacy')}>
 							개인정보 처리방침
 						</div>
 						<div>수정필요</div>

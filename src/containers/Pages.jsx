@@ -19,9 +19,9 @@ import Event from '../pages/home/Event';
 import Notice from '../pages/notice';
 import SearchResult from '../pages/search/SearchResult';
 import AddBinder from '../pages/binder/AddBinder';
-import Settings from '../pages/my/Settings';
-import Privacy from '../pages/my/Privacy';
-import TermsOfUse from '../pages/my/TermsOfUse';
+import Settings from '../pages/my/settings/Settings';
+import Privacy from '../pages/my/settings/Privacy';
+import TermsOfUse from '../pages/my/settings/TermsOfUse';
 import FindEmailResult from '../pages/login/FindEmailResult';
 import FindPasswordResult from '../pages/login/FindPasswordResult';
 import CelebDetail from '../pages/celebdetail';
@@ -43,6 +43,7 @@ import ViewedItems from '../pages/my/ViewedItems';
 import MyUploadItems from '../pages/my/MyUploadItems';
 import Followers from '../pages/my/Followers';
 import Followings from '../pages/my/Followings';
+import EditProfile from '../pages/my/settings/EditProfile';
 
 export default function Pages() {
 	return (
@@ -88,6 +89,7 @@ export default function Pages() {
 			<Route path="/users/:idx/followers" element={<Followers />} />
 			<Route path="/users/:idx/followings" element={<Followings />} />
 			<Route path="/settings" element={<Settings />} />
+			<Route path="/settings/edit/profile" element={<EditProfile />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />
