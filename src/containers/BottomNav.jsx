@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { BottomNavState, UploadPopupState } from '../recoil/BottomNav';
@@ -21,10 +21,10 @@ import { palette } from '../styles/palette';
 
 export default function BottomNav() {
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const [iconHome, setIconHome] = useState(false);
 	const [iconSearch, setIconSearch] = useState(false);
-	const [iconUpload, setIconUpload] = useState(false);
 	const [iconBinder, setIconBinder] = useState(false);
 	const [iconMy, setIconMy] = useState(false);
 
@@ -51,12 +51,6 @@ export default function BottomNav() {
 				setIconBinder(true);
 				setIconMy(false);
 				break;
-			case '/users/:id':
-				setIconHome(false);
-				setIconSearch(false);
-				setIconBinder(false);
-				setIconMy(true);
-				break;
 			default:
 				break;
 		}
@@ -69,6 +63,14 @@ export default function BottomNav() {
 			setUploadPopupStatus(false);
 		}
 	};
+	const onClickMyPageBtn = () => {
+		const userIdx = localStorage.getItem('myUserIdx');
+		navigate(`/users/${userIdx}`);
+		setIconHome(false);
+		setIconSearch(false);
+		setIconBinder(false);
+		setIconMy(true);
+	}
 
 	return (
 		<BottomNavWrap openStatus={bottomNavStatus}>
@@ -124,16 +126,14 @@ export default function BottomNav() {
 					<div className="bottomNavItemText">바인더</div>
 				</BottomNavItem>
 			</Link>
-			<Link style={{ flex: 1 }} to="/users/:id">
-				<BottomNavItem status={iconMy}>
-					{iconMy ? (
-						<BottomNavIcon src={icon_my_selected} />
-					) : (
-						<BottomNavIcon src={icon_my} />
-					)}
-					<div className="bottomNavItemText">마이</div>
-				</BottomNavItem>
-			</Link>
+			<BottomNavItem status={iconMy} onClick={onClickMyPageBtn} style={{ flex: 1 }}>
+				{iconMy ? (
+					<BottomNavIcon src={icon_my_selected} />
+				) : (
+					<BottomNavIcon src={icon_my} />
+				)}
+				<div className="bottomNavItemText">마이</div>
+			</BottomNavItem>
 		</BottomNavWrap>
 	);
 }

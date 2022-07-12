@@ -37,7 +37,10 @@ import ReportComment from '../pages/Report/ReportComment';
 import Faq from '../pages/my/Faq';
 import SupportNotices from '../pages/my/SupportNotices';
 import SupportNoticeDetail from '../pages/my/SupportNoticeDetail';
+
 import ItemDetail from '../pages/ItemDetail/ItemDetail';
+import ViewedItems from '../pages/my/ViewedItems';
+import MyUploadItems from '../pages/my/MyUploadItems';
 
 export default function Pages() {
 	return (
@@ -77,7 +80,9 @@ export default function Pages() {
 			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
 
-			<Route path="/users/:id" element={<My />} />
+			<Route path="/users/:idx" element={<My />} />
+			<Route path="/users/viewed-items" element={<ViewedItems />} />
+			<Route path="/users/upload-items" element={<MyUploadItems />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
@@ -85,7 +90,7 @@ export default function Pages() {
 			<Route path="/support/notices" element={<SupportNotices />} />
 			<Route path="/support/notices/page/:idx" element={<SupportNoticeDetail />} />
 
-			<Route path="/report/user/:id" element={<ReportUser />} />
+			<Route path="/report/user/:idx" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />
 			<Route path="/report/comment" element={<ReportComment />} />
 		</Routes>

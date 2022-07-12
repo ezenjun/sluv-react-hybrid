@@ -12,7 +12,7 @@ import { GridItemWrap } from '../../components/GridItems/GridItemWrap';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
-import { PopUpModal } from '../../components/PopUpModal';
+import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { ReactComponent as AddBinderButton } from '../../assets/Icons/addBinder.svg';
 import { ReactComponent as EditBinder } from '../../assets/Icons/DotsThreeVertical.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';

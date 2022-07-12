@@ -9,10 +9,16 @@ import { SubText } from '../../../components/Texts/SubText';
 import { FavoriteCelebListState } from '../../../recoil/Celebrity';
 
 export function RecommendUserComponent() {
+	const navigate = useNavigate();
+
 	const favoriteCelebList = useRecoilValue(FavoriteCelebListState);
 
 	const [selected, setSelected] = useState(0);
 	const [selectedCelebIdx, setSelectedCelebIdx] = useState(0);
+
+	const onClickUserProfile = idx => {
+		navigate(`/users/${idx}`);
+	};
 
 	const onChipClick = (idx, celebIdx) => {
 		setSelected(idx);
@@ -145,7 +151,10 @@ export function RecommendUserComponent() {
 				{userRecommendList[selected] ? (
 					<>
 						{userRecommendList[selected].map(user => (
-							<User key={user.userIdx}>
+							<User
+								onClick={() => onClickUserProfile(user.userIdx)}
+								key={user.userIdx}
+							>
 								<ProfileImg src={user.profileImgUrl}></ProfileImg>
 								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 									{user.nickName}

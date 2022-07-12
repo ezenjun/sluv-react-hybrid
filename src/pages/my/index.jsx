@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
@@ -22,34 +22,27 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { UploadPopup, UploadPopupWrap } from '../home';
 import { customApiClient } from '../../utils/apiClient';
+import { BackButton } from '../../components/Buttons/BackButton';
 
 export default function My() {
 
-  const { id } = useParams();
+  const { idx } = useParams();
+	
   const navigate = useNavigate();
 
   const [isAuthUser, setIsAuthUser] = useState(false);
   const [reportPopupStatus, setReportPopupStatus] = useState(false);
 	const [isCelebOpen, setIsCelebOpen] = useState(false);
 	const [celebList, setCelebList] = useState([]);
+	const [uploadInfo, setUploadInfo] = useState({});
+	const [userInfo, setUserInfo] = useState({});
+	const [isFollow, setIsFollow] = useState(false);
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
   
   useEffect(() => {
-		setBottomNavStatus(true);
-
-		const userIdx = localStorage.getItem('myUserIdx');
-		getUserPageData(userIdx);
-
-    // 유저페이지 조회 API
-    // if 사용자 본인이면
-    // => 하단바 생기기
-    // => setIsAuthUser(true)
-    // else 
-    // => 하단바 사라지기
-    // => setIsAuthUser(false)
-
+		getUserPageData(idx);
   },[]);
 
 	const getUserPageData = async (userIdx) => {
@@ -60,10 +53,12 @@ export default function My() {
 		if(!data) return;
 		if(!data.isSuccess) return;
 
+		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
 		setIsAuthUser(data.result.isMyPage === 'Y' ? true : false);
 		setCelebList(data.result.userInfo.interestCelebList);
+		setUserInfo(data.result.userInfo);
+		setUploadInfo(data.result.uploadInfo);
 		console.log(data);
-
 
 	}
 
@@ -90,6 +85,7 @@ export default function My() {
 					</>
 				) : (
 					<>
+						<BackButton onClick={() => navigate(-1)} />
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							프로필
 						</MainText>
@@ -116,8 +112,8 @@ export default function My() {
 								alignItems: 'center',
 							}}
 						>
-							<span className="userNickname">닉네임</span>
-							<span className="userId">아이디</span>
+							<span className="userNickname">{userInfo.nickName}</span>
+							<span className="userId">{userInfo.id}</span>
 						</div>
 						<div
 							style={{
@@ -127,7 +123,7 @@ export default function My() {
 							}}
 						>
 							<span className="followTitle">팔로잉</span>
-							<span className="followNum">10</span>
+							<span className="followNum">{userInfo.followingCnt}</span>
 							<div
 								style={{
 									borderLeft: '1px solid #d9d9d9',
@@ -136,7 +132,7 @@ export default function My() {
 								}}
 							></div>
 							<span className="followTitle">팔로워</span>
-							<span className="followNum">12</span>
+							<span className="followNum">{userInfo.followerCnt}</span>
 						</div>
 						<div className="celebWrap">
 							{celebList.slice(0, 3).map((celeb, index) => (
@@ -165,12 +161,22 @@ export default function My() {
 						</CelebFadeDiv>
 
 						{!isAuthUser && (
-							<PurpleButton disabled={true} marginBottom="0"></PurpleButton>
+							<PurpleButton
+								style={{ fontSize: '1rem', marginTop: '1rem' }}
+								disabled={isFollow}
+								marginBottom="0"
+							>
+								{isFollow ? '팔로우' : '팔로잉'}
+							</PurpleButton>
 						)}
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser ? <MyPageContainer /> : <ProfileContainer />}
+				{isAuthUser ? (
+					<MyPageContainer uploadInfo={uploadInfo} />
+				) : (
+					<ProfileContainer uploadInfo={uploadInfo} />
+				)}
 			</ContentWrap>
 
 			{/* 유저 신고하기 팝업  */}
@@ -179,7 +185,7 @@ export default function My() {
 					onClick={() => setReportPopupStatus(false)}
 					style={{ height: '100%', width: '100%' }}
 				></div>
-				<BottomDialogDiv>
+				<BottomDialogDiv style={{ minHeight: '5.5625rem' }}>
 					<CloseWrap>
 						<Close
 							style={{
@@ -191,6 +197,17 @@ export default function My() {
 							onClick={() => setReportPopupStatus(false)}
 						></Close>
 					</CloseWrap>
+					<div
+						onClick={() => navigate(`/report/user/${userInfo.userIdx}`)}
+						style={{
+							padding: '1.25rem',
+							fontSize: '1rem',
+							fontWeight: '600',
+							color: '#262626',
+						}}
+					>
+						'{userInfo.nickName}'님 신고하기
+					</div>
 				</BottomDialogDiv>
 			</BottomDialogWrap>
 
