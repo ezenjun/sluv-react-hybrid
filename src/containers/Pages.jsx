@@ -37,6 +37,7 @@ import ReportComment from '../pages/Report/ReportComment';
 import Faq from '../pages/my/Faq';
 import SupportNotices from '../pages/my/SupportNotices';
 import SupportNoticeDetail from '../pages/my/SupportNoticeDetail';
+import ViewedItems from '../pages/my/ViewedItems';
 
 export default function Pages() {
 	return (
@@ -76,6 +77,7 @@ export default function Pages() {
 			<Route path="/binder/add" element={<AddBinder />} />
 
 			<Route path="/users/:id" element={<My />} />
+			<Route path="/users/viewed-items" element={<ViewedItems />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
