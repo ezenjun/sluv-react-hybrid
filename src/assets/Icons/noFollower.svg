@@ -1,0 +1,17 @@
+<svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M47 3H13C7.47715 3 3 7.47715 3 13V47C3 52.5228 7.47715 57 13 57H47C52.5228 57 57 52.5228 57 47V13C57 7.47715 52.5228 3 47 3Z" fill="#EBEBEB"/>
+<path opacity="0.85" d="M43 8H17C12.5817 8 9 11.5817 9 16V44C9 48.4183 12.5817 52 17 52H43C47.4183 52 51 48.4183 51 44V16C51 11.5817 47.4183 8 43 8Z" fill="white"/>
+<circle cx="30" cy="30" r="12" fill="#FFF8F9"/>
+<mask id="mask0_2103_11367" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="20" y="21" width="20" height="27">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M32.3077 28.2676C33.3316 27.5432 34 26.3496 34 25C34 22.7909 32.2091 21 30 21C27.7909 21 26 22.7909 26 25C26 26.3496 26.6684 27.5432 27.6923 28.2676C23.282 29.3094 20 33.2714 20 38C20 43.5228 24.4772 48 30 48C35.5228 48 40 43.5228 40 38C40 33.2714 36.718 29.3094 32.3077 28.2676Z" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_2103_11367)">
+<circle cx="30" cy="30" r="12" fill="url(#paint0_linear_2103_11367)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_2103_11367" x1="30" y1="6.05078" x2="30.0108" y2="55.5725" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFE4EA"/>
+<stop offset="1" stop-color="#FFCCD7"/>
+</linearGradient>
+</defs>
+</svg>

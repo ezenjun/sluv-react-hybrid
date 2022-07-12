@@ -1,156 +1,181 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { customApiClient } from '../../utils/apiClient';
+
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { LargeViewWrap } from '../../components/LargeViewWrap/LargeViewWrap';
 import { LargeViewItem } from '../../components/LargeViewWrap/LargeViewItem';
 import { LargeViewImage } from '../../components/LargeViewWrap/LargeViewImage';
 import { ImageText } from '../../components/ImageText';
-import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
+import { useEffect } from 'react';
 export default function Follow() {
-	const [followExist, setFollowExist] = useState(true);
+	const [followExist, setFollowExist] = useState(false);
+	const [followItemList, setFollowItemList] = useState([]);
+	const [sameFollowSluverList, setSameFollowSluverList] = useState([]);
+	const getFollowItemList = async () => {
+		const data = await customApiClient('get', `/homes/items/followers?page=1&pageSize=6`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		let temp = data.result;
+		setFollowItemList([...temp]);
+		console.log('setFollwItemList', data.result);
+	};
+	const getSameFollowSluverList = async () => {
+		const data = await customApiClient('get', `/homes/similar-users`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		let temp = data.result;
+		setSameFollowSluverList([...temp]);
+		console.log('getSameFollowSluverList', data.result);
+	};
+	const onFollow = userIdx => {
+		FollowUser(userIdx);
+		let tempList = sameFollowSluverList;
+		console.log('팔로우 클릭');
+		// let length = userRecommendList.length;
+		for (var i = 0; i < tempList.length; i++) {
+			if (tempList[i].userIdx === userIdx) {
+				console.log('tempList[i].isFollow', tempList[i].isFollow);
+				if (tempList[i].isFollow === 'N') {
+					console.log('tempList[i].isFOllow inside', tempList[i].isFollow);
+					tempList[i].isFollow = 'Y';
+					console.log('tempList[i]', tempList[i].isFollow);
+					setSameFollowSluverList([...tempList]);
+				}
+			}
+		}
+	};
+	const onUnFollow = userIdx => {
+		UnFollowUser(userIdx);
+		let tempList = sameFollowSluverList;
+		console.log('언팔 클릭');
+		for (var i = 0; i < tempList.length; i++) {
+			if (tempList[i].userIdx === userIdx) {
+				console.log('tempList[i].isFollow', tempList[i].isFollow);
+				if (tempList[i].isFollow === 'Y') {
+					console.log('tempList[i]', tempList[i].isFollow);
+					tempList[i].isFollow = 'N';
+					console.log('tempList[i]', tempList[i].isFollow);
+					setSameFollowSluverList([...tempList]);
+				}
+			}
+		}
+		// setSameFollowSluverList([...tempList]);
+	};
+	const FollowUser = async userIdx => {
+		// 팔로우 버튼 클릭
+		const data = await customApiClient('post', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('FollowUser', data.message);
+	};
+	const UnFollowUser = async userIdx => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('delete', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('UnFollowUser', data.message);
+	};
+	useEffect(() => {
+		getSameFollowSluverList();
+		getFollowItemList();
+	}, []);
 	return (
 		<FeedContainer>
-			{followExist ? (
+			{followItemList.length > 0 ? (
 				<>
 					<LargeViewWrap padding="0 20px 40px 20px">
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										리노's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">마하그리드</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										현진's
-									</SubText>
-									<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">더블유브이프로젝트</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Round Lawn Short Shirt...</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										아이엔's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">우알롱</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Signature hood sip-up - ...</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										필릭스's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">마하그리드</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
+						{followItemList.map(item => (
+							<div key={item.itemIdx}>
+								<LargeViewItem>
+									<LargeViewImage>
+										<ImageText>
+											<SubText
+												fontsize="0.8125rem"
+												fontweight="bold"
+												color="white"
+											>
+												{item.name}'s
+											</SubText>
+											<BinderWhite
+												style={{ width: '1.5rem', height: '1.5rem' }}
+											/>
+										</ImageText>
+									</LargeViewImage>
+									<ItemTextWrap>
+										<SubText fontsize="1rem">{item.brandKr}</SubText>
+										<VerticalLine></VerticalLine>
+										<SubText fontsize="1rem">{item.ItemName}</SubText>
+									</ItemTextWrap>
+									<SubInfoWrap>
+										<ProfileImg></ProfileImg>
+										<SubText margin="0 "> {item.nickName}</SubText>
+										<Dot></Dot>
+										<SubText color="#8d8d8d"> {item.uploadTime}</SubText>
+									</SubInfoWrap>
+								</LargeViewItem>
+								<HorizontalLine></HorizontalLine>
+							</div>
+						))}
 					</LargeViewWrap>
 					<RecommendUserWrap>
 						<TextWrap>
 							<MainText fontsize="1.125rem">같은 셀럽을 좋아하는 스러버</MainText>
 						</TextWrap>
 						<UserWrap>
-							<User>
-								<ProfileImg size="62px" marginright="0"></ProfileImg>
-								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-									신류땡의 옷장
-								</SubText>
-								<SubText color="#8d8d8d">@ryujinee</SubText>
-								<FollowButton follow={false}>팔로우</FollowButton>
-							</User>
-							<User>
-								<ProfileImg size="62px" marginright="0"></ProfileImg>
-								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-									도영이 클로젯12
-								</SubText>
-								<SubText color="#8d8d8d">@doyoung12</SubText>
-								<FollowButton follow={true}>팔로잉</FollowButton>
-							</User>
-							<User>
-								<ProfileImg size="62px" marginright="0"></ProfileImg>
-								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-									신류땡의 옷장
-								</SubText>
-								<SubText color="#8d8d8d">@ryujinee</SubText>
-								<FollowButton follow={false}>팔로우</FollowButton>
-							</User>
-							<User>
-								<ProfileImg size="62px" marginright="0"></ProfileImg>
-								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-									신류땡의 옷장
-								</SubText>
-								<SubText color="#8d8d8d">@ryujinee</SubText>
-								<FollowButton follow={true}>팔로잉</FollowButton>
-							</User>
+							{sameFollowSluverList &&
+								sameFollowSluverList.map(sluver => (
+									<User>
+										<ProfileImg size="62px" marginright="0"></ProfileImg>
+										<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
+											{sluver.nickName}
+										</SubText>
+										<SubText color="#8d8d8d">@{sluver.id}</SubText>
+										{sluver.isFollow === 'Y' ? (
+											<FollowButton
+												follow={sluver.isFollow === 'Y'}
+												onClick={() => onUnFollow(sluver.userIdx)}
+											>
+												팔로잉
+											</FollowButton>
+										) : (
+											<FollowButton
+												follow={sluver.isFollow === 'Y'}
+												onClick={() => onFollow(sluver.userIdx)}
+											>
+												팔로우
+											</FollowButton>
+										)}
+									</User>
+								))}
 						</UserWrap>
 					</RecommendUserWrap>
 				</>
 			) : (
 				<>
 					<NoFollow>
-						<Present style={{ width: '3.75rem', height: '3.75rem' }}></Present>
+						<NoFollowerIcon
+							style={{ width: '3.75rem', height: '3.75rem' }}
+						></NoFollowerIcon>
 						<SubText></SubText>
 						<SubText color="#262626" fontsize="1rem" margin="1rem 0 0.5rem 0">
 							아직 팔로잉한 스러버가 없네요
@@ -163,275 +188,65 @@ export default function Follow() {
 						<MainText fontsize="18px" margin="0 0 1.625rem 0">
 							같은 셀럽을 좋아하는 스러버
 						</MainText>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton width="4.3125rem" height="2.3125rem" marginBottom="0">
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
-						<RecommendUser>
-							<UserTop>
-								<UserInfo>
-									<UserImage></UserImage>
-									<UserInfoText>
-										<SubText margin="0 "> 이리노순둥도리</SubText>
-										<SubInfoWrap>
-											<SubText color="#8d8d8d">@sluvvv</SubText>
-											<Dot></Dot>
-											<SubText color="#8d8d8d"> 10개 업로드</SubText>
-										</SubInfoWrap>
-									</UserInfoText>
-								</UserInfo>
-								<PurpleButton
-									width="4.3125rem"
-									height="2.3125rem"
-									marginBottom="0"
-									style={{ fontWeight: '600' }}
-								>
-									팔로우
-								</PurpleButton>
-							</UserTop>
-							<UserBottom>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-								<UploadImage></UploadImage>
-							</UserBottom>
-						</RecommendUser>
+						{sameFollowSluverList ? (
+							<>
+								{sameFollowSluverList.map(sluver => (
+									<RecommendUser key={sluver.userIdx}>
+										<UserTop>
+											<UserInfo>
+												<UserImage src={sluver.profileImgUrl}></UserImage>
+												<UserInfoText>
+													<SubText margin="0 ">
+														{' '}
+														{sluver.nickName}
+													</SubText>
+													<SubInfoWrap>
+														<SubText color="#8d8d8d">
+															@{sluver.id}
+														</SubText>
+														<Dot></Dot>
+														<SubText color="#8d8d8d">
+															{sluver.uploadCnt}개 업로드
+														</SubText>
+													</SubInfoWrap>
+												</UserInfoText>
+											</UserInfo>
+											{sluver.isFollow === 'Y' ? (
+												<FollowButton
+													follow={sluver.isFollow === 'Y'}
+													onClick={() => onUnFollow(sluver.userIdx)}
+													margintop="0"
+												>
+													팔로잉
+												</FollowButton>
+											) : (
+												<FollowButton
+													follow={sluver.isFollow === 'Y'}
+													onClick={() => onFollow(sluver.userIdx)}
+													margintop="0"
+												>
+													팔로우
+												</FollowButton>
+											)}
+										</UserTop>
+										<UserBottom>
+											{sluver.itemList && (
+												<>
+													{sluver.itemList.map(item => (
+														<UploadImage
+															key={item.itemIdx}
+															src={item.itemImgUrl}
+														></UploadImage>
+													))}
+												</>
+											)}
+										</UserBottom>
+									</RecommendUser>
+								))}
+							</>
+						) : (
+							<></>
+						)}
 					</RecommendFollow>
 				</>
 			)}
@@ -440,8 +255,7 @@ export default function Follow() {
 }
 
 const FeedContainer = styled.div`
-	height: 100vh;
-	padding: 1.25rem 0 1.25rem 0;
+	padding: 1.25rem 0 0 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
@@ -490,7 +304,7 @@ const RecommendFollow = styled.div`
 const RecommendUser = styled.div`
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 36px;
+	margin-bottom: 2.25rem;
 `;
 const UserTop = styled.div`
 	display: flex;
@@ -503,7 +317,7 @@ const UserInfo = styled.div`
 	align-items: center;
 `;
 const UserImage = styled.div`
-	background-color: #5d3997;
+	background-image: url(${props => props.src});
 	width: 2.25rem;
 	height: 2.25rem;
 	border-radius: 50%;
@@ -516,19 +330,28 @@ const UserInfoText = styled.div`
 const NickName = styled.div``;
 
 const UserBottom = styled.div`
-	display: flex;
-	flex-direction: row;
+	overflow-x: scroll;
+	white-space: nowrap;
 	justify-content: space-between;
 	margin-top: 11px;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
 `;
 const UploadImage = styled.div`
-	width: 76px;
-	height: 76px;
+	display: inline-block;
+	width: 4.75rem;
+	height: 4.75rem;
 	border-radius: 0.8125rem;
-	background-color: #5d3997;
+	margin-right: 0.6875rem;
+	background-color: pink;
+	background-image: url(${props => props.src});
+	background-repeat: no-repeat;
+	background-position: 50%;
+	background-size: cover;
 	@media screen and (width: 280px) {
-		width: 4.0625rem;
-		height: 4.0625rem;
+		width: 4.1875rem;
+		height: 4.1875rem;
 	}
 `;
 
@@ -568,7 +391,7 @@ const FollowButton = styled.div`
 	padding: 10px 16px;
 	border-radius: 30.4px;
 	border: solid 1px #9e30f4;
-	margin-top: 1rem;
+	margin-top: ${props => props.margintop || '1rem'};
 	background-color: ${props => (props.follow ? '#fff' : '#9e30f4')};
 	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
 	font-size: 0.875rem;
