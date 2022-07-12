@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { ContentWrap } from '../../components/containers/ContentWrap';
-import { MainContainer } from '../../components/containers/MainContainer'
+import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
@@ -12,78 +13,45 @@ import { ImageText } from '../../components/ImageText';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { BottomNavState } from '../../recoil/BottomNav';
-import { customApiClient } from '../../utils/apiClient';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 
-export default function ViewedItems() {
-
+export default function MyUploadItems() {
 	const navigate = useNavigate();
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 
-	const [itemCount, setItemCount] = useState(0);
-	const [itemList, setItemList] = useState([
-		{
-			itemIdx: 17,
-			itemImgUrl: '이미지 3',
-			name: '최우식',
-			isDib: 'N',
-			brandKr: '트리플에이',
-			itemName: '나이키 반바지',
-		},
-		{
-			itemIdx: 14,
-			itemImgUrl: '이미지 1',
-			name: '스트레이키즈',
-			isDib: 'Y',
-			brandKr: '에이리프',
-			itemName: '자라 반바지',
-		},
-		{
-			itemIdx: 10,
-			itemImgUrl: '아이템 이미지 url',
-			name: '스트레이키즈',
-			isDib: 'Y',
-			brandKr: '어콜드월',
-			itemName: '테스트 아이템 2',
-		},
-	]);
+	const { state } = useLocation();
+	console.log(state);
 
 	useEffect(() => {
 		setBottomNavStatus(false);
 
-		// getViewItems();
-	}, []);
-
-	const getViewItems = async () => {
-		const data = await customApiClient('get', '/my-page/recents');
-
-		if(!data) return;
-		if(!data.isSuccess) return;
-
-		setItemCount(data.result.recentItemCnt);
-		setItemList(data.result.recentItemList);
-		console.log(data.result);
-	}
+	},[]);
 
 	return (
 		<MainContainer>
 			<TopNav>
 				<BackButton onClick={() => navigate(-1)} />
 				<MainText style={{ fontSize: '1.125rem' }} className="centerText">
-					최근 본 아이템
+					나의 아이템 업로드
 				</MainText>
 			</TopNav>
 			<ContentWrap>
-				{itemCount ? (
+				{state.uploadCnt ? (
 					<div>
-						<div style={{ margin: '1rem 0 0.8125rem', fontSize: '0.75rem', color: '#8d8d8d' }}>
-							<span style={{ marginRight: '0.25rem' }}>최근 본 아이템</span>
-							<span>{itemCount}</span>
+						<div
+							style={{
+								margin: '1rem 0 0.8125rem',
+								fontSize: '0.75rem',
+								color: '#8d8d8d',
+							}}
+						>
+							<span style={{ marginRight: '0.25rem' }}>전체</span>
+							<span>{state.uploadCnt}</span>
 						</div>
 						<GridItemWrap>
-							{itemList.length > 0 &&
-								itemList.map(item => (
+							{state.uploadItemList.length > 0 &&
+								state.uploadItemList.map(item => (
 									<GridItem key={item.itemIdx}>
 										<GridImage>
 											<ImageText>
@@ -130,5 +98,3 @@ export default function ViewedItems() {
 		</MainContainer>
 	);
 }
-
-
