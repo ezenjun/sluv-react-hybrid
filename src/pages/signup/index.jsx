@@ -327,11 +327,12 @@ export default function Signup() {
 	}
 
 	const onPatchNickname = async () => {
+		console.log(nickname);
 		const body = {
 			nickName: nickname,
 		};
-		const uri = `/users/${socialLoginUserIdx}/nickname`;
-		const data = await customApiClient('patch', uri, body);
+		const uri = `/users/nickname-check?nickname=${socialLoginUserIdx}`;
+		const data = await customApiClient('get', uri);
 		console.log(data);
 		if (!data) return;
 		if (!data.isSuccess) return;

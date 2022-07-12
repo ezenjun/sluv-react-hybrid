@@ -150,7 +150,7 @@ const BottomNavWrap = styled.div`
 	bottom: ${props => (props.openStatus ? '0' : '-2.9063rem')};
 	visibility: ${props => (props.openStatus ? 'visible' : 'hidden')};
 	display: flex;
-	opacity: '0';
+	opacity: ${props => (props.openStatus ? '1' : '0')};
 	transition: bottom 300ms ease-in-out;
 `;
 
