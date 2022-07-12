@@ -185,7 +185,7 @@ export default function My() {
 					onClick={() => setReportPopupStatus(false)}
 					style={{ height: '100%', width: '100%' }}
 				></div>
-				<BottomDialogDiv>
+				<BottomDialogDiv style={{ minHeight: '5.5625rem' }}>
 					<CloseWrap>
 						<Close
 							style={{
@@ -197,6 +197,17 @@ export default function My() {
 							onClick={() => setReportPopupStatus(false)}
 						></Close>
 					</CloseWrap>
+					<div
+						onClick={() => navigate(`/report/user/${userInfo.userIdx}`)}
+						style={{
+							padding: '1.25rem',
+							fontSize: '1rem',
+							fontWeight: '600',
+							color: '#262626',
+						}}
+					>
+						'{userInfo.nickName}'님 신고하기
+					</div>
 				</BottomDialogDiv>
 			</BottomDialogWrap>
 

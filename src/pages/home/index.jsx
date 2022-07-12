@@ -10,7 +10,7 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
-import { PopUpModal } from '../../components/PopUpModal';
+import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { FavoriteCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import { customApiClient } from '../../utils/apiClient';
 

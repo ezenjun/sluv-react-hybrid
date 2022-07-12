@@ -7,7 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
-import { PopUpModal } from '../../components/PopUpModal';
+import { PopUpModal } from '../../components/PopUp/PopUpModal';
 
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { PopUpModalState } from '../../recoil/PopUpModal';
