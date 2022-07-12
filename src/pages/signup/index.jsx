@@ -321,6 +321,7 @@ export default function Signup() {
 		if(!data.isSuccess) return;
 
 		console.log(data.result.jwt);
+		localStorage.setItem('myUserIdx', data.result.userIdx);
 		localStorage.setItem('x-access-token', data.result.jwt);
 
 		handleNextClick();
@@ -331,8 +332,9 @@ export default function Signup() {
 		const body = {
 			nickName: nickname,
 		};
-		const uri = `/users/nickname-check?nickname=${socialLoginUserIdx}`;
-		const data = await customApiClient('get', uri);
+		
+		const uri = `/users/${socialLoginUserIdx}/nickname`;
+		const data = await customApiClient('patch', uri, body);
 		console.log(data);
 		if (!data) return;
 		if (!data.isSuccess) return;
