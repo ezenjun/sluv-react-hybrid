@@ -148,7 +148,9 @@ const BottomNavWrap = styled.div`
 	height: 3.125rem;
 	background-color: ${palette.white.primary};
 	bottom: ${props => (props.openStatus ? '0' : '-2.9063rem')};
-	display: ${props => (props.openStatus ? 'flex' : 'none')};
+	visibility: ${props => (props.openStatus ? 'visible' : 'hidden')};
+	display: flex;
+	opacity: '0';
 	transition: bottom 300ms ease-in-out;
 `;
 

@@ -30,6 +30,12 @@ export default function My() {
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+
+	const testList = [
+		{ celebName: '최우식' },
+		{ celebName: '스트레이키즈' },
+		{ celebName: '레드벨벳' },
+	];
   
   useEffect(() => {
 		setBottomNavStatus(true);
@@ -87,17 +93,42 @@ export default function My() {
 							src="https://sluv-actor-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B9%80%EA%B3%A0%EC%9D%80/%EA%B9%80%EA%B3%A0%EC%9D%80.png"
 							alt="유저 프로필 사진"
 						/>
-						<div>
-							<span>닉네임</span>
-							<span>아이디</span>
+						<div
+							style={{
+								border: '1px solid black',
+								display: 'flex',
+								alignItems: 'center',
+							}}
+						>
+							<span className="userNickname">닉네임</span>
+							<span className="userId">아이디</span>
 						</div>
-						<div>
-							<span>팔로잉</span>
-							<span>10</span>
-							<span>팔로워</span>
-							<span>12</span>
+						<div
+							style={{
+								border: '1px solid black',
+								display: 'flex',
+								alignItems: 'center',
+								marginTop: '0.5rem',
+							}}
+						>
+							<span className="followTitle">팔로잉</span>
+							<span className="followNum">10</span>
+							<div
+								style={{
+									borderLeft: '1px solid #d9d9d9',
+									height: '0.75rem',
+									margin: '0 0.5rem',
+								}}
+							></div>
+							<span className="followTitle">팔로워</span>
+							<span className="followNum">12</span>
 						</div>
-						<div>CHIP</div>
+						<div className="celebWrap">
+							{testList.slice(0, 3).map(celeb => (
+								<Chip>{celeb.celebName}</Chip>
+							))}
+							
+						</div>
 						{!isAuthUser && (
 							<PurpleButton disabled={true} marginBottom="0"></PurpleButton>
 						)}
@@ -194,5 +225,42 @@ const ProfileContentsWrap = styled.div`
 		left: 50%;
 		transform: translate(-50%, 0);
 	}
+	.userNickname {
+		margin-right: 0.25rem;
+		font-size: 1rem;
+		font-weight: bold;
+		color: #262626;
+	}
+	.userId {
+		font-size: 0.875rem;
+		color: #8d8d8d;
+	}
+	.followTitle {
+		font-size: 0.8125rem;
+		color: #262626;
+		margin-right: 0.25rem;
+	}
+	.followNum {
+		font-size: 0.8125rem;
+		font-weight: bold;
+		color: #262626;
+	}
+	.celebWrap {
+		margin-top: 1rem;
+
+	}
+`;
+
+const Chip = styled.div`
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 0.625rem 1rem;
+	margin-right: 0.5rem;
+	border-radius: 1.9rem;
+	/* border: solid 1px #e2e0e0; */
+	background-color: #fbf6ff;
+	color: #9e30f4;
+	font-size: 0.875rem;
+	font-weight: 600;
 `;
 
