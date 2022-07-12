@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import Slider from 'react-slick';
+import { customApiClient } from '../../utils/apiClient';
 
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
@@ -52,8 +53,27 @@ export default function ItemDetail() {
 		customPaging: i => <div style={{ position: 'fixed', width: '100%', top: '0' }}></div>,
 	};
 
+	const [itemInfo, setItemInfo] = useState([]);
+	const [sameCelebItemList, setsameCelebItemList] = useState([]);
+	const [otherUserDibItemList, setotherUserDibItemList] = useState([]);
+	const [sameBrandItemList, setsameBrandItemList] = useState([]);
+
+	const getItemInfo = async () => {
+		const data = await customApiClient('get', `/items/${itemIdx}`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setItemInfo(data.result.itemInfo);
+		setsameCelebItemList(data.result.sameCelebItemList);
+		setotherUserDibItemList(data.result.otherUserDibItemList);
+		setsameBrandItemList(data.result.sameBrandItemList);
+	};
+
 	useEffect(() => {
 		// 하단바 띄워주기
+		getItemInfo();
 		setBottomNavStatus(false);
 	}, []);
 	return (
@@ -78,86 +98,233 @@ export default function ItemDetail() {
 					></EditButton>
 				</div>
 			</TopNav>
-			<FeedContainer>
-				<ImageContainer>
-					<Slider {...settings}>
-						<Image></Image>
-						<Image></Image>
-						<Image></Image>
-						<Image></Image>
-						<Image></Image>
-					</Slider>
-				</ImageContainer>
+			{itemInfo && (
+				<FeedContainer>
+					<ImageContainer>
+						{itemInfo.itemImgList && (
+							<Slider {...settings}>
+								{itemInfo.itemImgList.map(itemImg => (
+									<Image></Image>
+								))}
+							</Slider>
+						)}
+					</ImageContainer>
 
-				<ItemInfoContainer>
-					<SubText fontsize="1rem" fontweight="bold" color="#9E30F4">
-						스트레이키즈 승민
-					</SubText>
-					<MainText fontsize="1.25rem" margin="0.75rem 0 0.375rem 0">
-						더블유브이 프로젝트
-					</MainText>
-					<SubText fontsize="1rem" fontweight="600" margin="0 0 0.75rem 0">
-						스트레이키즈 승민
-					</SubText>
-					<div style={{ display: 'flex', alignItems: 'center' }}>
-						<SubText fontweight="normal">상의 {'>'} 긴소매</SubText>
-						<Dot></Dot>
-						<SubText fontweight="normal">5분전</SubText>
-					</div>
-				</ItemInfoContainer>
-				<ItemInfoContainer backgroundColor="#F8F7FA" padding="2rem">
-					<div style={{ display: 'flex', alignItems: 'center' }}>
-						<UserImage></UserImage>
-						<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
-							이리노순둥도리
+					<ItemInfoContainer>
+						<SubText fontsize="1rem" fontweight="bold" color="#9E30F4">
+							{itemInfo.celebName}&nbsp;{itemInfo.memberIdx}
 						</SubText>
-					</div>
-					<SpeechBubbleWrap
-						borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-						backgroundColor="rgba(0, 0, 0, 0.05)"
-						style={{ margin: '0.625rem 0 0 0' }}
-					>
-						<div>2022년 5월 22일에</div>
-					</SpeechBubbleWrap>
-					<SpeechBubbleWrap
-						borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-						backgroundColor="rgba(0, 0, 0, 0.05)"
-						style={{ margin: '0.625rem 0 0 0' }}
-					>
-						<div>2022년 5월 22일에</div>
-					</SpeechBubbleWrap>
-					<SpeechBubbleWrap
-						borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-						backgroundColor="rgba(0, 0, 0, 0.05)"
-						style={{ margin: '0.625rem 0 0 0' }}
-					>
-						<div>2022년 5월 22일에</div>
-					</SpeechBubbleWrap>
-					<SpeechBubbleWrap
-						borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-						backgroundColor="rgba(0, 0, 0, 0.05)"
-						style={{ margin: '0.625rem 0 0 0' }}
-					>
-						<div>2022년 5월 22일에</div>
-					</SpeechBubbleWrap>
-				</ItemInfoContainer>
-				<UserInfo>
-					<Left>
-						<UserImage size="3.25rem"></UserImage>
-						<UserTextWrap>
-							<SubText font-weight="600" font-size="0.875rem" margin="0 0 0.25rem 0">
+						<MainText fontsize="1.25rem" margin="0.75rem 0 0.375rem 0">
+							{itemInfo.brandKr}
+						</MainText>
+						<SubText fontsize="1rem" fontweight="600" margin="0 0 0.75rem 0">
+							{itemInfo.itemName}
+						</SubText>
+						<div style={{ display: 'flex', alignItems: 'center' }}>
+							<SubText fontweight="normal">
+								{itemInfo.parentCategory} {'>'} {itemInfo.subCategory}
+							</SubText>
+							<Dot></Dot>
+							<SubText fontweight="normal">{itemInfo.uploadTime}</SubText>
+						</div>
+					</ItemInfoContainer>
+					<ItemInfoContainer backgroundColor="#F8F7FA" padding="2rem">
+						<div style={{ display: 'flex', alignItems: 'center' }}>
+							<UserImage></UserImage>
+							<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
 								이리노순둥도리
 							</SubText>
-							<SubText font-weight="600" font-size="0.875rem">
-								@sluvv
-							</SubText>
-						</UserTextWrap>
-					</Left>
-					<>
-						<FollowButton>팔로우</FollowButton>
-					</>
-				</UserInfo>
-			</FeedContainer>
+						</div>
+						<SpeechBubbleWrap
+							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+							backgroundColor="rgba(0, 0, 0, 0.05)"
+							style={{ margin: '0.625rem 0 0 0' }}
+						>
+							{itemInfo.whenDiscovery} 에
+						</SpeechBubbleWrap>
+						<SpeechBubbleWrap
+							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+							backgroundColor="rgba(0, 0, 0, 0.05)"
+							style={{ margin: '0.625rem 0 0 0' }}
+						>
+							{itemInfo.whereDiscovery}에서 발견하였고
+						</SpeechBubbleWrap>
+						<SpeechBubbleWrap
+							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+							backgroundColor="rgba(0, 0, 0, 0.05)"
+							style={{ margin: '0.625rem 0 0 0' }}
+						>
+							가격은 대략 {itemInfo.price}에요!
+						</SpeechBubbleWrap>
+						{itemInfo.content && (
+							<SpeechBubbleWrap
+								borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+								backgroundColor="rgba(0, 0, 0, 0.05)"
+								style={{ margin: '0.625rem 0 0 0' }}
+							>
+								{itemInfo.content}
+							</SpeechBubbleWrap>
+						)}
+					</ItemInfoContainer>
+					{itemInfo.sellerSite && <>링크</>}
+					<UserInfo>
+						<Left>
+							<UserImage size="3.25rem"></UserImage>
+							<UserTextWrap>
+								<SubText
+									font-weight="600"
+									font-size="0.875rem"
+									margin="0 0 0.25rem 0"
+								>
+									{itemInfo.nickName}
+								</SubText>
+								<SubText font-weight="600" font-size="0.875rem">
+									@sluvv
+								</SubText>
+							</UserTextWrap>
+						</Left>
+						<>
+							{itemInfo.isFollow === 'Y' ? (
+								<FollowButton follow={true}>팔로잉</FollowButton>
+							) : (
+								<FollowButton follow={false}>팔로우</FollowButton>
+							)}
+						</>
+					</UserInfo>
+					<MyUploadWrap>
+						<div className="titleWrap">
+							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								같은 셀럽의 아이템
+							</MainText>
+						</div>
+						<div className="contentWrap">
+							{/* {itemInfo.sameCelebItemList.length > 0 &&
+						uploadInfo.uploadItemList.slice(0, 10).map(item => (
+							<MyPageGridItem key={item.itemIdx}>
+								<GridImage>
+									<ImageText>
+										<SubText
+											fontsize="0.8125rem"
+											fontweight="bold"
+											color="white"
+										>
+											{item.name}'s
+										</SubText>
+										<BinderWhite
+											style={{
+												width: '1.375rem',
+												height: '1.375rem',
+											}}
+										/>
+									</ImageText>
+								</GridImage>
+								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+									{item.brandKr}
+								</SubText>
+								<SubText
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										width: '100%',
+									}}
+								>
+									{item.itemName}
+								</SubText>
+							</MyPageGridItem>
+						))} */}
+						</div>
+					</MyUploadWrap>
+					<MyUploadWrap>
+						<div className="titleWrap">
+							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								다른 스러버들이 함께 보관한 아이템
+							</MainText>
+						</div>
+						<div className="contentWrap">
+							{/* {uploadInfo.uploadItemList.length > 0 &&
+						uploadInfo.uploadItemList.slice(0, 10).map(item => (
+							<MyPageGridItem key={item.itemIdx}>
+								<GridImage>
+									<ImageText>
+										<SubText
+											fontsize="0.8125rem"
+											fontweight="bold"
+											color="white"
+										>
+											{item.name}'s
+										</SubText>
+										<BinderWhite
+											style={{
+												width: '1.375rem',
+												height: '1.375rem',
+											}}
+										/>
+									</ImageText>
+								</GridImage>
+								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+									{item.brandKr}
+								</SubText>
+								<SubText
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										width: '100%',
+									}}
+								>
+									{item.itemName}
+								</SubText>
+							</MyPageGridItem>
+						))} */}
+						</div>
+					</MyUploadWrap>
+					<MyUploadWrap>
+						<div className="titleWrap">
+							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								같은 브랜드의 아이템
+							</MainText>
+						</div>
+						<div className="contentWrap">
+							{/* {uploadInfo.uploadItemList.length > 0 &&
+						uploadInfo.uploadItemList.slice(0, 10).map(item => (
+							<MyPageGridItem key={item.itemIdx}>
+								<GridImage>
+									<ImageText>
+										<SubText
+											fontsize="0.8125rem"
+											fontweight="bold"
+											color="white"
+										>
+											{item.name}'s
+										</SubText>
+										<BinderWhite
+											style={{
+												width: '1.375rem',
+												height: '1.375rem',
+											}}
+										/>
+									</ImageText>
+								</GridImage>
+								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
+									{item.brandKr}
+								</SubText>
+								<SubText
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										width: '100%',
+									}}
+								>
+									{item.itemName}
+								</SubText>
+							</MyPageGridItem>
+						))} */}
+						</div>
+					</MyUploadWrap>
+				</FeedContainer>
+			)}
 
 			<BottomNavWrap openStatus={true}>
 				<AlignDiv>
@@ -297,3 +464,35 @@ const Left = styled.div`
 	display: flex;
 	align-items: center;
 `;
+
+const MyUploadWrap = styled.div`
+	margin-bottom: 1.875rem;
+
+	.titleWrap {
+		padding: 0 1.25rem;
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 0.875rem;
+	}
+	.contentWrap {
+		display: flex;
+		flex-direction: row;
+		padding-left: 1.25rem;
+
+		overflow-x: auto;
+		::-webkit-scrollbar {
+			display: none; /* for Chrome, Safari, and Opera */
+		}
+	}
+`;
+
+// const ContentWrap = styled.div`
+// 	display: flex;
+// 	flex-direction: row;
+// 	padding-left: 1.25rem;
+
+// 	overflow-x: auto;
+// 	::-webkit-scrollbar {
+// 		display: none; /* for Chrome, Safari, and Opera */
+// 	}
+// `;
