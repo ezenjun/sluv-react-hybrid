@@ -21,46 +21,10 @@ export const CelebsLuvItem = ({ celeb }) => {
 			state: celeb,
 		});
 	};
-	// console.log('celeb', celeb);
-	// console.log('celeb.memberList', celeb.memberList);
-	// const [selected, setSelected] = useState(0);
-	// const onChipClick = (idx, memberIdx) => {
-	// 	setSelected(idx);
-	// 	setSelectedMemeberIdx(memberIdx);
-	// 	if (selectedFilter === 1) {
-	// 		//최신순
-	// 		if (!latestList[idx]) {
-	// 			getEachMemberLatestList(memberIdx);
-	// 		}
-	// 	}
-	// 	if (selectedFilter === 2) {
-	// 		// 인기순
-	// 		if (!hotList[idx]) {
-	// 			getEachMemberHotList(memberIdx);
-	// 		}
-	// 	}
-	// };
-	// const [selectedFilter, setSelectedFilter] = useState(1);
-	// const tabList = [
-	// 	{
-	// 		idx: 1,
-	// 		name: '최신순',
-	// 	},
-	// 	{
-	// 		idx: 2,
-	// 		name: '인기순',
-	// 	},
-	// ];
-	// const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
-	// const onFilterClick = idx => {
-	// 	setSelectedFilter(idx);
-	// 	if (!latestList[idx]) {
-	// 		getEachMemberLatestList(selectedMemeberIdx);
-	// 	}
-	// 	if (!hotList[idx]) {
-	// 		getEachMemberHotList(selectedMemeberIdx);
-	// 	}
-	// };
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+	};
+
 	const [CurrentList, setCurrentList] = useState([]);
 
 	const [selectedFilter, setSelectedFilter] = useState(1);
@@ -233,7 +197,10 @@ export const CelebsLuvItem = ({ celeb }) => {
 				{CurrentList && (
 					<>
 						{CurrentList.map(item => (
-							<Item>
+							<Item
+								key={item.itemIdx}
+								onClick={() => onDetailItemClick(item.itemIdx)}
+							>
 								<Image>
 									<ImageText>
 										<SubText
@@ -248,6 +215,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 												style={{
 													width: '1.5rem',
 													height: '1.5rem',
+													zIndex: '50',
 												}}
 											/>
 										) : (
@@ -255,6 +223,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 												style={{
 													width: '1.5rem',
 													height: '1.5rem',
+													zIndex: '50',
 												}}
 											/>
 										)}

@@ -37,6 +37,7 @@ import ReportComment from '../pages/Report/ReportComment';
 import Faq from '../pages/my/Faq';
 import SupportNotices from '../pages/my/SupportNotices';
 import SupportNoticeDetail from '../pages/my/SupportNoticeDetail';
+import ItemDetail from '../pages/ItemDetail/ItemDetail';
 
 export default function Pages() {
 	return (
@@ -62,6 +63,7 @@ export default function Pages() {
 			<Route path="/upload/question" element={<UploadQuestion />} />
 
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
+			<Route path="/item/detail/:itemIdx" element={<ItemDetail />} />
 
 			<Route path="/question/:idx" element={<QuestionDetail />} />
 			<Route path="/question/realtime" element={<RealtimeQuestion />} />
