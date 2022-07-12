@@ -34,8 +34,18 @@ export default function CelebDetail() {
 	let { celebIdx } = useParams();
 	let location = useLocation();
 	const navigate = useNavigate();
+	const [latestList, setLatestList] = useState([]);
+	const [hotList, setHotList] = useState([]);
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	useEffect(() => {
+		// 하단바 띄워주기
+		setBottomNavStatus(false);
+	}, []);
 
-	const [currentItemList, setCurrentItemList] = useState([]);
+	useEffect(() => {
+		getTotalLatestList();
+		getTotalHotList();
+	}, []);
 
 	// 최신순/ 인기순
 	const [selectedFilter, setSelectedFilter] = useState(1);
@@ -49,23 +59,39 @@ export default function CelebDetail() {
 			name: '인기순',
 		},
 	];
+
 	const onFilterClick = idx => {
 		setSelectedFilter(idx);
+		if (!latestList[selectedMemeberIdx]) {
+			getEachMemberLatestList(selectedMemeberIdx);
+			console.log(selectedMemeberIdx);
+			console.log('latest' + idx + '비어있음');
+		}
+		if (!hotList[selectedMemeberIdx]) {
+			getEachMemberHotList(selectedMemeberIdx);
+			console.log(selectedMemeberIdx);
+			console.log('hot' + idx + '비어있음');
+		}
 	};
 	// 연예인 선택
+	const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
 	const [selectedChip, setSelectedChip] = useState(0);
 	const onChipClick = (idx, memberIdx) => {
+		setSelectedMemeberIdx(memberIdx);
 		setSelectedChip(idx);
+		console.log('idx, memberIdx', idx, memberIdx);
 		if (selectedFilter === 1) {
 			//최신순
 			if (!latestList[idx]) {
 				getEachMemberLatestList(memberIdx);
+				console.log('filter 1, latest');
 			}
 		}
 		if (selectedFilter === 2) {
 			// 인기순
 			if (!hotList[idx]) {
 				getEachMemberHotList(memberIdx);
+				console.log('filter 2, hot');
 			}
 		}
 	};
@@ -78,13 +104,10 @@ export default function CelebDetail() {
 		navigate(-1);
 	};
 
-	const [latestList, setLatestList] = useState([]);
-	const [hotList, setHotList] = useState([]);
-
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?celebIdx=${celebIdx}&order=latest&page=1&pageSize=15`
+			`/homes/items?celebIdx=${celebIdx}&order=latest&page=1&pageSize=6`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -97,7 +120,7 @@ export default function CelebDetail() {
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?celebIdx=${celebIdx}&order=hot&page=1&pageSize=15`
+			`/homes/items?celebIdx=${celebIdx}&order=hot&page=1&pageSize=6`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -138,15 +161,6 @@ export default function CelebDetail() {
 		console.log('hotList[selectedFilter]', hotList[selectedFilter]);
 	};
 
-	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	useEffect(() => {
-		// 하단바 띄워주기
-		setBottomNavStatus(false);
-		getTotalLatestList();
-		getTotalHotList();
-		console.log(hotList[selectedFilter]);
-	}, []);
-
 	return (
 		<MainContainer padding="0">
 			<TopNav>
@@ -157,7 +171,7 @@ export default function CelebDetail() {
 			</TopNav>
 			<FeedContainer>
 				{/* /그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음 */}
-				{location.state.memberList.length > 1 ? (
+				{location.state.memberList.length > 0 ? (
 					<>
 						<ChipWrap>
 							<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
@@ -205,15 +219,15 @@ export default function CelebDetail() {
 					</Filter>
 					{view ? (
 						<Filter onClick={changeView}>
-							<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
-							<SubText fontsize="12px" color="#8d8d8d">
+							<FilterSmall style={{ marginRight: '0.125rem' }}></FilterSmall>
+							<SubText fontsize="0.75rem" color="#8d8d8d">
 								작게보기
 							</SubText>
 						</Filter>
 					) : (
 						<Filter onClick={changeView}>
-							<FilterBig style={{ marginRight: '2px' }}></FilterBig>
-							<SubText fontsize="12px" color="#8d8d8d">
+							<FilterBig style={{ marginRight: '0.125rem' }}></FilterBig>
+							<SubText fontsize="0.75rem" color="#8d8d8d">
 								크게보기
 							</SubText>
 						</Filter>
@@ -221,14 +235,14 @@ export default function CelebDetail() {
 				</FilterWrap>
 				{view ? (
 					<>
-						{selectedFilter === 1 ? ( // 인기순
+						{selectedFilter === 1 ? ( // 최신순
 							<>
 								{latestList[selectedFilter] ? (
 									<LargeViewWrap>
 										{latestList[selectedFilter].map(item => (
 											<div key={item.itemIdx}>
 												<LargeViewItem>
-													<LargeViewImage>
+													<LargeViewImage src={item.itemImgUrl}>
 														<ImageText>
 															<SubText
 																fontsize="0.8125rem"
@@ -276,13 +290,14 @@ export default function CelebDetail() {
 								)}
 							</>
 						) : (
+							//인기순
 							<>
 								{hotList[selectedFilter] ? (
 									<LargeViewWrap>
 										{hotList[selectedFilter].map(item => (
 											<div key={item.itemIdx}>
 												<LargeViewItem>
-													<LargeViewImage>
+													<LargeViewImage src={item.itemImgUrl}>
 														<ImageText>
 															<SubText
 																fontsize="0.8125rem"
@@ -333,7 +348,7 @@ export default function CelebDetail() {
 					</>
 				) : (
 					<>
-						{selectedFilter === 1 ? (
+						{selectedFilter === 1 ? ( //최신순
 							<>
 								{latestList[selectedFilter] ? (
 									<>
@@ -383,6 +398,7 @@ export default function CelebDetail() {
 								)}
 							</>
 						) : (
+							//인기순
 							<>
 								{hotList[selectedFilter] ? (
 									<GridItemWrap>

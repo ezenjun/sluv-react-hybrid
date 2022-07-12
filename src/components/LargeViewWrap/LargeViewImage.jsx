@@ -7,6 +7,15 @@ export const LargeViewImage = styled.div`
 	box-sizing: border-box;
 	width: 100%;
 	height: 14.375rem;
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${props => props.src});
+	background-size: cover;
+	background-position: 50%;
 	background-color: darkturquoise;
 	border-radius: 1rem;
 	padding: 0.5rem 0.75rem;
