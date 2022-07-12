@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 
@@ -10,12 +10,14 @@ import { ImageText } from '../../components/ImageText';
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import { ReactComponent as ScrollToTop } from '../../assets/Icons/scrollToTop.svg';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { useEffect } from 'react';
-export default function Follow() {
+
+export default function Follow(props) {
 	const [followExist, setFollowExist] = useState(false);
 	const [followItemList, setFollowItemList] = useState([]);
 	const [sameFollowSluverList, setSameFollowSluverList] = useState([]);
@@ -93,17 +95,31 @@ export default function Follow() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
+		console.log('UnFollowUse++r', data.message);
 	};
 	useEffect(() => {
 		getSameFollowSluverList();
 		getFollowItemList();
 	}, []);
+
 	return (
 		<FeedContainer>
 			{followItemList.length > 0 ? (
 				<>
 					<LargeViewWrap padding="0 20px 40px 20px">
+						<ScrollToTop
+							onClick={() => props.scrolltoTop}
+							style={{
+								width: '2.625rem',
+								height: '2.625rem',
+								position: 'absolute',
+								bottom: '3.75rem',
+								right: '1.25rem',
+								zIndex: '190',
+								display: 'fixed',
+							}}
+						></ScrollToTop>
+
 						{followItemList.map(item => (
 							<div key={item.itemIdx}>
 								<LargeViewItem>

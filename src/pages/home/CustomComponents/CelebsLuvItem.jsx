@@ -23,25 +23,48 @@ export const CelebsLuvItem = ({ celeb }) => {
 	};
 	// console.log('celeb', celeb);
 	// console.log('celeb.memberList', celeb.memberList);
-	const [selected, setSelected] = useState(0);
-	const onChipClick = (idx, memberIdx) => {
-		setSelected(idx);
-		setSelectedMemeberIdx(memberIdx);
-		if (selectedFilter === 1) {
-			//최신순
-			if (!latestList[idx]) {
-				getEachMemberLatestList(memberIdx);
-			}
-		}
-		if (selectedFilter === 2) {
-			// 인기순
-			if (!hotList[idx]) {
-				getEachMemberHotList(memberIdx);
-			}
-		}
-	};
+	// const [selected, setSelected] = useState(0);
+	// const onChipClick = (idx, memberIdx) => {
+	// 	setSelected(idx);
+	// 	setSelectedMemeberIdx(memberIdx);
+	// 	if (selectedFilter === 1) {
+	// 		//최신순
+	// 		if (!latestList[idx]) {
+	// 			getEachMemberLatestList(memberIdx);
+	// 		}
+	// 	}
+	// 	if (selectedFilter === 2) {
+	// 		// 인기순
+	// 		if (!hotList[idx]) {
+	// 			getEachMemberHotList(memberIdx);
+	// 		}
+	// 	}
+	// };
+	// const [selectedFilter, setSelectedFilter] = useState(1);
+	// const tabList = [
+	// 	{
+	// 		idx: 1,
+	// 		name: '최신순',
+	// 	},
+	// 	{
+	// 		idx: 2,
+	// 		name: '인기순',
+	// 	},
+	// ];
+	// const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
+	// const onFilterClick = idx => {
+	// 	setSelectedFilter(idx);
+	// 	if (!latestList[idx]) {
+	// 		getEachMemberLatestList(selectedMemeberIdx);
+	// 	}
+	// 	if (!hotList[idx]) {
+	// 		getEachMemberHotList(selectedMemeberIdx);
+	// 	}
+	// };
+	const [CurrentList, setCurrentList] = useState([]);
+
 	const [selectedFilter, setSelectedFilter] = useState(1);
-	const tabList = [
+	const filterList = [
 		{
 			idx: 1,
 			name: '최신순',
@@ -51,14 +74,43 @@ export const CelebsLuvItem = ({ celeb }) => {
 			name: '인기순',
 		},
 	];
-	const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
+
 	const onFilterClick = idx => {
 		setSelectedFilter(idx);
+		if (idx === 1) {
+			setCurrentList(latestList[selectedChip]);
+		}
+		if (idx === 2) {
+			setCurrentList(hotList[selectedChip]);
+		}
+	};
+	// 연예인 선택
+	const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
+	const [selectedChip, setSelectedChip] = useState(0);
+	const onChipClick = (idx, memberIdx) => {
+		setSelectedMemeberIdx(memberIdx);
+		setSelectedChip(idx);
 		if (!latestList[idx]) {
-			getEachMemberLatestList(selectedMemeberIdx);
+			getEachMemberLatestList(memberIdx);
+			console.log('filter 1, latest', latestList);
+		} else {
+			console.log('latestList[idx] 존재');
+			if (selectedFilter === 1) {
+				setCurrentList(latestList[idx]);
+			} else {
+				setCurrentList(hotList[idx]);
+			}
 		}
 		if (!hotList[idx]) {
-			getEachMemberHotList(selectedMemeberIdx);
+			getEachMemberHotList(memberIdx);
+			console.log('filter 2, hot', hotList);
+		} else {
+			console.log('hotList[idx] 존재');
+			if (selectedFilter === 1) {
+				setCurrentList(latestList[idx]);
+			} else {
+				setCurrentList(hotList[idx]);
+			}
 		}
 	};
 
@@ -76,7 +128,8 @@ export const CelebsLuvItem = ({ celeb }) => {
 			return;
 		}
 		setLatestList([...latestList, data.result]);
-		console.log('latest : ', data.result);
+		setCurrentList(data.result);
+		console.log('latest result: ', data.result);
 	};
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
@@ -89,7 +142,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 			return;
 		}
 		setHotList([...hotList, data.result]);
-		console.log(data.result);
+		console.log('hot result: ', data.result);
 	};
 
 	const getEachMemberLatestList = async idx => {
@@ -102,9 +155,13 @@ export const CelebsLuvItem = ({ celeb }) => {
 			console.log(data.message);
 			return;
 		}
-		setLatestList([...latestList, data.result]);
-		console.log(idx, latestList);
-		console.log(data.result);
+		let temp = latestList;
+		temp[idx] = data.result;
+		setLatestList([...temp]);
+		console.log('latest each result: ', data.result);
+		if (selectedFilter === 1) {
+			setCurrentList(data.result);
+		}
 	};
 	const getEachMemberHotList = async idx => {
 		const data = await customApiClient(
@@ -116,9 +173,14 @@ export const CelebsLuvItem = ({ celeb }) => {
 			console.log(data.message);
 			return;
 		}
-		setHotList([...hotList, data.result]);
-		console.log(idx, latestList);
-		console.log(data.result);
+		let temp = hotList;
+		temp[idx] = data.result;
+		setHotList([...temp]);
+		// setHotList([...hotList, data.result]);
+		console.log('hot each result: ', data.result);
+		if (selectedFilter === 2) {
+			setCurrentList(data.result);
+		}
 	};
 	useEffect(() => {
 		getTotalLatestList();
@@ -136,13 +198,13 @@ export const CelebsLuvItem = ({ celeb }) => {
 				<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
 			</TextWrap>
 			<ChipWrap>
-				<Chip selected={selected === 0} onClick={() => onChipClick(0)}>
+				<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
 					{celeb.name}
 				</Chip>
 				{celeb.memberList.map((member, idx) => (
 					<Chip
 						key={idx}
-						selected={selected === idx + 1}
+						selected={selectedChip === idx + 1}
 						onClick={() => onChipClick(idx + 1, member.memberIdx)}
 					>
 						{member.name}
@@ -151,7 +213,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 			</ChipWrap>
 			<HorizontalLine />
 			<FilterWrap>
-				{tabList.map(item => {
+				{filterList.map(item => {
 					return (
 						<SubText
 							key={item.idx}
@@ -168,417 +230,52 @@ export const CelebsLuvItem = ({ celeb }) => {
 				})}
 			</FilterWrap>
 			<ItemWrap>
-				{selectedFilter === 1 ? (
+				{CurrentList && (
 					<>
-						{latestList[selected] ? (
-							<>
-								{latestList[selected].map(item => (
-									<Item>
-										<Image>
-											<ImageText>
-												<SubText
-													fontsize="0.8125rem"
-													fontweight="bold"
-													color="white"
-												>
-													{item.name}'s
-												</SubText>
-												{item.isDib === 'Y' ? (
-													<BinderRed
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												) : (
-													<BinderWhite
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												)}
-											</ImageText>
-										</Image>
+						{CurrentList.map(item => (
+							<Item>
+								<Image>
+									<ImageText>
 										<SubText
-											fontsize="16px"
+											fontsize="0.8125rem"
 											fontweight="bold"
-											margin="0 0 0.375rem 0 "
+											color="white"
 										>
-											{item.brandKr}
+											{item.name}'s
 										</SubText>
-										<SubText
-											color="#262626"
-											style={{
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												overflow: 'hidden',
-												width: '100%',
-											}}
-										>
-											{item.itemName}
-										</SubText>
-									</Item>
-								))}
-							</>
-						) : (
-							<>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
+										{item.isDib === 'Y' ? (
+											<BinderRed
+												style={{
+													width: '1.5rem',
+													height: '1.5rem',
+												}}
+											/>
+										) : (
 											<BinderWhite
 												style={{
 													width: '1.5rem',
 													height: '1.5rem',
 												}}
 											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-							</>
-						)}
-					</>
-				) : (
-					<>
-						{hotList[selected] ? (
-							<>
-								{hotList[selected].map(item => (
-									<Item>
-										<Image>
-											<ImageText>
-												<SubText
-													fontsize="0.8125rem"
-													fontweight="bold"
-													color="white"
-												>
-													{item.name}'s
-												</SubText>
-												{item.isDib === 'Y' ? (
-													<BinderRed
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												) : (
-													<BinderWhite
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												)}
-											</ImageText>
-										</Image>
-										<SubText
-											fontsize="16px"
-											fontweight="bold"
-											margin="0 0 0.375rem 0 "
-										>
-											{item.brandKr}
-										</SubText>
-										<SubText
-											color="#262626"
-											style={{
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												overflow: 'hidden',
-												width: '100%',
-											}}
-										>
-											{item.itemName}
-										</SubText>
-									</Item>
-								))}
-							</>
-						) : (
-							<>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-								<Item>
-									<SkeletonImg>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												스럽's
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-												}}
-											/>
-										</ImageText>
-									</SkeletonImg>
-									<SubText
-										fontsize="16px"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										스러버 브랜드
-									</SubText>
-									<SubText
-										color="#262626"
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										스럽이 사랑한 아이템
-									</SubText>
-								</Item>
-							</>
-						)}
+										)}
+									</ImageText>
+								</Image>
+								<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
+									{item.brandKr}
+								</SubText>
+								<SubText
+									color="#262626"
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										width: '100%',
+									}}
+								>
+									{item.itemName}
+								</SubText>
+							</Item>
+						))}
 					</>
 				)}
 			</ItemWrap>

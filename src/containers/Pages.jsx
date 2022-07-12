@@ -80,7 +80,6 @@ export default function Pages() {
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />
 			<Route path="/support/notices" element={<SupportNotices />} />
-			
 
 			<Route path="/report/user/:id" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />

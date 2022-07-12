@@ -48,6 +48,7 @@ export default function CelebDetail() {
 	}, []);
 
 	// 최신순/ 인기순
+
 	const [selectedFilter, setSelectedFilter] = useState(1);
 	const filterList = [
 		{
@@ -62,15 +63,11 @@ export default function CelebDetail() {
 
 	const onFilterClick = idx => {
 		setSelectedFilter(idx);
-		if (!latestList[selectedMemeberIdx]) {
-			getEachMemberLatestList(selectedMemeberIdx);
-			console.log(selectedMemeberIdx);
-			console.log('latest' + idx + '비어있음');
+		if (idx === 1) {
+			setCurrentList(latestList[selectedChip]);
 		}
-		if (!hotList[selectedMemeberIdx]) {
-			getEachMemberHotList(selectedMemeberIdx);
-			console.log(selectedMemeberIdx);
-			console.log('hot' + idx + '비어있음');
+		if (idx === 2) {
+			setCurrentList(hotList[selectedChip]);
 		}
 	};
 	// 연예인 선택
@@ -79,19 +76,26 @@ export default function CelebDetail() {
 	const onChipClick = (idx, memberIdx) => {
 		setSelectedMemeberIdx(memberIdx);
 		setSelectedChip(idx);
-		console.log('idx, memberIdx', idx, memberIdx);
-		if (selectedFilter === 1) {
-			//최신순
-			if (!latestList[idx]) {
-				getEachMemberLatestList(memberIdx);
-				console.log('filter 1, latest');
+		if (!latestList[idx]) {
+			getEachMemberLatestList(memberIdx);
+			console.log('filter 1, latest', latestList);
+		} else {
+			console.log('latestList[idx] 존재');
+			if (selectedFilter === 1) {
+				setCurrentList(latestList[idx]);
+			} else {
+				setCurrentList(hotList[idx]);
 			}
 		}
-		if (selectedFilter === 2) {
-			// 인기순
-			if (!hotList[idx]) {
-				getEachMemberHotList(memberIdx);
-				console.log('filter 2, hot');
+		if (!hotList[idx]) {
+			getEachMemberHotList(memberIdx);
+			console.log('filter 2, hot', hotList);
+		} else {
+			console.log('hotList[idx] 존재');
+			if (selectedFilter === 1) {
+				setCurrentList(latestList[idx]);
+			} else {
+				setCurrentList(hotList[idx]);
 			}
 		}
 	};
@@ -103,7 +107,7 @@ export default function CelebDetail() {
 	const backClick = () => {
 		navigate(-1);
 	};
-
+	const [CurrentList, setCurrentList] = useState([]);
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
 			'get',
@@ -115,7 +119,8 @@ export default function CelebDetail() {
 			return;
 		}
 		setLatestList([...latestList, data.result]);
-		console.log('latest : ', data.result);
+		setCurrentList(data.result);
+		console.log('latest result: ', data.result);
 	};
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
@@ -128,7 +133,7 @@ export default function CelebDetail() {
 			return;
 		}
 		setHotList([...hotList, data.result]);
-		console.log('hot : ', data.result);
+		console.log('hot result: ', data.result);
 	};
 
 	const getEachMemberLatestList = async idx => {
@@ -141,9 +146,13 @@ export default function CelebDetail() {
 			console.log(data.message);
 			return;
 		}
-		setLatestList([...latestList, data.result]);
-		console.log('member latest', idx, latestList);
-		console.log(data.result);
+		let temp = latestList;
+		temp[idx] = data.result;
+		setLatestList([...temp]);
+		console.log('latest each result: ', data.result);
+		if (selectedFilter === 1) {
+			setCurrentList(data.result);
+		}
 	};
 	const getEachMemberHotList = async idx => {
 		const data = await customApiClient(
@@ -155,10 +164,14 @@ export default function CelebDetail() {
 			console.log(data.message);
 			return;
 		}
-		setHotList([...hotList, data.result]);
-		console.log('member hot', idx, latestList);
-		console.log(data.result);
-		console.log('hotList[selectedFilter]', hotList[selectedFilter]);
+		let temp = hotList;
+		temp[idx] = data.result;
+		setHotList([...temp]);
+		// setHotList([...hotList, data.result]);
+		console.log('hot each result: ', data.result);
+		if (selectedFilter === 2) {
+			setCurrentList(data.result);
+		}
 	};
 
 	return (
@@ -235,176 +248,13 @@ export default function CelebDetail() {
 				</FilterWrap>
 				{view ? (
 					<>
-						{selectedFilter === 1 ? ( // 최신순
-							<>
-								{latestList[selectedFilter] ? (
-									<LargeViewWrap>
-										{latestList[selectedFilter].map(item => (
-											<div key={item.itemIdx}>
-												<LargeViewItem>
-													<LargeViewImage src={item.itemImgUrl}>
-														<ImageText>
-															<SubText
-																fontsize="0.8125rem"
-																fontweight="bold"
-																color="white"
-															>
-																{item.name}'s
-															</SubText>
-															<BinderWhite
-																style={{
-																	width: '1.5rem',
-																	height: '1.5rem',
-																}}
-															/>
-														</ImageText>
-													</LargeViewImage>
-													<ItemTextWrap>
-														<SubText fontsize="1rem">
-															{item.brandKr}
-														</SubText>
-														<VerticalLine></VerticalLine>
-														<SubText fontsize="1rem">
-															{item.itemName}
-														</SubText>
-													</ItemTextWrap>
-													<SubInfoWrap>
-														<ProfileImg></ProfileImg>
-														<SubText margin="0 ">
-															{' '}
-															{item.publisher}
-														</SubText>
-														<Dot></Dot>
-														<SubText color="#8d8d8d">
-															{' '}
-															{item.uploadTime}
-														</SubText>
-													</SubInfoWrap>
-												</LargeViewItem>
-												<HorizontalLine></HorizontalLine>
-											</div>
-										))}
-									</LargeViewWrap>
-								) : (
-									<></>
-								)}
-							</>
-						) : (
-							//인기순
-							<>
-								{hotList[selectedFilter] ? (
-									<LargeViewWrap>
-										{hotList[selectedFilter].map(item => (
-											<div key={item.itemIdx}>
-												<LargeViewItem>
-													<LargeViewImage src={item.itemImgUrl}>
-														<ImageText>
-															<SubText
-																fontsize="0.8125rem"
-																fontweight="bold"
-																color="white"
-															>
-																{item.name}'s
-															</SubText>
-															<BinderWhite
-																style={{
-																	width: '1.5rem',
-																	height: '1.5rem',
-																}}
-															/>
-														</ImageText>
-													</LargeViewImage>
-													<ItemTextWrap>
-														<SubText fontsize="1rem">
-															{item.brandKr}
-														</SubText>
-														<VerticalLine></VerticalLine>
-														<SubText fontsize="1rem">
-															{item.itemName}
-														</SubText>
-													</ItemTextWrap>
-													<SubInfoWrap>
-														<ProfileImg></ProfileImg>
-														<SubText margin="0 ">
-															{' '}
-															{item.publisher}
-														</SubText>
-														<Dot></Dot>
-														<SubText color="#8d8d8d">
-															{' '}
-															{item.uploadTime}
-														</SubText>
-													</SubInfoWrap>
-												</LargeViewItem>
-												<HorizontalLine></HorizontalLine>
-											</div>
-										))}
-									</LargeViewWrap>
-								) : (
-									<></>
-								)}
-							</>
-						)}
-					</>
-				) : (
-					<>
-						{selectedFilter === 1 ? ( //최신순
-							<>
-								{latestList[selectedFilter] ? (
-									<>
-										<GridItemWrap>
-											{latestList[selectedFilter].map(item => (
-												<GridItem key={item.itemIdx}>
-													<GridImage>
-														<ImageText>
-															<SubText
-																fontsize="0.8125rem"
-																fontweight="bold"
-																color="white"
-															>
-																{item.name}'s
-															</SubText>
-															<BinderWhite
-																style={{
-																	width: '1.375rem',
-																	height: '1.375rem',
-																}}
-															/>
-														</ImageText>
-													</GridImage>
-													<SubText
-														fontsize="1rem"
-														fontweight="bold"
-														margin="0 0 0.375rem 0 "
-													>
-														{item.brandKr}
-													</SubText>
-													<SubText
-														style={{
-															textOverflow: 'ellipsis',
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															width: '100%',
-														}}
-													>
-														{item.itemName}
-													</SubText>
-												</GridItem>
-											))}
-										</GridItemWrap>
-									</>
-								) : (
-									<></>
-								)}
-							</>
-						) : (
-							//인기순
-							<>
-								{hotList[selectedFilter] ? (
-									<GridItemWrap>
-										{hotList[selectedFilter].map(item => (
-											<GridItem key={item.itemIdx}>
-												<GridImage>
+						<LargeViewWrap>
+							{CurrentList && (
+								<>
+									{CurrentList.map(item => (
+										<div key={item.itemIdx}>
+											<LargeViewItem>
+												<LargeViewImage src={item.itemImgUrl}>
 													<ImageText>
 														<SubText
 															fontsize="0.8125rem"
@@ -415,37 +265,80 @@ export default function CelebDetail() {
 														</SubText>
 														<BinderWhite
 															style={{
-																width: '1.375rem',
-																height: '1.375rem',
+																width: '1.5rem',
+																height: '1.5rem',
 															}}
 														/>
 													</ImageText>
-												</GridImage>
-												<SubText
-													fontsize="1rem"
-													fontweight="bold"
-													margin="0 0 0.375rem 0 "
-												>
-													{item.brandKr}
-												</SubText>
-												<SubText
-													style={{
-														textOverflow: 'ellipsis',
-														whiteSpace: 'nowrap',
-														overflow: 'hidden',
-														width: '100%',
-													}}
-												>
-													{item.itemName}
-												</SubText>
-											</GridItem>
-										))}
-									</GridItemWrap>
-								) : (
-									<></>
-								)}
-							</>
-						)}
+												</LargeViewImage>
+												<ItemTextWrap>
+													<SubText fontsize="1rem">
+														{item.brandKr}
+													</SubText>
+													<VerticalLine></VerticalLine>
+													<SubText fontsize="1rem">
+														{item.itemName}
+													</SubText>
+												</ItemTextWrap>
+												<SubInfoWrap>
+													<ProfileImg></ProfileImg>
+													<SubText margin="0 "> {item.publisher}</SubText>
+													<Dot></Dot>
+													<SubText color="#8d8d8d">
+														{' '}
+														{item.uploadTime}
+													</SubText>
+												</SubInfoWrap>
+											</LargeViewItem>
+											<HorizontalLine></HorizontalLine>
+										</div>
+									))}
+								</>
+							)}
+						</LargeViewWrap>
+					</>
+				) : (
+					<>
+						<GridItemWrap>
+							{CurrentList.map(item => (
+								<GridItem key={item.itemIdx}>
+									<GridImage>
+										<ImageText>
+											<SubText
+												fontsize="0.8125rem"
+												fontweight="bold"
+												color="white"
+											>
+												{item.name}'s
+											</SubText>
+											<BinderWhite
+												style={{
+													width: '1.375rem',
+													height: '1.375rem',
+												}}
+											/>
+										</ImageText>
+									</GridImage>
+									<SubText
+										fontsize="1rem"
+										fontweight="bold"
+										margin="0 0 0.375rem 0 "
+									>
+										{item.brandKr}
+									</SubText>
+									<SubText
+										style={{
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap',
+											overflow: 'hidden',
+											width: '100%',
+										}}
+									>
+										{item.itemName}
+									</SubText>
+								</GridItem>
+							))}
+						</GridItemWrap>
 					</>
 				)}
 			</FeedContainer>
