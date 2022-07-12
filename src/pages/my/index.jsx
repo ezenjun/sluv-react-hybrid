@@ -122,8 +122,10 @@ export default function My() {
 								marginTop: '0.5rem',
 							}}
 						>
-							<span className="followTitle">팔로잉</span>
-							<span className="followNum">{userInfo.followingCnt}</span>
+							<span onClick={() => navigate(`/users/${userInfo.userIdx}/followings`)}>
+								<span className="followTitle">팔로잉</span>
+								<span className="followNum">{userInfo.followingCnt}</span>
+							</span>
 							<div
 								style={{
 									borderLeft: '1px solid #d9d9d9',
@@ -131,8 +133,10 @@ export default function My() {
 									margin: '0 0.5rem',
 								}}
 							></div>
-							<span className="followTitle">팔로워</span>
-							<span className="followNum">{userInfo.followerCnt}</span>
+							<span onClick={() => navigate(`/users/${userInfo.userIdx}/followers`)}>
+								<span className="followTitle">팔로워</span>
+								<span className="followNum">{userInfo.followerCnt}</span>
+							</span>
 						</div>
 						<div className="celebWrap">
 							{celebList.slice(0, 3).map((celeb, index) => (
