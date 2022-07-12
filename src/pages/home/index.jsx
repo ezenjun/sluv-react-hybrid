@@ -74,6 +74,9 @@ export default function Home() {
 		console.log('ggetFavoriteCeleb', data.result);
 		setFavoriteCelebList(data.result);
 	};
+	const scrolltoTop = () => {
+		window.scrollTo(0, 0);
+	};
 
 	return (
 		<>
@@ -99,7 +102,7 @@ export default function Home() {
 					})}
 				</TabContainer>
 				<FeedContainer>
-					<Outlet />
+					<Outlet scrolltoTop={scrolltoTop} />
 				</FeedContainer>
 
 				{/* 업로드 팝업 모달 */}
