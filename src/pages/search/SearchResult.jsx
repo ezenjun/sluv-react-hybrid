@@ -121,7 +121,7 @@ export default function SearchResult() {
 	// 	setBottomMenuStatusState(true);
 	// });
 	return (
-		<MainContainer padding="0 0 0 0">
+		<MainContainer padding="0 0 3.125rem 0">
 			<TopNav>
 				<BackButton
 					onClick={onBackClick}
