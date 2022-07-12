@@ -24,7 +24,7 @@ export default function MyPageContainer() {
 			<div style={{ height: '0.0625rem', backgroundColor: '#f4f4f4', margin: '0 1.25rem' }} />
 
 			<MyPageContentWrap>
-				<MyPageContentItem>
+				<MyPageContentItem onClick={() => navigate('/users/viewed-items')}>
 					<div className="itemText">최근 본 아이템</div>
 					<GrayArrow style={{ width: '1.5rem', height: '1.5rem' }} />
 				</MyPageContentItem>
