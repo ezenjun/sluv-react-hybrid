@@ -26,7 +26,7 @@ export default function MyPageContainer({ uploadInfo }) {
 			<MyUploadWrap>
 				<div className="titleWrap">
 					<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
-						인기 스러버 추천
+						나의 아이템 업로드
 					</MainText>
 					<RightArrow
 						onClick={onClickMyUpload}

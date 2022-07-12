@@ -39,6 +39,8 @@ import SupportNotices from '../pages/my/SupportNotices';
 import SupportNoticeDetail from '../pages/my/SupportNoticeDetail';
 import ViewedItems from '../pages/my/ViewedItems';
 import MyUploadItems from '../pages/my/MyUploadItems';
+import Followers from '../pages/my/Followers';
+import Followings from '../pages/my/Followings';
 
 export default function Pages() {
 	return (
@@ -80,6 +82,8 @@ export default function Pages() {
 			<Route path="/users/:idx" element={<My />} />
 			<Route path="/users/viewed-items" element={<ViewedItems />} />
 			<Route path="/users/upload-items" element={<MyUploadItems />} />
+			<Route path="/users/:idx/followers" element={<Followers />} />
+			<Route path="/users/:idx/followings" element={<Followings />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
