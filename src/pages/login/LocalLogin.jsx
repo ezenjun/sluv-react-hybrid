@@ -101,6 +101,7 @@ export default function LocalLogin() {
 		if (data.isSuccess === true) {
 			console.log('로그인 완료');
 			console.log(data.result.jwt);
+			localStorage.setItem('myUserIdx', data.result.userIdx);
 			//토큰저장
 			localStorage.setItem('x-access-token', data.result.jwt);
 			

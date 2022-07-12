@@ -3,13 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 
 import { ReactComponent as GrayArrow } from '../../assets/Icons/icon_mypage_arrow_gray.svg';
+import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
+import { MainText } from '../../components/Texts/MainText';
 
 export default function MyPageContainer() {
 	const navigate = useNavigate();
 	return (
 		<MyPageContainerWrap>
-			<div>나의 아이템 업로드</div>
-			<div>여기에는 내가 업로드한 아이템 목록이 들어갈거에요~~~~!</div>
+			<MyUploadWrap>
+				<div className="titleWrap">
+					<MainText style={{fontWeight: '600'}} fontsize="1.125rem">인기 스러버 추천</MainText>
+					<RightArrow style={{ width: '1.5rem', height: '1.5rem' }} />
+				</div>
+				<div className='contentWrap'>
+
+				</div>
+
+
+			</MyUploadWrap>
 
 			{/* 구분선 */}
 			<div style={{ height: '0.0625rem', backgroundColor: '#f4f4f4', margin: '0 1.25rem' }} />
@@ -35,6 +46,22 @@ export default function MyPageContainer() {
 const MyPageContainerWrap = styled.div`
 	padding: 1.9375rem 0 3.125rem 0;
 	flex: 1;
+`;
+
+const MyUploadWrap = styled.div`
+	border: 1px solid red;
+
+	.titleWrap {
+		padding: 0 1.25rem;
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 0.875rem;
+	}
+	.contentWrap {
+		display: flex;
+
+		
+	}
 `;
 
 const MyPageContentWrap = styled.div`
