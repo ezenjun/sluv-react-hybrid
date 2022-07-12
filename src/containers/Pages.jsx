@@ -35,6 +35,7 @@ import ReportUser from '../pages/Report/ReportUser';
 import ReportPost from '../pages/Report/ReportPost';
 import ReportComment from '../pages/Report/ReportComment';
 import Faq from '../pages/my/Faq';
+import SupportNotices from '../pages/my/SupportNotices';
 
 export default function Pages() {
 	return (
@@ -78,6 +79,8 @@ export default function Pages() {
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />
+			<Route path="/support/notices" element={<SupportNotices />} />
+			
 
 			<Route path="/report/user/:id" element={<ReportUser />} />
 			<Route path="/report/post" element={<ReportPost />} />

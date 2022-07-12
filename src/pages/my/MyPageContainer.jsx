@@ -12,14 +12,12 @@ export default function MyPageContainer() {
 		<MyPageContainerWrap>
 			<MyUploadWrap>
 				<div className="titleWrap">
-					<MainText style={{fontWeight: '600'}} fontsize="1.125rem">인기 스러버 추천</MainText>
+					<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+						인기 스러버 추천
+					</MainText>
 					<RightArrow style={{ width: '1.5rem', height: '1.5rem' }} />
 				</div>
-				<div className='contentWrap'>
-
-				</div>
-
-
+				<div className="contentWrap"></div>
 			</MyUploadWrap>
 
 			{/* 구분선 */}
@@ -30,7 +28,7 @@ export default function MyPageContainer() {
 					<div className="itemText">최근 본 아이템</div>
 					<GrayArrow style={{ width: '1.5rem', height: '1.5rem' }} />
 				</MyPageContentItem>
-				<MyPageContentItem>
+				<MyPageContentItem onClick={() => navigate('/support/notices/')}>
 					<div className="itemText">공지사항</div>
 					<GrayArrow style={{ width: '1.5rem', height: '1.5rem' }} />
 				</MyPageContentItem>
