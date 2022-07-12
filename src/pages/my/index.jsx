@@ -9,6 +9,8 @@ import { ReactComponent as ThreeDots } from '../../assets/Icons/icon_three_dots_
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
+import { ReactComponent as IconArrowUp } from '../../assets/Icons/icon_arrow_up.svg';
+import { ReactComponent as IconArrowDown } from '../../assets/Icons/icon_arrow_down.svg';
 
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../components/containers/BottomSlideMenu';
@@ -19,26 +21,26 @@ import ProfileContainer from './ProfileContainer';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { UploadPopup, UploadPopupWrap } from '../home';
+import { customApiClient } from '../../utils/apiClient';
 
 export default function My() {
 
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [isAuthUser, setIsAuthUser] = useState(true);
+  const [isAuthUser, setIsAuthUser] = useState(false);
   const [reportPopupStatus, setReportPopupStatus] = useState(false);
+	const [isCelebOpen, setIsCelebOpen] = useState(false);
+	const [celebList, setCelebList] = useState([]);
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
-
-	const testList = [
-		{ celebName: '최우식' },
-		{ celebName: '스트레이키즈' },
-		{ celebName: '레드벨벳' },
-	];
   
   useEffect(() => {
 		setBottomNavStatus(true);
+
+		const userIdx = localStorage.getItem('myUserIdx');
+		getUserPageData(userIdx);
 
     // 유저페이지 조회 API
     // if 사용자 본인이면
@@ -49,6 +51,21 @@ export default function My() {
     // => setIsAuthUser(false)
 
   },[]);
+
+	const getUserPageData = async (userIdx) => {
+		console.log('유저인덱스(path variable 늘 조심하자!!! : ', typeof userIdx, userIdx);
+
+		const data = await customApiClient('get', `/users/${userIdx}/page`);
+
+		if(!data) return;
+		if(!data.isSuccess) return;
+
+		setIsAuthUser(data.result.isMyPage === 'Y' ? true : false);
+		setCelebList(data.result.userInfo.interestCelebList);
+		console.log(data);
+
+
+	}
 
   const onClickThreeDots = () => {
     setReportPopupStatus(!reportPopupStatus);
@@ -95,7 +112,6 @@ export default function My() {
 						/>
 						<div
 							style={{
-								border: '1px solid black',
 								display: 'flex',
 								alignItems: 'center',
 							}}
@@ -105,7 +121,6 @@ export default function My() {
 						</div>
 						<div
 							style={{
-								border: '1px solid black',
 								display: 'flex',
 								alignItems: 'center',
 								marginTop: '0.5rem',
@@ -124,11 +139,31 @@ export default function My() {
 							<span className="followNum">12</span>
 						</div>
 						<div className="celebWrap">
-							{testList.slice(0, 3).map(celeb => (
-								<Chip>{celeb.celebName}</Chip>
+							{celebList.slice(0, 3).map((celeb, index) => (
+								<Chip key={index}>{celeb.celebName}</Chip>
 							))}
-							
+							{celebList.length > 3 && (
+								<div>
+									{isCelebOpen ? (
+										<IconArrowUp
+											onClick={() => setIsCelebOpen(!isCelebOpen)}
+											style={{ width: '2rem', height: '2rem' }}
+										/>
+									) : (
+										<IconArrowDown
+											onClick={() => setIsCelebOpen(!isCelebOpen)}
+											style={{ width: '2rem', height: '2rem' }}
+										/>
+									)}
+								</div>
+							)}
 						</div>
+						<CelebFadeDiv openStatus={isCelebOpen}>
+							{celebList.slice(3).map((celeb, index) => (
+								<Chip key={index}>{celeb.celebName}</Chip>
+							))}
+						</CelebFadeDiv>
+
 						{!isAuthUser && (
 							<PurpleButton disabled={true} marginBottom="0"></PurpleButton>
 						)}
@@ -203,7 +238,7 @@ export default function My() {
 }
 
 const ProfileWrap = styled.div`
-	padding: 4.375rem 1.25rem 1.875rem;
+	padding: 4.375rem 1rem 1.875rem;
 	background-color: #ff365f;
 `;
 
@@ -247,7 +282,9 @@ const ProfileContentsWrap = styled.div`
 	}
 	.celebWrap {
 		margin-top: 1rem;
-
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
 	}
 `;
 
@@ -257,10 +294,16 @@ const Chip = styled.div`
 	padding: 0.625rem 1rem;
 	margin-right: 0.5rem;
 	border-radius: 1.9rem;
-	/* border: solid 1px #e2e0e0; */
 	background-color: #fbf6ff;
 	color: #9e30f4;
 	font-size: 0.875rem;
 	font-weight: 600;
 `;
 
+const CelebFadeDiv = styled.div`
+	flex-wrap: wrap;
+	margin-top: 0.625rem;
+
+	display: ${props => (props.openStatus ? 'flex' : 'none')};
+	opacity: ${props => (props.openStatus ? '1' : '0')};
+`;

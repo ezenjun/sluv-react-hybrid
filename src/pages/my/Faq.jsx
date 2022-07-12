@@ -34,7 +34,9 @@ export default function Faq() {
 				target="blank"
 				style={{ textDecoration: 'none', padding: '0 1.25rem' }}
 			>
-				<PurpleButton marginBottom="1.625rem">1 : 1 문의하기</PurpleButton>
+				<PurpleButton style={{ fontSize: '1rem' }} marginBottom="1.625rem">
+					1 : 1 문의하기
+				</PurpleButton>
 			</a>
 		</MainContainer>
 	);
