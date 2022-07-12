@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const SpeechBubbleWrap = styled.div`
-	display: inline-block;
+	display: flex;
+	width: auto;
 	background: ${props => props.backgroundColor || 'white'};
 	position: relative;
 	padding: 0.9375rem 1.25rem;
@@ -61,5 +62,3 @@ export const ImgUploadBubbleWrap = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-
-
