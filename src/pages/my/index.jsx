@@ -32,6 +32,8 @@ export default function My() {
   const [reportPopupStatus, setReportPopupStatus] = useState(false);
 	const [isCelebOpen, setIsCelebOpen] = useState(false);
 	const [celebList, setCelebList] = useState([]);
+	const [uploadInfo, setUploadInfo] = useState({});
+	const [userInfo, setUserInfo] = useState({});
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
@@ -62,8 +64,9 @@ export default function My() {
 
 		setIsAuthUser(data.result.isMyPage === 'Y' ? true : false);
 		setCelebList(data.result.userInfo.interestCelebList);
+		setUserInfo(data.result.userInfo);
+		setUploadInfo(data.result.uploadInfo);
 		console.log(data);
-
 
 	}
 
@@ -116,8 +119,8 @@ export default function My() {
 								alignItems: 'center',
 							}}
 						>
-							<span className="userNickname">닉네임</span>
-							<span className="userId">아이디</span>
+							<span className="userNickname">{userInfo.nickName}</span>
+							<span className="userId">{userInfo.id}</span>
 						</div>
 						<div
 							style={{
@@ -127,7 +130,7 @@ export default function My() {
 							}}
 						>
 							<span className="followTitle">팔로잉</span>
-							<span className="followNum">10</span>
+							<span className="followNum">{userInfo.followingCnt}</span>
 							<div
 								style={{
 									borderLeft: '1px solid #d9d9d9',
@@ -136,7 +139,7 @@ export default function My() {
 								}}
 							></div>
 							<span className="followTitle">팔로워</span>
-							<span className="followNum">12</span>
+							<span className="followNum">{userInfo.followerCnt}</span>
 						</div>
 						<div className="celebWrap">
 							{celebList.slice(0, 3).map((celeb, index) => (
@@ -170,7 +173,7 @@ export default function My() {
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser ? <MyPageContainer /> : <ProfileContainer />}
+				{isAuthUser ? <MyPageContainer uploadInfo={uploadInfo} /> : <ProfileContainer />}
 			</ContentWrap>
 
 			{/* 유저 신고하기 팝업  */}

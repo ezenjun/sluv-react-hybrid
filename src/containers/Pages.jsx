@@ -38,6 +38,7 @@ import Faq from '../pages/my/Faq';
 import SupportNotices from '../pages/my/SupportNotices';
 import SupportNoticeDetail from '../pages/my/SupportNoticeDetail';
 import ViewedItems from '../pages/my/ViewedItems';
+import MyUploadItems from '../pages/my/MyUploadItems';
 
 export default function Pages() {
 	return (
@@ -78,6 +79,7 @@ export default function Pages() {
 
 			<Route path="/users/:id" element={<My />} />
 			<Route path="/users/viewed-items" element={<ViewedItems />} />
+			<Route path="/users/upload-items" element={<MyUploadItems />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
