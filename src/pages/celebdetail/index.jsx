@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { useSetRecoilState } from 'recoil';
+import { customApiClient } from '../../utils/apiClient';
 
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
@@ -30,54 +31,70 @@ import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 
 export default function CelebDetail() {
-	let params = useParams();
+	let { celebIdx } = useParams();
+	let location = useLocation();
 	const navigate = useNavigate();
+	const [latestList, setLatestList] = useState([]);
+	const [hotList, setHotList] = useState([]);
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	useEffect(() => {
+		// 하단바 띄워주기
+		setBottomNavStatus(false);
+	}, []);
 
-	// const [isGroup, setIsGroup] = useState(false); // 그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음
-	const membersList = [
+	useEffect(() => {
+		getTotalLatestList();
+		getTotalHotList();
+	}, []);
+
+	// 최신순/ 인기순
+	const [selectedFilter, setSelectedFilter] = useState(1);
+	const filterList = [
 		{
 			idx: 1,
-			name: '스트레이키즈',
+			name: '최신순',
 		},
 		{
 			idx: 2,
-			name: '리노',
-		},
-		{
-			idx: 3,
-			name: '현진',
-		},
-		{
-			idx: 4,
-			name: '아이엔',
-		},
-		{
-			idx: 5,
-			name: '필릭스',
-		},
-		{
-			idx: 6,
-			name: '한',
-		},
-		{
-			idx: 7,
-			name: '창빈',
-		},
-		{
-			idx: 8,
-			name: '승민',
-		},
-		{
-			idx: 9,
-			name: '우진',
+			name: '인기순',
 		},
 	];
 
-	// const [latestList, setLatestList] = useState([]);
-	// const [hotList, setHotList] = useState([]);
-
-	const [currentItemList, setCurrentItemList] = useState([]);
-	const [selectedChip, setSelectedChip] = useState(1);
+	const onFilterClick = idx => {
+		setSelectedFilter(idx);
+		if (!latestList[selectedMemeberIdx]) {
+			getEachMemberLatestList(selectedMemeberIdx);
+			console.log(selectedMemeberIdx);
+			console.log('latest' + idx + '비어있음');
+		}
+		if (!hotList[selectedMemeberIdx]) {
+			getEachMemberHotList(selectedMemeberIdx);
+			console.log(selectedMemeberIdx);
+			console.log('hot' + idx + '비어있음');
+		}
+	};
+	// 연예인 선택
+	const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
+	const [selectedChip, setSelectedChip] = useState(0);
+	const onChipClick = (idx, memberIdx) => {
+		setSelectedMemeberIdx(memberIdx);
+		setSelectedChip(idx);
+		console.log('idx, memberIdx', idx, memberIdx);
+		if (selectedFilter === 1) {
+			//최신순
+			if (!latestList[idx]) {
+				getEachMemberLatestList(memberIdx);
+				console.log('filter 1, latest');
+			}
+		}
+		if (selectedFilter === 2) {
+			// 인기순
+			if (!hotList[idx]) {
+				getEachMemberHotList(memberIdx);
+				console.log('filter 2, hot');
+			}
+		}
+	};
 
 	const [view, setView] = useState(true); //view = true 크게보기  false = 작게보기
 	const changeView = () => {
@@ -87,40 +104,87 @@ export default function CelebDetail() {
 		navigate(-1);
 	};
 
-	const onClickTab = (idx, name) => {
-		setSelectedChip(idx);
-		let tempArr = [];
-		tempArr = currentItemList.filter(item => item.name === name); //item 리스트와 chip 이름 비교
-		setCurrentItemList(tempArr);
+	const getTotalLatestList = async () => {
+		const data = await customApiClient(
+			'get',
+			`/homes/items?celebIdx=${celebIdx}&order=latest&page=1&pageSize=6`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setLatestList([...latestList, data.result]);
+		console.log('latest : ', data.result);
+	};
+	const getTotalHotList = async () => {
+		const data = await customApiClient(
+			'get',
+			`/homes/items?celebIdx=${celebIdx}&order=hot&page=1&pageSize=6`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setHotList([...hotList, data.result]);
+		console.log('hot : ', data.result);
 	};
 
-	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	useEffect(() => {
-		// 하단바 띄워주기
-		setBottomNavStatus(false);
-	}, []);
+	const getEachMemberLatestList = async idx => {
+		const data = await customApiClient(
+			'get',
+			`/homes/items?memberIdx=${idx}&order=latest&page=1&pageSize=15`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setLatestList([...latestList, data.result]);
+		console.log('member latest', idx, latestList);
+		console.log(data.result);
+	};
+	const getEachMemberHotList = async idx => {
+		const data = await customApiClient(
+			'get',
+			`/homes/items?memberIdx=${idx}&order=hot&page=1&pageSize=15`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setHotList([...hotList, data.result]);
+		console.log('member hot', idx, latestList);
+		console.log(data.result);
+		console.log('hotList[selectedFilter]', hotList[selectedFilter]);
+	};
 
 	return (
-		<MainContainer padding="0 0 3.125rem 0">
+		<MainContainer padding="0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
-					{membersList[0].name}'s 아이템
+					{location.state.name}'s 아이템
 				</div>
 			</TopNav>
 			<FeedContainer>
 				{/* /그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음 */}
-				{membersList.length > 1 ? (
+				{location.state.memberList.length > 0 ? (
 					<>
 						<ChipWrap>
-							{membersList.map(item => {
+							<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
+								{location.state.name}
+							</Chip>
+							{location.state.memberList.map((member, idx) => {
 								return (
 									<Chip
-										key={item.idx}
-										onClick={() => onClickTab(item.idx, item.name)}
-										selected={selectedChip === item.idx}
+										key={member.idx}
+										onClick={() => onChipClick(idx + 1, member.memberIdx)}
+										selected={selectedChip === idx + 1}
 									>
-										{item.name}
+										{member.name}
 									</Chip>
 								);
 							})}
@@ -133,323 +197,256 @@ export default function CelebDetail() {
 
 				<FilterWrap>
 					<Filter>
-						<SubText fontsize="14px" fontweight="bold">
-							최신순
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[0].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[0].idx)}
+							selected={selectedFilter === filterList[0].idx}
+							color={selectedFilter === filterList[0].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[0].name}
 						</SubText>
 						<VerticalLine />
-						<SubText fontsize="14px" color="#8d8d8d">
-							인기순
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[1].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[1].idx)}
+							selected={selectedFilter === filterList[1].idx}
+							color={selectedFilter === filterList[1].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[1].name}
 						</SubText>
 					</Filter>
 					{view ? (
 						<Filter onClick={changeView}>
-							<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
-							<SubText fontsize="12px" color="#8d8d8d">
+							<FilterSmall style={{ marginRight: '0.125rem' }}></FilterSmall>
+							<SubText fontsize="0.75rem" color="#8d8d8d">
 								작게보기
 							</SubText>
 						</Filter>
 					) : (
 						<Filter onClick={changeView}>
-							<FilterBig style={{ marginRight: '2px' }}></FilterBig>
-							<SubText fontsize="12px" color="#8d8d8d">
+							<FilterBig style={{ marginRight: '0.125rem' }}></FilterBig>
+							<SubText fontsize="0.75rem" color="#8d8d8d">
 								크게보기
 							</SubText>
 						</Filter>
 					)}
 				</FilterWrap>
 				{view ? (
-					<LargeViewWrap>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										리노's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">마하그리드</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										현진's
-									</SubText>
-									<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">더블유브이프로젝트</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Round Lawn Short Shirt...</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										아이엔's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">우알롱</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Signature hood sip-up - ...</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-						<HorizontalLine></HorizontalLine>
-						<LargeViewItem>
-							<LargeViewImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										필릭스's
-									</SubText>
-									<BinderWhite style={{ width: '1.5rem', height: '1.5rem' }} />
-								</ImageText>
-							</LargeViewImage>
-							<ItemTextWrap>
-								<SubText fontsize="1rem">마하그리드</SubText>
-								<VerticalLine></VerticalLine>
-								<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-							</ItemTextWrap>
-							<SubInfoWrap>
-								<ProfileImg></ProfileImg>
-								<SubText margin="0 "> 이리노순둥도리</SubText>
-								<Dot></Dot>
-								<SubText color="#8d8d8d"> 5분 전</SubText>
-							</SubInfoWrap>
-						</LargeViewItem>
-					</LargeViewWrap>
+					<>
+						{selectedFilter === 1 ? ( // 최신순
+							<>
+								{latestList[selectedFilter] ? (
+									<LargeViewWrap>
+										{latestList[selectedFilter].map(item => (
+											<div key={item.itemIdx}>
+												<LargeViewItem>
+													<LargeViewImage src={item.itemImgUrl}>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
+															</SubText>
+															<BinderWhite
+																style={{
+																	width: '1.5rem',
+																	height: '1.5rem',
+																}}
+															/>
+														</ImageText>
+													</LargeViewImage>
+													<ItemTextWrap>
+														<SubText fontsize="1rem">
+															{item.brandKr}
+														</SubText>
+														<VerticalLine></VerticalLine>
+														<SubText fontsize="1rem">
+															{item.itemName}
+														</SubText>
+													</ItemTextWrap>
+													<SubInfoWrap>
+														<ProfileImg></ProfileImg>
+														<SubText margin="0 ">
+															{' '}
+															{item.publisher}
+														</SubText>
+														<Dot></Dot>
+														<SubText color="#8d8d8d">
+															{' '}
+															{item.uploadTime}
+														</SubText>
+													</SubInfoWrap>
+												</LargeViewItem>
+												<HorizontalLine></HorizontalLine>
+											</div>
+										))}
+									</LargeViewWrap>
+								) : (
+									<></>
+								)}
+							</>
+						) : (
+							//인기순
+							<>
+								{hotList[selectedFilter] ? (
+									<LargeViewWrap>
+										{hotList[selectedFilter].map(item => (
+											<div key={item.itemIdx}>
+												<LargeViewItem>
+													<LargeViewImage src={item.itemImgUrl}>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
+															</SubText>
+															<BinderWhite
+																style={{
+																	width: '1.5rem',
+																	height: '1.5rem',
+																}}
+															/>
+														</ImageText>
+													</LargeViewImage>
+													<ItemTextWrap>
+														<SubText fontsize="1rem">
+															{item.brandKr}
+														</SubText>
+														<VerticalLine></VerticalLine>
+														<SubText fontsize="1rem">
+															{item.itemName}
+														</SubText>
+													</ItemTextWrap>
+													<SubInfoWrap>
+														<ProfileImg></ProfileImg>
+														<SubText margin="0 ">
+															{' '}
+															{item.publisher}
+														</SubText>
+														<Dot></Dot>
+														<SubText color="#8d8d8d">
+															{' '}
+															{item.uploadTime}
+														</SubText>
+													</SubInfoWrap>
+												</LargeViewItem>
+												<HorizontalLine></HorizontalLine>
+											</div>
+										))}
+									</LargeViewWrap>
+								) : (
+									<></>
+								)}
+							</>
+						)}
+					</>
 				) : (
-					<GridItemWrap>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEEㄻㄴㅁㄴ라ㅣ;ㅁㄴㅇ러;ㄹ미나어 ㅁㄴㅇ리ㅏㅁ넝ㄹ
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								더블유브이프로젝트
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Round Lawn Short Shirt.Round Lawn Short ShirtRound Lawn Short Shirt.
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-						<GridItem>
-							<GridImage>
-								<ImageText>
-									<SubText fontsize="0.8125rem" fontweight="bold" color="white">
-										우식's
-									</SubText>
-									<BinderWhite
-										style={{ width: '1.375rem', height: '1.375rem' }}
-									/>
-								</ImageText>
-							</GridImage>
-							<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-								마하그리드
-							</SubText>
-							<SubText
-								style={{
-									textOverflow: 'ellipsis',
-									whiteSpace: 'nowrap',
-									overflow: 'hidden',
-									width: '100%',
-								}}
-							>
-								Rugby Polo Ls TEE BLUE
-							</SubText>
-						</GridItem>
-					</GridItemWrap>
+					<>
+						{selectedFilter === 1 ? ( //최신순
+							<>
+								{latestList[selectedFilter] ? (
+									<>
+										<GridItemWrap>
+											{latestList[selectedFilter].map(item => (
+												<GridItem key={item.itemIdx}>
+													<GridImage>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
+															</SubText>
+															<BinderWhite
+																style={{
+																	width: '1.375rem',
+																	height: '1.375rem',
+																}}
+															/>
+														</ImageText>
+													</GridImage>
+													<SubText
+														fontsize="1rem"
+														fontweight="bold"
+														margin="0 0 0.375rem 0 "
+													>
+														{item.brandKr}
+													</SubText>
+													<SubText
+														style={{
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+															width: '100%',
+														}}
+													>
+														{item.itemName}
+													</SubText>
+												</GridItem>
+											))}
+										</GridItemWrap>
+									</>
+								) : (
+									<></>
+								)}
+							</>
+						) : (
+							//인기순
+							<>
+								{hotList[selectedFilter] ? (
+									<GridItemWrap>
+										{hotList[selectedFilter].map(item => (
+											<GridItem key={item.itemIdx}>
+												<GridImage>
+													<ImageText>
+														<SubText
+															fontsize="0.8125rem"
+															fontweight="bold"
+															color="white"
+														>
+															{item.name}'s
+														</SubText>
+														<BinderWhite
+															style={{
+																width: '1.375rem',
+																height: '1.375rem',
+															}}
+														/>
+													</ImageText>
+												</GridImage>
+												<SubText
+													fontsize="1rem"
+													fontweight="bold"
+													margin="0 0 0.375rem 0 "
+												>
+													{item.brandKr}
+												</SubText>
+												<SubText
+													style={{
+														textOverflow: 'ellipsis',
+														whiteSpace: 'nowrap',
+														overflow: 'hidden',
+														width: '100%',
+													}}
+												>
+													{item.itemName}
+												</SubText>
+											</GridItem>
+										))}
+									</GridItemWrap>
+								) : (
+									<></>
+								)}
+							</>
+						)}
+					</>
 				)}
 			</FeedContainer>
 		</MainContainer>

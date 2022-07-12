@@ -8,7 +8,13 @@ export const GridImage = styled.div`
 	height: 10.125rem;
 	border-radius: 1rem;
 	background-color: ${props => props.backgroundColor || '#f6f6f6'};
-	background-image: ${props => props.backgroundColor || `url("${props.src}")`};
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${props => props.src});
 	background-size: cover;
 	background-position: 50%;
 	margin-bottom: ${props => props.marginbottom || '1rem'};
