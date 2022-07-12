@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
-import { BackButton } from '../../components/Buttons/BackButton';
-import { ContentWrap } from '../../components/containers/ContentWrap';
-import { MainContainer } from '../../components/containers/MainContainer'
-import { TopNav } from '../../components/containers/TopNav';
-import { MainText } from '../../components/Texts/MainText';
-import { BottomNavState } from '../../recoil/BottomNav';
+import { BackButton } from '../../../components/Buttons/BackButton';
+import { ContentWrap } from '../../../components/containers/ContentWrap';
+import { MainContainer } from '../../../components/containers/MainContainer'
+import { TopNav } from '../../../components/containers/TopNav';
+import { MainText } from '../../../components/Texts/MainText';
+import { BottomNavState } from '../../../recoil/BottomNav';
 import { ContentParagraphWrap } from './TermsOfUse';
 
 export default function Privacy() {
