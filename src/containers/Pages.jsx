@@ -77,7 +77,7 @@ export default function Pages() {
 			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
 
-			<Route path="/users/:id" element={<My />} />
+			<Route path="/users/:idx" element={<My />} />
 			<Route path="/users/viewed-items" element={<ViewedItems />} />
 			<Route path="/users/upload-items" element={<MyUploadItems />} />
 			<Route path="/settings" element={<Settings />} />
