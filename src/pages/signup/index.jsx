@@ -356,11 +356,20 @@ export default function Signup() {
 				console.log('hi');
 				onPostLocalSignUp();
 			}
-		} else {
-
+		} else if (data.code === 3002) {
 			setNicknameValid(false);
-			alert(data.message);
-			console.log(data.message);
+
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('이미 존재하는 닉네임이에요');
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
 		}
 	}
 
