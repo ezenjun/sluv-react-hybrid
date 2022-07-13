@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
-import Slider from 'react-slick';
+import { customApiClient } from '../../utils/apiClient';
 
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
@@ -11,7 +11,6 @@ import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { BottomNavState } from '../../recoil/BottomNav';
-import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { SearchBottomSlideMenu } from '../../components/containers/SearchBottomSlideMenu';
 import { Input } from '../../components/Input';
 import { InputWrap, IconWrap, FeedContainer } from '.';
@@ -29,9 +28,7 @@ import { ImageText } from '../../components/ImageText';
 
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
-import { ReactComponent as UpArrow } from '../../assets/Icons/upArrow.svg';
 import { ReactComponent as DownArrow } from '../../assets/Icons/downArrowGray.svg';
-import { ReactComponent as X } from '../../assets/Icons/TagDeleteX.svg';
 import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.svg';
 import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
@@ -40,12 +37,12 @@ import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg'
 
 export default function SearchResult() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
 	const [searchInput, setSearchInput] = useState('');
-	const [isCollapsed, setIsCollapsed] = useState(true);
-	const [view, setView] = useState(true); //view = true 크게보기  false = 작게보기
+	const [view, setView] = useState(false); //view = true 크게보기  false = 작게보기
 
 	const [selectedItemFilter, setSelectedItemFilter] = useState();
 	const [selectedPriceFilter, setSelectedPriceFilter] = useState();
@@ -56,7 +53,20 @@ export default function SearchResult() {
 	const getIsSelected = input => {
 		setIsSelected(input);
 	};
-
+	const handleEnterEvent = () => {
+		if (window.event.keyCode === 13) {
+			let queryKeyword = searchInput;
+			let blank = ' ';
+			let isBlank = queryKeyword.includes(blank);
+			if (isBlank) {
+				queryKeyword = queryKeyword.replaceAll(' ', '+');
+				console.log('with blank', queryKeyword);
+			}
+			// setSearchInput(searchInput);
+			// navigate(`/search/result/${searchInput}`, { state: { searchInput } });
+			getSearchResultList(queryKeyword);
+		}
+	};
 	const tabList = [
 		{
 			idx: 1,
@@ -75,6 +85,11 @@ export default function SearchResult() {
 			name: '색상',
 		},
 	];
+
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+	};
+
 	const [selectedTab, setSelectedTab] = useState(1);
 	const getSelectedTab = input => {
 		setSelectedTab(input);
@@ -109,7 +124,6 @@ export default function SearchResult() {
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
-		const value = e.target.value;
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
@@ -117,9 +131,38 @@ export default function SearchResult() {
 	const onBackClick = () => {
 		navigate('../search');
 	};
-	// useEffect(() => {
-	// 	setBottomMenuStatusState(true);
-	// });
+
+	const [searchResultList, setSearchResultList] = useState([]);
+	const getSearchResultList = async queryKeyword => {
+		const data = await customApiClient(
+			'get',
+			`/search?search_word=${queryKeyword}&page=1&pageSize=10`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			if (data.code === 3070) {
+				setSearchResultList([]);
+			}
+			return;
+		}
+		console.log('getHotKeywordList', data.result.searchItemList);
+		setSearchResultList(data.result.searchItemList);
+	};
+
+	useEffect(() => {
+		setBottomMenuStatusState(false);
+		setSearchInput(location.state.searchInput);
+		let queryKeyword = location.state.searchInput;
+		let blank = ' ';
+		let isBlank = queryKeyword.includes(blank);
+		if (isBlank) {
+			queryKeyword = queryKeyword.replaceAll(' ', '+');
+			console.log('with blank', queryKeyword);
+		}
+		console.log(queryKeyword);
+		getSearchResultList(queryKeyword);
+	}, []);
 	return (
 		<MainContainer padding="0 0 3.125rem 0">
 			<TopNav>
@@ -137,6 +180,7 @@ export default function SearchResult() {
 						<SearchIcon />
 					</IconWrap>
 					<Input
+						onKeyUp={handleEnterEvent}
 						value={searchInput}
 						onChange={onHandleChangeSearch}
 						type="text"
@@ -212,7 +256,7 @@ export default function SearchResult() {
 				<ItemContainer>
 					<FilterWrap>
 						<SubText fontsize="14px" color="#8d8d8d">
-							전체 1234
+							전체 {searchResultList.searchItemCnt}
 						</SubText>
 						{view ? (
 							<ViewButton onClick={changeView}>
@@ -232,351 +276,122 @@ export default function SearchResult() {
 					</FilterWrap>
 					{view ? (
 						<LargeViewWrap>
-							<LargeViewItem>
-								<LargeViewImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											리노's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										/>
-									</ImageText>
-								</LargeViewImage>
-								<ItemTextWrap>
-									<SubText fontsize="1rem">마하그리드</SubText>
-									<VerticalLine></VerticalLine>
-									<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-								</ItemTextWrap>
-								<SubInfoWrap>
-									<ProfileImg></ProfileImg>
-									<SubText margin="0 "> 이리노순둥도리</SubText>
-									<Dot></Dot>
-									<SubText color="#8d8d8d"> 5분 전</SubText>
-								</SubInfoWrap>
-							</LargeViewItem>
-							<HorizontalLine></HorizontalLine>
-							<LargeViewItem>
-								<LargeViewImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											현진's
-										</SubText>
-										<BinderRed style={{ width: '1.5rem', height: '1.5rem' }} />
-									</ImageText>
-								</LargeViewImage>
-								<ItemTextWrap>
-									<SubText fontsize="1rem">더블유브이프로젝트</SubText>
-									<VerticalLine></VerticalLine>
-									<SubText fontsize="1rem">Round Lawn Short Shirt...</SubText>
-								</ItemTextWrap>
-								<SubInfoWrap>
-									<ProfileImg></ProfileImg>
-									<SubText margin="0 "> 이리노순둥도리</SubText>
-									<Dot></Dot>
-									<SubText color="#8d8d8d"> 5분 전</SubText>
-								</SubInfoWrap>
-							</LargeViewItem>
-							<HorizontalLine></HorizontalLine>
-							<LargeViewItem>
-								<LargeViewImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											아이엔's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										/>
-									</ImageText>
-								</LargeViewImage>
-								<ItemTextWrap>
-									<SubText fontsize="1rem">우알롱</SubText>
-									<VerticalLine></VerticalLine>
-									<SubText fontsize="1rem">Signature hood sip-up - ...</SubText>
-								</ItemTextWrap>
-								<SubInfoWrap>
-									<ProfileImg></ProfileImg>
-									<SubText margin="0 "> 이리노순둥도리</SubText>
-									<Dot></Dot>
-									<SubText color="#8d8d8d"> 5분 전</SubText>
-								</SubInfoWrap>
-							</LargeViewItem>
-							<HorizontalLine></HorizontalLine>
-							<LargeViewItem>
-								<LargeViewImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											필릭스's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.5rem', height: '1.5rem' }}
-										/>
-									</ImageText>
-								</LargeViewImage>
-								<ItemTextWrap>
-									<SubText fontsize="1rem">마하그리드</SubText>
-									<VerticalLine></VerticalLine>
-									<SubText fontsize="1rem">Rugby Polo LS TEE BLUE</SubText>
-								</ItemTextWrap>
-								<SubInfoWrap>
-									<ProfileImg></ProfileImg>
-									<SubText margin="0 "> 이리노순둥도리</SubText>
-									<Dot></Dot>
-									<SubText color="#8d8d8d"> 5분 전</SubText>
-								</SubInfoWrap>
-							</LargeViewItem>
+							{searchResultList && (
+								<>
+									{searchResultList.map(item => (
+										<>
+											<LargeViewItem
+												onClick={() => {
+													onDetailItemClick(item.itemIdx);
+												}}
+												key={item.itemIdx}
+											>
+												<LargeViewImage src={item.itemImgUrl}>
+													<ImageText>
+														<SubText
+															fontsize="0.8125rem"
+															fontweight="bold"
+															color="white"
+														>
+															{item.name}'s
+														</SubText>
+														{item.isDib === 'Y' ? (
+															<BinderRed
+																style={{
+																	width: '1.5rem',
+																	height: '1.5rem',
+																	zIndex: '50',
+																}}
+															/>
+														) : (
+															<BinderWhite
+																style={{
+																	width: '1.5rem',
+																	height: '1.5rem',
+																	zIndex: '50',
+																}}
+															/>
+														)}
+													</ImageText>
+												</LargeViewImage>
+												<ItemTextWrap>
+													<SubText fontsize="1rem">
+														{item.brandKr}
+													</SubText>
+													<VerticalLine></VerticalLine>
+													<SubText fontsize="1rem">
+														{item.itemName}
+													</SubText>
+												</ItemTextWrap>
+												<SubInfoWrap>
+													<ProfileImg
+														src={item.profileImgUrl}
+													></ProfileImg>
+													<SubText margin="0 "> {item.nickName}</SubText>
+													<Dot></Dot>
+													<SubText color="#8d8d8d">
+														{' '}
+														{item.uploadTime}
+													</SubText>
+												</SubInfoWrap>
+											</LargeViewItem>
+											<HorizontalLine></HorizontalLine>
+										</>
+									))}
+								</>
+							)}
 						</LargeViewWrap>
 					) : (
 						<GridItemWrap>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEEㄻㄴㅁㄴ라ㅣ;ㅁㄴㅇ러;ㄹ미나어 ㅁㄴㅇ리ㅏㅁ넝ㄹ
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									더블유브이프로젝트
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Round Lawn Short Shirt.Round Lawn Short ShirtRound Lawn Short
-									Shirt.
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
-							<GridItem>
-								<GridImage>
-									<ImageText>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="white"
-										>
-											우식's
-										</SubText>
-										<BinderWhite
-											style={{ width: '1.375rem', height: '1.375rem' }}
-										/>
-									</ImageText>
-								</GridImage>
-								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
-									마하그리드
-								</SubText>
-								<SubText
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									Rugby Polo Ls TEE BLUE
-								</SubText>
-							</GridItem>
+							{searchResultList && (
+								<>
+									{searchResultList.map(item => (
+										<>
+											<GridItem
+												onClick={() => {
+													onDetailItemClick(item.itemIdx);
+												}}
+												key={item.itemIdx}
+											>
+												<GridImage src={item.itemImgUrl}>
+													<ImageText>
+														<SubText
+															fontsize="0.8125rem"
+															fontweight="bold"
+															color="white"
+														>
+															{item.name}'s
+														</SubText>
+														<BinderWhite
+															style={{
+																width: '1.375rem',
+																height: '1.375rem',
+															}}
+														/>
+													</ImageText>
+												</GridImage>
+												<SubText
+													fontsize="1rem"
+													fontweight="bold"
+													margin="0 0 0.375rem 0 "
+												>
+													{item.brandKr}
+												</SubText>
+												<SubText
+													style={{
+														textOverflow: 'ellipsis',
+														whiteSpace: 'nowrap',
+														overflow: 'hidden',
+														width: '100%',
+													}}
+												>
+													{item.itemName}
+												</SubText>
+											</GridItem>
+										</>
+									))}
+								</>
+							)}
 						</GridItemWrap>
 					)}
 				</ItemContainer>
@@ -656,7 +471,9 @@ const ProfileImg = styled.div`
 	width: 1.375rem;
 	height: 1.375rem;
 	border-radius: 50%;
-	background-color: darkturquoise;
+	background-image: url(${props => props.src});
+	background-size: cover;
+	background-position: 50%;
 	margin-right: 0.5rem;
 `;
 const Dot = styled.div`

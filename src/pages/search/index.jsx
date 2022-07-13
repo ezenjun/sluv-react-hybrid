@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { customApiClient } from '../../utils/apiClient';
+
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
@@ -23,40 +25,68 @@ export default function Search() {
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
-
+	const [rankDate, setRankDate] = useState('');
 	const [searchInput, setSearchInput] = useState('');
 	const [isCollapsed, setIsCollapsed] = useState(true);
-	const hotSearchList = [
-		'아이유 니트',
-		'스트레이키즈 모자',
-		'방탄소년단',
-		'레드벨벳',
-		'블랙핑크',
-		'트와이스',
-		'나연 후드티',
-		'리노 모자',
-		'미주 스커트',
-		'오마이걸',
-	];
-	const [recentSearchList, setRecentSearchList] = useState([
-		'아이유 니트',
-		'스트레이키즈 모자',
-		'방탄소년단',
-		'레드벨벳',
-		'블랙핑크',
-		'트와이스',
-		'나연 후드티',
-		'리노 모자',
-		'미주 스커트',
-		'오마이걸',
-	]);
+
+	const [hotSearchList, setHotSearchList] = useState([]);
+	const getHotSearchList = async () => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('get', '/search/hot-ranking');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('getHotSearchList', data.result);
+		setHotSearchList(data.result);
+		let standarddate = data.result[0].standard;
+		standarddate = standarddate.replaceAll('-', '.');
+		console.log('date changed to ', standarddate);
+		setRankDate(standarddate);
+	};
+
+	const [hotKeywordList, setHotKeywordList] = useState([]);
+	const getHotKeywordList = async () => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('get', '/search/hot-searchword');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('getHotKeywordList', data.result);
+		setHotKeywordList(data.result);
+	};
+
+	const [recentSearchList, setRecentSearchList] = useState([]);
+	const getRecentSearchList = async () => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('get', '/search/recent');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('getRecentSearchList', data.result);
+		setRecentSearchList(data.result);
+	};
+
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
-
 		const value = e.target.value;
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
+	};
+	const handleEnterEvent = () => {
+		if (window.event.keyCode === 13) {
+			navigate(`/search/result`, { state: { searchInput } });
+		}
+	};
+
+	const onClickKeyword = searchInput => {
+		navigate(`/search/result`, { state: { searchInput } });
 	};
 
 	const settings = {
@@ -84,17 +114,14 @@ export default function Search() {
 		speed: 500,
 		cssEase: 'linear',
 		arrows: false,
-		// beforeChange: function(currentSlide, nextSlide) {
-		//   console.log("before change", currentSlide, nextSlide);
-		// },
-		// afterChange: function(currentSlide) {
-		//   console.log("after change", currentSlide);
-		// }
 	};
 
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
+		getHotSearchList();
+		getHotKeywordList();
+		// getRecentSearchList();
 	}, []);
 
 	return (
@@ -110,6 +137,7 @@ export default function Search() {
 						<SearchIcon />
 					</IconWrap>
 					<Input
+						onKeyUp={handleEnterEvent}
 						value={searchInput}
 						onChange={onHandleChangeSearch}
 						type="text"
@@ -148,7 +176,7 @@ export default function Search() {
 										>
 											<Slider {...verticalsettings}>
 												{hotSearchList.map((rank, index) => (
-													<div>
+													<div key={rank.searchWord}>
 														<SubText
 															fontsize="0.875rem"
 															fontweight="bold"
@@ -161,7 +189,7 @@ export default function Search() {
 															fontsize="0.875rem"
 															fontweight="600"
 														>
-															{rank}
+															{rank.searchWord}
 														</SubText>
 													</div>
 												))}
@@ -188,7 +216,7 @@ export default function Search() {
 													HOT 랭킹
 												</SubText>
 												<SubText fontweight="normal">
-													05.15 17:00 기준
+													{rankDate && <>{rankDate}</>}
 												</SubText>
 											</div>
 											<UpArrow
@@ -197,9 +225,15 @@ export default function Search() {
 											></UpArrow>
 										</CollapsedRow>
 										<Slider {...settings}>
+											{/* {hotSearchList && ( */}
 											<div>
 												{hotSearchList.slice(0, 5).map((rank, index) => (
-													<EachRank key={index}>
+													<EachRank
+														key={index}
+														onClick={() =>
+															onClickKeyword(rank.searchWord)
+														}
+													>
 														<SubText
 															fontsize="0.875rem"
 															fontweight="bold"
@@ -213,14 +247,21 @@ export default function Search() {
 															fontweight="600"
 															margin="16px 0"
 														>
-															{rank}
+															{rank.searchWord}
 														</SubText>
 													</EachRank>
 												))}
 											</div>
+											{/* )} */}
+											{/* {hotSearchList && ( */}
 											<div>
 												{hotSearchList.slice(5, 10).map((rank, index) => (
-													<EachRank key={index}>
+													<EachRank
+														key={index}
+														onClick={() =>
+															onClickKeyword(rank.searchWord)
+														}
+													>
 														<SubText
 															key={index}
 															fontsize="0.875rem"
@@ -235,11 +276,12 @@ export default function Search() {
 															fontweight="600"
 															margin="16px 0"
 														>
-															{rank}
+															{rank.searchWord}
 														</SubText>
 													</EachRank>
 												))}
 											</div>
+											{/* )} */}
 										</Slider>
 									</>
 								)}
@@ -250,18 +292,17 @@ export default function Search() {
 								인기 검색어
 							</MainText>
 							<HashTagWrap>
-								<HashTag onClick={() => navigate('/search/result')}>
-									#아이유 선글라스
-								</HashTag>
-								<HashTag>#로제 원피스</HashTag>
-								<HashTag>#있지 류진 후드티</HashTag>
-								<HashTag>#영케이 안경</HashTag>
-								<HashTag>#리노 반팔티</HashTag>
-								<HashTag>#효정 모자</HashTag>
-								<HashTag>#레드벨벳</HashTag>
-								<HashTag>#트와이스 나연 원피스</HashTag>
-								<HashTag>#엔시티드림</HashTag>
-								<HashTag>#220618 BTS 온라인 콘서트</HashTag>
+								{hotKeywordList && (
+									<>
+										{hotKeywordList.map(keyword => (
+											<HashTag
+												onClick={() => onClickKeyword(keyword.searchWord)}
+											>
+												# {keyword.searchWord}
+											</HashTag>
+										))}
+									</>
+								)}
 							</HashTagWrap>
 						</HotKeyword>
 					</SearchBottom>
@@ -278,22 +319,26 @@ export default function Search() {
 							</SubText>
 						</RecentSearchTextWrap>
 						<RecentKeywordWrap>
-							{recentSearchList.map(search => (
-								<Keyword>
-									<SubText
-										fontsize="14px"
-										fontweight="600"
-										margin="0 0.5rem 0 0"
-										onClick={() => setSearchInput(search)}
-									>
-										{search}
-									</SubText>
-									<X
-										onClick={() => alert('삭제')}
-										style={{ width: '1.125rem', height: '1.125rem' }}
-									></X>
-								</Keyword>
-							))}
+							{recentSearchList && (
+								<>
+									{recentSearchList.map(search => (
+										<Keyword>
+											<SubText
+												fontsize="14px"
+												fontweight="600"
+												margin="0 0.5rem 0 0"
+												onClick={() => onClickKeyword(search.searchWord)}
+											>
+												{search.searchWord}
+											</SubText>
+											<X
+												onClick={() => alert('삭제')}
+												style={{ width: '1.125rem', height: '1.125rem' }}
+											></X>
+										</Keyword>
+									))}
+								</>
+							)}
 						</RecentKeywordWrap>
 					</SearchBottom>
 				)}
