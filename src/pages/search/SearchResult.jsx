@@ -62,6 +62,7 @@ export default function SearchResult() {
 				queryKeyword = queryKeyword.replaceAll(' ', '+');
 				console.log('with blank', queryKeyword);
 			}
+			setSearchInput(searchInput);
 			// setSearchInput(searchInput);
 			// navigate(`/search/result/${searchInput}`, { state: { searchInput } });
 			getSearchResultList(queryKeyword);

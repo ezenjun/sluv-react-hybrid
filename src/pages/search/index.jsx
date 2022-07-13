@@ -71,6 +71,35 @@ export default function Search() {
 		console.log('getRecentSearchList', data.result);
 		setRecentSearchList(data.result);
 	};
+	const onDeleteAll = () => {
+		deleteAllRecentSearch();
+	};
+	const deleteAllRecentSearch = async () => {
+		const data = await customApiClient('delete', '/search/recent');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('getRecentSearchList', data.result);
+		setRecentSearchList([]);
+	};
+	const onDeleteEach = (searchidx, idx) => {
+		let temp = recentSearchList;
+		temp.splice(idx, 1);
+		console.log(temp);
+		setRecentSearchList([...temp]);
+		deleteEachRecentSearch(searchidx);
+	};
+	const deleteEachRecentSearch = async searchidx => {
+		const data = await customApiClient('delete', `/search/recent/${searchidx}`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('getRecentSearchList', data.result);
+	};
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
@@ -121,7 +150,7 @@ export default function Search() {
 		setBottomNavStatus(true);
 		getHotSearchList();
 		getHotKeywordList();
-		// getRecentSearchList();
+		getRecentSearchList();
 	}, []);
 
 	return (
@@ -311,7 +340,7 @@ export default function Search() {
 						<RecentSearchTextWrap>
 							<MainText fontsize="1.25rem">최근 검색어</MainText>
 							<SubText
-								onClick={() => alert('전체삭제')}
+								onClick={() => onDeleteAll()}
 								color="#8D8D8D"
 								fontweight="normal"
 							>
@@ -319,10 +348,10 @@ export default function Search() {
 							</SubText>
 						</RecentSearchTextWrap>
 						<RecentKeywordWrap>
-							{recentSearchList && (
+							{recentSearchList.length > 0 ? (
 								<>
-									{recentSearchList.map(search => (
-										<Keyword>
+									{recentSearchList.map((search, index) => (
+										<Keyword key={search.recentSearchIdx}>
 											<SubText
 												fontsize="14px"
 												fontweight="600"
@@ -332,12 +361,31 @@ export default function Search() {
 												{search.searchWord}
 											</SubText>
 											<X
-												onClick={() => alert('삭제')}
+												onClick={() =>
+													onDeleteEach(search.recentSearchIdx, index)
+												}
 												style={{ width: '1.125rem', height: '1.125rem' }}
 											></X>
 										</Keyword>
 									))}
 								</>
+							) : (
+								<div
+									style={{
+										display: 'flex',
+										width: '100%',
+										height: '3.125rem',
+										justifyContent: 'center',
+									}}
+								>
+									<SubText
+										fontsize="14px"
+										fontweight="normal"
+										margin="0 0.5rem 0 0"
+									>
+										최근 검색어가 없습니다
+									</SubText>
+								</div>
 							)}
 						</RecentKeywordWrap>
 					</SearchBottom>
