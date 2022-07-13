@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BackButton } from '../../../components/Buttons/BackButton';
@@ -11,6 +11,7 @@ import { BottomNavState } from '../../../recoil/BottomNav';
 
 export default function Settings() {
     const navigate = useNavigate();
+		const { state } = useLocation();
 
 		const setBottomNavStatus = useSetRecoilState(BottomNavState);
 
@@ -32,12 +33,17 @@ export default function Settings() {
 					<TitleWrap>계정</TitleWrap>
 					<div className="buttonWrap">
 						<div
-							onClick={() => navigate('/settings/edit/profile')}
+							onClick={() => navigate('/settings/edit/profile', { state: state })}
 							className="marginBottom"
 						>
 							프로필 수정
 						</div>
-						<div className="marginBottom">비밀번호 변경</div>
+						<div
+							onClick={() => navigate('/settings/edit/password')}
+							className="marginBottom"
+						>
+							비밀번호 변경
+						</div>
 						<div>셀럽 선택 편집</div>
 					</div>
 				</ItemWrap>

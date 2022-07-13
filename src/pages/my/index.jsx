@@ -11,6 +11,7 @@ import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { ReactComponent as IconArrowUp } from '../../assets/Icons/icon_arrow_up.svg';
 import { ReactComponent as IconArrowDown } from '../../assets/Icons/icon_arrow_down.svg';
+import { ReactComponent as UserBasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../components/containers/BottomSlideMenu';
@@ -59,14 +60,18 @@ export default function My() {
 		setUserInfo(data.result.userInfo);
 		setUploadInfo(data.result.uploadInfo);
 		console.log(data);
-
 	}
 
   const onClickThreeDots = () => {
     setReportPopupStatus(!reportPopupStatus);
   };
   const onClickSettings = () => {
-    navigate('/settings');
+    navigate('/settings', {
+		state: {
+			nickName: userInfo.nickName,
+			url: userInfo.profileImgUrl,
+		},
+	});
   };
 
   return (
@@ -101,11 +106,16 @@ export default function My() {
 			<ContentWrap padding="0">
 				<ProfileWrap>
 					<ProfileContentsWrap>
-						<img
-							className="userProfileImg"
-							src="https://sluv-actor-image-bucket.s3.ap-northeast-2.amazonaws.com/%EA%B9%80%EA%B3%A0%EC%9D%80/%EA%B9%80%EA%B3%A0%EC%9D%80.png"
-							alt="유저 프로필 사진"
-						/>
+						{userInfo.profileImgUrl ? (
+							<img
+								className="userProfileImg"
+								src={userInfo.profileImgUrl}
+								alt="유저 프로필 사진"
+							/>
+						) : (
+							<UserBasicProfileImg className="userProfileImg" />
+						)}
+
 						<div
 							style={{
 								display: 'flex',

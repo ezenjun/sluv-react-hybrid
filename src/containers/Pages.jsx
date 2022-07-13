@@ -44,6 +44,7 @@ import MyUploadItems from '../pages/my/MyUploadItems';
 import Followers from '../pages/my/Followers';
 import Followings from '../pages/my/Followings';
 import EditProfile from '../pages/my/settings/EditProfile';
+import EditPassword from '../pages/my/settings/EditPassword';
 
 export default function Pages() {
 	return (
@@ -90,6 +91,7 @@ export default function Pages() {
 			<Route path="/users/:idx/followings" element={<Followings />} />
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/edit/profile" element={<EditProfile />} />
+			<Route path="/settings/edit/password" element={<EditPassword />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />
