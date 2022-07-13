@@ -17,6 +17,7 @@ import { customApiClient } from '../../../utils/apiClient';
 import { useSetRecoilState } from 'recoil';
 import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../../recoil/ToastMessage';
 
+
 export default function EditPassword() {
 	const navigate = useNavigate();
 
@@ -94,7 +95,7 @@ export default function EditPassword() {
 					비밀번호 변경
 				</MainText>
 			</TopNav>
-			<ContentWrap style={{ flex: '1', marginTop:'1.625rem' }}>
+			<ContentWrap style={{ flex: '1', marginTop: '1.625rem' }}>
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<div style={{ marginBottom: '1.625rem' }}>
 						<MainText>비밀번호 변경</MainText>
@@ -158,13 +159,14 @@ export default function EditPassword() {
 					</FormWrap>
 				</div>
 			</ContentWrap>
-			<div style={{margin:'0 1.25rem'}}>
+			<div style={{ margin: '0 1.25rem' }}>
 				{passwordValid1 && passwordValid2 ? (
 					<PurpleButton onClick={onClickChangePassword}>변경</PurpleButton>
 				) : (
 					<PurpleButton disabled={true}>변경</PurpleButton>
 				)}
 			</div>
+			
 		</MainContainer>
 	);
 }
