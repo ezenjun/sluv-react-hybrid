@@ -53,7 +53,20 @@ export default function SearchResult() {
 	const getIsSelected = input => {
 		setIsSelected(input);
 	};
-
+	const handleEnterEvent = () => {
+		if (window.event.keyCode === 13) {
+			let queryKeyword = searchInput;
+			let blank = ' ';
+			let isBlank = queryKeyword.includes(blank);
+			if (isBlank) {
+				queryKeyword = queryKeyword.replaceAll(' ', '+');
+				console.log('with blank', queryKeyword);
+			}
+			// setSearchInput(searchInput);
+			// navigate(`/search/result/${searchInput}`, { state: { searchInput } });
+			getSearchResultList(queryKeyword);
+		}
+	};
 	const tabList = [
 		{
 			idx: 1,
@@ -111,7 +124,6 @@ export default function SearchResult() {
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
-		const value = e.target.value;
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
@@ -129,6 +141,9 @@ export default function SearchResult() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			if (data.code === 3070) {
+				setSearchResultList([]);
+			}
 			return;
 		}
 		console.log('getHotKeywordList', data.result.searchItemList);
@@ -165,6 +180,7 @@ export default function SearchResult() {
 						<SearchIcon />
 					</IconWrap>
 					<Input
+						onKeyUp={handleEnterEvent}
 						value={searchInput}
 						onChange={onHandleChangeSearch}
 						type="text"

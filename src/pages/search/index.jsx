@@ -81,12 +81,12 @@ export default function Search() {
 	};
 	const handleEnterEvent = () => {
 		if (window.event.keyCode === 13) {
-			navigate('/search/result', { state: { searchInput } });
+			navigate(`/search/result`, { state: { searchInput } });
 		}
 	};
 
 	const onClickKeyword = searchInput => {
-		navigate('/search/result', { state: { searchInput } });
+		navigate(`/search/result`, { state: { searchInput } });
 	};
 
 	const settings = {

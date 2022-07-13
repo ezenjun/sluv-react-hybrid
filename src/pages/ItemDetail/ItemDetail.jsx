@@ -358,15 +358,15 @@ export default function ItemDetail() {
 							<></>
 						)}
 					</UserInfo>
-					<MyUploadWrap>
-						<div className="titleWrap">
-							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
-								같은 셀럽의 아이템
-							</MainText>
-						</div>
-						<div className="contentWrap">
-							{sameCelebItemList.length > 0 &&
-								sameCelebItemList.map(item => (
+					{sameCelebItemList.length > 0 && (
+						<MyUploadWrap>
+							<div className="titleWrap">
+								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+									같은 셀럽의 아이템
+								</MainText>
+							</div>
+							<div className="contentWrap">
+								{sameCelebItemList.map(item => (
 									<MyPageGridItem key={item.itemIdx}>
 										<GridImage>
 											<ImageText>
@@ -404,17 +404,18 @@ export default function ItemDetail() {
 										</SubText>
 									</MyPageGridItem>
 								))}
-						</div>
-					</MyUploadWrap>
-					<MyUploadWrap>
-						<div className="titleWrap">
-							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
-								다른 스러버들이 함께 보관한 아이템
-							</MainText>
-						</div>
-						<div className="contentWrap">
-							{otherUserDibItemList.length > 0 &&
-								otherUserDibItemList.map(item => (
+							</div>
+						</MyUploadWrap>
+					)}
+					{otherUserDibItemList.length > 0 && (
+						<MyUploadWrap>
+							<div className="titleWrap">
+								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+									다른 스러버들이 함께 보관한 아이템
+								</MainText>
+							</div>
+							<div className="contentWrap">
+								{otherUserDibItemList.map(item => (
 									<MyPageGridItem key={item.itemIdx}>
 										<GridImage>
 											<ImageText>
@@ -452,19 +453,20 @@ export default function ItemDetail() {
 										</SubText>
 									</MyPageGridItem>
 								))}
-						</div>
-					</MyUploadWrap>
-					<MyUploadWrap>
-						<div className="titleWrap">
-							<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
-								같은 브랜드의 아이템
-							</MainText>
-						</div>
-						<div className="contentWrap">
-							{sameBrandItemList.length > 0 &&
-								sameBrandItemList.map(item => (
+							</div>
+						</MyUploadWrap>
+					)}
+					{sameBrandItemList.length > 0 && (
+						<MyUploadWrap>
+							<div className="titleWrap">
+								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+									같은 브랜드의 아이템
+								</MainText>
+							</div>
+							<div className="contentWrap">
+								{sameBrandItemList.map(item => (
 									<MyPageGridItem key={item.itemIdx}>
-										<GridImage>
+										<GridImage src={item.itemImgUrl}>
 											<ImageText>
 												<SubText
 													fontsize="0.8125rem"
@@ -500,8 +502,9 @@ export default function ItemDetail() {
 										</SubText>
 									</MyPageGridItem>
 								))}
-						</div>
-					</MyUploadWrap>
+							</div>
+						</MyUploadWrap>
+					)}
 				</FeedContainer>
 			)}
 
