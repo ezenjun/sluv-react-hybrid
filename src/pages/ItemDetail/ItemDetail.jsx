@@ -216,7 +216,7 @@ export default function ItemDetail() {
 						{itemInfo.itemImgList && (
 							<Slider {...settings}>
 								{itemInfo.itemImgList.map(itemImg => (
-									<Image></Image>
+									<Image src={itemImg.itemImgUrl}></Image>
 								))}
 							</Slider>
 						)}
@@ -224,7 +224,7 @@ export default function ItemDetail() {
 
 					<ItemInfoContainer>
 						<SubText fontsize="1rem" fontweight="bold" color="#9E30F4">
-							{itemInfo.celebName}&nbsp;{itemInfo.memberIdx}
+							{itemInfo.celebName}&nbsp;{itemInfo.memberName}
 						</SubText>
 						<MainText fontsize="1.25rem" margin="0.75rem 0 0.375rem 0">
 							{itemInfo.brandKr}
@@ -333,12 +333,12 @@ export default function ItemDetail() {
 										font-size="0.875rem"
 										margin="0 0 0.25rem 0"
 									>
-										{itemInfo.nickName}{' '}
+										{itemInfo.nickName}
 									</SubText>
 								)}
 
 								<SubText font-weight="600" font-size="0.875rem">
-									@sluvv
+									{itemInfo.id}
 								</SubText>
 							</UserTextWrap>
 						</Left>
@@ -562,6 +562,9 @@ const Image = styled.div`
 	background-color: pink;
 	width: 23.4375rem;
 	height: 23.4375rem;
+	background-image: url(${props => props.src});
+	background-size: cover;
+	background-position: 50%;
 	/* background-image: url(${props => props.src}); */
 `;
 const ImageContainer = styled.div`
@@ -678,6 +681,7 @@ const MyUploadWrap = styled.div`
 		padding: 0 1.25rem;
 		display: flex;
 		justify-content: space-between;
+		margin-top: 1.25rem;
 		margin-bottom: 0.875rem;
 	}
 	.contentWrap {

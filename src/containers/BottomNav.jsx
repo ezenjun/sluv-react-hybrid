@@ -70,7 +70,7 @@ export default function BottomNav() {
 		setIconSearch(false);
 		setIconBinder(false);
 		setIconMy(true);
-	}
+	};
 
 	return (
 		<BottomNavWrap openStatus={bottomNavStatus}>
