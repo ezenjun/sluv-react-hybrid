@@ -55,8 +55,8 @@ export const CelebsLuvItem = ({ celeb }) => {
 		setSelectedMemeberIdx(memberIdx);
 		setSelectedChip(idx);
 		if (!latestList[idx]) {
-			getEachMemberLatestList(memberIdx);
-			console.log('filter 1, latest', latestList);
+			getEachMemberLatestList(idx, memberIdx);
+			console.log('latest', latestList);
 		} else {
 			console.log('latestList[idx] 존재');
 			if (selectedFilter === 1) {
@@ -66,8 +66,8 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 		if (!hotList[idx]) {
-			getEachMemberHotList(memberIdx);
-			console.log('filter 2, hot', hotList);
+			getEachMemberHotList(idx, memberIdx);
+			console.log(' hot', hotList);
 		} else {
 			console.log('hotList[idx] 존재');
 			if (selectedFilter === 1) {
@@ -109,14 +109,15 @@ export const CelebsLuvItem = ({ celeb }) => {
 		console.log('hot result: ', data.result);
 	};
 
-	const getEachMemberLatestList = async idx => {
+	const getEachMemberLatestList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${idx}&order=latest&page=1&pageSize=4`
+			`/homes/items?memberIdx=${memberidx}&order=latest&page=1&pageSize=4`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setCurrentList([]);
 			return;
 		}
 		let temp = latestList;
@@ -127,14 +128,15 @@ export const CelebsLuvItem = ({ celeb }) => {
 			setCurrentList(data.result);
 		}
 	};
-	const getEachMemberHotList = async idx => {
+	const getEachMemberHotList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${idx}&order=hot&page=1&pageSize=4`
+			`/homes/items?memberIdx=${memberidx}&order=hot&page=1&pageSize=4`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setCurrentList([]);
 			return;
 		}
 		let temp = hotList;
@@ -194,58 +196,70 @@ export const CelebsLuvItem = ({ celeb }) => {
 				})}
 			</FilterWrap>
 			<ItemWrap>
-				{CurrentList && (
+				{CurrentList ? (
 					<>
-						{CurrentList.map(item => (
-							<Item
-								key={item.itemIdx}
-								onClick={() => onDetailItemClick(item.itemIdx)}
-							>
-								<Image>
-									<ImageText>
+						{CurrentList.length > 0 ? (
+							<>
+								{CurrentList.map(item => (
+									<Item
+										key={item.itemIdx}
+										onClick={() => onDetailItemClick(item.itemIdx)}
+									>
+										<Image src={item.itemImgUrl}>
+											<ImageText>
+												<SubText
+													fontsize="0.8125rem"
+													fontweight="bold"
+													color="white"
+												>
+													{item.name}'s
+												</SubText>
+												{item.isDib === 'Y' ? (
+													<BinderRed
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '50',
+														}}
+													/>
+												) : (
+													<BinderWhite
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '50',
+														}}
+													/>
+												)}
+											</ImageText>
+										</Image>
 										<SubText
-											fontsize="0.8125rem"
+											fontsize="16px"
 											fontweight="bold"
-											color="white"
+											margin="0 0 0.375rem 0 "
 										>
-											{item.name}'s
+											{item.brandKr}
 										</SubText>
-										{item.isDib === 'Y' ? (
-											<BinderRed
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-													zIndex: '50',
-												}}
-											/>
-										) : (
-											<BinderWhite
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-													zIndex: '50',
-												}}
-											/>
-										)}
-									</ImageText>
-								</Image>
-								<SubText fontsize="16px" fontweight="bold" margin="0 0 0.375rem 0 ">
-									{item.brandKr}
-								</SubText>
-								<SubText
-									color="#262626"
-									style={{
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap',
-										overflow: 'hidden',
-										width: '100%',
-									}}
-								>
-									{item.itemName}
-								</SubText>
-							</Item>
-						))}
+										<SubText
+											color="#262626"
+											style={{
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+												width: '100%',
+											}}
+										>
+											{item.itemName}
+										</SubText>
+									</Item>
+								))}
+							</>
+						) : (
+							<>아이템이 존재하지 않습니다</>
+						)}
 					</>
+				) : (
+					<>아이템이 존재하지 않습니다</>
 				)}
 			</ItemWrap>
 		</ItemContainer>
@@ -313,16 +327,17 @@ const Image = styled.div`
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
-	background-color: white;
+	background-color: grey;
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
 			rgba(60, 60, 60, 0.77) 0%,
 			rgba(0, 0, 0, 0) 34%
 		),
-		url(${img});
+		url(${props => props.src});
 	background-repeat: no-repeat;
-	background-size: contain;
+	background-size: cover;
+	background-position: 50%;
 	margin-bottom: 1rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
