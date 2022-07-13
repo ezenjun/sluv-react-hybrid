@@ -14,7 +14,7 @@ export function BottomSlideMenu({ menu, children, filters }) {
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv>
+			<BottomDialogDiv openStatus={bottomMenuStatusState}>
 				<CloseWrap>
 					{menu ? (
 						<div
@@ -52,7 +52,9 @@ export function BottomSlideMenu({ menu, children, filters }) {
 }
 
 export const BottomDialogWrap = styled.div`
-	display: ${props => (props.openStatus ? 'block' : 'none')};
+	/* display: ${props => (props.openStatus ? 'block' : 'none')}; */
+	visibility: ${props => (props.openStatus ? 'visible' : 'hidden')};
+	transition: bottom 300ms ease-in-out;
 	z-index: 10000;
 	position: absolute;
 	top: 0;
@@ -63,9 +65,15 @@ export const BottomDialogWrap = styled.div`
 `;
 
 export const BottomDialogDiv = styled.div`
-	position: absolute;
-	bottom: 0;
+	position: fixed;
+	left: 0;
+	right: 0;
 	display: flex;
+	bottom: ${props => (props.openStatus ? '0rem' : '-8rem')};
+	visibility: ${props => (props.openStatus ? 'visible' : 'hidden')};
+	opacity: ${props => (props.openStatus ? '1' : '0')};
+	transition: bottom 400ms ease-in-out;
+
 	flex-direction: column;
 	background-color: white;
 	text-align: center;
@@ -77,7 +85,7 @@ export const BottomDialogDiv = styled.div`
 	min-height: 8rem;
 	border-radius: 1rem 1rem 0 0;
 	padding: 1.25rem 0 1.25rem 0;
-	box-sizing: border-box;
+	/* box-sizing: border-box; */
 `;
 export const CloseWrap = styled.div`
 	display: flex;
