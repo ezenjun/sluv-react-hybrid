@@ -1,3 +1,4 @@
+import { TemporaryCredentials } from 'aws-sdk';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -22,10 +23,26 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	const [selectedMemberNum, setSelectedMemberNum] = useState(0);
 	const [checkStatusList, setCheckStatusList] = useState([]);
 	const [selectedMemberIdxArray, setSelectedMemberIdxArray] = useState([]);
+	const [isGroupIdxList, setIsGroupIdxList] = useState([]);
 
 	useEffect(() => {
-		console.log(data[currentMemberPage].memberList);
+		console.log('넘겨받은 셀럽 리스트 : ', postIdxArray);
+		console.log('넘겨받은 데이터', data);
+
+		
+		postIdxArray.map((celeb, index) => {
+			data.map((group, idx) => {
+				if(group.celebIdx === celeb.celebIdx) {
+					let temp = [];
+					temp = isGroupIdxList;
+					temp.push(index);
+					setIsGroupIdxList([...temp]);
+				}
+			})
+		})
 	}, []);
+
+	console.log(isGroupIdxList);
 
 	useEffect(() => {
 		let temp;
@@ -51,19 +68,28 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	};
 
 	const onHandleNextButton = () => {
-		if (currentMemberPage === data.length - 1) {
-			// API 호출 완료 후
-			onPostFavoriteCelebs();
-			return;
-		}
-
 		if (selectedMemberNum) {
 			let temp = [];
 			temp = postIdxArray;
-			temp[currentMemberPage].memberList = selectedMemberIdxArray;
+
+			let idx = isGroupIdxList[currentMemberPage]
+			console.log('인덱스', idx);
+			
+
+
+			temp[idx].memberList = selectedMemberIdxArray;
+
+
+
 			setPostIdxArray(temp);
 
-			setCurrentMemberPage(currentMemberPage + 1);
+			console.log('멤버선택테스트', temp);
+
+			if (currentMemberPage === data.length - 1) {
+				onPostFavoriteCelebs();
+			} else {
+				setCurrentMemberPage(currentMemberPage + 1);
+			}
 		} 
 	};
 
