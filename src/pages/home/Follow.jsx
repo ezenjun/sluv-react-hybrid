@@ -1,12 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
-import ScrollToTop from 'react-scroll-to-top';
-import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import { LargeViewWrap } from '../../components/LargeViewWrap/LargeViewWrap';
 import { LargeViewItem } from '../../components/LargeViewWrap/LargeViewItem';
 import { LargeViewImage } from '../../components/LargeViewWrap/LargeViewImage';
 import { ImageText } from '../../components/ImageText';
+import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
+
+import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
@@ -15,12 +18,143 @@ import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { useEffect } from 'react';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
-export default function Follow(props) {
-	const [followExist, setFollowExist] = useState(false);
+export default function Follow() {
+	const navigate = useNavigate();
 	const [followItemList, setFollowItemList] = useState([]);
 	const [sameFollowSluverList, setSameFollowSluverList] = useState([]);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const [binderList, setBinderList] = useState([]);
+	const onClickUserProfile = idx => {
+		console.log('유저 클리리리리');
+		navigate(`/users/${idx}`);
+	};
+
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+	const [openState, setOpenState] = useState(false);
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+	};
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
+	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
+	const onAddBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemIdx);
+		console.log(itemIdx);
+		console.log('selectedItemIdx', selectedItemIdx);
+		// setBottomMenuStatusState(true);
+	};
+	const getOpenStatus = input => {
+		setOpenState(input);
+	};
+	// console.log('셀렉트아이템인덱스', selectedItemIdx);
+	const onSelectBinder = binderIdx => {
+		console.log('셀렉트 바인더', selectedItemIdx);
+
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
+			}
+		}
+	};
+	const onDeleteBinderClick = (itemIdx, e) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			if (followItemList[i]) {
+				if (followItemList[i].itemIdx === selectedItemIdx) {
+					tempLatest[i] = !tempLatest[i];
+					setLatestIsBinderList([...tempLatest]);
+					console.log('clicked');
+				}
+			}
+		}
+		setOpenState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			if (followItemList[i]) {
+				if (followItemList[i].itemIdx === itemIdx) {
+					tempLatest[i] = !tempLatest[i];
+					setLatestIsBinderList([...tempLatest]);
+					console.log('clicked');
+				}
+			}
+		}
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+
 	const getFollowItemList = async () => {
 		const data = await customApiClient('get', `/homes/items/followers?page=1&pageSize=6`);
 		if (!data) return;
@@ -31,6 +165,15 @@ export default function Follow(props) {
 		let temp = data.result;
 		setFollowItemList([...temp]);
 		console.log('setFollwItemList', data.result);
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setLatestIsBinderList([...tmp]);
 	};
 	const getSameFollowSluverList = async () => {
 		const data = await customApiClient('get', `/homes/similar-users`);
@@ -43,7 +186,8 @@ export default function Follow(props) {
 		setSameFollowSluverList([...temp]);
 		console.log('getSameFollowSluverList', data.result);
 	};
-	const onFollow = userIdx => {
+	const onFollow = (e, userIdx) => {
+		e.stopPropagation();
 		FollowUser(userIdx);
 		let tempList = sameFollowSluverList;
 		console.log('팔로우 클릭');
@@ -60,7 +204,8 @@ export default function Follow(props) {
 			}
 		}
 	};
-	const onUnFollow = userIdx => {
+	const onUnFollow = (e, userIdx) => {
+		e.stopPropagation();
 		UnFollowUser(userIdx);
 		let tempList = sameFollowSluverList;
 		console.log('언팔 클릭');
@@ -95,7 +240,7 @@ export default function Follow(props) {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUse++r', data.message);
+		console.log('UnFollowUser', data.message);
 	};
 	useEffect(() => {
 		getSameFollowSluverList();
@@ -107,10 +252,10 @@ export default function Follow(props) {
 			{followItemList.length > 0 ? (
 				<>
 					<LargeViewWrap padding="0 20px 40px 20px">
-						{followItemList.map(item => (
+						{followItemList.map((item, index) => (
 							<div key={item.itemIdx}>
 								<LargeViewItem>
-									<LargeViewImage>
+									<LargeViewImage src={item.itemImgUrl}>
 										<ImageText>
 											<SubText
 												fontsize="0.8125rem"
@@ -119,9 +264,33 @@ export default function Follow(props) {
 											>
 												{item.name}'s
 											</SubText>
-											<BinderWhite
-												style={{ width: '1.5rem', height: '1.5rem' }}
-											/>
+											{latestIsBinderList && (
+												<>
+													{latestIsBinderList[index] === true ? (
+														<BinderRed
+															onClick={e =>
+																onDeleteBinderClick(item.itemIdx, e)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																zIndex: '900',
+															}}
+														/>
+													) : (
+														<BinderWhite
+															onClick={e =>
+																onAddBinderClick(e, item.itemIdx)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																zIndex: '900',
+															}}
+														/>
+													)}
+												</>
+											)}
 										</ImageText>
 									</LargeViewImage>
 									<ItemTextWrap>
@@ -147,11 +316,14 @@ export default function Follow(props) {
 						<UserWrap>
 							{sameFollowSluverList &&
 								sameFollowSluverList.map(sluver => (
-									<User>
+									<User
+										onClick={() => onClickUserProfile(sluver.userIdx)}
+										key={sluver.userIdx}
+									>
 										<ProfileImg
 											size="62px"
 											marginright="0"
-											src={sluver.profilImgUrl}
+											src={sluver.profileImgUrl}
 										></ProfileImg>
 										<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 											{sluver.nickName}
@@ -160,14 +332,14 @@ export default function Follow(props) {
 										{sluver.isFollow === 'Y' ? (
 											<FollowButton
 												follow={sluver.isFollow === 'Y'}
-												onClick={() => onUnFollow(sluver.userIdx)}
+												onClick={e => onUnFollow(e, sluver.userIdx)}
 											>
 												팔로잉
 											</FollowButton>
 										) : (
 											<FollowButton
 												follow={sluver.isFollow === 'Y'}
-												onClick={() => onFollow(sluver.userIdx)}
+												onClick={e => onFollow(e, sluver.userIdx)}
 											>
 												팔로우
 											</FollowButton>
@@ -198,7 +370,10 @@ export default function Follow(props) {
 						{sameFollowSluverList ? (
 							<>
 								{sameFollowSluverList.map(sluver => (
-									<RecommendUser key={sluver.userIdx}>
+									<RecommendUser
+										key={sluver.userIdx}
+										onClick={() => onClickUserProfile(sluver.userIdx)}
+									>
 										<UserTop>
 											<UserInfo>
 												<UserImage src={sluver.profileImgUrl}></UserImage>
@@ -257,6 +432,28 @@ export default function Follow(props) {
 					</RecommendFollow>
 				</>
 			)}
+			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
+				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+					<ImageWrap>
+						<PlusButton></PlusButton>
+					</ImageWrap>
+					<SubText fontsize="1rem" margin="0.9375rem 0">
+						바인더 만들기
+					</SubText>
+				</RowWrap>
+				<HorizontalLine></HorizontalLine>
+				{binderList.map(binder => (
+					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							&nbsp;({binder.dibCount})
+						</SubText>
+					</RowWrap>
+				))}
+			</BottomSlideMenu>
 		</FeedContainer>
 	);
 }
@@ -415,4 +612,23 @@ const TextWrap = styled.div`
 	align-items: flex-end;
 	margin-bottom: ${props => props.marginbottom || '20px'};
 	padding: ${props => props.padding};
+`;
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;

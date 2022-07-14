@@ -8,7 +8,6 @@ import { customApiClient } from '../../utils/apiClient';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
-import { ContentWrap } from '../../components/containers/ContentWrap';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { SubText } from '../../components/Texts/SubText';
@@ -25,11 +24,20 @@ import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { ImageText } from '../../components/ImageText';
 
+import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
+
+import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as NoItem } from '../../assets/Icons/noItemIcon.svg';
 import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.svg';
 import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function CelebDetail() {
 	let { celebIdx } = useParams();
@@ -38,12 +46,13 @@ export default function CelebDetail() {
 	const [latestList, setLatestList] = useState([]);
 	const [hotList, setHotList] = useState([]);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(false);
-	}, []);
-
-	useEffect(() => {
 		getTotalLatestList();
 		getTotalHotList();
 	}, []);
@@ -78,7 +87,7 @@ export default function CelebDetail() {
 		setSelectedMemeberIdx(memberIdx);
 		setSelectedChip(idx);
 		if (!latestList[idx]) {
-			getEachMemberLatestList(memberIdx);
+			getEachMemberLatestList(idx, memberIdx);
 			console.log('filter 1, latest', latestList);
 		} else {
 			console.log('latestList[idx] 존재');
@@ -89,7 +98,7 @@ export default function CelebDetail() {
 			}
 		}
 		if (!hotList[idx]) {
-			getEachMemberHotList(memberIdx);
+			getEachMemberHotList(idx, memberIdx);
 			console.log('filter 2, hot', hotList);
 		} else {
 			console.log('hotList[idx] 존재');
@@ -108,6 +117,154 @@ export default function CelebDetail() {
 	const backClick = () => {
 		navigate(-1);
 	};
+
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+	const [openState, setOpenState] = useState(false);
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+	};
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
+	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
+	const [hotIsBinderList, setHotIsBinderList] = useState([]);
+
+	const onAddBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemIdx);
+		console.log(itemIdx);
+		console.log('selectedItemIdx', selectedItemIdx);
+		// setBottomMenuStatusState(true);
+	};
+	const getOpenStatus = input => {
+		setOpenState(input);
+	};
+	// console.log('셀렉트아이템인덱스', selectedItemIdx);
+	const onSelectBinder = binderIdx => {
+		console.log('셀렉트 바인더', selectedItemIdx);
+
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
+			}
+		}
+	};
+	const onDeleteBinderClick = (itemIdx, e) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			for (var j = 0; j < latestIsBinderList[i].length; j++) {
+				if (latestList[i]) {
+					if (latestList[i][j].itemIdx === selectedItemIdx) {
+						tempLatest[i][j] = !tempLatest[i][j];
+						setLatestIsBinderList([...tempLatest]);
+						console.log('clicked');
+					}
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+		let tempHot = hotIsBinderList;
+		for (var k = 0; k < hotIsBinderList.length; k++) {
+			for (var l = 0; l < hotIsBinderList[k].length; l++) {
+				if (hotList[k]) {
+					if (hotList[k][l].itemIdx === selectedItemIdx) {
+						tempHot[k][l] = !tempHot[k][l];
+						setHotIsBinderList([...tempHot]);
+					}
+				}
+			}
+		}
+		console.log('tempHot', tempHot);
+		setOpenState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			for (var j = 0; j < latestIsBinderList[i].length; j++) {
+				if (latestList[i]) {
+					if (latestList[i][j].itemIdx === itemIdx) {
+						tempLatest[i][j] = !tempLatest[i][j];
+						setLatestIsBinderList([...tempLatest]);
+						console.log('clicked');
+					}
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+		let tempHot = hotIsBinderList;
+		for (var k = 0; k < hotIsBinderList.length; k++) {
+			for (var l = 0; l < hotIsBinderList[k].length; l++) {
+				if (hotList[k]) {
+					if (hotList[k][l].itemIdx === itemIdx) {
+						tempHot[k][l] = !tempHot[k][l];
+						setHotIsBinderList([...tempHot]);
+					}
+				}
+			}
+		}
+		console.log('tempHot', tempHot);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+
 	const [CurrentList, setCurrentList] = useState([]);
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
@@ -122,6 +279,15 @@ export default function CelebDetail() {
 		setLatestList([...latestList, data.result]);
 		setCurrentList(data.result);
 		console.log('latest result: ', data.result);
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setLatestIsBinderList([...latestIsBinderList, tmp]);
 	};
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
@@ -135,16 +301,27 @@ export default function CelebDetail() {
 		}
 		setHotList([...hotList, data.result]);
 		console.log('hot result: ', data.result);
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+
+		setHotIsBinderList([...hotIsBinderList, tmp]);
 	};
 
-	const getEachMemberLatestList = async idx => {
+	const getEachMemberLatestList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${idx}&order=latest&page=1&pageSize=15`
+			`/homes/items?memberIdx=${memberidx}&order=latest&page=1&pageSize=6`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setCurrentList([]);
 			return;
 		}
 		let temp = latestList;
@@ -154,15 +331,27 @@ export default function CelebDetail() {
 		if (selectedFilter === 1) {
 			setCurrentList(data.result);
 		}
+		var binderList = latestIsBinderList;
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		binderList[idx] = tmp;
+		setLatestIsBinderList([...binderList]);
 	};
-	const getEachMemberHotList = async idx => {
+	const getEachMemberHotList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${idx}&order=hot&page=1&pageSize=15`
+			`/homes/items?memberIdx=${memberidx}&order=hot&page=1&pageSize=6`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setCurrentList([]);
 			return;
 		}
 		let temp = hotList;
@@ -173,7 +362,19 @@ export default function CelebDetail() {
 		if (selectedFilter === 2) {
 			setCurrentList(data.result);
 		}
+		var binderList = hotIsBinderList;
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		binderList[idx] = tmp;
+		setHotIsBinderList([...binderList]);
 	};
+	console.log('location.state', location.state);
 
 	return (
 		<MainContainer padding="0">
@@ -185,29 +386,27 @@ export default function CelebDetail() {
 			</TopNav>
 			<FeedContainer>
 				{/* /그룹인 경우 Chip 보여줌 / 개인일 경우 Chip없음 */}
-				{location.state.memberList.length > 0 ? (
-					<>
-						<ChipWrap>
-							<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
-								{location.state.name}
-							</Chip>
-							{location.state.memberList.map((member, idx) => {
-								return (
-									<Chip
-										key={member.idx}
-										onClick={() => onChipClick(idx + 1, member.memberIdx)}
-										selected={selectedChip === idx + 1}
-									>
-										{member.name}
-									</Chip>
-								);
-							})}
-						</ChipWrap>
-						<HorizontalLine />
-					</>
-				) : (
-					<></>
-				)}
+				{/* {location.state.memberList.length > 0 && ( */}
+				<>
+					<ChipWrap>
+						<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
+							{location.state.name}
+						</Chip>
+						{location.state.memberList.map((member, idx) => {
+							return (
+								<Chip
+									key={member.idx}
+									onClick={() => onChipClick(idx + 1, member.memberIdx)}
+									selected={selectedChip === idx + 1}
+								>
+									{member.name}
+								</Chip>
+							);
+						})}
+					</ChipWrap>
+					<HorizontalLine />
+				</>
+				{/*} )}*/}
 				{CurrentList.length > 0 && (
 					<FilterWrap>
 						<Filter>
@@ -260,7 +459,7 @@ export default function CelebDetail() {
 								<LargeViewWrap>
 									{CurrentList && (
 										<>
-											{CurrentList.map(item => (
+											{CurrentList.map((item, index) => (
 												<div key={item.itemIdx}>
 													<LargeViewItem>
 														<LargeViewImage src={item.itemImgUrl}>
@@ -272,12 +471,88 @@ export default function CelebDetail() {
 																>
 																	{item.name}'s
 																</SubText>
-																<BinderWhite
-																	style={{
-																		width: '1.5rem',
-																		height: '1.5rem',
-																	}}
-																/>
+																{selectedFilter === 1 ? (
+																	<>
+																		{latestIsBinderList[
+																			selectedChip
+																		] && (
+																			<>
+																				{latestIsBinderList[
+																					selectedChip
+																				][index] ===
+																				true ? (
+																					<BinderRed
+																						onClick={e =>
+																							onDeleteBinderClick(
+																								item.itemIdx,
+																								e
+																							)
+																						}
+																						style={{
+																							width: '1.5rem',
+																							height: '1.5rem',
+																							zIndex: '900',
+																						}}
+																					/>
+																				) : (
+																					<BinderWhite
+																						onClick={e =>
+																							onAddBinderClick(
+																								e,
+																								item.itemIdx
+																							)
+																						}
+																						style={{
+																							width: '1.5rem',
+																							height: '1.5rem',
+																							zIndex: '900',
+																						}}
+																					/>
+																				)}
+																			</>
+																		)}
+																	</>
+																) : (
+																	<>
+																		{hotIsBinderList[
+																			selectedChip
+																		] && (
+																			<>
+																				{hotIsBinderList[
+																					selectedChip
+																				][index] ? (
+																					<BinderRed
+																						onClick={e =>
+																							onDeleteBinderClick(
+																								item.itemIdx,
+																								e
+																							)
+																						}
+																						style={{
+																							width: '1.5rem',
+																							height: '1.5rem',
+																							zIndex: '150',
+																						}}
+																					/>
+																				) : (
+																					<BinderWhite
+																						onClick={e =>
+																							onAddBinderClick(
+																								item.itemIdx,
+																								e
+																							)
+																						}
+																						style={{
+																							width: '1.5rem',
+																							height: '1.5rem',
+																							zIndex: '150',
+																						}}
+																					/>
+																				)}
+																			</>
+																		)}
+																	</>
+																)}
 															</ImageText>
 														</LargeViewImage>
 														<ItemTextWrap>
@@ -290,7 +565,9 @@ export default function CelebDetail() {
 															</SubText>
 														</ItemTextWrap>
 														<SubInfoWrap>
-															<ProfileImg></ProfileImg>
+															<ProfileImg
+																src={item.profileImgUrl}
+															></ProfileImg>
 															<SubText margin="0 ">
 																{' '}
 																{item.publisher}
@@ -312,9 +589,9 @@ export default function CelebDetail() {
 						) : (
 							<>
 								<GridItemWrap>
-									{CurrentList.map(item => (
+									{CurrentList.map((item, index) => (
 										<GridItem key={item.itemIdx}>
-											<GridImage>
+											<GridImage src={item.itemImgUrl}>
 												<ImageText>
 													<SubText
 														fontsize="0.8125rem"
@@ -323,12 +600,83 @@ export default function CelebDetail() {
 													>
 														{item.name}'s
 													</SubText>
-													<BinderWhite
-														style={{
-															width: '1.375rem',
-															height: '1.375rem',
-														}}
-													/>
+													{selectedFilter === 1 ? (
+														<>
+															{latestIsBinderList[selectedChip] && (
+																<>
+																	{latestIsBinderList[
+																		selectedChip
+																	][index] === true ? (
+																		<BinderRed
+																			onClick={e =>
+																				onDeleteBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '900',
+																			}}
+																		/>
+																	) : (
+																		<BinderWhite
+																			onClick={e =>
+																				onAddBinderClick(
+																					e,
+																					item.itemIdx
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '900',
+																			}}
+																		/>
+																	)}
+																</>
+															)}
+														</>
+													) : (
+														<>
+															{hotIsBinderList[selectedChip] && (
+																<>
+																	{hotIsBinderList[selectedChip][
+																		index
+																	] ? (
+																		<BinderRed
+																			onClick={e =>
+																				onDeleteBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '150',
+																			}}
+																		/>
+																	) : (
+																		<BinderWhite
+																			onClick={e =>
+																				onAddBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '150',
+																			}}
+																		/>
+																	)}
+																</>
+															)}
+														</>
+													)}
 												</ImageText>
 											</GridImage>
 											<SubText
@@ -372,6 +720,28 @@ export default function CelebDetail() {
 					</ItemContainer>
 				)}
 			</FeedContainer>
+			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
+				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+					<ImageWrap>
+						<PlusButton></PlusButton>
+					</ImageWrap>
+					<SubText fontsize="1rem" margin="0.9375rem 0">
+						바인더 만들기
+					</SubText>
+				</RowWrap>
+				<HorizontalLine></HorizontalLine>
+				{binderList.map(binder => (
+					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							&nbsp;({binder.dibCount})
+						</SubText>
+					</RowWrap>
+				))}
+			</BottomSlideMenu>
 		</MainContainer>
 	);
 }
@@ -387,6 +757,9 @@ const FeedContainer = styled.div`
 const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
 `;
 const FilterWrap = styled.div`
 	display: flex;
@@ -418,7 +791,10 @@ const ProfileImg = styled.div`
 	width: 1.375rem;
 	height: 1.375rem;
 	border-radius: 50%;
-	background-color: darkturquoise;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	background-image: url(${props => props.src});
 	margin-right: 0.5rem;
 `;
 const Dot = styled.div`
@@ -427,4 +803,24 @@ const Dot = styled.div`
 	border-radius: 50%;
 	background-color: #8d8d8d;
 	margin: 0 0.375rem;
+`;
+
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;

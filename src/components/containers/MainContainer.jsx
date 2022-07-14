@@ -11,4 +11,7 @@ export const MainContainer = styled.div`
 	padding: ${props => props.padding || '0'};
 	margin: ${props => props.margin || '0'};
 	overflow-y: scroll;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
 `;

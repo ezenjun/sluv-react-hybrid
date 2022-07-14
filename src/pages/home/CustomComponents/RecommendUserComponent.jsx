@@ -32,7 +32,8 @@ export function RecommendUserComponent() {
 		}
 	};
 
-	const onFollow = userIdx => {
+	const onFollow = (e, userIdx) => {
+		e.stopPropagation();
 		FollowUser(userIdx);
 		let tempList = userRecommendList;
 		console.log('팔로우 클릭');
@@ -54,7 +55,8 @@ export function RecommendUserComponent() {
 		setUserRecommendList([...tempList]);
 		// console.log(userRecommendList);
 	};
-	const onUnFollow = userIdx => {
+	const onUnFollow = (e, userIdx) => {
+		e.stopPropagation();
 		UnFollowUser(userIdx);
 		let tempList = userRecommendList;
 		console.log('언팔 클릭');
@@ -162,14 +164,14 @@ export function RecommendUserComponent() {
 								<SubText color="#8d8d8d">@{user.id}</SubText>
 								{user.isFollow === 'Y' ? (
 									<FollowButton
-										onClick={() => onUnFollow(user.userIdx)}
+										onClick={e => onUnFollow(e, user.userIdx)}
 										follow={user.isFollow === 'Y'}
 									>
 										팔로잉
 									</FollowButton>
 								) : (
 									<FollowButton
-										onClick={() => onFollow(user.userIdx)}
+										onClick={e => onFollow(e, user.userIdx)}
 										follow={user.isFollow === 'Y'}
 									>
 										팔로우
@@ -247,6 +249,7 @@ const FollowButton = styled.div`
 	font-size: 0.875rem;
 	font-weight: 600;
 	position: relative;
+	z-index: '900';
 `;
 const TextWrap = styled.div`
 	display: flex;
