@@ -47,7 +47,9 @@ export default function ItemDetail() {
 		setBottomMenuStatusState(false);
 		navigate('/report/user');
 	};
-
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+	};
 	const settings = {
 		dots: true,
 		infinite: true,
@@ -367,7 +369,10 @@ export default function ItemDetail() {
 							</div>
 							<div className="contentWrap">
 								{sameCelebItemList.map(item => (
-									<MyPageGridItem key={item.itemIdx}>
+									<MyPageGridItem
+										key={item.itemIdx}
+										onClick={() => onDetailItemClick(item.itemIdx)}
+									>
 										<GridImage>
 											<ImageText>
 												<SubText
@@ -416,7 +421,10 @@ export default function ItemDetail() {
 							</div>
 							<div className="contentWrap">
 								{otherUserDibItemList.map(item => (
-									<MyPageGridItem key={item.itemIdx}>
+									<MyPageGridItem
+										key={item.itemIdx}
+										onClick={() => onDetailItemClick(item.itemIdx)}
+									>
 										<GridImage>
 											<ImageText>
 												<SubText
@@ -465,7 +473,10 @@ export default function ItemDetail() {
 							</div>
 							<div className="contentWrap">
 								{sameBrandItemList.map(item => (
-									<MyPageGridItem key={item.itemIdx}>
+									<MyPageGridItem
+										key={item.itemIdx}
+										onClick={() => onDetailItemClick(item.itemIdx)}
+									>
 										<GridImage src={item.itemImgUrl}>
 											<ImageText>
 												<SubText

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { customApiClient } from '../../../utils/apiClient';
-
+import { ReactComponent as NoItem } from '../../../assets/Icons/noItemIcon.svg';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 import { VerticalLine } from '../../../components/Lines/VerticalLine';
@@ -57,6 +57,9 @@ export const HotItemComponent = () => {
 		console.log('weekly', weeklyList);
 		console.log(data.result);
 	};
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+	};
 	useEffect(() => {
 		getDailyHotList();
 		console.log(dailyList);
@@ -73,88 +76,116 @@ export const HotItemComponent = () => {
 				</MainText>
 				<RightArrow onClick={onHotClick}></RightArrow>
 			</TextWrap>
-			<FilterWrap>
-				{tabList.map(item => {
-					return (
-						<SubText
-							key={item.idx}
-							fontsize="0.875rem"
-							fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
-							margin="0 1rem 0 0 "
-							onClick={() => onFilterClick(item.idx)}
-							selected={selectedFilter === item.idx}
-							color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
-						>
-							{item.name}
-						</SubText>
-					);
-				})}
-			</FilterWrap>
-			<HotItemWrap>
-				{selectedFilter === 1 ? ( // 인기순
-					<>
-						{dailyList ? (
+			{dailyList.length > 0 && weeklyList.length > 0 ? (
+				<>
+					<FilterWrap>
+						{tabList.map(item => {
+							return (
+								<SubText
+									key={item.idx}
+									fontsize="0.875rem"
+									fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
+									margin="0 1rem 0 0 "
+									onClick={() => onFilterClick(item.idx)}
+									selected={selectedFilter === item.idx}
+									color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
+								>
+									{item.name}
+								</SubText>
+							);
+						})}
+					</FilterWrap>
+					<HotItemWrap>
+						{selectedFilter === 1 ? ( // 인기순
 							<>
-								{dailyList.map(hotitem => (
-									<HotItem key={hotitem.itemidx} src={hotitem.itemImgUrl}>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="#6de98d"
-										>
-											{hotitem.name}'s
-										</SubText>
-										<SubText
-											fontsize="13px"
-											fontweight="bold"
-											color="white"
-											margin="0.5rem 0 0 0 "
-										>
-											{hotitem.brandKr}
-										</SubText>
-										<SubText fontsize="12px" color="white">
-											{hotitem.itemName}
-										</SubText>
-									</HotItem>
-								))}
+								{dailyList ? (
+									<>
+										{dailyList.map(hotitem => (
+											<HotItem
+												key={hotitem.itemIdx}
+												src={hotitem.itemImgUrl}
+												onClick={() => onDetailItemClick(hotitem.itemIdx)}
+											>
+												<SubText
+													fontsize="0.8125rem"
+													fontweight="bold"
+													color="#6de98d"
+												>
+													{hotitem.name}'s
+												</SubText>
+												<SubText
+													fontsize="13px"
+													fontweight="bold"
+													color="white"
+													margin="0.5rem 0 0 0 "
+												>
+													{hotitem.brandKr}
+												</SubText>
+												<SubText fontsize="12px" color="white">
+													{hotitem.itemName}
+												</SubText>
+											</HotItem>
+										))}
+									</>
+								) : (
+									<></>
+								)}
 							</>
 						) : (
-							<></>
-						)}
-					</>
-				) : (
-					<>
-						{weeklyList ? (
 							<>
-								{weeklyList.map(hotitem => (
-									<HotItem key={hotitem.itemidx} src={hotitem.itemImgUrl}>
-										<SubText
-											fontsize="0.8125rem"
-											fontweight="bold"
-											color="#6de98d"
-										>
-											{hotitem.name}'s
-										</SubText>
-										<SubText
-											fontsize="13px"
-											fontweight="bold"
-											color="white"
-											margin="0.5rem 0 0 0 "
-										>
-											{hotitem.brandKr}
-										</SubText>
-										<SubText fontsize="12px" color="white">
-											{hotitem.itemName}
-										</SubText>
-									</HotItem>
-								))}
+								{weeklyList ? (
+									<>
+										{weeklyList.map(hotitem => (
+											<HotItem
+												key={hotitem.itemIdx}
+												src={hotitem.itemImgUrl}
+												onClick={() => onDetailItemClick(hotitem.itemIdx)}
+											>
+												<SubText
+													fontsize="0.8125rem"
+													fontweight="bold"
+													color="#6de98d"
+												>
+													{hotitem.name}'s
+												</SubText>
+												<SubText
+													fontsize="13px"
+													fontweight="bold"
+													color="white"
+													margin="0.5rem 0 0 0 "
+												>
+													{hotitem.brandKr}
+												</SubText>
+												<SubText fontsize="12px" color="white">
+													{hotitem.itemName}
+												</SubText>
+											</HotItem>
+										))}
+									</>
+								) : (
+									<></>
+								)}
 							</>
-						) : (
-							<></>
 						)}
-					</>
-				)}
-			</HotItemWrap>
+					</HotItemWrap>
+				</>
+			) : (
+				<ItemContainer
+					style={{
+						display: 'flex',
+						alignContent: 'center',
+						justifyContent: 'center',
+						alignItems: 'center',
+						paddingBottom: '2.5rem',
+						width: '100%',
+					}}
+				>
+					<NoItem></NoItem>
+					<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
+						아직 아이템이 존재하지 않아요
+					</SubText>
+				</ItemContainer>
+			)}
 		</ItemContainer>
 	);
 };

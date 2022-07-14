@@ -148,7 +148,11 @@ export default function Follow(props) {
 							{sameFollowSluverList &&
 								sameFollowSluverList.map(sluver => (
 									<User>
-										<ProfileImg size="62px" marginright="0"></ProfileImg>
+										<ProfileImg
+											size="62px"
+											marginright="0"
+											src={sluver.profilImgUrl}
+										></ProfileImg>
 										<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 											{sluver.nickName}
 										</SubText>
@@ -277,7 +281,10 @@ const ProfileImg = styled.div`
 	/* width: 1.375rem;
 	height: 1.375rem; */
 	border-radius: 50%;
-	background-color: darkturquoise;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	background-image: url(${props => props.src});
 	margin-right: ${props => props.marginright || '0.5rem'}; ;
 `;
 const Dot = styled.div`
@@ -320,6 +327,9 @@ const UserInfo = styled.div`
 	align-items: center;
 `;
 const UserImage = styled.div`
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
 	background-image: url(${props => props.src});
 	width: 2.25rem;
 	height: 2.25rem;
@@ -330,7 +340,6 @@ const UserInfoText = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
-const NickName = styled.div``;
 
 const UserBottom = styled.div`
 	overflow-x: scroll;

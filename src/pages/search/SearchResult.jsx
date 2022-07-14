@@ -198,64 +198,64 @@ export default function SearchResult() {
 					)}
 				</InputWrap>
 			</div>
-			{searchResultList.length > 0 && (
-				<FilterContainer>
-					{isSelected ? (
-						<Refresh
-							onClick={() => childFunc.current()}
-							style={{
-								width: '32px',
-								height: '32px',
-								marginRight: '0.5rem',
-								flexShrink: 0,
-							}}
-						></Refresh>
-					) : (
-						<></>
-					)}
-					<Filter onClick={() => onFilterClick(1)} selected={selectedItemFilter}>
-						{selectedItemFilter ? selectedItemFilter : '아이템 종류'}
+			{/* {searchResultList.length > 0 && ( */}
+			<FilterContainer>
+				{isSelected ? (
+					<Refresh
+						onClick={() => childFunc.current()}
+						style={{
+							width: '32px',
+							height: '32px',
+							marginRight: '0.5rem',
+							flexShrink: 0,
+						}}
+					></Refresh>
+				) : (
+					<></>
+				)}
+				<Filter onClick={() => onFilterClick(1)} selected={selectedItemFilter}>
+					{selectedItemFilter ? selectedItemFilter : '아이템 종류'}
 
-						<DownArrow
-							style={{
-								width: '1.125rem',
-								height: '1.125rem',
-								marginLeft: '0.125rem',
-							}}
-						></DownArrow>
-					</Filter>
-					<Filter onClick={() => onFilterClick(2)} selected={selectedPriceFilter}>
-						{selectedPriceFilter ? selectedPriceFilter : '가격대'}
-						<DownArrow
-							style={{
-								width: '1.125rem',
-								height: '1.125rem',
-								marginLeft: '0.125rem',
-							}}
-						></DownArrow>
-					</Filter>
-					<Filter onClick={() => onFilterClick(3)} selected={selectedAlignFilter}>
-						{selectedAlignFilter ? selectedAlignFilter : '정렬'}
-						<DownArrow
-							style={{
-								width: '1.125rem',
-								height: '1.125rem',
-								marginLeft: '0.125rem',
-							}}
-						></DownArrow>
-					</Filter>
-					<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
-						{selectedColorFilter ? selectedColorFilter : '색상'}
-						<DownArrow
-							style={{
-								width: '1.125rem',
-								height: '1.125rem',
-								marginLeft: '0.125rem',
-							}}
-						></DownArrow>
-					</Filter>
-				</FilterContainer>
-			)}
+					<DownArrow
+						style={{
+							width: '1.125rem',
+							height: '1.125rem',
+							marginLeft: '0.125rem',
+						}}
+					></DownArrow>
+				</Filter>
+				<Filter onClick={() => onFilterClick(2)} selected={selectedPriceFilter}>
+					{selectedPriceFilter ? selectedPriceFilter : '가격대'}
+					<DownArrow
+						style={{
+							width: '1.125rem',
+							height: '1.125rem',
+							marginLeft: '0.125rem',
+						}}
+					></DownArrow>
+				</Filter>
+				<Filter onClick={() => onFilterClick(3)} selected={selectedAlignFilter}>
+					{selectedAlignFilter ? selectedAlignFilter : '정렬'}
+					<DownArrow
+						style={{
+							width: '1.125rem',
+							height: '1.125rem',
+							marginLeft: '0.125rem',
+						}}
+					></DownArrow>
+				</Filter>
+				<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
+					{selectedColorFilter ? selectedColorFilter : '색상'}
+					<DownArrow
+						style={{
+							width: '1.125rem',
+							height: '1.125rem',
+							marginLeft: '0.125rem',
+						}}
+					></DownArrow>
+				</Filter>
+			</FilterContainer>
+			{/* )} */}
 
 			<FeedContainer>
 				{searchResultList.length > 0 ? (

@@ -385,7 +385,10 @@ const ProfileImg = styled.div`
 	width: 1.375rem;
 	height: 1.375rem;
 	border-radius: 50%;
-	background-color: darkturquoise;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	background-image: url(${props => props.src});
 	margin-right: 0.5rem;
 `;
 const Dot = styled.div`

@@ -25,7 +25,8 @@ export const CelebsLuvItem = ({ celeb }) => {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
-
+	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
+	const [hotIsBinderList, setHotIsBinderList] = useState([]);
 	const [CurrentList, setCurrentList] = useState([]);
 
 	const [selectedFilter, setSelectedFilter] = useState(1);
@@ -78,7 +79,22 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 	};
-
+	const onBinderClick = itemIdx => {
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			for (var j = 0; j < latestIsBinderList[i].length; j++) {
+				if (latestList[i][j].itemIdx === itemIdx) {
+					latestIsBinderList[i][j] = !latestIsBinderList[i][j];
+				}
+			}
+		}
+		for (var i = 0; i < hotIsBinderList.length; i++) {
+			for (var j = 0; j < hotIsBinderList[i].length; j++) {
+				if (hotList[i][j].itemIdx === itemIdx) {
+					hotIsBinderList[i][j] = !hotIsBinderList[i][j];
+				}
+			}
+		}
+	};
 	const [latestList, setLatestList] = useState([]);
 	const [hotList, setHotList] = useState([]);
 
@@ -95,6 +111,17 @@ export const CelebsLuvItem = ({ celeb }) => {
 		setLatestList([...latestList, data.result]);
 		setCurrentList(data.result);
 		console.log('latest result: ', data.result);
+		console.log(data.result[0].isDib === 'N');
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setLatestIsBinderList([...tmp]);
+		console.log('latest temp', tmp);
 	};
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
@@ -108,6 +135,17 @@ export const CelebsLuvItem = ({ celeb }) => {
 		}
 		setHotList([...hotList, data.result]);
 		console.log('hot result: ', data.result);
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+
+		setHotIsBinderList([...tmp]);
+		console.log('hot temp', tmp);
 	};
 
 	const getEachMemberLatestList = async (idx, memberidx) => {
@@ -121,13 +159,25 @@ export const CelebsLuvItem = ({ celeb }) => {
 			setCurrentList([]);
 			return;
 		}
-		let temp = latestList;
+		var temp = latestList;
 		temp[idx] = data.result;
 		setLatestList([...temp]);
 		console.log('latest each result: ', data.result);
 		if (selectedFilter === 1) {
 			setCurrentList(data.result);
 		}
+		var binderList = latestIsBinderList;
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		binderList[idx] = tmp;
+		setLatestIsBinderList([...binderList]);
+		console.log('hot temp', tmp);
 	};
 	const getEachMemberHotList = async (idx, memberidx) => {
 		const data = await customApiClient(
@@ -148,6 +198,18 @@ export const CelebsLuvItem = ({ celeb }) => {
 		if (selectedFilter === 2) {
 			setCurrentList(data.result);
 		}
+		var binderList = hotIsBinderList;
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		binderList[idx] = tmp;
+		setHotIsBinderList([...binderList]);
+		console.log('hot temp', tmp);
 	};
 	useEffect(() => {
 		getTotalLatestList();
