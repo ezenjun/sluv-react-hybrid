@@ -79,7 +79,7 @@ export default function My() {
 		<MainContainer>
 			{isAuthUser === -1 && <Loading />}
 			<TopNav>
-				{isAuthUser === 0 && (
+				{isAuthUser === 1 && (
 					<>
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							마이페이지
@@ -91,7 +91,7 @@ export default function My() {
 						/>
 					</>
 				)}
-				{isAuthUser === 1 && (
+				{isAuthUser === 0 && (
 					<>
 						<BackButton onClick={() => navigate(-1)} />
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
@@ -177,7 +177,7 @@ export default function My() {
 							))}
 						</CelebFadeDiv>
 
-						{isAuthUser === 1 && (
+						{isAuthUser === 0 && (
 							<PurpleButton
 								style={{ fontSize: '1rem', marginTop: '1rem' }}
 								disabled={isFollow}
@@ -189,8 +189,8 @@ export default function My() {
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser === 0 && (<MyPageContainer uploadInfo={uploadInfo} />) }
-				{isAuthUser === 1 && (<ProfileContainer uploadInfo={uploadInfo} />) }
+				{isAuthUser === 1 && (<MyPageContainer uploadInfo={uploadInfo} />) }
+				{isAuthUser === 0 && (<ProfileContainer uploadInfo={uploadInfo} />) }
 			</ContentWrap>
 
 			{/* 유저 신고하기 팝업  */}
