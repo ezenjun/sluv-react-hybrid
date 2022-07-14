@@ -232,6 +232,9 @@ const ProfileImg = styled.div`
 	width: 3.875rem;
 	height: 3.875rem;
 	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
 	background-image: url(${props => props.src});
 `;
 const FollowButton = styled.div`
@@ -243,6 +246,7 @@ const FollowButton = styled.div`
 	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
 	font-size: 0.875rem;
 	font-weight: 600;
+	position: relative;
 `;
 const TextWrap = styled.div`
 	display: flex;

@@ -50,6 +50,8 @@ export default function AddBinder() {
 
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
+	console.log(location);
+
 	useEffect(() => {
 		if (binderName && coverImgUrl && isConfirm) {
 			onPostBinder();
@@ -87,7 +89,7 @@ export default function AddBinder() {
 	const handleBinderName = e => {
 		const { value, maxLength } = e.target;
 		setBinderName(value.slice(0, maxLength));
-		const regex = /^.{1,20}$/; 
+		const regex = /^.{1,20}$/;
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
@@ -162,7 +164,9 @@ export default function AddBinder() {
 		} else {
 			// navigate('/binder');
 			const to = data.result.addedBinder;
-			if (location.state) {
+
+			if (location.state.fromBinderIdx) {
+				console.log('바인더 옮겨');
 				const body = { itemIdxList: location.state.selectedList };
 				const data = await customApiClient(
 					'patch',
@@ -186,10 +190,34 @@ export default function AddBinder() {
 					setTimeout(() => {
 						setToastMessageWrapStatus(false);
 					}, 2300);
-					navigate(-1);
+					// navigate(-1);
 				}
-			} else {
+			}
+			if (location.state.item) {
+				const body = {
+					itemIdx: location.state.item,
+					binderIdx: to,
+				};
+				const Uri = '/dibs';
+				const data = await customApiClient('post', Uri, body);
+				if (!data) return;
+				if (!data.isSuccess) {
+					console.log(data.message);
+					return;
+				}
+				setBottomMenuStatusState(false);
+				setToastMessageBottomPosition('3.875rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage(`아이템이 생성된 바인더로 이동했어요`);
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
 				navigate(-1);
+				console.log('홈에서 바인더 생성 후 아이템 추가');
 			}
 		}
 	};

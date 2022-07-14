@@ -4,17 +4,20 @@ import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { SubText } from '../Texts/SubText';
 
-export function BottomSlideMenu({ menu, children, filters }) {
+export function BottomSlideMenu({ menu, children, filters, open, getOpenStatus }) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const closeDialog = () => {
+		if (open) {
+			getOpenStatus(false);
+		}
 		setBottomMenuStatusState(false);
 	};
 
 	return (
-		<BottomDialogWrap openStatus={bottomMenuStatusState}>
+		<BottomDialogWrap openStatus={open ? open : bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv openStatus={bottomMenuStatusState}>
+			<BottomDialogDiv openStatus={open ? open : bottomMenuStatusState}>
 				<CloseWrap>
 					{menu ? (
 						<div
