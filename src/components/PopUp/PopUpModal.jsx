@@ -32,6 +32,8 @@ export function PopUpModal({ children, closeButton, closeFunction }) {
 	);
 }
 
+
+
 const WholePage = styled.div`
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
 	justify-content: center;
@@ -61,4 +63,22 @@ const CloseWrap = styled.div`
 	display: flex;
 	width: 100%;
 	justify-content: flex-end;
+`;
+
+export const ButtonWrap = styled.div`
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+`;
+export const Button = styled.div`
+	background-color: ${props => props.backgroundColor};
+	box-sizing: border-box;
+	width: 47%;
+	height: 3rem;
+	padding: 0.9375rem 0;
+	font-family: Pretendard;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 1.9rem;
+	color: #fff;
 `;
