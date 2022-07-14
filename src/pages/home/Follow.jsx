@@ -130,7 +130,7 @@ export default function Follow(props) {
 										<SubText fontsize="1rem">{item.ItemName}</SubText>
 									</ItemTextWrap>
 									<SubInfoWrap>
-										<ProfileImg></ProfileImg>
+										<ProfileImg src={item.profileImgUrl}></ProfileImg>
 										<SubText margin="0 "> {item.nickName}</SubText>
 										<Dot></Dot>
 										<SubText color="#8d8d8d"> {item.uploadTime}</SubText>
@@ -278,7 +278,7 @@ const ProfileImg = styled.div`
 	height: 1.375rem; */
 	border-radius: 50%;
 	background-color: darkturquoise;
-	margin-right: ${props => props.marginright || '1.375rem'}; ;
+	margin-right: ${props => props.marginright || '0.5rem'}; ;
 `;
 const Dot = styled.div`
 	width: 0.125rem;

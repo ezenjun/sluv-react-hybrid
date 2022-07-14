@@ -155,8 +155,8 @@ export default function Search() {
 
 	return (
 		<MainContainer padding="0 0 3.125rem 0">
-			<TopNav>
-				<SubText fontsize="18px" fontweight="bold" className="centerText">
+			<TopNav style={{ height: '3.0625rem' }}>
+				<SubText fontsize="1.125rem" fontweight="bold" className="centerText">
 					검색
 				</SubText>
 			</TopNav>
@@ -439,8 +439,8 @@ export default function Search() {
 export const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
-	border-radius: 0.625rem;
-	padding: 16px;
+	border-radius: 0.8125rem;
+	padding: 1rem;
 	border: solid 1px #c9c9c9;
 	margin: ${props => props.margin || '0'};
 	:focus {

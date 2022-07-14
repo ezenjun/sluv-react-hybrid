@@ -27,6 +27,7 @@ import { GridImage } from '../../components/GridItems/GridImage';
 import { ImageText } from '../../components/ImageText';
 
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
+import { ReactComponent as NoResult } from '../../assets/Icons/noResult.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as DownArrow } from '../../assets/Icons/downArrowGray.svg';
 import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.svg';
@@ -64,7 +65,7 @@ export default function SearchResult() {
 			}
 			setSearchInput(searchInput);
 			// setSearchInput(searchInput);
-			// navigate(`/search/result/${searchInput}`, { state: { searchInput } });
+			navigate(`/search/result`, { state: { searchInput } });
 			getSearchResultList(queryKeyword);
 		}
 	};
@@ -171,7 +172,7 @@ export default function SearchResult() {
 					onClick={onBackClick}
 					style={{ width: '1.5rem', height: '1.5rem' }}
 				></BackButton>
-				<SubText fontsize="18px" fontweight="bold" className="centerText">
+				<SubText fontsize="1.125rem" fontweight="bold" className="centerText">
 					검색 결과
 				</SubText>
 			</TopNav>
@@ -197,205 +198,229 @@ export default function SearchResult() {
 					)}
 				</InputWrap>
 			</div>
-			<FilterContainer>
-				{isSelected ? (
-					<Refresh
-						onClick={() => childFunc.current()}
-						style={{
-							width: '32px',
-							height: '32px',
-							marginRight: '0.5rem',
-							flexShrink: 0,
-						}}
-					></Refresh>
-				) : (
-					<></>
-				)}
-				<Filter onClick={() => onFilterClick(1)} selected={selectedItemFilter}>
-					{selectedItemFilter ? selectedItemFilter : '아이템 종류'}
+			{searchResultList.length > 0 && (
+				<FilterContainer>
+					{isSelected ? (
+						<Refresh
+							onClick={() => childFunc.current()}
+							style={{
+								width: '32px',
+								height: '32px',
+								marginRight: '0.5rem',
+								flexShrink: 0,
+							}}
+						></Refresh>
+					) : (
+						<></>
+					)}
+					<Filter onClick={() => onFilterClick(1)} selected={selectedItemFilter}>
+						{selectedItemFilter ? selectedItemFilter : '아이템 종류'}
 
-					<DownArrow
-						style={{
-							width: '1.125rem',
-							height: '1.125rem',
-							marginLeft: '0.125rem',
-						}}
-					></DownArrow>
-				</Filter>
-				<Filter onClick={() => onFilterClick(2)} selected={selectedPriceFilter}>
-					{selectedPriceFilter ? selectedPriceFilter : '가격대'}
-					<DownArrow
-						style={{
-							width: '1.125rem',
-							height: '1.125rem',
-							marginLeft: '0.125rem',
-						}}
-					></DownArrow>
-				</Filter>
-				<Filter onClick={() => onFilterClick(3)} selected={selectedAlignFilter}>
-					{selectedAlignFilter ? selectedAlignFilter : '정렬'}
-					<DownArrow
-						style={{
-							width: '1.125rem',
-							height: '1.125rem',
-							marginLeft: '0.125rem',
-						}}
-					></DownArrow>
-				</Filter>
-				<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
-					{selectedColorFilter ? selectedColorFilter : '색상'}
-					<DownArrow
-						style={{
-							width: '1.125rem',
-							height: '1.125rem',
-							marginLeft: '0.125rem',
-						}}
-					></DownArrow>
-				</Filter>
-			</FilterContainer>
+						<DownArrow
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginLeft: '0.125rem',
+							}}
+						></DownArrow>
+					</Filter>
+					<Filter onClick={() => onFilterClick(2)} selected={selectedPriceFilter}>
+						{selectedPriceFilter ? selectedPriceFilter : '가격대'}
+						<DownArrow
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginLeft: '0.125rem',
+							}}
+						></DownArrow>
+					</Filter>
+					<Filter onClick={() => onFilterClick(3)} selected={selectedAlignFilter}>
+						{selectedAlignFilter ? selectedAlignFilter : '정렬'}
+						<DownArrow
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginLeft: '0.125rem',
+							}}
+						></DownArrow>
+					</Filter>
+					<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
+						{selectedColorFilter ? selectedColorFilter : '색상'}
+						<DownArrow
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								marginLeft: '0.125rem',
+							}}
+						></DownArrow>
+					</Filter>
+				</FilterContainer>
+			)}
+
 			<FeedContainer>
-				<ItemContainer>
-					<FilterWrap>
-						<SubText fontsize="14px" color="#8d8d8d">
-							전체 {searchResultList.searchItemCnt}
-						</SubText>
+				{searchResultList.length > 0 ? (
+					<ItemContainer>
+						<FilterWrap>
+							<SubText fontsize="14px" color="#8d8d8d">
+								전체 {searchResultList.searchItemCnt}
+							</SubText>
+							{view ? (
+								<ViewButton onClick={changeView}>
+									<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
+									<SubText fontsize="12px" color="#8d8d8d">
+										작게보기
+									</SubText>
+								</ViewButton>
+							) : (
+								<ViewButton onClick={changeView}>
+									<FilterBig style={{ marginRight: '2px' }}></FilterBig>
+									<SubText fontsize="12px" color="#8d8d8d">
+										크게보기
+									</SubText>
+								</ViewButton>
+							)}
+						</FilterWrap>
 						{view ? (
-							<ViewButton onClick={changeView}>
-								<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
-								<SubText fontsize="12px" color="#8d8d8d">
-									작게보기
-								</SubText>
-							</ViewButton>
-						) : (
-							<ViewButton onClick={changeView}>
-								<FilterBig style={{ marginRight: '2px' }}></FilterBig>
-								<SubText fontsize="12px" color="#8d8d8d">
-									크게보기
-								</SubText>
-							</ViewButton>
-						)}
-					</FilterWrap>
-					{view ? (
-						<LargeViewWrap>
-							{searchResultList && (
-								<>
-									{searchResultList.map(item => (
-										<>
-											<LargeViewItem
-												onClick={() => {
-													onDetailItemClick(item.itemIdx);
-												}}
-												key={item.itemIdx}
-											>
-												<LargeViewImage src={item.itemImgUrl}>
-													<ImageText>
-														<SubText
-															fontsize="0.8125rem"
-															fontweight="bold"
-															color="white"
-														>
-															{item.name}'s
+							<LargeViewWrap>
+								{searchResultList && (
+									<>
+										{searchResultList.map(item => (
+											<>
+												<LargeViewItem
+													onClick={() => {
+														onDetailItemClick(item.itemIdx);
+													}}
+													key={item.itemIdx}
+												>
+													<LargeViewImage src={item.itemImgUrl}>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
+															</SubText>
+															{item.isDib === 'Y' ? (
+																<BinderRed
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		zIndex: '50',
+																	}}
+																/>
+															) : (
+																<BinderWhite
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		zIndex: '50',
+																	}}
+																/>
+															)}
+														</ImageText>
+													</LargeViewImage>
+													<ItemTextWrap>
+														<SubText fontsize="1rem">
+															{item.brandKr}
 														</SubText>
-														{item.isDib === 'Y' ? (
-															<BinderRed
-																style={{
-																	width: '1.5rem',
-																	height: '1.5rem',
-																	zIndex: '50',
-																}}
-															/>
-														) : (
+														<VerticalLine></VerticalLine>
+														<SubText fontsize="1rem">
+															{item.itemName}
+														</SubText>
+													</ItemTextWrap>
+													<SubInfoWrap>
+														<ProfileImg
+															src={item.profileImgUrl}
+														></ProfileImg>
+														<SubText margin="0 ">
+															{' '}
+															{item.nickName}
+														</SubText>
+														<Dot></Dot>
+														<SubText color="#8d8d8d">
+															{' '}
+															{item.uploadTime}
+														</SubText>
+													</SubInfoWrap>
+												</LargeViewItem>
+												<HorizontalLine></HorizontalLine>
+											</>
+										))}
+									</>
+								)}
+							</LargeViewWrap>
+						) : (
+							<GridItemWrap>
+								{searchResultList && (
+									<>
+										{searchResultList.map(item => (
+											<>
+												<GridItem
+													onClick={() => {
+														onDetailItemClick(item.itemIdx);
+													}}
+													key={item.itemIdx}
+												>
+													<GridImage src={item.itemImgUrl}>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
+															</SubText>
 															<BinderWhite
 																style={{
-																	width: '1.5rem',
-																	height: '1.5rem',
-																	zIndex: '50',
+																	width: '1.375rem',
+																	height: '1.375rem',
 																}}
 															/>
-														)}
-													</ImageText>
-												</LargeViewImage>
-												<ItemTextWrap>
-													<SubText fontsize="1rem">
+														</ImageText>
+													</GridImage>
+													<SubText
+														fontsize="1rem"
+														fontweight="bold"
+														margin="0 0 0.375rem 0 "
+													>
 														{item.brandKr}
 													</SubText>
-													<VerticalLine></VerticalLine>
-													<SubText fontsize="1rem">
+													<SubText
+														style={{
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+															width: '100%',
+														}}
+													>
 														{item.itemName}
 													</SubText>
-												</ItemTextWrap>
-												<SubInfoWrap>
-													<ProfileImg
-														src={item.profileImgUrl}
-													></ProfileImg>
-													<SubText margin="0 "> {item.nickName}</SubText>
-													<Dot></Dot>
-													<SubText color="#8d8d8d">
-														{' '}
-														{item.uploadTime}
-													</SubText>
-												</SubInfoWrap>
-											</LargeViewItem>
-											<HorizontalLine></HorizontalLine>
-										</>
-									))}
-								</>
-							)}
-						</LargeViewWrap>
-					) : (
-						<GridItemWrap>
-							{searchResultList && (
-								<>
-									{searchResultList.map(item => (
-										<>
-											<GridItem
-												onClick={() => {
-													onDetailItemClick(item.itemIdx);
-												}}
-												key={item.itemIdx}
-											>
-												<GridImage src={item.itemImgUrl}>
-													<ImageText>
-														<SubText
-															fontsize="0.8125rem"
-															fontweight="bold"
-															color="white"
-														>
-															{item.name}'s
-														</SubText>
-														<BinderWhite
-															style={{
-																width: '1.375rem',
-																height: '1.375rem',
-															}}
-														/>
-													</ImageText>
-												</GridImage>
-												<SubText
-													fontsize="1rem"
-													fontweight="bold"
-													margin="0 0 0.375rem 0 "
-												>
-													{item.brandKr}
-												</SubText>
-												<SubText
-													style={{
-														textOverflow: 'ellipsis',
-														whiteSpace: 'nowrap',
-														overflow: 'hidden',
-														width: '100%',
-													}}
-												>
-													{item.itemName}
-												</SubText>
-											</GridItem>
-										</>
-									))}
-								</>
-							)}
-						</GridItemWrap>
-					)}
-				</ItemContainer>
+												</GridItem>
+											</>
+										))}
+									</>
+								)}
+							</GridItemWrap>
+						)}
+					</ItemContainer>
+				) : (
+					<ItemContainer
+						style={{
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '90%',
+						}}
+					>
+						<NoResult style={{ width: '3.75rem', height: '3.75rem' }}></NoResult>
+						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+							검색 결과가 없어요
+						</SubText>
+						<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
+							다른 키워드로 검색해보세요
+						</SubText>
+					</ItemContainer>
+				)}
 			</FeedContainer>
 			<SearchBottomSlideMenu
 				childFunc={childFunc}

@@ -79,7 +79,7 @@ const ChipWrap = styled.div`
 	margin-left: ${props => props.marginleft || '20px'};
 	margin-bottom: 10px;
 	-webkit-animation-name: move;
-	-webkit-animation-duration: 25s;
+	-webkit-animation-duration: 15s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-direction: alternate;
 	-webkit-animation-timing-function: linear;
