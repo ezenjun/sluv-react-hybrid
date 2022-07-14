@@ -50,6 +50,8 @@ export default function UploadItem() {
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
 	const [imgUrlList, setImgUrlList] = useState([]);
+	const [previewImgUrlList, setPreviewImgUrlList] = useState([]);
+	const [isImgUploadComplete, setIsImgUploadComplete] = useState(false);
 
 	const [productName, setProductName] = useState('');
 	const [isProductName, setIsProductName] = useState(false);
@@ -74,9 +76,13 @@ export default function UploadItem() {
 	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(null);
 	const [selectedPriceMainFilterIdx, setSelectedPriceMainFilterIdx] = useState(0);
 	const [visible, setVisible] = useState(false);
-	const now = new Date();
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
+
+
+
+	const now = new Date();
+	console.log(now);
 
 	const labelRenderer = useCallback((type, data) => {
 		switch (type) {
@@ -97,8 +103,6 @@ export default function UploadItem() {
 		}
 	}, []);
 
-	
-
 	AWS.config.update({
 		region: REGION,
 		accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -113,8 +117,14 @@ export default function UploadItem() {
 	useEffect(() => {
 		setBottomMenuStatusState(false);
 		setBottomNavStatus(false);
+		setIsImgUploadComplete(false);
 		setCurrentPage(0);
 	}, []);
+
+	useEffect(() => {
+		isImgUploadComplete && onPostUpload();
+
+	},[isImgUploadComplete]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -168,8 +178,8 @@ export default function UploadItem() {
 		setVisible(true);
 	};
 	const onConfirmDatePick = (val) => {
-		const dd = String(val.getMonth()).padStart(2, '0');
-		const mm = String(val.getMonth()).padStart(2, '0');
+		const dd = String(val.getDate()).padStart(2, '0');
+		const mm = String(val.getMonth()+1).padStart(2, '0');
 		const yyyy = val.getFullYear();
 		console.log(yyyy + '-' + mm + '-' + dd);
 		setDate(yyyy+'-'+mm+'-'+dd);
@@ -195,12 +205,28 @@ export default function UploadItem() {
 		imgInput.current.click();
 	};
 	const onChangeImg = (e) => {
-		const files = e.target.files;
-		console.log(files);
-		setSelectedFileList(files);
+		const fileArr = e.target.files;
+		setSelectedFileList(fileArr);
+		console.log(fileArr);
+		
+		let fileURLs = [];
+
+		let file;
+		let filesLength = fileArr.length > 5 ? 5 : fileArr.length;
+
+		for (let i = 0; i < filesLength; i++) {
+			file = fileArr[i];
+
+			let reader = new FileReader();
+			reader.onload = () => {
+				fileURLs[i] = reader.result;
+				setPreviewImgUrlList([...fileURLs]);
+			};
+			reader.readAsDataURL(file);
+		}
 	};
 
-	const s3ImgUpload = (file) => {
+	const s3ImgUpload = (file, index, length) => {
 		const params = {
 			ACL: 'public-read',
 			Body: file,
@@ -216,21 +242,43 @@ export default function UploadItem() {
 			})
 			.on('complete', evt => {
 				console.log(evt);
-				const temp = [];
-				// temp.push({ itemImgUrl: url });
+				let temp = [];
+				temp = imgUrlList;
+				temp.push({
+					isRepresent: 0,
+					itemImgUrl:
+						'https://' +
+						evt.request.httpRequest.endpoint.host +
+						evt.request.httpRequest.path,
+				});
 				setImgUrlList(temp);
-				onPostUpload();
+
+				if(index === length) {
+					setIsImgUploadComplete(true);
+				}
+
+				// if (isImgUploadComplete) {
+				// 	onPostUpload();
+
+				// 	let temp2 = [];
+				// 	temp2 = imgUrlList;
+				// 	temp2[0].isRepresent = 1;
+				// 	setImgUrlList(temp2);
+				// } 
 			})
 			.send(err => {
 				if (err) console.log(err);
 			});
 	}
 
+	console.log(isImgUploadComplete);
+
+
 	const onClickUploadItem = async (fileList) => {
 		
 		const arr = Array.from(fileList);
-		arr.map(_file => {
-			s3ImgUpload(_file);
+		arr.map((_file, index) => {
+			s3ImgUpload(_file, index, arr.length -1);
 		});
 	};
 
@@ -239,7 +287,7 @@ export default function UploadItem() {
 			celebIdx: selectedCeleb.celebIdx,
 			memberIdx: selectedMember.memberIdx,
 			parentCategory: filterList[selectedItemMainFilter - 1].name,
-			subCategory: selectedItemSubFilter,
+			subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
 			brandIdx: brandObj.brandIdx,
 			name: productName,
 			whenDiscovery: date,
@@ -247,21 +295,16 @@ export default function UploadItem() {
 			price: selectedPriceMainFilterIdx,
 			content: extraInfo,
 			sellerSite: link,
-			itemImgUrlList: [
-				{
-					isRepresent: 1,
-					itemImgUrl:
-						'https://sluv-singer-image-bucket.s3.ap-northeast-2.amazonaws.com/김세정/김세정.png',
-				},
-			],
+			itemImgUrlList: imgUrlList,
 		};
-		console.log(body);
+
+		console.log('넘아가는 데이터',body);
 		const data = await customApiClient('post', '/items', body);
 		console.log(data);
 		if(!data) return;
 		if(!data.isSuccess) return;
 
-		
+		console.log('아이템 업로드 완료');
 	}
 
 	return (
@@ -285,7 +328,7 @@ export default function UploadItem() {
 
 					<TopRadiusContainer
 						backgroundColor="linear-gradient(to top, #ffecf0 0%, #f0fff4 102%)"
-						style={{ flex: '1', overflowY: 'scroll' }}
+						style={{ flex: '1', overflowY: 'scroll', padding: '1.625rem 1.25rem 2.5rem' }}
 					>
 						<SpeechBubbleWrap>
 							<div>
@@ -456,8 +499,21 @@ export default function UploadItem() {
 						</SpeechBubbleWrap>
 
 						<ImgUploadBubbleWrap>
-							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
-								<Plus style={{ width: '24px', height: '24px' }} />
+							{previewImgUrlList.length > 0 &&
+								previewImgUrlList.map((img, index) => (
+									<PreviewImgWrap key={index}>
+										<img
+											className="previewImg"
+											src={img}
+											alt="미리보기 이미지"
+										/>
+									</PreviewImgWrap>
+								))}
+							<UploadButtonWrap
+								
+								onClick={e => onClickItemImgSelect(e)}
+							>
+								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
 							</UploadButtonWrap>
 							<input
 								type="file"
@@ -468,6 +524,7 @@ export default function UploadItem() {
 								multiple
 							/>
 						</ImgUploadBubbleWrap>
+						
 					</TopRadiusContainer>
 
 					{popUpPageNum === 1 && (
@@ -557,4 +614,27 @@ const UploadButtonWrap = styled.button`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-shrink: 0;
+`;
+
+const PreviewImgWrap = styled.div`
+	width: 5rem;
+	height: 5rem;
+	border-radius: 13px;
+	border: solid 1px #94849d;
+	position: relative;
+	margin-right: 0.5rem;
+	flex-shrink: 0;
+
+	/* position: absolute;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover; */
+
+	.previewImg {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 13px;
+	}
 `;

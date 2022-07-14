@@ -24,6 +24,7 @@ import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { UploadPopup, UploadPopupWrap } from '../home';
 import { customApiClient } from '../../utils/apiClient';
 import { BackButton } from '../../components/Buttons/BackButton';
+import Loading from '../../components/Loading';
 
 export default function My() {
 
@@ -31,7 +32,7 @@ export default function My() {
 	
   const navigate = useNavigate();
 
-  const [isAuthUser, setIsAuthUser] = useState(false);
+  const [isAuthUser, setIsAuthUser] = useState(-1);
   const [reportPopupStatus, setReportPopupStatus] = useState(false);
 	const [isCelebOpen, setIsCelebOpen] = useState(false);
 	const [celebList, setCelebList] = useState([]);
@@ -55,7 +56,7 @@ export default function My() {
 		if(!data.isSuccess) return;
 
 		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
-		setIsAuthUser(data.result.isMyPage === 'Y' ? true : false);
+		setIsAuthUser(data.result.isMyPage === 'Y' ? 1 : 0);
 		setCelebList(data.result.userInfo.interestCelebList);
 		setUserInfo(data.result.userInfo);
 		setUploadInfo(data.result.uploadInfo);
@@ -76,8 +77,9 @@ export default function My() {
 
   return (
 		<MainContainer>
+			{isAuthUser === -1 && <Loading />}
 			<TopNav>
-				{isAuthUser ? (
+				{isAuthUser === 1 && (
 					<>
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							마이페이지
@@ -88,7 +90,8 @@ export default function My() {
 							style={{ width: '24px', height: '24px' }}
 						/>
 					</>
-				) : (
+				)}
+				{isAuthUser === 0 && (
 					<>
 						<BackButton onClick={() => navigate(-1)} />
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
@@ -174,7 +177,7 @@ export default function My() {
 							))}
 						</CelebFadeDiv>
 
-						{!isAuthUser && (
+						{isAuthUser === 0 && (
 							<PurpleButton
 								style={{ fontSize: '1rem', marginTop: '1rem' }}
 								disabled={isFollow}
@@ -186,11 +189,8 @@ export default function My() {
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser ? (
-					<MyPageContainer uploadInfo={uploadInfo} />
-				) : (
-					<ProfileContainer uploadInfo={uploadInfo} />
-				)}
+				{isAuthUser === 1 && (<MyPageContainer uploadInfo={uploadInfo} />) }
+				{isAuthUser === 0 && (<ProfileContainer uploadInfo={uploadInfo} />) }
 			</ContentWrap>
 
 			{/* 유저 신고하기 팝업  */}
@@ -199,7 +199,7 @@ export default function My() {
 					onClick={() => setReportPopupStatus(false)}
 					style={{ height: '100%', width: '100%' }}
 				></div>
-				<BottomDialogDiv style={{ minHeight: '5.5625rem' }}>
+				<BottomDialogDiv openStatus={reportPopupStatus} style={{ minHeight: '5.5625rem' }}>
 					<CloseWrap>
 						<Close
 							style={{
