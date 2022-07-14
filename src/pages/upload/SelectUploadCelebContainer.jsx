@@ -15,6 +15,7 @@ import { customApiClient } from '../../utils/apiClient';
 import { useNavigate } from 'react-router-dom';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { UploadCelebState, UploadMemberState } from '../../recoil/Upload';
+import { UploadPopupState } from '../../recoil/BottomNav';
 
 export default function SelectUploadCelebContainer() {
 	const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function SelectUploadCelebContainer() {
 	const setSelectedCeleb = useSetRecoilState(UploadCelebState);
 	const setSelectedMember = useSetRecoilState(UploadMemberState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
+	const setUploadPopupStatus = useSetRecoilState(UploadPopupState);
 
 	useEffect(() => {
 		setSelectedCeleb({});
@@ -139,6 +141,11 @@ export default function SelectUploadCelebContainer() {
 		e.preventDefault();
 	}
 
+	const onClickClose = () => {
+		setUploadPopupStatus(false);
+		navigate(-1);
+	}
+
 
 	return (
 		<MainContainer>
@@ -147,7 +154,7 @@ export default function SelectUploadCelebContainer() {
 					정보 공유하기
 				</MainText>
 				<div style={{ flex: '1' }}></div>
-				<Close onClick={() => navigate(-1)} style={{ width: '24px', height: '24px' }} />
+				<Close onClick={onClickClose} style={{ width: '24px', height: '24px' }} />
 			</TopNav>
 
 			<ContentWrap padding="0">
