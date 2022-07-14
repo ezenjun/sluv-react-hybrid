@@ -6,18 +6,30 @@ import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
 import { MainContainer } from '../../../components/containers/MainContainer'
 import { TopNav } from '../../../components/containers/TopNav'
+import { Button, ButtonWrap, PopUpModal } from '../../../components/PopUp/PopUpModal';
 import { MainText } from '../../../components/Texts/MainText';
+import { SubText } from '../../../components/Texts/SubText';
 import { BottomNavState } from '../../../recoil/BottomNav';
+import { PopUpModalState } from '../../../recoil/PopUpModal';
 
 export default function Settings() {
     const navigate = useNavigate();
 		const { state } = useLocation();
 
 		const setBottomNavStatus = useSetRecoilState(BottomNavState);
+		const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
 		useEffect(() => {
 			setBottomNavStatus(false);
 		}, []);
+
+		const onClickLogout = () => {
+			localStorage.removeItem('x-access-token');
+			localStorage.removeItem('myUserIdx');
+
+			setPopUpModalState(false);
+			navigate('/');
+		}
 
     return (
 		<MainContainer>
@@ -82,11 +94,32 @@ export default function Settings() {
 				</ItemWrap>
 				<ItemWrap>
 					<TitleWrap>기타</TitleWrap>
-					<div className="buttonWrap">
+					<div onClick={() => setPopUpModalState(true)} className="buttonWrap">
 						<div>로그아웃</div>
 					</div>
 				</ItemWrap>
 			</ContentWrap>
+
+			<PopUpModal>
+				<MainText fontsize="1.125rem" margin="1.5rem 0 0.75rem 0">
+					서비스에서
+					<br />
+					로그아웃 할까요?
+				</MainText>
+				<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
+					스럽에서 로그아웃되며,
+					<br />
+					다음에 또 만나요
+				</SubText>
+				<ButtonWrap>
+					<Button backgroundColor="#c9c9c9" onClick={() => setPopUpModalState(false)}>
+						취소
+					</Button>
+					<Button backgroundColor="#9e30f4" onClick={onClickLogout}>
+						확인
+					</Button>
+				</ButtonWrap>
+			</PopUpModal>
 		</MainContainer>
 	);
 }
