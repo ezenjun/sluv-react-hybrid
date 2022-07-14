@@ -22,6 +22,7 @@ import SelectUploadMemberContainer from './SelectUploadMemberContainer';
 import { ReactComponent as InfoIcon } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { ReactComponent as Plus } from '../../assets/Icons/img_upload_plus_icon.svg';
+import { ReactComponent as ImgDelete } from '../../assets/Icons/icon_preview_img_delete.svg';
 import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 import AWS from 'aws-sdk';
@@ -62,6 +63,7 @@ export default function UploadItem() {
 	const [imgUrlList, setImgUrlList] = useState([]);
 	const [previewImgUrlList, setPreviewImgUrlList] = useState([]);
 	const [isImgUploadComplete, setIsImgUploadComplete] = useState(false);
+	const [checkedElement, setCheckedElement] = useState(0);
 
 	const [productName, setProductName] = useState('');
 	const [isProductName, setIsProductName] = useState(false);
@@ -274,37 +276,35 @@ export default function UploadItem() {
 				console.log(evt);
 			})
 			.on('complete', evt => {
-				console.log(evt);
 				let temp = [];
 				temp = imgUrlList;
-				temp.push({
-					isRepresent: 0,
-					itemImgUrl:
-						'https://' +
-						evt.request.httpRequest.endpoint.host +
-						evt.request.httpRequest.path,
-				});
+				if(index == checkedElement) {
+					temp.push({
+						isRepresent: 1,
+						itemImgUrl:
+							'https://' +
+							evt.request.httpRequest.endpoint.host +
+							evt.request.httpRequest.path,
+					});
+				} else {
+					temp.push({
+						isRepresent: 0,
+						itemImgUrl:
+							'https://' +
+							evt.request.httpRequest.endpoint.host +
+							evt.request.httpRequest.path,
+					});
+				}
 				setImgUrlList(temp);
 
 				if (index === length) {
 					setIsImgUploadComplete(true);
 				}
-
-				// if (isImgUploadComplete) {
-				// 	onPostUpload();
-
-				// 	let temp2 = [];
-				// 	temp2 = imgUrlList;
-				// 	temp2[0].isRepresent = 1;
-				// 	setImgUrlList(temp2);
-				// }
 			})
 			.send(err => {
 				if (err) console.log(err);
 			});
 	};
-
-	console.log(isImgUploadComplete);
 
 	const onClickUploadItem = async fileList => {
 		const arr = Array.from(fileList);
@@ -358,6 +358,21 @@ export default function UploadItem() {
 		}
 	}
 
+	const onClickPreviewImg = (index) => {
+		console.log(index);
+	}
+	const onClickPreviewImgDelete = (index) => {
+		setCheckedElement(0);
+		let temp = [];
+		temp = previewImgUrlList;
+		temp.splice(index, 1);
+		setPreviewImgUrlList([...temp]);
+	}
+	const onChangeRadioButton = e => {
+		console.log(e.target.value);
+		setCheckedElement(e.target.value);
+	};
+
 	return (
 		<>
 			{currentPage === 0 && <SelectUploadCelebContainer />}
@@ -370,10 +385,7 @@ export default function UploadItem() {
 							정보 공유하기
 						</MainText>
 						<div className="rightText">
-							<UploadBtn
-								status={isUploadConfirm}
-								onClick={onClickUploadBtnStart}
-							>
+							<UploadBtn status={isUploadConfirm} onClick={onClickUploadBtnStart}>
 								등록
 							</UploadBtn>
 						</div>
@@ -556,19 +568,45 @@ export default function UploadItem() {
 						</SpeechBubbleWrap>
 
 						<ImgUploadBubbleWrap>
+							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
+								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
+							</UploadButtonWrap>
 							{previewImgUrlList.length > 0 &&
 								previewImgUrlList.map((img, index) => (
-									<PreviewImgWrap key={index}>
+									<PreviewImgWrap
+										onClick={() => onClickPreviewImg(index)}
+										key={index}
+									>
 										<img
 											className="previewImg"
 											src={img}
 											alt="미리보기 이미지"
 										/>
+										{checkedElement == index && (
+											<RepresentDiv>
+												대표
+											</RepresentDiv>
+										)}
+
+										<ImgDelete
+											onClick={() => onClickPreviewImgDelete(index)}
+											style={{
+												width: '1.5rem',
+												height: '1.5rem',
+												position: 'absolute',
+												top: '-0.5rem',
+												right: '-0.5rem',
+											}}
+										/>
+										<input
+											type="radio"
+											value={index}
+											style={{ display: 'none' }}
+											checked={checkedElement == index}
+											onChange={onChangeRadioButton}
+										/>
 									</PreviewImgWrap>
 								))}
-							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
-								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
-							</UploadButtonWrap>
 							<input
 								type="file"
 								accept="image/*"
@@ -670,7 +708,7 @@ const UploadButtonWrap = styled.button`
 	flex-shrink: 0;
 `;
 
-const PreviewImgWrap = styled.div`
+const PreviewImgWrap = styled.label`
 	width: 5rem;
 	height: 5rem;
 	border-radius: 13px;
@@ -694,4 +732,19 @@ const PreviewImgWrap = styled.div`
 
 const UploadBtn = styled.span`
 	color: ${props => (props.status ? '#262626' : '#b1b1b1')};
+`;
+
+const RepresentDiv = styled.div`
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 1.375rem;
+	border-radius: 0 0 13px 13px;
+	background-color: rgba(86, 75, 92, 0.7);
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.75rem;
 `;

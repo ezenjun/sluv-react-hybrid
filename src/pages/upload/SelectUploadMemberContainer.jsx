@@ -12,6 +12,7 @@ import { UploadCelebState, UploadMemberState } from '../../recoil/Upload';
 import { BottomWrap, CelebLeftBottom, CelebLeftTop, CelebNextLeftBottom, CelebNextLeftTop, CelebNextRightBottom, CelebNextRightTop, CelebRightBottom, CelebRightTop, Image, MembersContainer, RepeatWrap, TextWrap } from '../signup/SelectCeleb';
 import { SubText } from '../../components/Texts/SubText';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
+import { UploadPopupState } from '../../recoil/BottomNav';
 
 export default function SelectUploadMemberContainer() {
 	const navigate = useNavigate();
@@ -19,12 +20,17 @@ export default function SelectUploadMemberContainer() {
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const selectedCeleb = useRecoilValue(UploadCelebState);
 	const setSelectedMember = useSetRecoilState(UploadMemberState);
+	const setUploadPopupStatus = useSetRecoilState(UploadPopupState);
 
 	const onSelectMember = (member, e) => {
 		console.log(member);
 		setSelectedMember(member);
 		setCurrentPage(2);
 	}
+	const onClickClose = () => {
+		setUploadPopupStatus(false);
+		navigate(-1);
+	};
 
 	return (
 		<MainContainer>
@@ -33,7 +39,7 @@ export default function SelectUploadMemberContainer() {
 				<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 					정보 공유하기
 				</MainText>
-				<Close onClick={() => navigate(-1)} style={{ width: '24px', height: '24px' }} />
+				<Close onClick={onClickClose} style={{ width: '24px', height: '24px' }} />
 			</TopNav>
 
 			<ContentWrap padding="0">

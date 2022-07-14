@@ -11,6 +11,8 @@ import { BrandListState } from '../../../recoil/Upload';
 import { useEffect } from 'react';
 import { customApiClient } from '../../../utils/apiClient';
 import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
+import Loading from '../../../components/Loading';
+import { render } from '@testing-library/react';
 
 export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 
@@ -18,7 +20,12 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 	const [brandList, setBrandList] = useRecoilState(BrandListState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [currentBrandList, setCurrentBrandList] = useState([]);
+	const [renderingList, setRenderingList] = useState([]);
 	const [searchInput, setSearchInput] = useState('');
+	const [renderDataNum, setRenderDataNum] = useState(20);
+
+	const [target, setTarget] = useState(null);
+	const [isLoaded, setIsLoaded] = useState(true);
 
 	useEffect(() => {
 		if(brandList.length < 1) {
@@ -29,6 +36,38 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		}
 	},[]);
 
+	useEffect(() => {
+		let observer;
+		if (target) {
+			observer = new IntersectionObserver(onIntersect, {
+				threshold: 0.1,
+			});
+			observer.observe(target);
+			setRenderDataNum(renderDataNum + 20);
+		}
+    return () => observer && observer.disconnect();
+	},[target]);
+
+	useEffect(() => {
+		setIsLoaded(false);
+	},[renderingList])
+
+	const onIntersect = ([entry], observer) => {
+		if (entry.isIntersecting && !isLoaded) {
+			observer.unobserve(entry.target);
+			getMoreItem();
+			observer.observe(entry.target);
+		}
+	};
+
+	const getMoreItem = () => {
+		setIsLoaded(true);
+
+		setRenderingList(renderingList => [
+			...renderingList.concat(currentBrandList.slice(renderDataNum - 20, renderDataNum)),
+		]);
+	};
+
 	const getBrandList = async () => {
 		const data = await customApiClient('get', '/brands');
 
@@ -37,6 +76,7 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 
 		setBrandList(data.result);
 		setCurrentBrandList(data.result);
+		setRenderingList(data.result.slice(0, renderDataNum));
 	}
 
 	const onHandleChangeSearch = e => {
@@ -87,16 +127,20 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 			</InputWrap>
 
 			<BrandListWrap>
-				{currentBrandList.length > 0 &&
-					currentBrandList.map(brand => {
+				{renderingList.length > 0 &&
+					renderingList.map((brand,index) => {
 						return (
-							<BrandListItem onClick={() => onClickBrandItem(brand)} key={brand.brandIdx}>
+							<BrandListItem
+								onClick={() => onClickBrandItem(brand)}
+								key={index}
+							>
 								<SelectIcon style={{ width: '1.5rem', height: '1.5rem' }} />
 								<span className="brandKr">{brand.brandKr}</span>
 								<span className="brandEn">{brand.brandEn}</span>
 							</BrandListItem>
 						);
 					})}
+				<div className="Target-Element" ref={setTarget}></div>
 			</BrandListWrap>
 		</SelectBrandDialogContainer>
 	);
@@ -111,8 +155,18 @@ const BrandListWrap = styled.div`
 	flex-direction: column;
 	overflow-y: scroll;
 	height: 65vh;
+	padding: 10px 0;
 
-	margin-top: 2.125rem;
+	margin-top: 24px;
+
+	.Target-Element {
+		width: 100vw;
+		height: 10px;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+		align-items: center;
+	}
 `;
 
 const BrandListItem = styled.div`
