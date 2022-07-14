@@ -10,14 +10,30 @@ import { ItemFilter } from '../Filters/ItemFilter';
 
 import { SubText } from '../Texts/SubText';
 
+// export const filterList = [
+// 	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
+// 	{ idx: 2, name: '하의', list: ['바지', '치마'] },
+// 	{ idx: 3, name: '원피스', list: ['원피스', '점프슈트'] },
+// 	{ idx: 4, name: '뷰티', list: ['메이트업', '스킨케어', '향수', '헤어 & 바디'] },
+// 	{ idx: 5, name: '액세서리', list: ['신발', '모자', '가방'] },
+// 	{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
+// 	{ idx: 7, name: '기타', list: [] },
+// ];
+
 export const filterList = [
-	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
-	{ idx: 2, name: '하의', list: ['바지', '치마'] },
-	{ idx: 3, name: '원피스', list: ['원피스', '점프슈트'] },
-	{ idx: 4, name: '뷰티', list: ['메이트업', '스킨케어', '향수', '헤어 & 바디'] },
-	{ idx: 5, name: '액세서리', list: ['신발', '모자', '가방'] },
-	{ idx: 6, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
-	{ idx: 7, name: '기타', list: [] },
+	{
+		idx: 1,
+		name: '상의',
+		list: ['티셔츠', '블라우스', '니트', '셔츠', '맨투맨', '후드', '민소매'],
+	},
+	{ idx: 2, name: '아우터', list: ['가디건', '자켓', '점퍼', '패딩', '코트'] },
+	{ idx: 3, name: '바지', list: ['반바지', '청바지', '슬랙스', '츄리닝바지'] },
+	{ idx: 4, name: '치마', list: ['롱스커트', '미니스커트'] },
+	{ idx: 5, name: '원피스', list: ['미니원피스', '롱원피스', '점프슈트'] },
+	{ idx: 6, name: '뷰티', list: ['메이크업', '스킨케어', '향수', '헤어&바디'] },
+	{ idx: 7, name: '악세서리', list: ['신발', '모자', '가방', '주얼리'] },
+	{ idx: 8, name: '라이프', list: ['홈웨어', '가구', '생활용품'] },
+	{ idx: 9, name: '기타', list: [] },
 ];
 
 export function SearchBottomSlideMenu(props) {
@@ -175,7 +191,7 @@ export function SearchBottomSlideMenu(props) {
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv>
+			<BottomDialogDiv openStatus={bottomMenuStatusState}>
 				<CloseWrap>
 					{tabList.map(item => {
 						return (

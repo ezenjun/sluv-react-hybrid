@@ -199,7 +199,7 @@ export default function My() {
 					onClick={() => setReportPopupStatus(false)}
 					style={{ height: '100%', width: '100%' }}
 				></div>
-				<BottomDialogDiv style={{ minHeight: '5.5625rem' }}>
+				<BottomDialogDiv openStatus={reportPopupStatus} style={{ minHeight: '5.5625rem' }}>
 					<CloseWrap>
 						<Close
 							style={{
