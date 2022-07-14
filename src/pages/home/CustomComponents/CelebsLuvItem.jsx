@@ -20,7 +20,6 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../../recoil/ToastMessage';
-import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
 
 export const CelebsLuvItem = ({ celeb }) => {
 	const navigate = useNavigate();
@@ -89,7 +88,6 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 	};
-	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
@@ -106,7 +104,6 @@ export const CelebsLuvItem = ({ celeb }) => {
 		navigate('/binder/add', {
 			state: { item: itemIdx },
 		});
-		setBottomMenuStatusState(false);
 	};
 	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
 
@@ -126,15 +123,11 @@ export const CelebsLuvItem = ({ celeb }) => {
 		setOpenState(input);
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
-	const [binderName, setBinderName] = useState('');
 	const onSelectBinder = binderIdx => {
 		console.log('셀렉트 바인더', selectedItemIdx);
 
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
-				console.log(binderList[i]);
-				setBinderName(binderList[i].name);
-				console.log(binderList[i].name);
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
 			}
 		}
@@ -183,7 +176,6 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 		console.log('tempHot', tempHot);
-		setBottomMenuStatusState(false);
 		setOpenState(false);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);

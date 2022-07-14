@@ -11,15 +11,15 @@ import { BottomNavState } from '../../recoil/BottomNav';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
-
-import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
+import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
+import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as EditButton } from '../../assets/Icons/threedot_Black.svg';
 import { ReactComponent as ShareButton } from '../../assets/Icons/Share.svg';
-import { ReactComponent as AddItem } from '../../assets/Icons/addItem.svg';
+import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as BinderGrey } from '../../assets/Icons/binderGrey.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as LikeButtonGrey } from '../../assets/Icons/likeButton.svg';
@@ -30,12 +30,23 @@ import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_ri
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function ItemDetail() {
 	let { itemIdx } = useParams();
 	const navigate = useNavigate();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+
 	const onReport = () => {
 		setBottomMenuStatusState(true);
 	};
@@ -81,6 +92,94 @@ export default function ItemDetail() {
 		}
 		setIsDib(!isDib);
 	};
+
+	const onAddBinderClick = () => {
+		getBinderList();
+		setOpenState(true);
+	};
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+	const [openState, setOpenState] = useState(false);
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+		setBottomMenuStatusState(false);
+	};
+	const getOpenStatus = input => {
+		setOpenState(input);
+	};
+	const onSelectBinder = binderIdx => {
+		console.log('셀렉트 바인더', itemInfo.itemIdx);
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				addToBinderAPI(itemInfo.itemIdx, binderIdx, binderList[i].name);
+			}
+		}
+	};
+	const onDeleteBinderClick = () => {
+		DeleteFromBinderAPI(itemInfo.itemIdx);
+	};
+
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setIsDib(!isDib);
+		setDibCnt(dibCnt + 1);
+		setOpenState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		setIsDib(!isDib);
+		setDibCnt(dibCnt - 1);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+
 	const onClickLike = () => {
 		if (isLike) {
 			if (likeCnt === 1) {
@@ -373,7 +472,7 @@ export default function ItemDetail() {
 										key={item.itemIdx}
 										onClick={() => onDetailItemClick(item.itemIdx)}
 									>
-										<GridImage>
+										<GridImage src={item.itemImgUrl}>
 											<ImageText>
 												<SubText
 													fontsize="0.8125rem"
@@ -425,7 +524,7 @@ export default function ItemDetail() {
 										key={item.itemIdx}
 										onClick={() => onDetailItemClick(item.itemIdx)}
 									>
-										<GridImage>
+										<GridImage src={item.itemImgUrl}>
 											<ImageText>
 												<SubText
 													fontsize="0.8125rem"
@@ -523,7 +622,7 @@ export default function ItemDetail() {
 				<AlignDiv>
 					{isDib ? (
 						<BinderRed
-							onClick={onClickDib}
+							onClick={onDeleteBinderClick}
 							style={{
 								width: '1.5rem',
 								height: '1.5rem',
@@ -532,7 +631,7 @@ export default function ItemDetail() {
 						></BinderRed>
 					) : (
 						<BinderGrey
-							onClick={onClickDib}
+							onClick={onAddBinderClick}
 							style={{
 								width: '1.5rem',
 								height: '1.5rem',
@@ -569,6 +668,28 @@ export default function ItemDetail() {
 					</SubText>
 				</AlignDiv>
 			</BottomNavWrap>
+			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
+				<RowWrap onClick={() => onCreateBinder(itemInfo.itemIdx)}>
+					<ImageWrap>
+						<PlusButton></PlusButton>
+					</ImageWrap>
+					<SubText fontsize="1rem" margin="0.9375rem 0">
+						바인더 만들기
+					</SubText>
+				</RowWrap>
+				<HorizontalLine></HorizontalLine>
+				{binderList.map(binder => (
+					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							&nbsp;({binder.dibCount})
+						</SubText>
+					</RowWrap>
+				))}
+			</BottomSlideMenu>
 		</MainContainer>
 	);
 }
@@ -738,4 +859,23 @@ const MyPageGridItem = styled.div`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
+`;
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;

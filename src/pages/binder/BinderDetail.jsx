@@ -450,6 +450,8 @@ const Image = styled.div`
 	position: relative;
 	border-radius: 1rem;
 	background-color: ${props => props.backgroundColor || '#f6f6f6'};
+	background-position: 50%;
+	background-size: cover;
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
@@ -458,7 +460,6 @@ const Image = styled.div`
 		),
 		url(${props => props.src});
 	background-repeat: no-repeat;
-	background-size: contain;
 	margin-bottom: 0.5rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
