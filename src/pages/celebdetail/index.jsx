@@ -25,6 +25,7 @@ import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { ImageText } from '../../components/ImageText';
 
+import { ReactComponent as NoItem } from '../../assets/Icons/noItemIcon.svg';
 import { ReactComponent as FilterSmall } from '../../assets/Icons/filterSmall.svg';
 import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
@@ -207,139 +208,168 @@ export default function CelebDetail() {
 				) : (
 					<></>
 				)}
+				{CurrentList.length > 0 && (
+					<FilterWrap>
+						<Filter>
+							<SubText
+								fontsize="0.875rem"
+								fontweight={
+									selectedFilter === filterList[0].idx ? 'bold' : 'normal'
+								}
+								onClick={() => onFilterClick(filterList[0].idx)}
+								selected={selectedFilter === filterList[0].idx}
+								color={selectedFilter === filterList[0].idx ? '#262626' : '#8D8D8D'}
+							>
+								{filterList[0].name}
+							</SubText>
+							<VerticalLine />
+							<SubText
+								fontsize="0.875rem"
+								fontweight={
+									selectedFilter === filterList[1].idx ? 'bold' : 'normal'
+								}
+								onClick={() => onFilterClick(filterList[1].idx)}
+								selected={selectedFilter === filterList[1].idx}
+								color={selectedFilter === filterList[1].idx ? '#262626' : '#8D8D8D'}
+							>
+								{filterList[1].name}
+							</SubText>
+						</Filter>
+						{view ? (
+							<Filter onClick={changeView}>
+								<FilterSmall style={{ marginRight: '0.125rem' }}></FilterSmall>
+								<SubText fontsize="0.75rem" color="#8d8d8d">
+									작게보기
+								</SubText>
+							</Filter>
+						) : (
+							<Filter onClick={changeView}>
+								<FilterBig style={{ marginRight: '0.125rem' }}></FilterBig>
+								<SubText fontsize="0.75rem" color="#8d8d8d">
+									크게보기
+								</SubText>
+							</Filter>
+						)}
+					</FilterWrap>
+				)}
 
-				<FilterWrap>
-					<Filter>
-						<SubText
-							fontsize="0.875rem"
-							fontweight={selectedFilter === filterList[0].idx ? 'bold' : 'normal'}
-							onClick={() => onFilterClick(filterList[0].idx)}
-							selected={selectedFilter === filterList[0].idx}
-							color={selectedFilter === filterList[0].idx ? '#262626' : '#8D8D8D'}
-						>
-							{filterList[0].name}
-						</SubText>
-						<VerticalLine />
-						<SubText
-							fontsize="0.875rem"
-							fontweight={selectedFilter === filterList[1].idx ? 'bold' : 'normal'}
-							onClick={() => onFilterClick(filterList[1].idx)}
-							selected={selectedFilter === filterList[1].idx}
-							color={selectedFilter === filterList[1].idx ? '#262626' : '#8D8D8D'}
-						>
-							{filterList[1].name}
-						</SubText>
-					</Filter>
-					{view ? (
-						<Filter onClick={changeView}>
-							<FilterSmall style={{ marginRight: '0.125rem' }}></FilterSmall>
-							<SubText fontsize="0.75rem" color="#8d8d8d">
-								작게보기
-							</SubText>
-						</Filter>
-					) : (
-						<Filter onClick={changeView}>
-							<FilterBig style={{ marginRight: '0.125rem' }}></FilterBig>
-							<SubText fontsize="0.75rem" color="#8d8d8d">
-								크게보기
-							</SubText>
-						</Filter>
-					)}
-				</FilterWrap>
-				{view ? (
+				{CurrentList.length > 0 ? (
 					<>
-						<LargeViewWrap>
-							{CurrentList && (
-								<>
+						{view ? (
+							<>
+								<LargeViewWrap>
+									{CurrentList && (
+										<>
+											{CurrentList.map(item => (
+												<div key={item.itemIdx}>
+													<LargeViewItem>
+														<LargeViewImage src={item.itemImgUrl}>
+															<ImageText>
+																<SubText
+																	fontsize="0.8125rem"
+																	fontweight="bold"
+																	color="white"
+																>
+																	{item.name}'s
+																</SubText>
+																<BinderWhite
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																	}}
+																/>
+															</ImageText>
+														</LargeViewImage>
+														<ItemTextWrap>
+															<SubText fontsize="1rem">
+																{item.brandKr}
+															</SubText>
+															<VerticalLine></VerticalLine>
+															<SubText fontsize="1rem">
+																{item.itemName}
+															</SubText>
+														</ItemTextWrap>
+														<SubInfoWrap>
+															<ProfileImg></ProfileImg>
+															<SubText margin="0 ">
+																{' '}
+																{item.publisher}
+															</SubText>
+															<Dot></Dot>
+															<SubText color="#8d8d8d">
+																{' '}
+																{item.uploadTime}
+															</SubText>
+														</SubInfoWrap>
+													</LargeViewItem>
+													<HorizontalLine></HorizontalLine>
+												</div>
+											))}
+										</>
+									)}
+								</LargeViewWrap>
+							</>
+						) : (
+							<>
+								<GridItemWrap>
 									{CurrentList.map(item => (
-										<div key={item.itemIdx}>
-											<LargeViewItem>
-												<LargeViewImage src={item.itemImgUrl}>
-													<ImageText>
-														<SubText
-															fontsize="0.8125rem"
-															fontweight="bold"
-															color="white"
-														>
-															{item.name}'s
-														</SubText>
-														<BinderWhite
-															style={{
-																width: '1.5rem',
-																height: '1.5rem',
-															}}
-														/>
-													</ImageText>
-												</LargeViewImage>
-												<ItemTextWrap>
-													<SubText fontsize="1rem">
-														{item.brandKr}
+										<GridItem key={item.itemIdx}>
+											<GridImage>
+												<ImageText>
+													<SubText
+														fontsize="0.8125rem"
+														fontweight="bold"
+														color="white"
+													>
+														{item.name}'s
 													</SubText>
-													<VerticalLine></VerticalLine>
-													<SubText fontsize="1rem">
-														{item.itemName}
-													</SubText>
-												</ItemTextWrap>
-												<SubInfoWrap>
-													<ProfileImg></ProfileImg>
-													<SubText margin="0 "> {item.publisher}</SubText>
-													<Dot></Dot>
-													<SubText color="#8d8d8d">
-														{' '}
-														{item.uploadTime}
-													</SubText>
-												</SubInfoWrap>
-											</LargeViewItem>
-											<HorizontalLine></HorizontalLine>
-										</div>
+													<BinderWhite
+														style={{
+															width: '1.375rem',
+															height: '1.375rem',
+														}}
+													/>
+												</ImageText>
+											</GridImage>
+											<SubText
+												fontsize="1rem"
+												fontweight="bold"
+												margin="0 0 0.375rem 0 "
+											>
+												{item.brandKr}
+											</SubText>
+											<SubText
+												style={{
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+													width: '100%',
+												}}
+											>
+												{item.itemName}
+											</SubText>
+										</GridItem>
 									))}
-								</>
-							)}
-						</LargeViewWrap>
+								</GridItemWrap>
+							</>
+						)}
 					</>
 				) : (
-					<>
-						<GridItemWrap>
-							{CurrentList.map(item => (
-								<GridItem key={item.itemIdx}>
-									<GridImage>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												{item.name}'s
-											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.375rem',
-													height: '1.375rem',
-												}}
-											/>
-										</ImageText>
-									</GridImage>
-									<SubText
-										fontsize="1rem"
-										fontweight="bold"
-										margin="0 0 0.375rem 0 "
-									>
-										{item.brandKr}
-									</SubText>
-									<SubText
-										style={{
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap',
-											overflow: 'hidden',
-											width: '100%',
-										}}
-									>
-										{item.itemName}
-									</SubText>
-								</GridItem>
-							))}
-						</GridItemWrap>
-					</>
+					<ItemContainer
+						style={{
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '70%',
+						}}
+					>
+						<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
+						<SubText fontsize="1rem" fontweight="bolds" margin="1rem 0 0.4375rem 0">
+							아직 해당 셀럽의 아이템이 존재하지 않아요
+						</SubText>
+						<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
+							아이템을 직접 업로드 해보세요!
+						</SubText>
+					</ItemContainer>
 				)}
 			</FeedContainer>
 		</MainContainer>
@@ -354,7 +384,10 @@ const FeedContainer = styled.div`
 		display: none; /* for Chrome, Safari, and Opera */
 	}
 `;
-
+const ItemContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
 const FilterWrap = styled.div`
 	display: flex;
 	justify-content: space-between;

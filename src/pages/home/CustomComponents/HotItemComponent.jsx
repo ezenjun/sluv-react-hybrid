@@ -96,7 +96,7 @@ export const HotItemComponent = () => {
 						{dailyList ? (
 							<>
 								{dailyList.map(hotitem => (
-									<HotItem key={hotitem.itemidx}>
+									<HotItem key={hotitem.itemidx} src={hotitem.itemImgUrl}>
 										<SubText
 											fontsize="0.8125rem"
 											fontweight="bold"
@@ -127,7 +127,7 @@ export const HotItemComponent = () => {
 						{weeklyList ? (
 							<>
 								{weeklyList.map(hotitem => (
-									<HotItem key={hotitem.itemidx}>
+									<HotItem key={hotitem.itemidx} src={hotitem.itemImgUrl}>
 										<SubText
 											fontsize="0.8125rem"
 											fontweight="bold"
@@ -265,7 +265,17 @@ const HotItem = styled.div`
 	box-sizing: border-box;
 	align-items: flex-start;
 	flex-direction: column;
-	background-color: darkolivegreen;
+	background-color: grey;
+	background-image: linear-gradient(
+			to top,
+			#000 0%,
+			rgba(60, 60, 60, 0.77) 0%,
+			rgba(0, 0, 0, 0) 34%
+		),
+		url(${props => props.src});
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
 	border-radius: 1rem;
 	padding: 0.75rem 1rem;
 	span {

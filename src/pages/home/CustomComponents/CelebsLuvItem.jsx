@@ -9,6 +9,7 @@ import { SubText } from '../../../components/Texts/SubText';
 import { HorizontalLine } from '../../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../../components/Lines/VerticalLine';
 
+import { ReactComponent as NoItem } from '../../../assets/Icons/noItemIcon.svg';
 import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../../assets/Icons/binderRed.svg';
@@ -178,28 +179,30 @@ export const CelebsLuvItem = ({ celeb }) => {
 				))}
 			</ChipWrap>
 			<HorizontalLine />
-			<FilterWrap>
-				{filterList.map(item => {
-					return (
-						<SubText
-							key={item.idx}
-							fontsize="0.875rem"
-							fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
-							margin="0 1rem 0 0 "
-							onClick={() => onFilterClick(item.idx)}
-							selected={selectedFilter === item.idx}
-							color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
-						>
-							{item.name}
-						</SubText>
-					);
-				})}
-			</FilterWrap>
-			<ItemWrap>
+			{CurrentList.length > 0 && (
+				<FilterWrap>
+					{filterList.map(item => {
+						return (
+							<SubText
+								key={item.idx}
+								fontsize="0.875rem"
+								fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
+								margin="0 1rem 0 0 "
+								onClick={() => onFilterClick(item.idx)}
+								selected={selectedFilter === item.idx}
+								color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
+							>
+								{item.name}
+							</SubText>
+						);
+					})}
+				</FilterWrap>
+			)}
+			<>
 				{CurrentList ? (
 					<>
 						{CurrentList.length > 0 ? (
-							<>
+							<ItemWrap>
 								{CurrentList.map(item => (
 									<Item
 										key={item.itemIdx}
@@ -253,15 +256,50 @@ export const CelebsLuvItem = ({ celeb }) => {
 										</SubText>
 									</Item>
 								))}
-							</>
+							</ItemWrap>
 						) : (
-							<>아이템이 존재하지 않습니다</>
+							<ItemContainer
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignContent: 'center',
+									alignItems: 'center',
+									paddingBottom: '2.5rem',
+									width: '100%',
+								}}
+							>
+								<NoItem></NoItem>
+								<SubText
+									margin="1rem 0 0.5rem 0"
+									fontsize="0.875rem"
+									fontweight="700"
+								>
+									아직 해당 셀럽의 아이템이 존재하지 않아요
+								</SubText>
+								<SubText fontsize="0.875rem" fontweight="normal" color="#8D8D8D">
+									아이템을 직접 업로드 해보세요!
+								</SubText>
+							</ItemContainer>
 						)}
 					</>
 				) : (
-					<>아이템이 존재하지 않습니다</>
+					<ItemContainer
+						style={{
+							display: 'flex',
+							alignContent: 'center',
+							justifyContent: 'center',
+							alignItems: 'center',
+							paddingBottom: '2.5rem',
+							width: '100%',
+						}}
+					>
+						<NoItem></NoItem>
+						<SubText margin="1rem 0" fontsize="0.875rem" fontweight="700">
+							아직 해당 셀럽의 아이템이 존재하지 않아요
+						</SubText>
+					</ItemContainer>
 				)}
-			</ItemWrap>
+			</>
 		</ItemContainer>
 	);
 };

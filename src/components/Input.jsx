@@ -11,6 +11,7 @@ export const Input = styled.input`
 	outline: none;
 	border: none;
 	margin: ${props => props.margin || '0'};
+	background-color: white;
 	&:disabled {
 		::placeholder {
 			color: #dadada;
