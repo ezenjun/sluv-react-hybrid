@@ -43,10 +43,26 @@ export default function Login() {
 		}
 	}
 
+	const getAutoLogin = async () => {
+		const data = await customApiClient('get', '/auth/auto-login');
+		console.log(data);
+		if(!data) return;
+		if(!data.isSuccess) return;
+
+		if(data.code === 1001) {
+			navigate('/home');
+		}
+	}
+
 	useEffect(() => {
 		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
 		setCurrentPage(1);
 		setSocialLoginComplete(false);
+
+		// 자동 로그인 API 호출
+		getAutoLogin();
+
+
 		/* global google*/
 
 		// if(google.accounts.id) {
