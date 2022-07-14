@@ -272,12 +272,12 @@ export const CelebsLuvItem = ({ celeb }) => {
 								<SubText
 									margin="1rem 0 0.5rem 0"
 									fontsize="0.875rem"
-									fontweight="700"
+									fontweight="bold"
 								>
-									아직 해당 셀럽의 아이템이 존재하지 않아요
+									아직 업로드된 아이템이 없어요
 								</SubText>
 								<SubText fontsize="0.875rem" fontweight="normal" color="#8D8D8D">
-									아이템을 직접 업로드 해보세요!
+									직접 업로드 해보세요!
 								</SubText>
 							</ItemContainer>
 						)}
@@ -294,7 +294,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 						}}
 					>
 						<NoItem></NoItem>
-						<SubText margin="1rem 0" fontsize="0.875rem" fontweight="700">
+						<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
 							아직 해당 셀럽의 아이템이 존재하지 않아요
 						</SubText>
 					</ItemContainer>

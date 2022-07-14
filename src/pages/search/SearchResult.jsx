@@ -65,7 +65,7 @@ export default function SearchResult() {
 			}
 			setSearchInput(searchInput);
 			// setSearchInput(searchInput);
-			// navigate(`/search/result/${searchInput}`, { state: { searchInput } });
+			navigate(`/search/result`, { state: { searchInput } });
 			getSearchResultList(queryKeyword);
 		}
 	};

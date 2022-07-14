@@ -363,11 +363,11 @@ export default function CelebDetail() {
 						}}
 					>
 						<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
-						<SubText fontsize="1rem" fontweight="bolds" margin="1rem 0 0.4375rem 0">
-							아직 해당 셀럽의 아이템이 존재하지 않아요
+						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+							아직 업로드된 아이템이 없어요
 						</SubText>
 						<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
-							아이템을 직접 업로드 해보세요!
+							직접 업로드 해보세요!
 						</SubText>
 					</ItemContainer>
 				)}
