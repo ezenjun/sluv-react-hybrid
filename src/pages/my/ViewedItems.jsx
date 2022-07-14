@@ -22,37 +22,12 @@ export default function ViewedItems() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 
 	const [itemCount, setItemCount] = useState(0);
-	const [itemList, setItemList] = useState([
-		{
-			itemIdx: 17,
-			itemImgUrl: '이미지 3',
-			name: '최우식',
-			isDib: 'N',
-			brandKr: '트리플에이',
-			itemName: '나이키 반바지',
-		},
-		{
-			itemIdx: 14,
-			itemImgUrl: '이미지 1',
-			name: '스트레이키즈',
-			isDib: 'Y',
-			brandKr: '에이리프',
-			itemName: '자라 반바지',
-		},
-		{
-			itemIdx: 10,
-			itemImgUrl: '아이템 이미지 url',
-			name: '스트레이키즈',
-			isDib: 'Y',
-			brandKr: '어콜드월',
-			itemName: '테스트 아이템 2',
-		},
-	]);
+	const [itemList, setItemList] = useState([]);
 
 	useEffect(() => {
 		setBottomNavStatus(false);
 
-		// getViewItems();
+		getViewItems();
 	}, []);
 
 	const getViewItems = async () => {
