@@ -19,6 +19,7 @@ export default function SelectItemCategoryDialog(props) {
 					filterList[props.selectedMainFilter - 1].name + ' > ' + props.selectedSubFilter
 				);
 			} else {
+				props.getSelectedSubFilter('기타');
 				props.setCategory(
 					filterList[props.selectedMainFilter - 1].name);
 			}
@@ -59,7 +60,7 @@ export default function SelectItemCategoryDialog(props) {
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv>
+			<BottomDialogDiv openStatus={bottomMenuStatusState}>
 				<CloseWrap>
 					<div
 						style={{

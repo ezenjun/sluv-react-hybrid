@@ -50,6 +50,7 @@ export default function UploadItem() {
 	const [infoDialogStatus, setInfoDialogStatus] = useState(false);
 	const [selectedFileList, setSelectedFileList] = useState([]);
 	const [imgUrlList, setImgUrlList] = useState([]);
+	const [previewImgUrlList, setPreviewImgUrlList] = useState([]);
 
 	const [productName, setProductName] = useState('');
 	const [isProductName, setIsProductName] = useState(false);
@@ -96,8 +97,6 @@ export default function UploadItem() {
 				return data;
 		}
 	}, []);
-
-	
 
 	AWS.config.update({
 		region: REGION,
@@ -195,10 +194,30 @@ export default function UploadItem() {
 		imgInput.current.click();
 	};
 	const onChangeImg = (e) => {
-		const files = e.target.files;
-		console.log(files);
-		setSelectedFileList(files);
+		const fileArr = e.target.files;
+		setImgUrlList(fileArr);
+		console.log(fileArr);
+		
+		let fileURLs = [];
+
+		let file;
+		let filesLength = fileArr.length > 5 ? 5 : fileArr.length;
+
+		for (let i = 0; i < filesLength; i++) {
+			file = fileArr[i];
+
+			let reader = new FileReader();
+			reader.onload = () => {
+				fileURLs[i] = reader.result;
+				setPreviewImgUrlList([...fileURLs]);
+			};
+			reader.readAsDataURL(file);
+		}
 	};
+	console.log('이미지파일리스트 : ', imgUrlList);
+	console.log('미리보기이미지리스트 : ', previewImgUrlList);
+
+
 
 	const s3ImgUpload = (file) => {
 		const params = {
@@ -239,7 +258,7 @@ export default function UploadItem() {
 			celebIdx: selectedCeleb.celebIdx,
 			memberIdx: selectedMember.memberIdx,
 			parentCategory: filterList[selectedItemMainFilter - 1].name,
-			subCategory: selectedItemSubFilter,
+			subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
 			brandIdx: brandObj.brandIdx,
 			name: productName,
 			whenDiscovery: date,
@@ -456,8 +475,15 @@ export default function UploadItem() {
 						</SpeechBubbleWrap>
 
 						<ImgUploadBubbleWrap>
+							{previewImgUrlList.length > 0 &&
+								previewImgUrlList.map((img, index) => (
+									<PreviewImgWrap key={index}>
+										<img className='previewImg' src={img} alt='미리보기 이미지'/>
+									</PreviewImgWrap>
+
+								))}
 							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
-								<Plus style={{ width: '24px', height: '24px' }} />
+								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
 							</UploadButtonWrap>
 							<input
 								type="file"
@@ -468,6 +494,7 @@ export default function UploadItem() {
 								multiple
 							/>
 						</ImgUploadBubbleWrap>
+						<div style={{ height: '8.5rem' }}></div>
 					</TopRadiusContainer>
 
 					{popUpPageNum === 1 && (
@@ -557,4 +584,25 @@ const UploadButtonWrap = styled.button`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+`;
+
+const PreviewImgWrap = styled.div`
+	width: 5rem;
+	height: 5rem;
+	border-radius: 13px;
+	border: solid 1px #94849d;
+	position: relative;
+	margin-right: 0.5rem;
+
+	/* position: absolute;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover; */
+
+	.previewImg {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 13px;
+	}
 `;

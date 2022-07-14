@@ -36,8 +36,9 @@ export const SpeechBubbleWrap = styled.div`
 
 export const ImgUploadBubbleWrap = styled.div`
 	overflow-x: auto;
-	float: right;
+	/* float: right; */
 	display: flex;
+	flex-direction: row;
 	background-color: white;
 	position: relative;
 	padding: 0.625rem;
