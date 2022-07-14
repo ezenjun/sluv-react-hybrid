@@ -13,6 +13,12 @@ import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { FavoriteCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import { customApiClient } from '../../utils/apiClient';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -21,8 +27,13 @@ export default function Home() {
 	const [noticeState, setNoticeState] = useState(false);
 
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 	const [favoriteCelebList, setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const tabList = [
 		{
@@ -78,6 +89,21 @@ export default function Home() {
 		window.scrollTo(0, 0);
 	};
 
+	const onClickUploadQuestion = () => {
+		setUploadPopupStatus(false);
+		setToastMessageBottomPosition('4rem');
+		setToastMessage('준비 중이에요. 조금만 기다려주세요!');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+
 	return (
 		<>
 			<MainContainer padding="0 0 1.25rem 0">
@@ -122,7 +148,7 @@ export default function Home() {
 							<span>정보 공유하기</span>
 						</div>
 						<div
-							onClick={() => navigate('/upload/question')}
+							onClick={onClickUploadQuestion}
 							className="uploadPopupBtn bottomBtn"
 						>
 							<IconUploadQuestion
