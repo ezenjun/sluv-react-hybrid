@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../../utils/apiClient';
 
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 import { HorizontalLine } from '../../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../../components/Lines/VerticalLine';
-
+import { BottomSlideMenu } from '../../../components/containers/BottomSlideMenu';
+import { ReactComponent as PlusButton } from '../../../assets/Icons/plusButton.svg';
 import { ReactComponent as NoItem } from '../../../assets/Icons/noItemIcon.svg';
 import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../../assets/Icons/binderRed.svg';
-import img from '../img.png';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../../recoil/ToastMessage';
+import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
 
 export const CelebsLuvItem = ({ celeb }) => {
 	const navigate = useNavigate();
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 	const onDetailCelebClick = celeb => {
 		navigate(`/celeb/detail/${celeb.celebIdx}`, {
 			state: celeb,
@@ -25,8 +36,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
-	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
-	const [hotIsBinderList, setHotIsBinderList] = useState([]);
+
 	const [CurrentList, setCurrentList] = useState([]);
 
 	const [selectedFilter, setSelectedFilter] = useState(1);
@@ -79,22 +89,159 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 	};
-	const onBinderClick = itemIdx => {
-		for (var i = 0; i < latestIsBinderList.length; i++) {
-			for (var j = 0; j < latestIsBinderList[i].length; j++) {
-				if (latestList[i][j].itemIdx === itemIdx) {
-					latestIsBinderList[i][j] = !latestIsBinderList[i][j];
-				}
-			}
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
 		}
-		for (var i = 0; i < hotIsBinderList.length; i++) {
-			for (var j = 0; j < hotIsBinderList[i].length; j++) {
-				if (hotList[i][j].itemIdx === itemIdx) {
-					hotIsBinderList[i][j] = !hotIsBinderList[i][j];
-				}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+	const [openState, setOpenState] = useState(false);
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+		setBottomMenuStatusState(false);
+	};
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
+	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
+	const [hotIsBinderList, setHotIsBinderList] = useState([]);
+
+	const onAddBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemIdx);
+		console.log(itemIdx);
+		console.log('selectedItemIdx', selectedItemIdx);
+		// setBottomMenuStatusState(true);
+	};
+	const getOpenStatus = input => {
+		setOpenState(input);
+	};
+	// console.log('셀렉트아이템인덱스', selectedItemIdx);
+	const [binderName, setBinderName] = useState('');
+	const onSelectBinder = binderIdx => {
+		console.log('셀렉트 바인더', selectedItemIdx);
+
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				console.log(binderList[i]);
+				setBinderName(binderList[i].name);
+				console.log(binderList[i].name);
+				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
 			}
 		}
 	};
+	const onDeleteBinderClick = (itemIdx, e) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			for (var j = 0; j < latestIsBinderList[i].length; j++) {
+				if (latestList[i]) {
+					if (latestList[i][j].itemIdx === selectedItemIdx) {
+						tempLatest[i][j] = !tempLatest[i][j];
+						setLatestIsBinderList([...tempLatest]);
+						console.log('clicked');
+					}
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+		let tempHot = hotIsBinderList;
+		for (var k = 0; k < hotIsBinderList.length; k++) {
+			for (var l = 0; l < hotIsBinderList[k].length; l++) {
+				if (hotList[k]) {
+					if (hotList[k][l].itemIdx === selectedItemIdx) {
+						tempHot[k][l] = !tempHot[k][l];
+						setHotIsBinderList([...tempHot]);
+					}
+				}
+			}
+		}
+		console.log('tempHot', tempHot);
+		setBottomMenuStatusState(false);
+		setOpenState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			for (var j = 0; j < latestIsBinderList[i].length; j++) {
+				if (latestList[i]) {
+					if (latestList[i][j].itemIdx === itemIdx) {
+						tempLatest[i][j] = !tempLatest[i][j];
+						setLatestIsBinderList([...tempLatest]);
+						console.log('clicked');
+					}
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+		let tempHot = hotIsBinderList;
+		for (var k = 0; k < hotIsBinderList.length; k++) {
+			for (var l = 0; l < hotIsBinderList[k].length; l++) {
+				if (hotList[k]) {
+					if (hotList[k][l].itemIdx === itemIdx) {
+						tempHot[k][l] = !tempHot[k][l];
+						setHotIsBinderList([...tempHot]);
+					}
+				}
+			}
+		}
+		console.log('tempHot', tempHot);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
 	const [latestList, setLatestList] = useState([]);
 	const [hotList, setHotList] = useState([]);
 
@@ -120,7 +267,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 				tmp.push(false);
 			}
 		}
-		setLatestIsBinderList([...tmp]);
+		setLatestIsBinderList([...latestIsBinderList, tmp]);
 		console.log('latest temp', tmp);
 	};
 	const getTotalHotList = async () => {
@@ -144,7 +291,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 			}
 		}
 
-		setHotIsBinderList([...tmp]);
+		setHotIsBinderList([...hotIsBinderList, tmp]);
 		console.log('hot temp', tmp);
 	};
 
@@ -217,152 +364,242 @@ export const CelebsLuvItem = ({ celeb }) => {
 	}, []);
 
 	return (
-		<ItemContainer>
-			<TextWrap>
-				<MainText fontsize="1.5rem">
-					#{celeb.name}'s
-					<br />
-					LUV 아이템
-				</MainText>
-				<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
-			</TextWrap>
-			<ChipWrap>
-				<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
-					{celeb.name}
-				</Chip>
-				{celeb.memberList.map((member, idx) => (
-					<Chip
-						key={idx}
-						selected={selectedChip === idx + 1}
-						onClick={() => onChipClick(idx + 1, member.memberIdx)}
-					>
-						{member.name}
+		<>
+			<ItemContainer>
+				<TextWrap>
+					<MainText fontsize="1.5rem">
+						#{celeb.name}'s
+						<br />
+						LUV 아이템
+					</MainText>
+					<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
+				</TextWrap>
+				<ChipWrap>
+					<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
+						{celeb.name}
 					</Chip>
-				))}
-			</ChipWrap>
-			<HorizontalLine />
-			{CurrentList.length > 0 && (
-				<FilterWrap>
-					{filterList.map(item => {
-						return (
-							<SubText
-								key={item.idx}
-								fontsize="0.875rem"
-								fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
-								margin="0 1rem 0 0 "
-								onClick={() => onFilterClick(item.idx)}
-								selected={selectedFilter === item.idx}
-								color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
-							>
-								{item.name}
-							</SubText>
-						);
-					})}
-				</FilterWrap>
-			)}
-			<>
-				{CurrentList ? (
-					<>
-						{CurrentList.length > 0 ? (
-							<ItemWrap>
-								{CurrentList.map(item => (
-									<Item
-										key={item.itemIdx}
-										onClick={() => onDetailItemClick(item.itemIdx)}
-									>
-										<Image src={item.itemImgUrl}>
-											<ImageText>
-												<SubText
-													fontsize="0.8125rem"
-													fontweight="bold"
-													color="white"
-												>
-													{item.name}'s
-												</SubText>
-												{item.isDib === 'Y' ? (
-													<BinderRed
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-															zIndex: '50',
-														}}
-													/>
-												) : (
-													<BinderWhite
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-															zIndex: '50',
-														}}
-													/>
-												)}
-											</ImageText>
-										</Image>
-										<SubText
-											fontsize="16px"
-											fontweight="bold"
-											margin="0 0 0.375rem 0 "
-										>
-											{item.brandKr}
-										</SubText>
-										<SubText
-											color="#262626"
-											style={{
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												overflow: 'hidden',
-												width: '100%',
-											}}
-										>
-											{item.itemName}
-										</SubText>
-									</Item>
-								))}
-							</ItemWrap>
-						) : (
-							<ItemContainer
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignContent: 'center',
-									alignItems: 'center',
-									paddingBottom: '2.5rem',
-									width: '100%',
-								}}
-							>
-								<NoItem></NoItem>
+					{celeb.memberList.map((member, idx) => (
+						<Chip
+							key={idx}
+							selected={selectedChip === idx + 1}
+							onClick={() => onChipClick(idx + 1, member.memberIdx)}
+						>
+							{member.name}
+						</Chip>
+					))}
+				</ChipWrap>
+				<HorizontalLine />
+				{CurrentList.length > 0 && (
+					<FilterWrap>
+						{filterList.map(item => {
+							return (
 								<SubText
-									margin="1rem 0 0.5rem 0"
+									key={item.idx}
 									fontsize="0.875rem"
-									fontweight="bold"
+									fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
+									margin="0 1rem 0 0 "
+									onClick={() => onFilterClick(item.idx)}
+									selected={selectedFilter === item.idx}
+									color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
 								>
-									아직 업로드된 아이템이 없어요
+									{item.name}
 								</SubText>
-								<SubText fontsize="0.875rem" fontweight="normal" color="#8D8D8D">
-									직접 업로드 해보세요!
-								</SubText>
-							</ItemContainer>
-						)}
-					</>
-				) : (
-					<ItemContainer
-						style={{
-							display: 'flex',
-							alignContent: 'center',
-							justifyContent: 'center',
-							alignItems: 'center',
-							paddingBottom: '2.5rem',
-							width: '100%',
-						}}
-					>
-						<NoItem></NoItem>
-						<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
-							아직 해당 셀럽의 아이템이 존재하지 않아요
-						</SubText>
-					</ItemContainer>
+							);
+						})}
+					</FilterWrap>
 				)}
-			</>
-		</ItemContainer>
+				<>
+					{CurrentList ? (
+						<>
+							{CurrentList.length > 0 ? (
+								<ItemWrap>
+									{CurrentList.map((item, index) => (
+										<Item key={item.itemIdx}>
+											<Image
+												style={{ zIndex: '0' }}
+												src={item.itemImgUrl}
+												onClick={() => onDetailItemClick(item.itemIdx)}
+											>
+												<ImageText>
+													<SubText
+														fontsize="0.8125rem"
+														fontweight="bold"
+														color="white"
+													>
+														{item.name}'s
+													</SubText>
+													{selectedFilter === 1 ? (
+														<>
+															{latestIsBinderList[selectedChip] && (
+																<>
+																	{latestIsBinderList[
+																		selectedChip
+																	][index] === true ? (
+																		<BinderRed
+																			onClick={e =>
+																				onDeleteBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '900',
+																			}}
+																		/>
+																	) : (
+																		<BinderWhite
+																			onClick={e =>
+																				onAddBinderClick(
+																					e,
+																					item.itemIdx
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '900',
+																			}}
+																		/>
+																	)}
+																</>
+															)}
+														</>
+													) : (
+														<>
+															{hotIsBinderList[selectedChip] && (
+																<>
+																	{hotIsBinderList[selectedChip][
+																		index
+																	] ? (
+																		<BinderRed
+																			onClick={e =>
+																				onDeleteBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '150',
+																			}}
+																		/>
+																	) : (
+																		<BinderWhite
+																			onClick={e =>
+																				onAddBinderClick(
+																					item.itemIdx,
+																					e
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																				zIndex: '150',
+																			}}
+																		/>
+																	)}
+																</>
+															)}
+														</>
+													)}
+												</ImageText>
+											</Image>
+											<SubText
+												fontsize="16px"
+												fontweight="bold"
+												margin="0 0 0.375rem 0 "
+											>
+												{item.brandKr}
+											</SubText>
+											<SubText
+												color="#262626"
+												style={{
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+													width: '100%',
+												}}
+											>
+												{item.itemName}
+											</SubText>
+										</Item>
+									))}
+								</ItemWrap>
+							) : (
+								<ItemContainer
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignContent: 'center',
+										alignItems: 'center',
+										paddingBottom: '2.5rem',
+										width: '100%',
+									}}
+								>
+									<NoItem></NoItem>
+									<SubText
+										margin="1rem 0 0.5rem 0"
+										fontsize="0.875rem"
+										fontweight="bold"
+									>
+										아직 업로드된 아이템이 없어요
+									</SubText>
+									<SubText
+										fontsize="0.875rem"
+										fontweight="normal"
+										color="#8D8D8D"
+									>
+										직접 업로드 해보세요!
+									</SubText>
+								</ItemContainer>
+							)}
+						</>
+					) : (
+						<ItemContainer
+							style={{
+								display: 'flex',
+								alignContent: 'center',
+								justifyContent: 'center',
+								alignItems: 'center',
+								paddingBottom: '2.5rem',
+								width: '100%',
+							}}
+						>
+							<NoItem></NoItem>
+							<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
+								아직 해당 셀럽의 아이템이 존재하지 않아요
+							</SubText>
+						</ItemContainer>
+					)}
+				</>
+			</ItemContainer>
+
+			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
+				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+					<ImageWrap>
+						<PlusButton></PlusButton>
+					</ImageWrap>
+					<SubText fontsize="1rem" margin="0.9375rem 0">
+						바인더 만들기
+					</SubText>
+				</RowWrap>
+				<HorizontalLine></HorizontalLine>
+				{binderList.map(binder => (
+					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							&nbsp;({binder.dibCount})
+						</SubText>
+					</RowWrap>
+				))}
+			</BottomSlideMenu>
+		</>
 	);
 };
 const ItemContainer = styled.div`
@@ -486,4 +723,23 @@ const ImageText = styled.div`
 	width: 100%;
 	align-items: center;
 	justify-content: space-between;
+`;
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;

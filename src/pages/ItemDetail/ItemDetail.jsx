@@ -244,9 +244,9 @@ export default function ItemDetail() {
 					</ItemInfoContainer>
 					<ItemInfoContainer backgroundColor="#F8F7FA" padding="2rem">
 						<div style={{ display: 'flex', alignItems: 'center' }}>
-							<UserImage></UserImage>
+							<UserImage src={itemInfo.profileImgUrl}></UserImage>
 							<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
-								이리노순둥도리
+								{itemInfo.nickName}
 							</SubText>
 						</div>
 						<SpeechBubbleWrap
@@ -311,7 +311,7 @@ export default function ItemDetail() {
 
 					<UserInfo>
 						<Left>
-							<UserImage size="3.25rem"></UserImage>
+							<UserImage size="3.25rem" src={itemInfo.profileImgUrl}></UserImage>
 							<UserTextWrap>
 								{itemInfo.isMe === 'Y' ? (
 									<SubText
@@ -645,7 +645,10 @@ const UserImage = styled.div`
 	width: ${props => props.size || '1.5rem'};
 	height: ${props => props.size || '1.5rem'};
 	border-radius: 50%;
-	background-color: darkgoldenrod;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	background-image: url(${props => props.src});
 `;
 const FeedContainer = styled.div`
 	overflow-y: scroll;

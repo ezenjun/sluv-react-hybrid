@@ -246,6 +246,7 @@ const FollowButton = styled.div`
 	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
 	font-size: 0.875rem;
 	font-weight: 600;
+	position: relative;
 `;
 const TextWrap = styled.div`
 	display: flex;
