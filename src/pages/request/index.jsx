@@ -10,14 +10,9 @@ import {
 	SpeechBubbleTextArea,
 } from '../../components/Bubbles/InputSpeechBubble';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
-import {
-	ToastMessageBottomPositionState,
-	ToastMessageState,
-	ToastMessageStatusState,
-	ToastMessageWrapStatusState,
-} from '../../recoil/ToastMessage';
 import { customApiClient } from '../../utils/apiClient';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 
 export default function RequestCeleb() {
 	const navigate = useNavigate();
@@ -26,12 +21,8 @@ export default function RequestCeleb() {
 	const [reason, setReason] = useState('');
 	const [isName, setIsName] = useState(false);
 	const [isReason, setIsReason] = useState(false);
-	const [isConfirm, setIsConfirm] = useState(false);
 
-	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
-	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
-	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
-	const setToastMessage = useSetRecoilState(ToastMessageState);
+	const [popupStatus, setPopupStatus] = useState(false);
 
 	useEffect(() => {
 		if (name) {
@@ -49,16 +40,9 @@ export default function RequestCeleb() {
 		setIsReason(false);
 	}, [reason]);
 
-	useEffect(() => {
-		if (name && reason) {
-			setIsConfirm(true);
-			return;
-		}
-		setIsConfirm(false);
-	}, [name, reason]);
 
 	const onClickConfirm = async () => {
-		if (isConfirm) {
+		if (isName) {
 			// 셀럽 추가 요청하기 API
 			const body = {
 				name: name,
@@ -69,20 +53,14 @@ export default function RequestCeleb() {
 				console.log(data.message);
 				return;
 			}
-			setToastMessageBottomPosition('1.625rem');
-			setToastMessage('셀럽 추가를 성공적으로 요청했어요');
-			setToastMessageWrapStatus(true);
-			setToastMessageStatus(true);
-
-			setTimeout(() => {
-				setToastMessageStatus(false);
-			}, 2000);
-			setTimeout(() => {
-				setToastMessageWrapStatus(false);
-				navigate(-1);
-			}, 2300);
+			setPopupStatus(true);
 		}
 	};
+
+	const onClickYes = () => {
+		setPopupStatus(false);
+		navigate(-1);
+	}
 
 	return (
 		<MainContainer>
@@ -91,7 +69,7 @@ export default function RequestCeleb() {
 				<div className="centerText">셀럽 추가 요청하기</div>
 				<div
 					className="rightText"
-					style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
+					style={{ color: isName ? '#262626' : '#b1b1b1' }}
 					onClick={onClickConfirm}
 				>
 					완료
@@ -127,6 +105,38 @@ export default function RequestCeleb() {
 					/>
 				</InputSpeechBubbleWrap>
 			</TopRadiusContainer>
+
+			<WholePage openStatus={popupStatus}>
+				<ModalWrap>
+					<div
+						style={{
+							marginTop: '1.5rem',
+							fontSize: '1.125rem',
+							fontWeight: 'bold',
+							color: '#262626',
+						}}
+					>
+						'{name}'을
+						<br/>
+						요청해 주셔서 감사해요!
+					</div>
+					<div
+						style={{
+							fontSize: '0.875rem',
+							color: '#8d8d8d',
+							margin: '0.75rem 0 2rem',
+							lineHeight: '1.36',
+						}}
+					>
+						셀럽이 추가되면 이메일로 알려드릴게요!
+						<br />
+						다른 셀럽을 먼저 선택해주세요
+					</div>
+					<PurpleButton onClick={onClickYes} marginBottom="0">
+						확인
+					</PurpleButton>
+				</ModalWrap>
+			</WholePage>
 		</MainContainer>
 	);
 }
