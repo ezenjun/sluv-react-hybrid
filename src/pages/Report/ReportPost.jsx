@@ -11,6 +11,8 @@ import { ReactComponent as Unchecked } from '../../assets/Icons/icon_circular_ch
 import { ReactComponent as Checked } from '../../assets/Icons/icon_circular_checkbox_fill.svg';
 import { InputSpeechBubbleWrap, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
 import { customApiClient } from '../../utils/apiClient';
+import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function ReportPost() {
 	const { idx } = useParams();
@@ -42,6 +44,7 @@ export default function ReportPost() {
 	const [checkedElement, setCheckedElement] = useState(-1);
 	const [extraOpinion, setExtraOpinion] = useState('');
 	const [isExtraOpinion, setIsExtraOpinion] = useState(false);
+	const [popupStatus, setPopupStatus] = useState(false);
 
 	const onChangeRadioButton = e => {
 		setIsConfirm(true);
@@ -75,6 +78,11 @@ export default function ReportPost() {
 		console.log(data);
 		if(!data.isSuccess) return;
 
+		setPopupStatus(true);
+	}
+
+	const onClickYes = () => {
+		setPopupStatus(false);
 		navigate(-1);
 	}
 
@@ -135,6 +143,36 @@ export default function ReportPost() {
 					/>
 				</InputSpeechBubbleWrap>
 			</TopRadiusContainer>
+
+			<WholePage openStatus={popupStatus}>
+				<ModalWrap>
+					<div
+						style={{
+							marginTop: '1.5rem',
+							fontSize: '1.125rem',
+							fontWeight: 'bold',
+							color: '#262626',
+						}}
+					>
+						게시글이 신고되었어요
+					</div>
+					<div
+						style={{
+							fontSize: '0.875rem',
+							color: '#8d8d8d',
+							margin: '0.75rem 0 2rem',
+							lineHeight: '1.36',
+						}}
+					>
+						해당 게시글을 검수할게요
+						<br />
+						조금만 기다려주세요!
+					</div>
+					<PurpleButton onClick={onClickYes} marginBottom="0">
+						확인
+					</PurpleButton>
+				</ModalWrap>
+			</WholePage>
 		</MainContainer>
 	);
 }
