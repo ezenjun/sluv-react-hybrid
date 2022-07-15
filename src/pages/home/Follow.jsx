@@ -40,6 +40,10 @@ export default function Follow() {
 		console.log('유저 클리리리리');
 		navigate(`/users/${idx}`);
 	};
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+		// window.location.reload();
+	};
 
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
@@ -253,7 +257,7 @@ export default function Follow() {
 				<>
 					<LargeViewWrap padding="0 20px 40px 20px">
 						{followItemList.map((item, index) => (
-							<div key={item.itemIdx}>
+							<div key={item.itemIdx} onClick={() => onDetailItemClick(item.itemIdx)}>
 								<LargeViewItem>
 									<LargeViewImage src={item.itemImgUrl}>
 										<ImageText>
