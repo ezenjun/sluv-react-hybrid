@@ -99,7 +99,7 @@ export default function Pages() {
 			<Route path="/support/notices/page/:idx" element={<SupportNoticeDetail />} />
 
 			<Route path="/report/user/:idx" element={<ReportUser />} />
-			<Route path="/report/post" element={<ReportPost />} />
+			<Route path="/report/post/:idx" element={<ReportPost />} />
 			<Route path="/report/comment" element={<ReportComment />} />
 		</Routes>
 	);

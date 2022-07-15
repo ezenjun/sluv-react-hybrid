@@ -24,11 +24,12 @@ import { ReactComponent as BinderGrey } from '../../assets/Icons/binderGrey.svg'
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as LikeButtonGrey } from '../../assets/Icons/likeButton.svg';
 import { ReactComponent as LikeButtonRed } from '../../assets/Icons/likeButtonRed.svg';
+import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 
 import { ReactComponent as ItemLinkIcon } from '../../assets/Icons/itemLinkIcon.svg';
 import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_rightArrow.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
-import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
+import { BottomDialogDiv, BottomDialogWrap, BottomSlideMenu, CloseWrap } from '../../components/containers/BottomSlideMenu';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import {
 	ToastMessageBottomPositionState,
@@ -48,9 +49,8 @@ export default function ItemDetail() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const onReport = () => {
-		setBottomMenuStatusState(true);
-	};
+	const [reportDialogStatus, setReportDialogStatus] = useState(false);
+
 	const onReportPost = () => {
 		setBottomMenuStatusState(false);
 		navigate('/report/post');
@@ -274,6 +274,7 @@ export default function ItemDetail() {
 		getItemInfo();
 		setBottomNavStatus(false);
 	}, [itemIdx]);
+
 	return (
 		<MainContainer padding="0 0 0 0">
 			{itemInfo.isMe === 'Y' ? (
@@ -310,7 +311,7 @@ export default function ItemDetail() {
 						style={{ width: '1.5rem', height: '1.5rem', marginRight: '1.25rem' }}
 					></ShareButton>
 					<EditButton
-						onClick={onReport}
+						onClick={() => setReportDialogStatus(true)}
 						style={{ width: '1.5rem', height: '1.5rem' }}
 					></EditButton>
 				</div>
@@ -695,6 +696,31 @@ export default function ItemDetail() {
 					</RowWrap>
 				))}
 			</BottomSlideMenu>
+
+			<BottomDialogWrap openStatus={reportDialogStatus}>
+				<div
+					onClick={() => setReportDialogStatus(false)}
+					style={{ height: '100%', width: '100%' }}
+				></div>
+				<BottomDialogDiv openStatus={reportDialogStatus}>
+					<CloseWrap>
+						<Close
+							style={{
+								width: '1.5rem',
+								height: '1.5rem',
+								position: 'absolute',
+								right: '1.25rem',
+							}}
+							onClick={() => setReportDialogStatus(false)}
+						></Close>
+					</CloseWrap>
+					<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem' }}>
+						<div style={{ paddingBottom: '1.875rem' }}>수정 요청하기</div>
+						<div style={{ paddingBottom: '1.875rem' }} onClick={() => navigate(`/report/post/${itemIdx}`)}>게시글 신고하기</div>
+						<div>'{itemInfo.nickName}'님 신고하기</div>
+					</div>
+				</BottomDialogDiv>
+			</BottomDialogWrap>
 		</MainContainer>
 	);
 }
