@@ -48,6 +48,10 @@ export default function HotItem() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+		// window.location.reload();
+	};
 	// 최신순/ 인기순
 
 	const [selectedFilter, setSelectedFilter] = useState(1);
@@ -329,7 +333,10 @@ export default function HotItem() {
 									{CurrentList && (
 										<>
 											{CurrentList.map((item, index) => (
-												<div key={item.itemIdx}>
+												<div
+													key={item.itemIdx}
+													onClick={() => onDetailItemClick(item.itemIdx)}
+												>
 													<LargeViewItem>
 														<LargeViewImage src={item.itemImgUrl}>
 															<ImageText>
@@ -454,7 +461,10 @@ export default function HotItem() {
 							<>
 								<GridItemWrap>
 									{CurrentList.map((item, index) => (
-										<GridItem key={item.itemIdx}>
+										<GridItem
+											key={item.itemIdx}
+											onClick={() => onDetailItemClick(item.itemIdx)}
+										>
 											<GridImage src={item.itemImgUrl}>
 												<ImageText>
 													<SubText
