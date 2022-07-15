@@ -94,7 +94,7 @@ export default function ReportComment() {
 			<TopNav style={{ justifyContent: 'space-between' }}>
 				<BackButton onClick={() => navigate(-1)} />
 				<MainText style={{ fontSize: '1.125rem' }} className="centerText">
-					게시글 신고하기
+					수정 요청하기
 				</MainText>
 				<div
 					style={{ color: isConfirm ? '#262626' : '#dadada' }}
@@ -108,7 +108,7 @@ export default function ReportComment() {
 			<TopRadiusContainer style={{ flex: '1' }}>
 				<SpeechBubbleWrap>
 					<span>
-						게시글을 신고하는 이유가 궁금해요<span className="redStar">*</span>
+						게시글 수정을 요청하는 이유가 궁금해요<span className="redStar">*</span>
 					</span>
 				</SpeechBubbleWrap>
 				<CheckboxWrap>
