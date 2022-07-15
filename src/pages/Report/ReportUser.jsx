@@ -178,10 +178,10 @@ export const CheckboxWrap = styled.div`
 	border: 1px solid #fff;
 	box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.05);
 	margin-top: 0.75rem;
-	margin-right: 0.5rem;
+	margin-left: 0.5rem;
 `;
 
-const CircularCheckboxWrap = styled.label`
+export const CircularCheckboxWrap = styled.label`
 	display: flex;
 	align-items: center;
 	margin-bottom: 0.75rem;

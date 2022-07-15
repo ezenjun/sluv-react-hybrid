@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const SpeechBubbleWrap = styled.div`
-	display: flex;
+	display: inline-flex;
 	width: auto;
 	background: ${props => props.backgroundColor || 'white'};
 	position: relative;
