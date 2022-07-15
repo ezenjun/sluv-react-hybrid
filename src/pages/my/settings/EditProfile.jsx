@@ -11,6 +11,7 @@ import { SubText } from '../../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../../assets/Icons/check_validation.svg';
 import { ReactComponent as UserBasicProfileImg } from '../../../assets/Icons/user_basic_profile_img.svg';
+import { ReactComponent as Close } from '../../../assets/Icons/CloseX.svg';
 import { PurpleButton } from '../../../components/Buttons/PurpleButton';
 import { useEffect } from 'react';
 import AWS from 'aws-sdk';
@@ -18,6 +19,7 @@ import { REGION, USER_PROFILE_IMAGE_S3_BUCKET } from '../../../utils/s3Module';
 import { customApiClient } from '../../../utils/apiClient';
 import { useSetRecoilState } from 'recoil';
 import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../../recoil/ToastMessage';
+import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../../components/containers/BottomSlideMenu';
 
 AWS.config.update({
 	region: REGION,
@@ -41,6 +43,7 @@ export default function EditProfile() {
 	const [newProfileImgUrl, setNewProfileImgUrl] = useState('');
 	const [nicknameValid, setNicknameValid] = useState(false);
 	const [selectedFile, setSelectedFile] = useState('');
+	const [bottomDialogStatus, setBottomDialogStatus] = useState(false);
 
 	useEffect(() => {
 		setNickname(state.nickName);
@@ -72,9 +75,17 @@ export default function EditProfile() {
 		const reader = new FileReader();
 		reader.onload = () => (imgEL.style.backgroundImage = `url(${reader.result})`);
 		reader.readAsDataURL(file);
+
+		setBottomDialogStatus(false);
 	};
 
-
+	const onClickProfileImg = () => {
+		setBottomDialogStatus(true);
+	};
+	const onClickCurrentImgDelete = () => {
+		setProfileImgUrl('');
+		setBottomDialogStatus(false);
+	}
 	const onClickProfileChange = (e) => {
 		e.preventDefault();
 		profileImgInput.current.click();
@@ -125,10 +136,24 @@ export default function EditProfile() {
 	};
 
 	const patchUserProfile = async () => {
-		const body = {
-			nickName: nickname,
-			profileImgUrl: newProfileImgUrl ? newProfileImgUrl : null,
-		};
+		let body = {};
+		if(newProfileImgUrl) {
+			body = {
+				nickName: nickname,
+				profileImgUrl: newProfileImgUrl,
+			};
+		} else if (profileImgUrl) {
+			body = {
+				nickName: nickname,
+				profileImgUrl: profileImgUrl,
+			};
+		} else {
+			body = {
+				nickName: nickname,
+				profileImgUrl: null,
+			};
+		}
+		
 		console.log(body);
 		const data = await customApiClient('patch', '/users/profiles', body);
 		console.log(data);
@@ -181,7 +206,7 @@ export default function EditProfile() {
 			<ContentWrap style={{ flex: '1' }}>
 				<ProfileImgWrap>
 					<div
-						onClick={onClickProfileChange}
+						onClick={onClickProfileImg}
 						style={{
 							width: '6.25rem',
 							height: '100%',
@@ -242,6 +267,32 @@ export default function EditProfile() {
 					수정 완료
 				</PurpleButton>
 			</div>
+
+			<BottomDialogWrap openStatus={bottomDialogStatus}>
+				<div
+					onClick={() => setBottomDialogStatus(false)}
+					style={{ height: '100%', width: '100%' }}
+				></div>
+				<BottomDialogDiv openStatus={bottomDialogStatus}>
+					<CloseWrap>
+						<Close
+							style={{
+								width: '1.5rem',
+								height: '1.5rem',
+								position: 'absolute',
+								right: '1.25rem',
+							}}
+							onClick={() => setBottomDialogStatus(false)}
+						></Close>
+					</CloseWrap>
+					<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem' }}>
+						<div style={{ paddingBottom: '1.875rem' }} onClick={onClickProfileChange}>
+							앨범에서 사진 선택
+						</div>
+						<div onClick={onClickCurrentImgDelete}>현재 사진 삭제</div>
+					</div>
+				</BottomDialogDiv>
+			</BottomDialogWrap>
 		</MainContainer>
 	);
 }
