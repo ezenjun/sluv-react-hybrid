@@ -158,7 +158,7 @@ export default function ReportUser() {
 						color: '#262626',
 					}}
 				>
-					게시글이 신고되었어요
+					사용자가 신고되었어요
 				</div>
 				<div
 					style={{
@@ -168,7 +168,7 @@ export default function ReportUser() {
 						lineHeight: '1.36'
 					}}
 				>
-					해당 게시글을 검수할게요
+					해당 사용자를 검수할게요
 					<br />
 					조금만 기다려 주세요!
 				</div>
