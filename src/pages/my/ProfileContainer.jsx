@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
@@ -7,13 +7,20 @@ import { ImageText } from '../../components/ImageText';
 import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 
-export default function ProfileContainer({uploadInfo}) {
+export default function ProfileContainer({ uploadInfo }) {
 	console.log(uploadInfo);
 	return (
 		<ProfileContainerWrap>
 			{uploadInfo.uploadCnt > 0 && (
 				<>
-					<div style={{ fontSize: '1.125rem', fontWeight: 'bold', color: '#262626', marginBottom:'1rem' }}>
+					<div
+						style={{
+							fontSize: '1.125rem',
+							fontWeight: 'bold',
+							color: '#262626',
+							marginBottom: '1rem',
+						}}
+					>
 						<span>아이템</span>
 						<span style={{ marginLeft: '0.25rem', color: '#9e30f4' }}>
 							{uploadInfo.uploadCnt}
@@ -23,7 +30,7 @@ export default function ProfileContainer({uploadInfo}) {
 						{uploadInfo.uploadItemList.length > 0 &&
 							uploadInfo.uploadItemList.map(item => (
 								<GridItem key={item.itemIdx}>
-									<GridImage>
+									<GridImage src={item.itemImgUrl}>
 										<ImageText>
 											<SubText
 												fontsize="0.8125rem"
@@ -64,7 +71,7 @@ export default function ProfileContainer({uploadInfo}) {
 			)}
 		</ProfileContainerWrap>
 	);
-};
+}
 
 const ProfileContainerWrap = styled.div`
 	padding: 1.875rem 1.25rem 0 1.25rem;
