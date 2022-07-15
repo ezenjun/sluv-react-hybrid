@@ -716,8 +716,15 @@ export default function ItemDetail() {
 					</CloseWrap>
 					<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem' }}>
 						<div style={{ paddingBottom: '1.875rem' }}>수정 요청하기</div>
-						<div style={{ paddingBottom: '1.875rem' }} onClick={() => navigate(`/report/post/${itemIdx}`)}>게시글 신고하기</div>
-						<div>'{itemInfo.nickName}'님 신고하기</div>
+						<div
+							style={{ paddingBottom: '1.875rem' }}
+							onClick={() => navigate(`/report/post/${itemIdx}`)}
+						>
+							게시글 신고하기
+						</div>
+						<div onClick={() => navigate(`/report/user/${itemInfo.uploaderIdx}`)}>
+							'{itemInfo.nickName}'님 신고하기
+						</div>
 					</div>
 				</BottomDialogDiv>
 			</BottomDialogWrap>

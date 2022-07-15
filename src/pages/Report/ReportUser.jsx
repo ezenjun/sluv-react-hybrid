@@ -31,19 +31,19 @@ export default function ReportUser() {
 	const [checkListData, setCheckListData] = useState([
 		{
 			idx: 0,
-			text: '스팸 / 홍보성 게시글이에요',
+			text: '판매업자 활동을 해요',
 		},
 		{
 			idx: 1,
-			text: '똑같은 정보를 도배 하였어요',
+			text: '비매너 사용자에요',
 		},
 		{
 			idx: 2,
-			text: '단순 비방으로 불쾌감을 유발해요',
+			text: '욕설을 해요',
 		},
 		{
 			idx: 3,
-			text: '외설적 표현이 담겨있어요',
+			text: '성희롱을 해요',
 		},
 		{
 			idx: 4,
@@ -66,11 +66,18 @@ export default function ReportUser() {
 		setCheckedElement(e.target.value);
 	};
 	const onClickConfirm = async () => {
+		let body = {};
+		if(extraOpinion) {
+			body = {
+				category: checkedElement,
+				content: extraOpinion,
+			};
+		} else {
+			body = {
+				category: checkedElement,
+			};
+		}
 		
-		const body = {
-			category: checkedElement,
-			content: extraOpinion,
-		};
 		const data = await customApiClient('post', `/users/${idx}/report`, body);
 
 		if(!data) return;
