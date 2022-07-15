@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -36,6 +36,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import Loading from '../../components/Loading';
 
 export default function ItemDetail() {
 	let { itemIdx } = useParams();
@@ -60,6 +61,7 @@ export default function ItemDetail() {
 	};
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
+		window.location.reload();
 	};
 	const settings = {
 		dots: true,
@@ -84,14 +86,10 @@ export default function ItemDetail() {
 	const [isLike, setIsLike] = useState();
 	const [likeCnt, setLikeCnt] = useState();
 	const [isFollow, setIsFollow] = useState();
-	const onClickDib = () => {
-		if (isDib) {
-			setDibCnt(dibCnt - 1);
-		} else {
-			setDibCnt(dibCnt + 1);
-		}
-		setIsDib(!isDib);
-	};
+
+	const myRef = useRef(null);
+	const scrollToRef = ref => ref.current.scrollIntoView({ behavior: 'smooth' });
+	const executeScroll = () => scrollToRef(myRef);
 
 	const onAddBinderClick = () => {
 		getBinderList();
@@ -269,11 +267,13 @@ export default function ItemDetail() {
 		console.log('UnLikeItem', data.message);
 		// console.log('userRecommendList', userRecommendList);
 	};
+
 	useEffect(() => {
 		// 하단바 띄워주기
+		//
 		getItemInfo();
 		setBottomNavStatus(false);
-	}, []);
+	}, [itemIdx]);
 	return (
 		<MainContainer padding="0 0 0 0">
 			{itemInfo.isMe === 'Y' ? (
@@ -299,7 +299,11 @@ export default function ItemDetail() {
 				</BottomSlideMenu>
 			)}
 
-			<TopNav style={{ justifyContent: 'space-between' }}>
+			<TopNav
+				style={{
+					justifyContent: 'space-between',
+				}}
+			>
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="rightText">
 					<ShareButton
@@ -311,13 +315,14 @@ export default function ItemDetail() {
 					></EditButton>
 				</div>
 			</TopNav>
+
 			{itemInfo && (
 				<FeedContainer>
 					<ImageContainer>
 						{itemInfo.itemImgList && (
 							<Slider {...settings}>
 								{itemInfo.itemImgList.map(itemImg => (
-									<Image src={itemImg.itemImgUrl}></Image>
+									<Image key={itemImg} src={itemImg.itemImgUrl}></Image>
 								))}
 							</Slider>
 						)}
@@ -774,6 +779,7 @@ const UserImage = styled.div`
 const FeedContainer = styled.div`
 	overflow-y: scroll;
 	display: flex;
+	position: relative;
 	flex-direction: column;
 	box-sizing: border-box;
 	::-webkit-scrollbar {
