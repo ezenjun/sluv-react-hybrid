@@ -34,7 +34,7 @@ export function PopUpModal({ children, closeButton, closeFunction }) {
 
 
 
-const WholePage = styled.div`
+export const WholePage = styled.div`
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
 	justify-content: center;
 	align-items: center;
@@ -47,7 +47,7 @@ const WholePage = styled.div`
 	background-color: rgba(0, 0, 0, 0.7);
 	padding: 1.25rem;
 `;
-const ModalWrap = styled.div`
+export const ModalWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	/* /justify-content: center; */
