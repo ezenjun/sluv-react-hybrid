@@ -29,7 +29,12 @@ import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { ReactComponent as ItemLinkIcon } from '../../assets/Icons/itemLinkIcon.svg';
 import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_rightArrow.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
-import { BottomDialogDiv, BottomDialogWrap, BottomSlideMenu, CloseWrap } from '../../components/containers/BottomSlideMenu';
+import {
+	BottomDialogDiv,
+	BottomDialogWrap,
+	BottomSlideMenu,
+	CloseWrap,
+} from '../../components/containers/BottomSlideMenu';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import {
 	ToastMessageBottomPositionState,
@@ -52,16 +57,14 @@ export default function ItemDetail() {
 	const [reportDialogStatus, setReportDialogStatus] = useState(false);
 
 	const onReportPost = () => {
-		setBottomMenuStatusState(false);
 		navigate('/report/post');
 	};
 	const onReportUser = () => {
-		setBottomMenuStatusState(false);
 		navigate('/report/user');
 	};
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
-		window.location.reload();
+		// window.location.reload();
 	};
 	const settings = {
 		dots: true,
@@ -81,20 +84,21 @@ export default function ItemDetail() {
 	const [otherUserDibItemList, setotherUserDibItemList] = useState([]);
 	const [sameBrandItemList, setsameBrandItemList] = useState([]);
 
+	const [sameCelebItemIsDibList, setSameCelebItemIsDibList] = useState([]);
+	const [otherUserDibItemIsDibList, setOtherUserDibItemIsDibList] = useState([]);
+	const [sameBrandItemIsDibList, setSameBrandItemIsDibList] = useState([]);
+
 	const [isDib, setIsDib] = useState();
 	const [dibCnt, setDibCnt] = useState();
 	const [isLike, setIsLike] = useState();
 	const [likeCnt, setLikeCnt] = useState();
 	const [isFollow, setIsFollow] = useState();
 
-	const myRef = useRef(null);
-	const scrollToRef = ref => ref.current.scrollIntoView({ behavior: 'smooth' });
-	const executeScroll = () => scrollToRef(myRef);
+	// const myRef = useRef(null);
+	// const scrollToRef = ref => ref.current.scrollIntoView({ behavior: 'smooth' });
+	// const executeScroll = () => scrollToRef(myRef);
 
-	const onAddBinderClick = () => {
-		getBinderList();
-		setOpenState(true);
-	};
+	const [openState, setOpenState] = useState(false); // 바인더 클릭 시 하단바 status
 	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
@@ -106,7 +110,6 @@ export default function ItemDetail() {
 		setBinderList(data.result);
 		console.log('바인더 리스트', data.result);
 	};
-	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
 		navigate('/binder/add', {
 			state: { item: itemIdx },
@@ -116,16 +119,39 @@ export default function ItemDetail() {
 	const getOpenStatus = input => {
 		setOpenState(input);
 	};
-	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', itemInfo.itemIdx);
+
+	// 아이템 하단의 추천 아이템 바인더 버튼
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+	const onAddEachBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemIdx);
+	};
+	// 하단바 바인더 버튼
+	const onAddBinderClick = () => {
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemInfo.itemIdx);
+	};
+	const onSelectBinder = (binderIdx, itemIdx) => {
+		console.log('셀렉트 바인더', itemIdx);
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
-				addToBinderAPI(itemInfo.itemIdx, binderIdx, binderList[i].name);
+				if (itemIdx === itemInfo.itemIdx) {
+					console.log('해당 아이템');
+					addToBinderAPI(itemInfo.itemIdx, binderIdx, binderList[i].name);
+				} else {
+					console.log('추천된 아이템');
+					addToBinderAPI(itemIdx, binderIdx, binderList[i].name);
+				}
 			}
 		}
 	};
-	const onDeleteBinderClick = () => {
-		DeleteFromBinderAPI(itemInfo.itemIdx);
+
+	const onDeleteBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
 	};
 
 	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
@@ -140,6 +166,33 @@ export default function ItemDetail() {
 		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
+		}
+		var tmp = sameCelebItemIsDibList;
+		for (var i = 0; i < sameCelebItemIsDibList.length; i++) {
+			if (sameCelebItemList[i]) {
+				if (sameCelebItemList[i].itemIdx === itemIdx) {
+					tmp[i] = !tmp[i];
+					setSameCelebItemIsDibList([...tmp]);
+				}
+			}
+		}
+		tmp = otherUserDibItemIsDibList;
+		for (var j = 0; j < otherUserDibItemIsDibList.length; j++) {
+			if (otherUserDibItemList[j]) {
+				if (otherUserDibItemList[j].itemIdx === itemIdx) {
+					tmp[j] = !tmp[j];
+					setOtherUserDibItemIsDibList([...tmp]);
+				}
+			}
+		}
+		tmp = sameBrandItemIsDibList;
+		for (var k = 0; k < sameBrandItemIsDibList.length; k++) {
+			if (sameBrandItemList[k]) {
+				if (sameBrandItemList[k].itemIdx === itemIdx) {
+					tmp[k] = !tmp[k];
+					setSameBrandItemIsDibList([...tmp]);
+				}
+			}
 		}
 		setIsDib(!isDib);
 		setDibCnt(dibCnt + 1);
@@ -164,6 +217,34 @@ export default function ItemDetail() {
 			return;
 		}
 		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		var tmp = sameCelebItemIsDibList;
+		for (var i = 0; i < sameCelebItemIsDibList.length; i++) {
+			if (sameCelebItemList[i]) {
+				if (sameCelebItemList[i].itemIdx === itemIdx) {
+					tmp[i] = !tmp[i];
+					setSameCelebItemIsDibList([...tmp]);
+				}
+			}
+		}
+		tmp = otherUserDibItemIsDibList;
+		for (var j = 0; j < otherUserDibItemIsDibList.length; j++) {
+			if (otherUserDibItemList[j]) {
+				if (otherUserDibItemList[j].itemIdx === itemIdx) {
+					tmp[j] = !tmp[j];
+					setOtherUserDibItemIsDibList([...tmp]);
+				}
+			}
+		}
+		tmp = sameBrandItemIsDibList;
+		for (var k = 0; k < sameBrandItemIsDibList.length; k++) {
+			if (sameBrandItemList[k]) {
+				if (sameBrandItemList[k].itemIdx === itemIdx) {
+					tmp[k] = !tmp[k];
+					setSameBrandItemIsDibList([...tmp]);
+				}
+			}
+		}
+
 		setIsDib(!isDib);
 		setDibCnt(dibCnt - 1);
 		setToastMessageBottomPosition('3.875rem');
@@ -210,19 +291,55 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log(data.result);
+		// 아이템 정보 저장
 		setItemInfo(data.result.itemInfo);
-		setsameCelebItemList(data.result.sameCelebItemList);
-		setotherUserDibItemList(data.result.otherUserDibItemList);
-		setsameBrandItemList(data.result.sameBrandItemList);
+		// 아이템 바인더 저장 여부
 		if (data.result.itemInfo.isDib === 'Y') setIsDib(true);
 		else setIsDib(false);
+		// 아이템 좋아요 여부
 		if (data.result.itemInfo.isLike === 'Y') setIsLike(true);
 		else setIsLike(false);
+		// 아이템 작성자 팔로우 여부
 		if (data.result.itemInfo.isFollow === 'Y') setIsFollow(true);
 		else setIsFollow(false);
+		// 아이템 바인더 저장 횟수
 		setDibCnt(data.result.itemInfo.dibCnt);
+		// 아이템 좋아요 횟수
 		setLikeCnt(data.result.itemInfo.itemLikeCnt);
+
+		// 같은 셀럽의 아이템 저장 / 바인더 저장 여부 isDib
+		setsameCelebItemList(data.result.sameCelebItemList);
+		var tmp = [];
+		for (var i = 0; i < data.result.sameCelebItemList.length; i++) {
+			if (data.result.sameCelebItemList[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setSameCelebItemIsDibList([...tmp]);
+		// 다른 스러버들이 함께 보관한 아이템 저장 / 바인더 저장 여부 isDib
+		setotherUserDibItemList(data.result.otherUserDibItemList);
+		tmp = [];
+		for (var j = 0; j < data.result.otherUserDibItemList.length; j++) {
+			if (data.result.otherUserDibItemList[j].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setOtherUserDibItemIsDibList([...tmp]);
+		// 같은 브랜드의 아이템 저장 / 바인더 저장 여부 isDib
+		setsameBrandItemList(data.result.sameBrandItemList);
+		tmp = [];
+		for (var k = 0; k < data.result.sameBrandItemList.length; k++) {
+			if (data.result.sameBrandItemList[k].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		setSameBrandItemIsDibList([...tmp]);
 	};
 	const FollowUser = async userIdx => {
 		// 팔로우 버튼 클릭
@@ -473,7 +590,7 @@ export default function ItemDetail() {
 								</MainText>
 							</div>
 							<div className="contentWrap">
-								{sameCelebItemList.map(item => (
+								{sameCelebItemList.map((item, index) => (
 									<MyPageGridItem
 										key={item.itemIdx}
 										onClick={() => onDetailItemClick(item.itemIdx)}
@@ -487,12 +604,29 @@ export default function ItemDetail() {
 												>
 													{item.name}'s
 												</SubText>
-												<BinderWhite
-													style={{
-														width: '1.375rem',
-														height: '1.375rem',
-													}}
-												/>
+												{sameCelebItemIsDibList[index] === true ? (
+													<BinderRed
+														onClick={e =>
+															onDeleteBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												) : (
+													<BinderWhite
+														onClick={e =>
+															onAddEachBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												)}
 											</ImageText>
 										</GridImage>
 										<SubText
@@ -525,7 +659,7 @@ export default function ItemDetail() {
 								</MainText>
 							</div>
 							<div className="contentWrap">
-								{otherUserDibItemList.map(item => (
+								{otherUserDibItemList.map((item, index) => (
 									<MyPageGridItem
 										key={item.itemIdx}
 										onClick={() => onDetailItemClick(item.itemIdx)}
@@ -539,12 +673,29 @@ export default function ItemDetail() {
 												>
 													{item.name}'s
 												</SubText>
-												<BinderWhite
-													style={{
-														width: '1.375rem',
-														height: '1.375rem',
-													}}
-												/>
+												{otherUserDibItemIsDibList[index] === true ? (
+													<BinderRed
+														onClick={e =>
+															onDeleteBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												) : (
+													<BinderWhite
+														onClick={e =>
+															onAddEachBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												)}
 											</ImageText>
 										</GridImage>
 										<SubText
@@ -577,7 +728,7 @@ export default function ItemDetail() {
 								</MainText>
 							</div>
 							<div className="contentWrap">
-								{sameBrandItemList.map(item => (
+								{sameBrandItemList.map((item, index) => (
 									<MyPageGridItem
 										key={item.itemIdx}
 										onClick={() => onDetailItemClick(item.itemIdx)}
@@ -591,12 +742,29 @@ export default function ItemDetail() {
 												>
 													{item.name}'s
 												</SubText>
-												<BinderWhite
-													style={{
-														width: '1.375rem',
-														height: '1.375rem',
-													}}
-												/>
+												{sameBrandItemIsDibList[index] === true ? (
+													<BinderRed
+														onClick={e =>
+															onDeleteBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												) : (
+													<BinderWhite
+														onClick={e =>
+															onAddEachBinderClick(e, item.itemIdx)
+														}
+														style={{
+															width: '1.5rem',
+															height: '1.5rem',
+															zIndex: '900',
+														}}
+													/>
+												)}
 											</ImageText>
 										</GridImage>
 										<SubText
@@ -628,7 +796,7 @@ export default function ItemDetail() {
 				<AlignDiv>
 					{isDib ? (
 						<BinderRed
-							onClick={onDeleteBinderClick}
+							onClick={e => onDeleteBinderClick(e, itemInfo.itemIdx)}
 							style={{
 								width: '1.5rem',
 								height: '1.5rem',
@@ -637,7 +805,7 @@ export default function ItemDetail() {
 						></BinderRed>
 					) : (
 						<BinderGrey
-							onClick={onAddBinderClick}
+							onClick={() => onAddBinderClick(itemInfo.itemIdx)}
 							style={{
 								width: '1.5rem',
 								height: '1.5rem',
@@ -675,7 +843,7 @@ export default function ItemDetail() {
 				</AlignDiv>
 			</BottomNavWrap>
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
-				<RowWrap onClick={() => onCreateBinder(itemInfo.itemIdx)}>
+				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
 					<ImageWrap>
 						<PlusButton></PlusButton>
 					</ImageWrap>
@@ -685,7 +853,10 @@ export default function ItemDetail() {
 				</RowWrap>
 				<HorizontalLine></HorizontalLine>
 				{binderList.map(binder => (
-					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+					<RowWrap
+						key={binder.name}
+						onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
+					>
 						<ImageWrap></ImageWrap>
 						<SubText fontsize="1rem" margin="0.9375rem 0">
 							{binder.name}
