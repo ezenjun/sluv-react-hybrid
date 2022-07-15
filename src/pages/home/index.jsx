@@ -247,7 +247,7 @@ export const UploadPopup = styled.div`
 	border-radius: 16px;
 
 	.uploadPopupBtn {
-		padding: 1.25rem 1.625rem;
+		padding: 1.25rem;
 		display: flex;
 		align-items: center;
 	}
