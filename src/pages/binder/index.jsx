@@ -321,8 +321,8 @@ export default function Binder() {
 												<GridItem key={item.binderIdx}>
 													<PinkBinder
 														style={{
-															width: '10.125rem',
-															height: '10.125rem',
+															width: '9.6875rem',
+															height: '9.6875rem',
 															marginBottom: '0.6875rem',
 															borderRadius: '1rem',
 														}}
@@ -363,8 +363,8 @@ export default function Binder() {
 															{item.binderIdx % 3 === 0 ? (
 																<YellowBinder
 																	style={{
-																		width: '10.125rem',
-																		height: '10.125rem',
+																		width: '9.6875rem',
+																		height: '9.6875rem',
 																		marginBottom: '0.6875rem',
 																		borderRadius: '1rem',
 																	}}
@@ -380,8 +380,8 @@ export default function Binder() {
 																	{item.binderIdx % 3 === 1 ? (
 																		<GreenBinder
 																			style={{
-																				width: '10.125rem',
-																				height: '10.125rem',
+																				width: '9.6875rem',
+																				height: '9.6875rem',
 																				marginBottom:
 																					'0.6875rem',
 																				borderRadius:
@@ -397,8 +397,8 @@ export default function Binder() {
 																	) : (
 																		<BlueBinder
 																			style={{
-																				width: '10.125rem',
-																				height: '10.125rem',
+																				width: '9.6875rem',
+																				height: '9.6875rem',
 																				marginBottom:
 																					'0.6875rem',
 																				borderRadius:
@@ -449,8 +449,8 @@ export default function Binder() {
 											<GridItem key={item.binderIdx}>
 												<BasicBinder
 													style={{
-														width: '10.125rem',
-														height: '10.125rem',
+														width: '9.6875rem',
+														height: '9.6875rem',
 														marginBottom: '0.6875rem',
 													}}
 													onClick={() =>
@@ -647,8 +647,8 @@ const AddBinder = styled.div`
 	align-items: center;
 	/* height: 100%;
 	width: 100%; */
-	width: 10.125rem;
-	height: 10.125rem;
+	width: 9.6875rem;
+	height: 9.6875rem;
 	border-radius: 1rem;
 	text-align: center;
 	background-color: #fbf6ff;
