@@ -44,10 +44,18 @@ export default function RequestCeleb() {
 	const onClickConfirm = async () => {
 		if (isName) {
 			// 셀럽 추가 요청하기 API
-			const body = {
-				name: name,
-				reason: reason,
-			};
+			let body = {};
+			if(reason) {
+				body = {
+					name: name,
+					reason: reason,
+				};
+			} else {
+				body = {
+					name: name,
+				};
+			}
+			
 			const data = await customApiClient('post', '/celebs/req', body);
 			if (!data.isSuccess) {
 				console.log(data.message);
