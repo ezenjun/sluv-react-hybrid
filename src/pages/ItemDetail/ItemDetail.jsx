@@ -43,6 +43,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import Loading from '../../components/Loading';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 export default function ItemDetail() {
 	let { itemIdx } = useParams();
@@ -53,6 +54,7 @@ export default function ItemDetail() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+	const [myUserIdx, setMyUserIdx] = useState(-1);
 
 	const [reportDialogStatus, setReportDialogStatus] = useState(false);
 
@@ -287,7 +289,14 @@ export default function ItemDetail() {
 	};
 
 	const getItemInfo = async () => {
-		const data = await customApiClient('get', `/items/${itemIdx}`);
+		
+		let uri = ``;
+		if(myUserIdx) {
+			uri = `/items/${itemIdx}?userIdx=${myUserIdx}`;
+		} else {
+			uri = `/items/${itemIdx}`;
+		}
+		const data = await customApiClient('get', uri);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -386,6 +395,21 @@ export default function ItemDetail() {
 		console.log('UnLikeItem', data.message);
 		// console.log('userRecommendList', userRecommendList);
 	};
+	const onClickShareButton = (e) => {
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`해당 게시글 링크를 복사했어요. 널리널리 퍼뜨려주세요!`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	useEffect(() => {
+		setMyUserIdx(localStorage.getItem('myUserIdx')); 
+	},[]);
 
 	useEffect(() => {
 		// 하단바 띄워주기
@@ -426,9 +450,12 @@ export default function ItemDetail() {
 			>
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="rightText">
-					<ShareButton
-						style={{ width: '1.5rem', height: '1.5rem', marginRight: '1.25rem' }}
-					></ShareButton>
+					<CopyToClipboard text={`https://www.sluv.co.kr/item/detail/${itemIdx}`}>
+						<ShareButton
+							onClick={onClickShareButton}
+							style={{ width: '1.5rem', height: '1.5rem', marginRight: '1.25rem' }}
+						></ShareButton>
+					</CopyToClipboard>
 					<EditButton
 						onClick={() => setReportDialogStatus(true)}
 						style={{ width: '1.5rem', height: '1.5rem' }}
