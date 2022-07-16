@@ -130,6 +130,7 @@ export default function My() {
 		navigate('/binder/add', {
 			state: { item: itemIdx },
 		});
+		setBottomMenuStatusState(false);
 	};
 
 	const onSelectBinder = (binderIdx, itemIdx) => {
