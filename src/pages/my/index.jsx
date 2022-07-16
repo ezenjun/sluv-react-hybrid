@@ -263,6 +263,7 @@ export default function My() {
 							style={{
 								display: 'flex',
 								alignItems: 'center',
+								justifyContent: 'center',
 							}}
 						>
 							<span className="userNickname">{userInfo.nickName}</span>
@@ -273,6 +274,7 @@ export default function My() {
 								display: 'flex',
 								alignItems: 'center',
 								marginTop: '0.5rem',
+								justifyContent: 'center',
 							}}
 						>
 							<span onClick={() => navigate(`/users/${userInfo.userIdx}/followings`)}>
@@ -300,12 +302,12 @@ export default function My() {
 									{isCelebOpen ? (
 										<IconArrowUp
 											onClick={() => setIsCelebOpen(!isCelebOpen)}
-											style={{ width: '2rem', height: '2rem' }}
+											style={{ width: '1.75rem', height: '1.75rem' }}
 										/>
 									) : (
 										<IconArrowDown
 											onClick={() => setIsCelebOpen(!isCelebOpen)}
-											style={{ width: '2rem', height: '2rem' }}
+											style={{ width: '1.75rem', height: '1.75rem' }}
 										/>
 									)}
 								</div>
@@ -472,8 +474,8 @@ const ProfileContentsWrap = styled.div`
 	position: relative;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	padding: 3.25rem 1.25rem 1.625rem;
+	/* align-items: center; */
+	padding: 3.25rem 1rem 1.625rem;
 
 	.userProfileImg {
 		width: 5rem;
@@ -508,6 +510,7 @@ const ProfileContentsWrap = styled.div`
 		margin-top: 1rem;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		flex-wrap: wrap;
 	}
 `;
@@ -516,7 +519,7 @@ const Chip = styled.div`
 	display: inline-block;
 	box-sizing: border-box;
 	padding: 0.625rem 1rem;
-	margin-right: 0.5rem;
+	margin-right: 0.375rem;
 	border-radius: 1.9rem;
 	background-color: #fbf6ff;
 	color: #9e30f4;
@@ -527,6 +530,7 @@ const Chip = styled.div`
 const CelebFadeDiv = styled.div`
 	flex-wrap: wrap;
 	margin-top: 0.625rem;
+	justify-content: center;
 
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
 	opacity: ${props => (props.openStatus ? '1' : '0')};
@@ -559,8 +563,7 @@ const FollowButton = styled.div`
 	border-radius: 30.4px;
 	border: solid 1px #9e30f4;
 	height: 3rem;
-	width: 18.4375rem;
-	text-align: center;
+	/* text-align: center; */
 	margin-top: 0.75rem;
 	background-color: ${props => (props.follow ? '#fff' : '#9e30f4')};
 	color: ${props => (props.follow ? '#9e30f4' : '#fff')};

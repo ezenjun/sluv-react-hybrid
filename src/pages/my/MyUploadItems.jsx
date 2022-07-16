@@ -19,6 +19,7 @@ import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
+import { ReactComponent as NoUploadItemIcon } from '../../assets/Icons/icon_no_upload_item.svg';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -248,7 +249,23 @@ export default function MyUploadItems() {
 						</GridItemWrap>
 					</div>
 				) : (
-					<div>아직 본 아이템이 없어요!!</div>
+					<NoUploadItemWrap>
+						<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
+						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+							업로드한 아이템이 없어요
+						</SubText>
+						<SubText
+							fontsize="0.875rem"
+							fontweight="400"
+							color="#8D8D8D"
+							style={{ textAlign: 'center' }}
+						>
+							좋아하는 셀럽의 아이템 정보를
+							<br />
+							업로드하고 공유해보아요
+						</SubText>
+						<Chip onClick={() => navigate('/upload/item')}>아이템 업로드 하러가기</Chip>
+					</NoUploadItemWrap>
 				)}
 			</ContentWrap>
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
@@ -294,4 +311,25 @@ const ImageWrap = styled.div`
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;
+`;
+
+const NoUploadItemWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 11.25rem;
+
+`;
+
+
+const Chip = styled.div`
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 0.625rem 1.625rem;
+	border-radius: 1.9rem;
+	background-color: #fbf6ff;
+	color: #9e30f4;
+	font-size: 0.875rem;
+	font-weight: 600;
+	margin-top: 1.25rem;
 `;
