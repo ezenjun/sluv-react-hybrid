@@ -19,6 +19,7 @@ import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
+import { ReactComponent as NoUploadItemIcon } from '../../assets/Icons/icon_no_upload_item.svg';
 
 import {
 	ToastMessageBottomPositionState,
@@ -26,6 +27,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { NoUploadItemWrap } from './MyUploadItems';
 
 export default function ViewedItems() {
 	const navigate = useNavigate();
@@ -269,7 +271,22 @@ export default function ViewedItems() {
 						</GridItemWrap>
 					</div>
 				) : (
-					<div>아직 본 아이템이 없어요!!</div>
+					<NoUploadItemWrap>
+						<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
+						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+							최근 본 아이템이 없어요
+						</SubText>
+						<SubText
+							fontsize="0.875rem"
+							fontweight="400"
+							color="#8D8D8D"
+							style={{ textAlign: 'center' }}
+						>
+							좋아하는 셀럽의 아이템 정보를
+							<br />
+							자유롭게 찾아보아요
+						</SubText>
+					</NoUploadItemWrap>
 				)}
 			</ContentWrap>
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>

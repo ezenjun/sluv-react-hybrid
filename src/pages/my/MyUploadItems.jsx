@@ -313,7 +313,7 @@ const ImageWrap = styled.div`
 	margin-right: 1.25rem;
 `;
 
-const NoUploadItemWrap = styled.div`
+export const NoUploadItemWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
