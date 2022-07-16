@@ -35,7 +35,6 @@ export default function Follow() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const [binderList, setBinderList] = useState([]);
 	const onClickUserProfile = idx => {
 		console.log('유저 클리리리리');
 		navigate(`/users/${idx}`);
@@ -44,7 +43,7 @@ export default function Follow() {
 		navigate(`/item/detail/${itemIdx}`);
 		// window.location.reload();
 	};
-
+	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
 		if (!data) return;

@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
+import { SubText } from '../../components/Texts/SubText';
+import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
 import { ReactComponent as Settings } from '../../assets/Icons/icon_setting.svg';
 import { ReactComponent as ThreeDots } from '../../assets/Icons/icon_three_dots_row.svg';
@@ -12,48 +14,67 @@ import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_
 import { ReactComponent as IconArrowUp } from '../../assets/Icons/icon_arrow_up.svg';
 import { ReactComponent as IconArrowDown } from '../../assets/Icons/icon_arrow_down.svg';
 import { ReactComponent as UserBasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
+import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 
 import { ContentWrap } from '../../components/containers/ContentWrap';
-import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../components/containers/BottomSlideMenu';
+import {
+	BottomDialogDiv,
+	BottomDialogWrap,
+	CloseWrap,
+	BottomSlideMenu,
+} from '../../components/containers/BottomSlideMenu';
 import styled from 'styled-components';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import MyPageContainer from './MyPageContainer';
 import ProfileContainer from './ProfileContainer';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { UploadPopup, UploadPopupWrap } from '../home';
 import { customApiClient } from '../../utils/apiClient';
 import { BackButton } from '../../components/Buttons/BackButton';
 import Loading from '../../components/Loading';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function My() {
+	const { idx } = useParams();
 
-  const { idx } = useParams();
-	
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const [isAuthUser, setIsAuthUser] = useState(-1);
-  const [reportPopupStatus, setReportPopupStatus] = useState(false);
+	const [isAuthUser, setIsAuthUser] = useState(-1);
+	const [reportPopupStatus, setReportPopupStatus] = useState(false);
 	const [isCelebOpen, setIsCelebOpen] = useState(false);
 	const [celebList, setCelebList] = useState([]);
 	const [uploadInfo, setUploadInfo] = useState({});
 	const [userInfo, setUserInfo] = useState({});
 	const [isFollow, setIsFollow] = useState(false);
 
+	const [myUploadIsDibList, setMyUploadIsDibList] = useState([]);
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const uploadPopupStatus = useRecoilValue(UploadPopupState);
-  
-  useEffect(() => {
-		getUserPageData(idx);
-  },[]);
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const getUserPageData = async (userIdx) => {
+	useEffect(() => {
+		getUserPageData(idx);
+		getBinderList();
+	}, []);
+
+	const getUserPageData = async userIdx => {
 		console.log('유저인덱스(path variable 늘 조심하자!!! : ', typeof userIdx, userIdx);
 
 		const data = await customApiClient('get', `/users/${userIdx}/page`);
 
-		if(!data) return;
-		if(!data.isSuccess) return;
+		if (!data) return;
+		if (!data.isSuccess) return;
 
 		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
 		setIsAuthUser(data.result.isMyPage === 'Y' ? 1 : 0);
@@ -61,21 +82,103 @@ export default function My() {
 		setUserInfo(data.result.userInfo);
 		setUploadInfo(data.result.uploadInfo);
 		console.log(data);
+		var tmp = [];
+		for (var i = 0; i < data.result.uploadInfo.uploadItemList.length; i++) {
+			console.log(data.result.uploadInfo.uploadItemList[i]);
+			if (data.result.uploadInfo.uploadItemList[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		console.log(tmp);
+		setMyUploadIsDibList([...tmp]);
+	};
+
+	const onClickThreeDots = () => {
+		setReportPopupStatus(!reportPopupStatus);
+	};
+	const onClickSettings = () => {
+		navigate('/settings', {
+			state: {
+				nickName: userInfo.nickName,
+				url: userInfo.profileImgUrl,
+			},
+		});
+	};
+
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+	const getSelectedItemIdx = idx => {
+		setSelectedItemIdx(idx);
+	};
+	const getMyUpLoadDibList = input => {
+		setMyUploadIsDibList(input);
+	};
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+	};
+
+	const onSelectBinder = (binderIdx, itemIdx) => {
+		console.log('셀렉트 바인더', itemIdx);
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				if (itemIdx === selectedItemIdx) {
+					console.log('해당 아이템');
+					addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
+				}
+			}
+		}
+	};
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		var tmp = myUploadIsDibList;
+		for (var i = 0; i < myUploadIsDibList.length; i++) {
+			if (uploadInfo.uploadItemList[i]) {
+				if (uploadInfo.uploadItemList[i].itemIdx === itemIdx) {
+					tmp[i] = !tmp[i];
+					setMyUploadIsDibList([...tmp]);
+				}
+			}
+		}
+		setBottomMenuStatusState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 	}
 
-  const onClickThreeDots = () => {
-    setReportPopupStatus(!reportPopupStatus);
-  };
-  const onClickSettings = () => {
-    navigate('/settings', {
-		state: {
-			nickName: userInfo.nickName,
-			url: userInfo.profileImgUrl,
-		},
-	});
-  };
-
-  return (
+	return (
 		<MainContainer>
 			{isAuthUser === -1 && <Loading />}
 			<TopNav>
@@ -189,9 +292,51 @@ export default function My() {
 					</ProfileContentsWrap>
 				</ProfileWrap>
 
-				{isAuthUser === 1 && (<MyPageContainer uploadInfo={uploadInfo} />) }
-				{isAuthUser === 0 && (<ProfileContainer uploadInfo={uploadInfo} />) }
+				{isAuthUser === 1 && (
+					<MyPageContainer
+						uploadInfo={uploadInfo}
+						getSelectedItemIdx={getSelectedItemIdx}
+						myUploadIsDibList={myUploadIsDibList}
+						getMyUpLoadDibList={getMyUpLoadDibList}
+						// myUploadIsDibList={myUploadIsDibList}
+					/>
+				)}
+				{isAuthUser === 0 && (
+					<ProfileContainer
+						uploadInfo={uploadInfo}
+						getSelectedItemIdx={getSelectedItemIdx}
+						myUploadIsDibList={myUploadIsDibList}
+						getMyUpLoadDibList={getMyUpLoadDibList}
+					/>
+				)}
 			</ContentWrap>
+
+			{/* 아이템 바인더 추가용 bottomslideMenu */}
+			<BottomSlideMenu>
+				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+					<ImageWrap>
+						<PlusButton></PlusButton>
+					</ImageWrap>
+					<SubText fontsize="1rem" margin="0.9375rem 0">
+						바인더 만들기
+					</SubText>
+				</RowWrap>
+				<HorizontalLine></HorizontalLine>
+				{binderList.map(binder => (
+					<RowWrap
+						key={binder.name}
+						onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
+					>
+						<ImageWrap></ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							{binder.name}
+						</SubText>
+						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+							&nbsp;({binder.dibCount})
+						</SubText>
+					</RowWrap>
+				))}
+			</BottomSlideMenu>
 
 			{/* 유저 신고하기 팝업  */}
 			<BottomDialogWrap openStatus={reportPopupStatus}>
@@ -265,7 +410,7 @@ export default function My() {
 				</UploadPopup>
 			</UploadPopupWrap>
 		</MainContainer>
-  );
+	);
 }
 
 const ProfileWrap = styled.div`
@@ -337,4 +482,23 @@ const CelebFadeDiv = styled.div`
 
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
 	opacity: ${props => (props.openStatus ? '1' : '0')};
+`;
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;
