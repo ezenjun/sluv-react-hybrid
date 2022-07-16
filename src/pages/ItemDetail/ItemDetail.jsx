@@ -97,7 +97,9 @@ export default function ItemDetail() {
 	// const myRef = useRef(null);
 	// const scrollToRef = ref => ref.current.scrollIntoView({ behavior: 'smooth' });
 	// const executeScroll = () => scrollToRef(myRef);
-
+	const onClickUserProfile = idx => {
+		navigate(`/users/${idx}`);
+	};
 	const [openState, setOpenState] = useState(false); // 바인더 클릭 시 하단바 status
 	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
@@ -532,7 +534,7 @@ export default function ItemDetail() {
 					)}
 
 					<UserInfo>
-						<Left>
+						<Left onClick={() => onClickUserProfile(itemInfo.uploaderIdx)}>
 							<UserImage size="3.25rem" src={itemInfo.profileImgUrl}></UserImage>
 							<UserTextWrap>
 								{itemInfo.isMe === 'Y' ? (

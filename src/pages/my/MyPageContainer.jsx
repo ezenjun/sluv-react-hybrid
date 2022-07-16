@@ -188,6 +188,9 @@ const MyPageContainerWrap = styled.div`
 const MyUploadWrap = styled.div`
 	margin-bottom: 1.875rem;
 	overflow-x: scroll;
+	::-webkit-scrollbar {
+		display: none; /* for Chrome, Safari, and Opera */
+	}
 	.titleWrap {
 		padding: 0 1.25rem;
 		display: flex;
