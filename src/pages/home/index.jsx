@@ -69,6 +69,7 @@ export default function Home() {
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
+		postFcmToken();
 
 
 
