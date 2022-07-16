@@ -161,5 +161,5 @@ export default function ProfileContainer({
 }
 
 const ProfileContainerWrap = styled.div`
-	padding: 1.875rem 1.25rem 0 1.25rem;
+	padding: 1.875rem 1.25rem 1.25rem 1.25rem;
 `;
