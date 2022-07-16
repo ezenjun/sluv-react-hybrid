@@ -45,6 +45,7 @@ import Followers from '../pages/my/Followers';
 import Followings from '../pages/my/Followings';
 import EditProfile from '../pages/my/settings/EditProfile';
 import EditPassword from '../pages/my/settings/EditPassword';
+import EventDetail from '../pages/EventDetail';
 
 export default function Pages() {
 	return (
@@ -68,6 +69,8 @@ export default function Pages() {
 			</Route>
 			<Route path="/upload/item" element={<UploadItem />} />
 			<Route path="/upload/question" element={<UploadQuestion />} />
+
+			<Route path="event/:eventIdx" element={<EventDetail />} />
 
 			<Route path="/celeb/detail/:celebIdx" element={<CelebDetail />} />
 			<Route path="/item/detail/:itemIdx" element={<ItemDetail />} />

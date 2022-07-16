@@ -160,7 +160,7 @@ export function RecommendUserComponent() {
 								<ProfileImg src={user.profileImgUrl}></ProfileImg>
 								<SubText
 									fontsize="0.875rem"
-									margin="0.5rem 0 0.25rem 0"
+									margin="0.5rem 0 0.1875rem 0"
 									style={{
 										textOverflow: 'ellipsis',
 										whiteSpace: 'nowrap',
@@ -227,7 +227,7 @@ const User = styled.div`
 	box-sizing: border-box;
 	align-items: center;
 	width: 9.0625rem;
-	height: 12.375rem;
+	height: 13.125rem;
 	padding: 20px;
 	margin-right: 11px;
 	border-radius: 16px;
@@ -254,7 +254,7 @@ const FollowButton = styled.div`
 	padding: 10px 16px;
 	border-radius: 30.4px;
 	border: solid 1px #9e30f4;
-	margin-top: 1rem;
+	margin-top: 0.75rem;
 	background-color: ${props => (props.follow ? '#fff' : '#9e30f4')};
 	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
 	font-size: 0.875rem;
