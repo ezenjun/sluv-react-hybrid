@@ -4,10 +4,10 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactComponent as DemoDay1 } from '../../assets/Event/DemoDay_1.svg';
-import { ReactComponent as DemoDay2 } from '../../assets/Event/DemoDay_2.svg';
-import { ReactComponent as DemoDay3 } from '../../assets/Event/DemoDay_3.svg';
-import { ReactComponent as DemoDay4 } from '../../assets/Event/DemoDay_4.svg';
+import { ReactComponent as DemoDay1 } from '../../assets/Event/DemoDay1.svg';
+import { ReactComponent as DemoDay2 } from '../../assets/Event/DemoDay2.svg';
+import { ReactComponent as DemoDay3 } from '../../assets/Event/DemoDay3.svg';
+import { ReactComponent as DemoDay4 } from '../../assets/Event/DemoDay4.svg';
 
 export default function EventDetail() {
 	const navigate = useNavigate();
@@ -29,28 +29,28 @@ export default function EventDetail() {
 					style={{
 						width: '100%',
 						height: '23.4375rem',
-						marginBottom: '20px',
+						marginBottom: '8px',
 					}}
 				></DemoDay1>
 				<DemoDay2
 					style={{
 						width: '100%',
 						height: '23.4375rem',
-						marginBottom: '20px',
+						marginBottom: '8px',
 					}}
 				></DemoDay2>
 				<DemoDay3
 					style={{
 						width: '100%',
 						height: '23.4375rem',
-						marginBottom: '20px',
+						marginBottom: '8px',
 					}}
 				></DemoDay3>
 				<DemoDay4
 					style={{
 						width: '100%',
 						height: '23.4375rem',
-						marginBottom: '20px',
+						marginBottom: '8px',
 					}}
 				></DemoDay4>
 			</FeedContainer>
@@ -61,7 +61,6 @@ export default function EventDetail() {
 const FeedContainer = styled.div`
 	height: 100vh;
 	padding: 0 0 3.75rem 0;
-	margin-top: 5px;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */

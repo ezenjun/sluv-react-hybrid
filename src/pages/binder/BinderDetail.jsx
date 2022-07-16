@@ -27,7 +27,7 @@ import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 
-import { ReactComponent as BinderIcon } from '../../assets/Icons/binder40x40.svg';
+import { ReactComponent as BinderEmpty } from '../../assets/Icons/BinderEmpty.svg';
 import { ReactComponent as CheckEmpty } from '../../assets/Icons/checkEmpty.svg';
 import { ReactComponent as CheckFull } from '../../assets/Icons/checkFull.svg';
 import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
@@ -270,7 +270,7 @@ export default function BinderDetail() {
 			) : (
 				<NoItemContainer>
 					<IconWrap>
-						<BinderIcon style={{ width: '2.5rem', height: '2.5rem' }}></BinderIcon>
+						<BinderEmpty style={{ width: '2.5rem', height: '2.5rem' }}></BinderEmpty>
 					</IconWrap>
 					<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.75rem 0">
 						바인더가 비어있어요
@@ -401,12 +401,8 @@ const NoItemContainer = styled.div`
 `;
 const IconWrap = styled.div`
 	display: flex;
-	width: 3.75rem;
-	height: 3.75rem;
 	align-items: center;
 	justify-content: center;
-	background-color: #f4f4f4;
-	border-radius: 50%;
 `;
 const BinderTextWrap = styled.div`
 	display: flex;
