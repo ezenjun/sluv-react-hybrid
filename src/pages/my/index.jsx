@@ -84,14 +84,14 @@ export default function My() {
 		console.log(data);
 		var tmp = [];
 		for (var i = 0; i < data.result.uploadInfo.uploadItemList.length; i++) {
-			console.log(data.result.uploadInfo.uploadItemList[i]);
+			console.log('포문 안', data.result.uploadInfo.uploadItemList[i]);
 			if (data.result.uploadInfo.uploadItemList[i].isDib === 'Y') {
 				tmp.push(true);
 			} else {
 				tmp.push(false);
 			}
 		}
-		console.log(tmp);
+		console.log('테ㅁ프.', tmp);
 		setMyUploadIsDibList([...tmp]);
 	};
 
