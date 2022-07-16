@@ -13,6 +13,7 @@ import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { FavoriteCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
 import { customApiClient } from '../../utils/apiClient';
+import { checkMobile } from '../../App';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -68,12 +69,91 @@ export default function Home() {
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
+		postFcmToken();
+
+
 
 		// 관심셀럽 조회 API 호출
 		if (favoriteCelebList.length < 1) {
 			getFavoriteCeleb();
 		}
 	}, []);
+
+	const postFcmToken = async () => {
+		const userPlatform = checkMobile();
+		let platform = '';
+
+		//fcm token
+		if (!localStorage.getItem('isFcmLoad') || localStorage.getItem('isFcmLoad') != 'deactive') {
+			localStorage.setItem('isFcmLoad', 'deactive');
+
+			if (userPlatform == 'android') {
+				platform = 'AOS';
+
+				//splash close 함수 호출
+				try {
+					window.android.closeSplash();
+				} catch (err) {
+					console.log(err);
+				}
+
+				//업데이트되기전까지는 이 로직 사용 -> 업데이트 되고나서는 밑에 로직 사용
+				let tokenTest = localStorage.getItem('fcmToken');
+				if (tokenTest == undefined || tokenTest == 'undefined' || tokenTest.length == 0)
+					tokenTest = null;
+				if (!tokenTest) {
+					//fcm token 가져오기 함수
+					try {
+						const deviceToken = await window.android.getFcmToken();
+						localStorage.setItem('fcmToken', deviceToken);
+					} catch (err) {
+						console.log(err);
+					}
+				}
+			} else if (userPlatform == 'ios') {
+				platform = 'IOS';
+
+				//splash close 함수 호출
+				try {
+					window.webkit.messageHandlers.closeSplash.postMessage('hihi');
+				} catch (err) {
+					console.log(err);
+				}
+
+				//fcm token 가져오기 함수
+				try {
+					window.webkit.messageHandlers.getFcmToken.postMessage('hihi');
+				} catch (err) {
+					console.log(err);
+				}
+			} else {
+				platform = 'WEB';
+				localStorage.setItem('fcmToken', null);
+			}
+
+			setTimeout(() => {
+				let fcmToken = localStorage.getItem('fcmToken');
+
+				if (
+					!fcmToken ||
+					fcmToken == 'null' ||
+					fcmToken == undefined ||
+					fcmToken == 'undefined' ||
+					fcmToken.length == 0
+				)
+					fcmToken = null;
+
+				//fcm 등록
+				const data = customApiClient('patch', '/users/fcm', {
+					fcmToken: fcmToken,
+					platform: platform,
+					type: 'UPDATE',
+				});
+				
+			}, 3000);
+		}
+		
+	}
 
 	const getFavoriteCeleb = async () => {
 		const data = await customApiClient('get', '/interest');
