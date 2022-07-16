@@ -29,6 +29,45 @@
 			}
 		</style>
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
+		<script>
+			
+			//모바일 기기 체크
+    const checkMobile = () => {
+
+      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+      if (varUA.indexOf('android') > -1) {
+        //안드로이드
+        return "android";
+      } else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
+        //IOS
+        return "ios";
+      } else {
+        //아이폰, 안드로이드 외
+        return "other";
+      }
+
+    }
+
+    window.onload = async function inital() {
+
+      const current_user_platform = checkMobile();
+			console.log(current_user_platform);
+
+      //fcm token 가져오기 -> 앱 업데이트 되면 주석처리
+      if (current_user_platform == 'android') {
+
+        try {
+          const fcmToken = await window.android.getFcmToken();
+          localStorage.setItem('fcmToken', fcmToken);
+					alert(fcmToken);
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+    }
+		</script>
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to run this app.</noscript>
