@@ -492,43 +492,75 @@ export default function ItemDetail() {
 							<SubText fontweight="normal">{itemInfo.uploadTime}</SubText>
 						</div>
 					</ItemInfoContainer>
-					<ItemInfoContainer backgroundColor="#F8F7FA" padding="2rem">
+					<ItemInfoContainer
+						style={{ display: 'block' }}
+						backgroundColor="#F8F7FA"
+						padding="2rem"
+					>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
 							<UserImage src={itemInfo.profileImgUrl}></UserImage>
 							<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
 								{itemInfo.nickName}
 							</SubText>
 						</div>
-						<SpeechBubbleWrap
-							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-							backgroundColor="rgba(0, 0, 0, 0.05)"
-							style={{ margin: '0.625rem 0 0 0' }}
-						>
-							{itemInfo.whenDiscovery} 에
-						</SpeechBubbleWrap>
-						<SpeechBubbleWrap
-							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-							backgroundColor="rgba(0, 0, 0, 0.05)"
-							style={{ margin: '0.625rem 0 0 0' }}
-						>
-							{itemInfo.whereDiscovery}에서 발견하였고
-						</SpeechBubbleWrap>
-						<SpeechBubbleWrap
-							borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
-							backgroundColor="rgba(0, 0, 0, 0.05)"
-							style={{ margin: '0.625rem 0 0 0' }}
-						>
-							가격은 대략 {itemInfo.price}에요!
-						</SpeechBubbleWrap>
-						{itemInfo.content && (
+						<div>
 							<SpeechBubbleWrap
 								borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
 								backgroundColor="rgba(0, 0, 0, 0.05)"
 								style={{ margin: '0.625rem 0 0 0' }}
 							>
-								{itemInfo.content}
+								<div className="itemDetailText">
+									<span className="itemDetailTextBold">
+										{itemInfo.whenDiscovery}
+									</span>
+									에
+								</div>
 							</SpeechBubbleWrap>
-						)}
+						</div>
+						<div>
+							<SpeechBubbleWrap
+								borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+								backgroundColor="rgba(0, 0, 0, 0.05)"
+								style={{ margin: '0.625rem 0 0 0' }}
+							>
+								<div className="itemDetailText">
+									<span className="itemDetailTextBold">
+										{itemInfo.whereDiscovery}
+									</span>
+									에서 발견하였고
+								</div>
+							</SpeechBubbleWrap>
+						</div>
+						<div>
+							<SpeechBubbleWrap
+								borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+								backgroundColor="rgba(0, 0, 0, 0.05)"
+								style={{ margin: '0.625rem 0 0 0' }}
+							>
+								<div className="itemDetailText">
+									가격은 대략
+									<span className="itemDetailTextBold"> {itemInfo.price}</span>
+									에요!
+								</div>
+							</SpeechBubbleWrap>
+						</div>
+						<div>
+							{itemInfo.content && (
+								<SpeechBubbleWrap
+									borderRight="0.5rem solid rgba(0, 0, 0, 0.05)"
+									backgroundColor="rgba(0, 0, 0, 0.05)"
+									style={{ margin: '0.625rem 0 0 0' }}
+								>
+									<div className="itemDetailText">
+										그리고
+										<span className="itemDetailTextBold">
+											{' '}
+											{itemInfo.content}
+										</span>
+									</div>
+								</SpeechBubbleWrap>
+							)}
+						</div>
 					</ItemInfoContainer>
 					{itemInfo.sellerSite && (
 						<ItemLInkContainer>

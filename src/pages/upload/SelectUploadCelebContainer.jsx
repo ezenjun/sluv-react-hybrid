@@ -41,7 +41,6 @@ export default function SelectUploadCelebContainer() {
 			getCelebList();
 		} else {
 			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
-			// 1개 선택이니까 체크리스트 필요없어! 
 		}
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if (popularCelebList.length < 1) {
@@ -63,8 +62,6 @@ export default function SelectUploadCelebContainer() {
 		}
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
-
-		// 1개 선택이니까 체크리스트 필요없어!
 	};
 	const getPopularCelebList = async () => {
 		const data = await customApiClient('get', '/interest/top-choice');
