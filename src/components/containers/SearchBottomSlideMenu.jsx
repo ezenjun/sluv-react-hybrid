@@ -40,7 +40,6 @@ export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [isSelected, setIsSelected] = useState(false);
-	
 
 	const onReset = () => {
 		props.getSelectedItemFilter();
@@ -59,13 +58,23 @@ export function SearchBottomSlideMenu(props) {
 		setBottomMenuStatusState(false);
 		if (selectedItemMainFilter !== 0) {
 			if (selectedItemFilterList.length === 0) {
-				props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
+				props.getSelectedItemFilter(
+					filterList[selectedItemMainFilter - 1].name,
+					'',
+					filterList[selectedItemMainFilter - 1].name
+				);
 				console.log(selectedItemFilterList.length);
 			} else {
 				if (selectedItemFilterList.length === 1) {
-					props.getSelectedItemFilter(`${selectedItemFilterList[0]}`);
+					props.getSelectedItemFilter(
+						filterList[selectedItemMainFilter - 1].name,
+						`${selectedItemFilterList[0]}`,
+						`${selectedItemFilterList[0]}`
+					);
 				} else {
 					props.getSelectedItemFilter(
+						filterList[selectedItemMainFilter - 1].name,
+						`${selectedItemFilterList}`,
 						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
 					);
 				}
@@ -300,6 +309,7 @@ export const ButtonWrap = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
+	margin: 1.25rem 0 0 0;
 	padding: 0 1.25rem;
 `;
 const ResetButton = styled.div`

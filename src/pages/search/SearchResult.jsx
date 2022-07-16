@@ -37,6 +37,13 @@ import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
 
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
+
 export default function SearchResult() {
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -50,6 +57,11 @@ export default function SearchResult() {
 	const [selectedPriceFilter, setSelectedPriceFilter] = useState();
 	const [selectedAlignFilter, setSelectedAlignFilter] = useState();
 	const [selectedColorFilter, setSelectedColorFilter] = useState();
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const [isSelected, setIsSelected] = useState(false);
 	const getIsSelected = input => {
@@ -74,7 +86,7 @@ export default function SearchResult() {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
-
+	// 정렬
 	const [selectedTab, setSelectedTab] = useState(1);
 	const getSelectedTab = input => {
 		setSelectedTab(input);
@@ -82,8 +94,15 @@ export default function SearchResult() {
 
 	const childFunc = React.useRef(null);
 	const getResetFunction = input => {};
-	const getSelectedItemFilter = input => {
-		setSelectedItemFilter(input);
+
+	const [mainItem, setMainItem] = useState('');
+	const [subItem, setSubItem] = useState([]);
+	const getSelectedItemFilter = (main, sub, text) => {
+		setSelectedItemFilter(text);
+		setMainItem(main);
+		setSubItem(sub);
+		console.log('메인', main);
+		console.log('서브', sub);
 		console.log(selectedItemFilter);
 	};
 	const getSelectedPriceFilter = input => {
@@ -167,12 +186,27 @@ export default function SearchResult() {
 			if (data.code === 2060) {
 				//더이상 아이템이 없을 때
 				setBlockRerender(true);
-				alert('더이상 아이템이 없어요');
+				setToastMessageBottomPosition('3.125rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage('더이상 아이템이 없어요');
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
 			}
 			return;
 		} else {
 			console.log('아이템 리스트 다시 불러오기', data.result.searchItemList);
-			setSearchResultList([...searchResultList, data.result.searchItemList]);
+			let temp = [];
+			temp = searchResultList;
+			let newArr = temp.concat(data.result.searchItemList);
+			console.log(newArr);
+
+			setSearchResultList([...newArr]);
+			// setSearchResultList([...searchResultList, data.result.searchItemList]);
 		}
 	};
 	useEffect(() => {
@@ -185,6 +219,7 @@ export default function SearchResult() {
 		}
 	}, [inView, loading]);
 	useEffect(() => {
+		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
@@ -198,7 +233,7 @@ export default function SearchResult() {
 		getSearchResultList(queryKeyword);
 	}, []);
 	return (
-		<MainContainer padding="0 0 3.125rem 0">
+		<MainContainer padding="0 0 0 0">
 			<TopNav>
 				<BackButton
 					onClick={onBackClick}
