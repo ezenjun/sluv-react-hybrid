@@ -513,7 +513,7 @@ const HashTag = styled.div`
 	border: 1px solid #ede4f4;
 	border-radius: 8rem;
 	margin: 0.375rem 0.5rem 0.375rem 0;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: 600;
 	font-family: Pretendard;
 	color: #564b5c;

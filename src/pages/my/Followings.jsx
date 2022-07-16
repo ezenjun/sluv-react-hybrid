@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -15,16 +15,19 @@ import { customApiClient } from '../../utils/apiClient';
 export default function Followings() {
 	const navigate = useNavigate();
 	const { idx } = useParams();
-	
-	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const onClickUserProfile = idx => {
+		navigate(`/users/${idx}`);
+	};
 	const [followingList, setFollowingList] = useState([]);
+	const [isFollowList, setIsFollowList] = useState([]);
 
 	useEffect(() => {
 		setBottomNavStatus(false);
 
 		getFollowings();
-	},[]);
+	}, []);
 
 	const getFollowings = async () => {
 		const data = await customApiClient('get', `/users/${idx}/followings`);
@@ -34,7 +37,50 @@ export default function Followings() {
 
 		console.log(data.result);
 		setFollowingList(data.result);
-
+		var tmp = [];
+		for (var i = 0; i < data.result.length; i++) {
+			if (data.result[i].isFollow === 'Y') {
+				tmp[i] = true;
+			} else {
+				tmp[i] = false;
+			}
+		}
+		setIsFollowList([...tmp]);
+	};
+	const onFollow = (e, userIdx, index) => {
+		e.stopPropagation();
+		FollowUser(userIdx, index);
+	};
+	const onUnFollow = (e, userIdx, index) => {
+		e.stopPropagation();
+		UnFollowUser(userIdx, index);
+	};
+	const FollowUser = async (userIdx, index) => {
+		// 팔로우 버튼 클릭
+		const data = await customApiClient('post', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('FollowUser', data.message);
+		var tmp = isFollowList;
+		tmp[index] = !tmp[index];
+		setIsFollowList([...tmp]);
+		// console.log('userRecommendList', userRecommendList);
+	};
+	const UnFollowUser = async (userIdx, index) => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('delete', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('UnFollowUser', data.message);
+		var tmp = isFollowList;
+		tmp[index] = !tmp[index];
+		setIsFollowList([...tmp]);
 	};
 
 	return (
@@ -47,10 +93,18 @@ export default function Followings() {
 			</TopNav>
 			<ContentWrap padding="0">
 				{followingList.length > 0 &&
-					followingList.map(following => (
-						<FollowingUserInfo key={following.userIdx}>
+					followingList.map((following, index) => (
+						<FollowingUserInfo
+							key={following.userIdx}
+							onClick={() => {
+								onClickUserProfile(following.userIdx);
+							}}
+						>
 							<FollowingLeft>
-								<FollowingUserImage size="3.25rem"></FollowingUserImage>
+								<FollowingUserImage
+									size="3.25rem"
+									src={following.profileImgUrl}
+								></FollowingUserImage>
 								<FollowingUserTextWrap>
 									<SubText
 										font-weight="600"
@@ -68,9 +122,25 @@ export default function Followings() {
 									</SubText>
 								</FollowingUserTextWrap>
 							</FollowingLeft>
-							<>
-								<FollowingFollowButton>팔로우</FollowingFollowButton>
-							</>
+							{following.isMe === 'N' && (
+								<>
+									{isFollowList[index] ? (
+										<FollowButton
+											onClick={e => onUnFollow(e, following.userIdx, index)}
+											follow={isFollowList[index]}
+										>
+											팔로잉
+										</FollowButton>
+									) : (
+										<FollowButton
+											onClick={e => onFollow(e, following.userIdx, index)}
+											follow={isFollowList[index]}
+										>
+											팔로우
+										</FollowButton>
+									)}
+								</>
+							)}
 						</FollowingUserInfo>
 					))}
 			</ContentWrap>
@@ -111,5 +181,19 @@ export const FollowingUserImage = styled.div`
 	width: ${props => props.size || '1.5rem'};
 	height: ${props => props.size || '1.5rem'};
 	border-radius: 50%;
-	background-color: darkgoldenrod;
+	background: url(${props => props.src});
+	background-position: 50%;
+	background-size: cover;
+	background-repeat: no-repeat;
+`;
+const FollowButton = styled.div`
+	padding: 10px 16px;
+	border-radius: 30.4px;
+	border: solid 1px #9e30f4;
+	background-color: ${props => (props.follow ? '#fff' : '#9e30f4')};
+	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
+	font-size: 0.875rem;
+	font-weight: 600;
+	position: relative;
+	z-index: '900';
 `;

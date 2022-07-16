@@ -10,13 +10,18 @@ export default function Event() {
 	const onClickCard = idx => {
 		navigate(`/event/${idx}`, { state: { eventName: '스럽 X CMC 10기 데모데이 이벤트' } });
 	};
+	var today = new Date();
+	var Dday = new Date('July,30,2022');
+	var gap = Dday.getTime() - today.getTime();
+	var result = Math.ceil(gap / (1000 * 60 * 60 * 24));
+
 	return (
 		<FeedContainer>
 			<EventCard onClick={() => onClickCard(1)}>
 				<Top>
 					<DDAY>
 						<SubText fontweight="700" color="#9E30F4">
-							D-14
+							D-{result}
 						</SubText>
 					</DDAY>
 				</Top>
@@ -63,8 +68,13 @@ const EventCard = styled.div`
 	align-items: center;
 	width: 100%;
 	height: 14.375rem;
-	background: linear-gradient(353.46deg, rgba(0, 0, 0, 0.226) -41%, rgba(255, 255, 255, 0) 93%),
-		linear-gradient(353deg, #9e30f4 -41.04%, #ffe6eb 111.39%);
+	background: linear-gradient(
+			330.46deg,
+			rgba(0, 0, 0, 0.5) -60.04%,
+			rgba(255, 255, 255, 0) 41.39%
+		),
+		linear-gradient(330deg, #9e30f4 -41.04%, #ffe6eb 91.39%);
+
 	border-radius: 0.8125rem;
 	padding: 1.25rem;
 	box-sizing: border-box;

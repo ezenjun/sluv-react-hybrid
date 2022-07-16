@@ -28,7 +28,7 @@ export default function Custom() {
 					<RecommendUserComponent></RecommendUserComponent>
 					<BannerComponent color="#ff006b" icon={SpeakerPhone}></BannerComponent>
 					<CelebsLuvItem celeb={favoriteCelebList[1]}></CelebsLuvItem>
-					<BannerComponent color="#7000ff" icon={BubbleHeart}></BannerComponent>
+					{/* <BannerComponent color="#7000ff" icon={BubbleHeart}></BannerComponent> */}
 					<CelebsLuvItem celeb={favoriteCelebList[2]}></CelebsLuvItem>
 					{favoriteCelebList[3] && (
 						<CelebsLuvItem celeb={favoriteCelebList[3]}></CelebsLuvItem>
