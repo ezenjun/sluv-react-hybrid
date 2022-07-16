@@ -12,11 +12,31 @@ import {
 	ToastMessageWrapStatusState,
 } from './recoil/ToastMessage';
 
+//모바일 기기 체크
+export const checkMobile = () => {
+
+  var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+
+  if (varUA.indexOf('android') > -1) {
+    //안드로이드
+    return "android";
+  } else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
+    //IOS
+    return "ios";
+  } else {
+    //아이폰, 안드로이드 외
+    return "other";
+  }
+
+}
+
 export default function App() {
 	const toastMessageStatus = useRecoilValue(ToastMessageStatusState);
 	const toastMessageWrapStatus = useRecoilValue(ToastMessageWrapStatusState);
 	const message = useRecoilValue(ToastMessageState);
 	const bottomPosition = useRecoilValue(ToastMessageBottomPositionState);
+
+	
 	return (
 		<RootWrap>
 			<BrowserRouter>

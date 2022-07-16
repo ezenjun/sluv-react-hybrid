@@ -14,6 +14,7 @@ import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
 import { useSetRecoilState } from 'recoil';
 import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
+import { checkMobile } from '../../App';
 
 export default function Login() {
 	const navigate = useNavigate();
@@ -54,10 +55,33 @@ export default function Login() {
 		}
 	}
 
+	const getMyFcmToken = async () => {
+
+		localStorage.removeItem('isFcmLoad');
+		let localFcm = localStorage.getItem('fcmToken');
+
+		if (localFcm == undefined || localFcm == 'undefined' || localFcm.length == 0) {
+			localFcm = null;
+		}
+
+		const current_user_platform = checkMobile;
+
+		if (current_user_platform == 'android' && !localFcm) {
+			try {
+				const fcmToken = await window.android.getFcmToken();
+				localStorage.setItem('fcmToken', fcmToken);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	};
+
 	useEffect(() => {
 		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
 		setCurrentPage(1);
 		setSocialLoginComplete(false);
+
+		getMyFcmToken();
 
 		// 자동 로그인 API 호출
 		getAutoLogin();
