@@ -13,7 +13,6 @@ import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg'
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
-import { ReactComponent as ScrollToTopIcon } from '../../assets/Icons/scrollToTop.svg';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
