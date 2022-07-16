@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
+import { ReactComponent as FirstEvent } from '../../../assets/Event/FirstEvent.svg';
+import { useNavigate } from 'react-router-dom';
 export function EventComponent() {
+	const navigate = useNavigate();
 	const settings = {
 		dots: false,
 		infinite: true,
@@ -13,14 +16,15 @@ export function EventComponent() {
 		cssEase: 'linear',
 		arrows: true,
 	};
-
+	const onClickCard = idx => {
+		navigate(`/event/${idx}`, { state: { eventName: '스럽 X CMC 10기 데모데이 이벤트' } });
+	};
 	return (
 		<EventContainer>
 			<Slider {...settings}>
-				<Events>이벤트 배너</Events>
-				<Events bg="red">이벤트 배너</Events>
-				<Events>이벤트 배너</Events>
-				<Events bg="red">이벤트 배너</Events>
+				<div onClick={() => onClickCard(1)}>
+					<FirstEvent style={{ height: '100%', width: '100%' }}></FirstEvent>
+				</div>
 			</Slider>
 		</EventContainer>
 	);
@@ -31,15 +35,9 @@ const EventContainer = styled.div`
 	grid-auto-flow: column;
 	grid-auto-columns: 100%;
 	box-sizing: border-box;
-	height: 400px;
-	overflow-x: scroll;
+
+	/* overflow-x: scroll; */
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
-`;
-const Events = styled.div`
-	height: 400px;
-	width: 100%;
-	box-sizing: border-box;
-	background-color: ${props => props.bg || 'pink'};
 `;
