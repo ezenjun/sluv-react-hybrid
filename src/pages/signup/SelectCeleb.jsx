@@ -24,6 +24,7 @@ export default function SelectCeleb() {
 	const navigate = useNavigate();
 
 	const [checkStatusList, setCheckStatusList] = useState([]);
+	const [badgeNumList, setBadgeNumList] = useState([]);
 	const [selectedGroups, setSelectedGroups] = useState([]);
 	const [selectedCelebIdxArray, setSelectedCelebIdxArray] = useState([]);
 	
@@ -54,9 +55,13 @@ export default function SelectCeleb() {
 			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 
 			let temp;
+			let temp2;
 			(temp = []).length = totalCelebList.length;
 			temp.fill(false);
+			temp2 = new Array(totalCelebList.length).fill(0);
 			setCheckStatusList(temp);
+			setBadgeNumList(temp2);
+			console.log(temp2);
 		}
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if(popularCelebList.length < 1) {
@@ -64,6 +69,14 @@ export default function SelectCeleb() {
 		}
 		
 	}, []);
+
+	useEffect(() => {
+		let temp2;
+		temp2 = new Array(totalCelebList.length).fill(0);
+		setBadgeNumList(temp2);
+		console.log(temp2);
+
+	},[totalCelebList]);
 
 	useEffect(() => {
 		console.log(`선택한 셀럽 수 : ${selectedNum}`);
@@ -89,7 +102,7 @@ export default function SelectCeleb() {
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 
 		let temp;
-		(temp = []).length = data.result.length;
+		(temp = []).length = totalCelebList.length;
 		temp.fill(false);
 		setCheckStatusList(temp);
 	};
@@ -118,9 +131,10 @@ export default function SelectCeleb() {
 		}
 	};
 
-	const onSelectCeleb = (celeb, e) => {
+	const onSelectCeleb = (celeb, e, index) => {
 		let tempGroup = [];
 		let tempWholeCeleb = [];
+		let tempBadgeNumList = [];
 		if (!checkStatusList[celeb.celebIdx - 1]) {
 			setSelectedNum(selectedNum + 1);
 
@@ -133,6 +147,9 @@ export default function SelectCeleb() {
 			tempWholeCeleb.push({celebIdx: celeb.celebIdx});
 			setSelectedCelebIdxArray(tempWholeCeleb);
 
+			tempBadgeNumList = badgeNumList;
+			tempBadgeNumList[index] = selectedNum + 1;
+			setBadgeNumList(tempBadgeNumList);
 		} else {
 			setSelectedNum(selectedNum - 1);
 
@@ -144,6 +161,14 @@ export default function SelectCeleb() {
 			setSelectedCelebIdxArray(
 				tempWholeCeleb.filter(item => item.celebIdx !== celeb.celebIdx)
 			);
+
+			tempBadgeNumList = badgeNumList;
+			tempBadgeNumList.map((badgeNum, _index) => {
+				if(badgeNum > tempBadgeNumList[index]) {
+					tempBadgeNumList[_index] = tempBadgeNumList[_index] - 1;
+				}
+			})
+			setBadgeNumList(tempBadgeNumList);
 		}
 		let tempCheckList = checkStatusList;
 		tempCheckList[celeb.celebIdx - 1] = !tempCheckList[celeb.celebIdx - 1];
@@ -284,10 +309,10 @@ export default function SelectCeleb() {
 						{!searchFailStatus && (
 							<ListContainer>
 								{currentCelebList.length > 0 &&
-									currentCelebList.map(celeb => (
+									currentCelebList.map((celeb,index) => (
 										<Celeb
 											key={celeb.celebIdx}
-											onClick={e => onSelectCeleb(celeb, e)}
+											onClick={e => onSelectCeleb(celeb, e, index)}
 										>
 											<Image
 												size="6.25rem"
@@ -304,7 +329,7 @@ export default function SelectCeleb() {
 											<CountBadge
 												status={checkStatusList[celeb.celebIdx - 1]}
 											>
-												<span className="badgeItem">{selectedNum}</span>
+												<span className="badgeItem">{badgeNumList[index]}</span>
 											</CountBadge>
 										</Celeb>
 									))}
