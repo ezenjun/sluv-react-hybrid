@@ -18,6 +18,7 @@ import {
 } from '../../recoil/ToastMessage';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
+import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicBinder.svg';
 import { ReactComponent as BinderHelp } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
@@ -66,9 +67,12 @@ export default function AddBinder() {
 	const onAlbumClick = e => {
 		e.preventDefault();
 		coverImgInput.current.click();
+		setIsBasicCover(false);
 	};
+	const [isBasicCover, setIsBasicCover] = useState(false);
 	const onDefaultClick = () => {
-		alert('기본 커버');
+		setBottomMenuStatusState(false);
+		setIsBasicCover(true);
 	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
 	const onChangeCoverImg = e => {
@@ -131,6 +135,7 @@ export default function AddBinder() {
 
 	const onPostBinder = async () => {
 		let body = {};
+		console.log('커버url', coverImgUrl);
 		if (coverImgUrl) {
 			body = {
 				isBasic: 1,
@@ -162,63 +167,75 @@ export default function AddBinder() {
 			}
 			return;
 		} else {
-			// navigate('/binder');
 			const to = data.result.addedBinder;
-
-			if (location.state.fromBinderIdx) {
-				console.log('바인더 옮겨');
-				const body = { itemIdxList: location.state.selectedList };
-				const data = await customApiClient(
-					'patch',
-					`/dibs/${location.state.fromBinderIdx}/${to}`,
-					body
-				);
-				if (!data) return;
-				if (!data.isSuccess) {
-					console.log(data.message);
-					console.log(data.code);
-					return;
-				} else {
+			console.log();
+			if (location.state) {
+				if (location.state.fromBinderIdx) {
+					console.log('바인더 옮겨');
+					const body = { itemIdxList: location.state.selectedList };
+					const data = await customApiClient(
+						'patch',
+						`/dibs/${location.state.fromBinderIdx}/${to}`,
+						body
+					);
+					if (!data) return;
+					if (!data.isSuccess) {
+						console.log(data.message);
+						console.log(data.code);
+						return;
+					} else {
+						setBottomMenuStatusState(false);
+						setToastMessageBottomPosition('3.875rem');
+						setToastMessageWrapStatus(true);
+						setToastMessageStatus(true);
+						setToastMessage(`아이템이 ${binderName} 바인더로 이동했어요`);
+						setTimeout(() => {
+							setToastMessageStatus(false);
+						}, 2000);
+						setTimeout(() => {
+							setToastMessageWrapStatus(false);
+						}, 2300);
+						// navigate(-1);
+					}
+				}
+				if (location.state.item) {
+					const body = {
+						itemIdx: location.state.item,
+						binderIdx: to,
+					};
+					const Uri = '/dibs';
+					const data = await customApiClient('post', Uri, body);
+					if (!data) return;
+					if (!data.isSuccess) {
+						console.log(data.message);
+						return;
+					}
 					setBottomMenuStatusState(false);
 					setToastMessageBottomPosition('3.875rem');
 					setToastMessageWrapStatus(true);
 					setToastMessageStatus(true);
-					setToastMessage(`아이템이 ${binderName} 바인더로 이동했어요`);
+					setToastMessage(`아이템이 생성된 바인더로 이동했어요`);
 					setTimeout(() => {
 						setToastMessageStatus(false);
 					}, 2000);
 					setTimeout(() => {
 						setToastMessageWrapStatus(false);
 					}, 2300);
-					// navigate(-1);
+					navigate(-1);
+					console.log('홈에서 바인더 생성 후 아이템 추가');
 				}
 			}
-			if (location.state.item) {
-				const body = {
-					itemIdx: location.state.item,
-					binderIdx: to,
-				};
-				const Uri = '/dibs';
-				const data = await customApiClient('post', Uri, body);
-				if (!data) return;
-				if (!data.isSuccess) {
-					console.log(data.message);
-					return;
-				}
-				setBottomMenuStatusState(false);
-				setToastMessageBottomPosition('3.875rem');
-				setToastMessageWrapStatus(true);
-				setToastMessageStatus(true);
-				setToastMessage(`아이템이 생성된 바인더로 이동했어요`);
-				setTimeout(() => {
-					setToastMessageStatus(false);
-				}, 2000);
-				setTimeout(() => {
-					setToastMessageWrapStatus(false);
-				}, 2300);
-				navigate(-1);
-				console.log('홈에서 바인더 생성 후 아이템 추가');
-			}
+			navigate('/binder');
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('바인더가 생성되었어요');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
 		}
 	};
 
@@ -286,10 +303,15 @@ export default function AddBinder() {
 									style={{ width: '2rem', height: '2rem' }}
 								></BinderAddPicture>
 							</PictureIconBackground>
-
-							<SubText fontweight="normal" color="#b1b1b1">
-								커버 이미지 추가
-							</SubText>
+							{!isBasicCover ? (
+								<SubText fontweight="normal" color="#b1b1b1">
+									커버 이미지 추가
+								</SubText>
+							) : (
+								<SubText fontweight="normal" color="#b1b1b1">
+									기본 커버
+								</SubText>
+							)}
 						</>
 					)}
 					<CoverImage className="img__box" />

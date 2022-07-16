@@ -92,9 +92,14 @@ export default function My() {
 			}
 		}
 		console.log('테ㅁ프.', tmp);
+		if (data.result.userInfo.isFollow === 'Y') {
+			setFollowStatus(true);
+		} else {
+			setFollowStatus(false);
+		}
 		setMyUploadIsDibList([...tmp]);
 	};
-
+	const [followStatus, setFollowStatus] = useState();
 	const onClickThreeDots = () => {
 		setReportPopupStatus(!reportPopupStatus);
 	};
@@ -178,6 +183,37 @@ export default function My() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	}
+	const onFollow = (e, userIdx) => {
+		e.stopPropagation();
+		FollowUser(userIdx);
+	};
+	const onUnFollow = (e, userIdx) => {
+		e.stopPropagation();
+		UnFollowUser(userIdx);
+	};
+	const FollowUser = async userIdx => {
+		// 팔로우 버튼 클릭
+		const data = await customApiClient('post', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('FollowUser', data.message);
+		setFollowStatus(true);
+		// console.log('userRecommendList', userRecommendList);
+	};
+	const UnFollowUser = async userIdx => {
+		// 팔로잉 버튼 클릭(언팔)
+		const data = await customApiClient('delete', `/users/${userIdx}/follow`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('UnFollowUser', data.message);
+		setFollowStatus(false);
+	};
 
 	return (
 		<MainContainer>
@@ -282,13 +318,23 @@ export default function My() {
 						</CelebFadeDiv>
 
 						{isAuthUser === 0 && (
-							<PurpleButton
-								style={{ fontSize: '1rem', marginTop: '1rem' }}
-								disabled={isFollow}
-								marginBottom="0"
-							>
-								{isFollow ? '팔로우' : '팔로잉'}
-							</PurpleButton>
+							<>
+								{followStatus ? (
+									<FollowButton
+										onClick={e => onUnFollow(e, userInfo.userIdx)}
+										follow={followStatus}
+									>
+										팔로잉
+									</FollowButton>
+								) : (
+									<FollowButton
+										onClick={e => onFollow(e, userInfo.userIdx)}
+										follow={followStatus}
+									>
+										팔로우
+									</FollowButton>
+								)}
+							</>
 						)}
 					</ProfileContentsWrap>
 				</ProfileWrap>
@@ -416,7 +462,8 @@ export default function My() {
 
 const ProfileWrap = styled.div`
 	padding: 4.375rem 1rem 1.875rem;
-	background-color: #ff365f;
+	background-image: radial-gradient(circle at 40% 46%, #ff365e2b, rgba(255, 223, 229, 0) 100%),
+		radial-gradient(circle at -276% -165%, #ff365e4b, rgba(255, 223, 229, 0) 87%); ;
 `;
 
 const ProfileContentsWrap = styled.div`
@@ -502,4 +549,23 @@ const ImageWrap = styled.div`
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;
+`;
+const FollowButton = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1rem;
+	padding: 0.625rem 1rem;
+	border-radius: 30.4px;
+	border: solid 1px #9e30f4;
+	height: 3rem;
+	width: 18.4375rem;
+	text-align: center;
+	margin-top: 0.75rem;
+	background-color: ${props => (props.follow ? '#fff' : '#9e30f4')};
+	color: ${props => (props.follow ? '#9e30f4' : '#fff')};
+	font-weight: 600;
+	position: relative;
+	z-index: '900';
+	box-sizing: border-box;
 `;

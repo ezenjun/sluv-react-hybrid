@@ -5,16 +5,20 @@ body {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
-	-webkit-tap-highlight-color : transparent;
+	-webkit-tap-highlight-color: transparent;
 }
 // a 태그 밑줄 제거
 a {
 	text-decoration: none;
 }
 
-
 //반응형
-@media screen and (max-width: 290px) {
+@media screen and (max-width: 280px) {
+	html {
+		font-size: 12px;
+	}
+}
+@media screen and (min-width: 281px) and (max-width: 290px) {
 	html {
 		font-size: 13px;
 	}
@@ -68,11 +72,3 @@ a {
 		font-size: 21px;
 	}
 }
-
-
-
-
-
-
-
-

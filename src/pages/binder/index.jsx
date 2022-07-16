@@ -10,7 +10,7 @@ import { SubText } from '../../components/Texts/SubText';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { GridItemWrap } from '../../components/GridItems/GridItemWrap';
 import { GridItem } from '../../components/GridItems/GridItem';
-import { GridImage } from '../../components/GridItems/GridImage';
+
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { ReactComponent as AddBinderButton } from '../../assets/Icons/addBinder.svg';
@@ -18,6 +18,13 @@ import { ReactComponent as EditBinder } from '../../assets/Icons/DotsThreeVertic
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
 import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_upload_item.svg';
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
+
+import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicBinder.svg';
+import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg';
+import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
+import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
+import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
+
 import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
@@ -90,7 +97,7 @@ export default function Binder() {
 			editBinderApi(editBinderIdx);
 		}
 	}, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
-	
+
 	// Function
 	const onAddBinder = () => {
 		navigate('./add');
@@ -312,16 +319,20 @@ export default function Binder() {
 										<>
 											{item.isBasic === 0 ? ( // 기본 바인더
 												<GridItem key={item.binderIdx}>
-													<GridImage
-														backgroundColor="linear-gradient(180deg, #F0FFF4 -1.86%, #ECEEFF 100%);"
-														marginbottom="0.6875rem"
+													<PinkBinder
+														style={{
+															width: '10.125rem',
+															height: '10.125rem',
+															marginBottom: '0.6875rem',
+															borderRadius: '1rem',
+														}}
 														onClick={() =>
 															onEachBinderClick(
 																item.binderIdx,
 																item.name
 															)
 														}
-													></GridImage>
+													></PinkBinder>
 													<SubText
 														fontsize="1rem"
 														fontweight="bold"
@@ -336,16 +347,76 @@ export default function Binder() {
 											) : (
 												//생성 바인더들
 												<GridItem key={item.binderIdx}>
-													<GridImage
-														src={item.coverImgUrl}
-														marginbottom="0.6875rem"
-														onClick={() =>
-															onEachBinderClick(
-																item.binderIdx,
-																item.name
-															)
-														}
-													></GridImage>
+													{item.coverImgUrl ? (
+														<BinderImage
+															src={item.coverImgUrl}
+															marginbottom="0.6875rem"
+															onClick={() =>
+																onEachBinderClick(
+																	item.binderIdx,
+																	item.name
+																)
+															}
+														></BinderImage>
+													) : (
+														<>
+															{item.binderIdx % 3 === 0 ? (
+																<YellowBinder
+																	style={{
+																		width: '10.125rem',
+																		height: '10.125rem',
+																		marginBottom: '0.6875rem',
+																		borderRadius: '1rem',
+																	}}
+																	onClick={() =>
+																		onEachBinderClick(
+																			item.binderIdx,
+																			item.name
+																		)
+																	}
+																></YellowBinder>
+															) : (
+																<>
+																	{item.binderIdx % 3 === 1 ? (
+																		<GreenBinder
+																			style={{
+																				width: '10.125rem',
+																				height: '10.125rem',
+																				marginBottom:
+																					'0.6875rem',
+																				borderRadius:
+																					'1rem',
+																			}}
+																			onClick={() =>
+																				onEachBinderClick(
+																					item.binderIdx,
+																					item.name
+																				)
+																			}
+																		></GreenBinder>
+																	) : (
+																		<BlueBinder
+																			style={{
+																				width: '10.125rem',
+																				height: '10.125rem',
+																				marginBottom:
+																					'0.6875rem',
+																				borderRadius:
+																					'1rem',
+																			}}
+																			onClick={() =>
+																				onEachBinderClick(
+																					item.binderIdx,
+																					item.name
+																				)
+																			}
+																		></BlueBinder>
+																	)}
+																</>
+															)}
+														</>
+													)}
+
 													<GridItemInfo>
 														<SubText
 															fontsize="1rem"
@@ -376,13 +447,16 @@ export default function Binder() {
 									{binderList.map(item => (
 										<>
 											<GridItem key={item.binderIdx}>
-												<GridImage
-													backgroundColor="#f4f4f4"
-													marginbottom="0.6875rem"
+												<BasicBinder
+													style={{
+														width: '10.125rem',
+														height: '10.125rem',
+														marginBottom: '0.6875rem',
+													}}
 													onClick={() =>
 														onEachBinderClick(item.binderIdx, item.name)
 													}
-												></GridImage>
+												></BasicBinder>
 												<SubText
 													fontsize="1rem"
 													fontweight="bold"
@@ -536,13 +610,13 @@ export default function Binder() {
 					</div>
 					<div
 						style={{
-							width: '20px',
-							height: '20px',
+							width: '1.25rem',
+							height: '1.25rem',
 							backgroundColor: '#9e30f4',
 							position: 'absolute',
 							left: '50%',
 							transform: 'translate(-50%,0)',
-							bottom: '-10px',
+							bottom: '-0.625rem',
 							borderRadius: '50%',
 						}}
 					></div>
@@ -571,13 +645,15 @@ const AddBinder = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	/* height: 100%;
+	width: 100%; */
 	width: 10.125rem;
 	height: 10.125rem;
 	border-radius: 1rem;
 	text-align: center;
 	background-color: #fbf6ff;
 	color: #564b5c;
-	@media screen and (width: 360px) {
+	/* @media screen and (width: 360px) {
 		width: 9.5625rem;
 		height: 9.5625rem;
 	}
@@ -588,7 +664,7 @@ const AddBinder = styled.div`
 	@media screen and (width: 280px) {
 		width: 8.125rem;
 		height: 8.125rem;
-	}
+	} */
 `;
 const GridItemInfo = styled.div`
 	display: flex;
@@ -677,4 +753,33 @@ const Button = styled.div`
 	font-weight: bold;
 	border-radius: 1.9rem;
 	color: #fff;
+`;
+const BinderImage = styled.div`
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+	width: 10.125rem;
+	height: 10.125rem;
+	border-radius: 1rem;
+	background-color: ${props => props.backgroundColor || '#f6f6f6'};
+	background-image: url(${props => props.src});
+	background-size: cover;
+	background-position: 50%;
+	margin-bottom: ${props => props.marginbottom || '1rem'};
+	box-sizing: border-box;
+	padding: 0.5rem 0.75rem;
+	color: white;
+	font-size: 0.8125rem;
+	@media screen and (width: 360px) {
+		width: 9.5625rem;
+		height: 9.5625rem;
+	}
+	@media screen and (width: 320px) {
+		width: 8.4063rem;
+		height: 8.4063rem;
+	}
+	@media screen and (width: 280px) {
+		width: 8.125rem;
+		height: 8.125rem;
+	}
 `;
