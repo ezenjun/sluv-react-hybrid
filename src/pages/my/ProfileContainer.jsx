@@ -6,8 +6,75 @@ import { GridItemWrap } from '../../components/GridItems/GridItemWrap';
 import { ImageText } from '../../components/ImageText';
 import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
+import { customApiClient } from '../../utils/apiClient';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
+import { useSetRecoilState } from 'recoil';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { useNavigate } from 'react-router-dom';
 
-export default function ProfileContainer({ uploadInfo }) {
+export default function ProfileContainer({
+	uploadInfo,
+	getSelectedItemIdx,
+	myUploadIsDibList,
+	getMyUpLoadDibList,
+}) {
+	const navigate = useNavigate();
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+	const onAddEachBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getSelectedItemIdx(itemIdx);
+		setBottomMenuStatusState(true);
+	};
+
+	const onDeleteBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+		// window.location.reload();
+	};
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		var tmp = myUploadIsDibList;
+		for (var i = 0; i < myUploadIsDibList.length; i++) {
+			if (uploadInfo.uploadItemList[i]) {
+				if (uploadInfo.uploadItemList[i].itemIdx === itemIdx) {
+					tmp[i] = !tmp[i];
+					getMyUpLoadDibList([...tmp]);
+				}
+			}
+		}
+
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
 	console.log(uploadInfo);
 	return (
 		<ProfileContainerWrap>
@@ -28,8 +95,11 @@ export default function ProfileContainer({ uploadInfo }) {
 					</div>
 					<GridItemWrap>
 						{uploadInfo.uploadItemList.length > 0 &&
-							uploadInfo.uploadItemList.map(item => (
-								<GridItem key={item.itemIdx}>
+							uploadInfo.uploadItemList.map((item, index) => (
+								<GridItem
+									key={item.itemIdx}
+									onClick={() => onDetailItemClick(item.itemIdx)}
+								>
 									<GridImage src={item.itemImgUrl}>
 										<ImageText>
 											<SubText
@@ -39,12 +109,29 @@ export default function ProfileContainer({ uploadInfo }) {
 											>
 												{item.name}'s
 											</SubText>
-											<BinderWhite
-												style={{
-													width: '1.375rem',
-													height: '1.375rem',
-												}}
-											/>
+											{myUploadIsDibList[index] === true ? (
+												<BinderRed
+													onClick={e =>
+														onDeleteBinderClick(e, item.itemIdx)
+													}
+													style={{
+														width: '1.5rem',
+														height: '1.5rem',
+														zIndex: '900',
+													}}
+												/>
+											) : (
+												<BinderWhite
+													onClick={e =>
+														onAddEachBinderClick(e, item.itemIdx)
+													}
+													style={{
+														width: '1.5rem',
+														height: '1.5rem',
+														zIndex: '900',
+													}}
+												/>
+											)}
 										</ImageText>
 									</GridImage>
 									<SubText

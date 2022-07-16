@@ -301,7 +301,14 @@ export default function My() {
 						// myUploadIsDibList={myUploadIsDibList}
 					/>
 				)}
-				{isAuthUser === 0 && <ProfileContainer uploadInfo={uploadInfo} />}
+				{isAuthUser === 0 && (
+					<ProfileContainer
+						uploadInfo={uploadInfo}
+						getSelectedItemIdx={getSelectedItemIdx}
+						myUploadIsDibList={myUploadIsDibList}
+						getMyUpLoadDibList={getMyUpLoadDibList}
+					/>
+				)}
 			</ContentWrap>
 
 			{/* 아이템 바인더 추가용 bottomslideMenu */}
