@@ -42,7 +42,7 @@ export default function ViewedItems() {
 	useEffect(() => {
 		setBottomNavStatus(false);
 
-		getViewItems();
+		// getViewItems();
 	}, []);
 
 	const getViewItems = async () => {
