@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';
 import { ReactComponent as FirstEvent } from '../../../assets/Event/FirstEvent.svg';
+import { useNavigate } from 'react-router-dom';
 export function EventComponent() {
+	const navigate = useNavigate();
 	const settings = {
 		dots: false,
 		infinite: true,
@@ -14,11 +16,13 @@ export function EventComponent() {
 		cssEase: 'linear',
 		arrows: true,
 	};
-
+	const onClickCard = idx => {
+		navigate(`/event/${idx}`, { state: { eventName: '스럽 X CMC 10기 데모데이 이벤트' } });
+	};
 	return (
 		<EventContainer>
 			<Slider {...settings}>
-				<div>
+				<div onClick={() => onClickCard(1)}>
 					<FirstEvent style={{ height: '100%', width: '100%' }}></FirstEvent>
 				</div>
 			</Slider>
