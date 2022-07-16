@@ -158,7 +158,17 @@ export function RecommendUserComponent() {
 								key={user.userIdx}
 							>
 								<ProfileImg src={user.profileImgUrl}></ProfileImg>
-								<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
+								<SubText
+									fontsize="0.875rem"
+									margin="0.5rem 0 0.25rem 0"
+									style={{
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										width: '100%',
+										textAlign: 'center',
+									}}
+								>
 									{user.nickName}
 								</SubText>
 								<SubText color="#8d8d8d">@{user.id}</SubText>
@@ -234,6 +244,7 @@ const ProfileImg = styled.div`
 	width: 3.875rem;
 	height: 3.875rem;
 	border-radius: 50%;
+	flex-shrink: 0;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 50%;

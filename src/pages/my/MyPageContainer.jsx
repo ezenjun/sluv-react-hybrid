@@ -1,24 +1,94 @@
-import React from 'react'
-import { useEffect } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import { customApiClient } from '../../utils/apiClient';
 
 import { ReactComponent as GrayArrow } from '../../assets/Icons/icon_mypage_arrow_gray.svg';
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
+import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 
-export default function MyPageContainer({ uploadInfo }) {
-	const navigate = useNavigate();
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
+export default function MyPageContainer({
+	uploadInfo,
+	getSelectedItemIdx,
+	myUploadIsDibList,
+	getMyUpLoadDibList,
+}) {
+	const navigate = useNavigate();
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
+
+	console.log(myUploadIsDibList);
 	const onClickMyUpload = () => {
 		navigate('/users/upload-items', {
 			state: uploadInfo,
 		});
+	};
+
+	// 아이템 하단의 추천 아이템 바인더 버튼
+	const onAddEachBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getSelectedItemIdx(itemIdx);
+		setBottomMenuStatusState(true);
+	};
+
+	const onDeleteBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+	const onDetailItemClick = itemIdx => {
+		navigate(`/item/detail/${itemIdx}`);
+		// window.location.reload();
+	};
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		var tmp = myUploadIsDibList;
+		for (var i = 0; i < myUploadIsDibList.length; i++) {
+			if (uploadInfo.uploadItemList[i]) {
+				if (uploadInfo.uploadItemList[i].itemIdx === itemIdx) {
+					tmp[i] = !tmp[i];
+					getMyUpLoadDibList([...tmp]);
+				}
+			}
+		}
+
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 	}
 
 	return (
@@ -35,9 +105,12 @@ export default function MyPageContainer({ uploadInfo }) {
 				</div>
 				<div className="contentWrap">
 					{uploadInfo.uploadItemList.length > 0 &&
-						uploadInfo.uploadItemList.slice(0, 10).map(item => (
-							<MyPageGridItem key={item.itemIdx}>
-								<GridImage>
+						uploadInfo.uploadItemList.slice(0, 10).map((item, index) => (
+							<MyPageGridItem
+								key={item.itemIdx}
+								onClick={() => onDetailItemClick(item.itemIdx)}
+							>
+								<GridImage src={item.itemImgUrl}>
 									<ImageText>
 										<SubText
 											fontsize="0.8125rem"
@@ -46,12 +119,25 @@ export default function MyPageContainer({ uploadInfo }) {
 										>
 											{item.name}'s
 										</SubText>
-										<BinderWhite
-											style={{
-												width: '1.375rem',
-												height: '1.375rem',
-											}}
-										/>
+										{myUploadIsDibList[index] === true ? (
+											<BinderRed
+												onClick={e => onDeleteBinderClick(e, item.itemIdx)}
+												style={{
+													width: '1.5rem',
+													height: '1.5rem',
+													zIndex: '900',
+												}}
+											/>
+										) : (
+											<BinderWhite
+												onClick={e => onAddEachBinderClick(e, item.itemIdx)}
+												style={{
+													width: '1.5rem',
+													height: '1.5rem',
+													zIndex: '900',
+												}}
+											/>
+										)}
 									</ImageText>
 								</GridImage>
 								<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.375rem 0 ">
@@ -95,12 +181,13 @@ export default function MyPageContainer({ uploadInfo }) {
 
 const MyPageContainerWrap = styled.div`
 	padding: 1.9375rem 0 3.125rem 0;
-	flex: 1;
+	display: flex;
+	flex-direction: column;
 `;
 
 const MyUploadWrap = styled.div`
 	margin-bottom: 1.875rem;
-
+	overflow-x: scroll;
 	.titleWrap {
 		padding: 0 1.25rem;
 		display: flex;
@@ -112,7 +199,7 @@ const MyUploadWrap = styled.div`
 		flex-direction: row;
 		padding-left: 1.25rem;
 
-		overflow-x: auto;
+		overflow-x: scroll;
 		::-webkit-scrollbar {
 			display: none; /* for Chrome, Safari, and Opera */
 		}
@@ -144,5 +231,3 @@ const MyPageGridItem = styled.div`
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
 `;
-
-

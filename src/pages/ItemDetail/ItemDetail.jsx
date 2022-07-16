@@ -612,7 +612,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												) : (
@@ -623,7 +622,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												)}
@@ -681,7 +679,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												) : (
@@ -692,7 +689,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												)}
@@ -750,7 +746,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												) : (
@@ -761,7 +756,6 @@ export default function ItemDetail() {
 														style={{
 															width: '1.5rem',
 															height: '1.5rem',
-															zIndex: '900',
 														}}
 													/>
 												)}
