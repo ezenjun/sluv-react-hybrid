@@ -281,35 +281,38 @@ export default function Search() {
 													</EachRank>
 												))}
 											</div>
-											{/* )} */}
-											{/* {hotSearchList && ( */}
-											<div>
-												{hotSearchList.slice(5, 10).map((rank, index) => (
-													<EachRank
-														key={index}
-														onClick={() =>
-															onClickKeyword(rank.searchWord)
-														}
-													>
-														<SubText
-															key={index}
-															fontsize="0.875rem"
-															fontweight="bold"
-															color="#9e30f4"
-															margin="1rem 1rem 1rem 0"
-														>
-															{index + 6}
-														</SubText>
-														<SubText
-															fontsize="0.875rem"
-															fontweight="600"
-															margin="16px 0"
-														>
-															{rank.searchWord}
-														</SubText>
-													</EachRank>
-												))}
-											</div>
+											{hotSearchList.length > 5 && (
+												<div>
+													{hotSearchList
+														.slice(5, 10)
+														.map((rank, index) => (
+															<EachRank
+																key={index}
+																onClick={() =>
+																	onClickKeyword(rank.searchWord)
+																}
+															>
+																<SubText
+																	key={index}
+																	fontsize="0.875rem"
+																	fontweight="bold"
+																	color="#9e30f4"
+																	margin="1rem 1rem 1rem 0"
+																>
+																	{index + 6}
+																</SubText>
+																<SubText
+																	fontsize="0.875rem"
+																	fontweight="600"
+																	margin="16px 0"
+																>
+																	{rank.searchWord}
+																</SubText>
+															</EachRank>
+														))}
+												</div>
+											)}
+
 											{/* )} */}
 										</Slider>
 									</>
@@ -353,7 +356,7 @@ export default function Search() {
 									{recentSearchList.map((search, index) => (
 										<Keyword key={search.recentSearchIdx}>
 											<SubText
-												fontsize="14px"
+												fontsize="0.875rem"
 												fontweight="600"
 												margin="0 0.5rem 0 0"
 												onClick={() => onClickKeyword(search.searchWord)}
@@ -379,7 +382,7 @@ export default function Search() {
 									}}
 								>
 									<SubText
-										fontsize="14px"
+										fontsize="0.875rem"
 										fontweight="normal"
 										margin="0 0.5rem 0 0"
 									>
@@ -420,13 +423,13 @@ export default function Search() {
 					</div>
 					<div
 						style={{
-							width: '20px',
-							height: '20px',
+							width: '1.25rem',
+							height: '1.25rem',
 							backgroundColor: '#9e30f4',
 							position: 'absolute',
 							left: '50%',
 							transform: 'translate(-50%,0)',
-							bottom: '-10px',
+							bottom: '-0.625rem',
 							borderRadius: '50%',
 						}}
 					></div>
@@ -478,7 +481,7 @@ const HotSearch = styled.div`
 	background-color: #fbf6ff;
 	box-sizing: border-box;
 	border-radius: 1rem;
-	height: ${props => (props.collapsed ? '3.5625rem' : '16.4375rem')};
+	height: ${props => (props.collapsed ? '3.5625rem' : '100%')};
 	overflow: hidden;
 	padding: 1.25rem;
 	transition: all 0.3s ease-out;

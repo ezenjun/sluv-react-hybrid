@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { customApiClient } from '../../utils/apiClient';
+import { useInView } from 'react-intersection-observer';
 
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
@@ -69,24 +70,6 @@ export default function SearchResult() {
 			getSearchResultList(queryKeyword);
 		}
 	};
-	const tabList = [
-		{
-			idx: 1,
-			name: '아이템 종류',
-		},
-		{
-			idx: 2,
-			name: '가격대',
-		},
-		{
-			idx: 3,
-			name: '정렬',
-		},
-		{
-			idx: 4,
-			name: '색상',
-		},
-	];
 
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
@@ -138,7 +121,7 @@ export default function SearchResult() {
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=1&pageSize=10`
+			`/search?search_word=${queryKeyword}&page=1&pageSize=2`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -152,6 +135,55 @@ export default function SearchResult() {
 		setSearchResultList(data.result.searchItemList);
 	};
 
+	const [page, setPage] = useState(1);
+	const [loading, setLoading] = useState(false);
+
+	const [ref, inView] = useInView();
+	const [blockRerender, setBlockRerender] = useState(false);
+	const getNewItems = useCallback(async () => {
+		if (!blockRerender) {
+			setLoading(true);
+			getAFterSearchResultList(location.state.searchInput, page);
+			setLoading(false);
+		}
+	}, [page]);
+
+	useEffect(() => {
+		getNewItems();
+	}, [getNewItems]);
+
+	const getAFterSearchResultList = async (queryKeyword, pageIdx) => {
+		const data = await customApiClient(
+			'get',
+			`/search?search_word=${queryKeyword}&page=${pageIdx}&pageSize=2`
+		);
+		console.log('');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			if (data.code === 3070) {
+				setSearchResultList([]);
+			}
+			if (data.code === 2060) {
+				//더이상 아이템이 없을 때
+				setBlockRerender(true);
+				alert('더이상 아이템이 없어요');
+			}
+			return;
+		} else {
+			console.log('아이템 리스트 다시 불러오기', data.result.searchItemList);
+			setSearchResultList([...searchResultList, data.result.searchItemList]);
+		}
+	};
+	useEffect(() => {
+		// 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
+		if (inView && !loading) {
+			if (!blockRerender) {
+				setPage(page => page + 1);
+				console.log('페이지:', page);
+			}
+		}
+	}, [inView, loading]);
 	useEffect(() => {
 		setBottomMenuStatusState(false);
 		setSearchInput(location.state.searchInput);
@@ -349,54 +381,99 @@ export default function SearchResult() {
 										))}
 									</>
 								)}
+								<div ref={ref}></div>
 							</LargeViewWrap>
 						) : (
 							<GridItemWrap>
 								{searchResultList && (
 									<>
-										{searchResultList.map(item => (
+										{searchResultList.map((item, idx) => (
 											<>
-												<GridItem
-													onClick={() => {
-														onDetailItemClick(item.itemIdx);
-													}}
-													key={item.itemIdx}
-												>
-													<GridImage src={item.itemImgUrl}>
-														<ImageText>
-															<SubText
-																fontsize="0.8125rem"
-																fontweight="bold"
-																color="white"
-															>
-																{item.name}'s
-															</SubText>
-															<BinderWhite
-																style={{
-																	width: '1.375rem',
-																	height: '1.375rem',
-																}}
-															/>
-														</ImageText>
-													</GridImage>
-													<SubText
-														fontsize="1rem"
-														fontweight="bold"
-														margin="0 0 0.375rem 0 "
-													>
-														{item.brandKr}
-													</SubText>
-													<SubText
-														style={{
-															textOverflow: 'ellipsis',
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															width: '100%',
+												{searchResultList.length - 1 === idx ? (
+													<GridItem
+														onClick={() => {
+															onDetailItemClick(item.itemIdx);
 														}}
+														key={item.itemIdx}
 													>
-														{item.itemName}
-													</SubText>
-												</GridItem>
+														<GridImage src={item.itemImgUrl}>
+															<ImageText>
+																<SubText
+																	fontsize="0.8125rem"
+																	fontweight="bold"
+																	color="white"
+																>
+																	{item.name}'s
+																</SubText>
+																<BinderWhite
+																	style={{
+																		width: '1.375rem',
+																		height: '1.375rem',
+																	}}
+																/>
+															</ImageText>
+														</GridImage>
+														<SubText
+															fontsize="1rem"
+															fontweight="bold"
+															margin="0 0 0.375rem 0 "
+														>
+															{item.brandKr}
+														</SubText>
+														<SubText
+															style={{
+																textOverflow: 'ellipsis',
+																whiteSpace: 'nowrap',
+																overflow: 'hidden',
+																width: '100%',
+															}}
+														>
+															{item.itemName}
+														</SubText>
+													</GridItem>
+												) : (
+													<GridItem
+														onClick={() => {
+															onDetailItemClick(item.itemIdx);
+														}}
+														key={item.itemIdx}
+													>
+														<GridImage src={item.itemImgUrl}>
+															<ImageText>
+																<SubText
+																	fontsize="0.8125rem"
+																	fontweight="bold"
+																	color="white"
+																>
+																	{item.name}'s
+																</SubText>
+																<BinderWhite
+																	style={{
+																		width: '1.375rem',
+																		height: '1.375rem',
+																	}}
+																/>
+															</ImageText>
+														</GridImage>
+														<SubText
+															fontsize="1rem"
+															fontweight="bold"
+															margin="0 0 0.375rem 0 "
+														>
+															{item.brandKr}
+														</SubText>
+														<SubText
+															style={{
+																textOverflow: 'ellipsis',
+																whiteSpace: 'nowrap',
+																overflow: 'hidden',
+																width: '100%',
+															}}
+														>
+															{item.itemName}
+														</SubText>
+													</GridItem>
+												)}
 											</>
 										))}
 									</>
