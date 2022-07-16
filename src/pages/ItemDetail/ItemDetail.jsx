@@ -289,9 +289,8 @@ export default function ItemDetail() {
 	};
 
 	const getItemInfo = async () => {
-		
 		let uri = ``;
-		if(myUserIdx) {
+		if (myUserIdx) {
 			uri = `/items/${itemIdx}?userIdx=${myUserIdx}`;
 		} else {
 			uri = `/items/${itemIdx}`;
@@ -395,7 +394,7 @@ export default function ItemDetail() {
 		console.log('UnLikeItem', data.message);
 		// console.log('userRecommendList', userRecommendList);
 	};
-	const onClickShareButton = (e) => {
+	const onClickShareButton = e => {
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
@@ -406,17 +405,17 @@ export default function ItemDetail() {
 		setTimeout(() => {
 			setToastMessageWrapStatus(false);
 		}, 2300);
-	}
+	};
 	useEffect(() => {
-		setMyUserIdx(localStorage.getItem('myUserIdx')); 
-	},[]);
+		setMyUserIdx(localStorage.getItem('myUserIdx'));
+	}, []);
 
 	useEffect(() => {
 		// 하단바 띄워주기
 		//
 		getItemInfo();
 		setBottomNavStatus(false);
-	}, [itemIdx]);
+	}, [itemIdx, myUserIdx]);
 
 	return (
 		<MainContainer padding="0 0 0 0">
