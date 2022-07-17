@@ -22,6 +22,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 	const [currentMemberPage, setCurrentMemberPage] = useState(0);
 	const [selectedMemberNum, setSelectedMemberNum] = useState(0);
 	const [checkStatusList, setCheckStatusList] = useState([]);
+	const [badgeNumList, setBadgeNumList] = useState([]);
 	const [selectedMemberIdxArray, setSelectedMemberIdxArray] = useState([]);
 	const [isGroupIdxList, setIsGroupIdxList] = useState([]);
 
@@ -42,13 +43,15 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		})
 	}, []);
 
-	console.log(isGroupIdxList);
-
 	useEffect(() => {
 		let temp;
+		let temp2;
 		(temp = []).length = data[currentMemberPage].memberList.length;
+		(temp2 = []).length = data[currentMemberPage].memberList.length;
 		temp.fill(false);
+		temp2.fill(0);
 		setCheckStatusList(temp);
+		setBadgeNumList(temp2);
 
 		setSelectedMemberNum(0);
 		setSelectedMemberIdxArray([]);
@@ -93,21 +96,34 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		} 
 	};
 
-	const onSelectMember = (member, e) => {
+	const onSelectMember = (member, e, index) => {
 		console.log(member);
 
 		let tempWholeMember = [];
+		let tempBadgeNumList = [];
 		if (!checkStatusList[member.memberIdx - 1]) {
 			setSelectedMemberNum(selectedMemberNum + 1);
 
 			tempWholeMember = selectedMemberIdxArray;
 			tempWholeMember.push({ memberIdx: member.memberIdx });
 			setSelectedMemberIdxArray(tempWholeMember);
+
+			tempBadgeNumList = badgeNumList;
+			tempBadgeNumList[index] = selectedMemberNum + 1;
+			setBadgeNumList(tempBadgeNumList);
 		} else {
 			setSelectedMemberNum(selectedMemberNum - 1);
 
 			tempWholeMember = selectedMemberIdxArray;
 			setSelectedMemberIdxArray(tempWholeMember.filter(item => item.memberIdx !== member.memberIdx));
+
+			tempBadgeNumList = badgeNumList;
+			tempBadgeNumList.map((badgeNum, _index) => {
+				if (badgeNum > tempBadgeNumList[index]) {
+					tempBadgeNumList[_index] = tempBadgeNumList[_index] - 1;
+				}
+			});
+			setBadgeNumList(tempBadgeNumList);
 		}
 		let tempCheckList = checkStatusList;
 		tempCheckList[member.memberIdx - 1] = !tempCheckList[member.memberIdx - 1];
@@ -193,7 +209,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 0 && (
 													<CelebLeftTop
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -221,7 +239,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebLeftTop>
@@ -229,7 +247,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 1 && (
 													<CelebRightTop
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -256,7 +276,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebRightTop>
@@ -264,7 +284,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 2 && (
 													<CelebLeftBottom
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -291,7 +313,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebLeftBottom>
@@ -299,7 +321,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 3 && (
 													<CelebRightBottom
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -326,7 +350,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebRightBottom>
@@ -334,7 +358,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 4 && (
 													<CelebNextLeftBottom
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -361,7 +387,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebNextLeftBottom>
@@ -369,7 +395,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 5 && (
 													<CelebNextLeftTop
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -396,7 +424,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebNextLeftTop>
@@ -404,7 +432,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 6 && (
 													<CelebNextRightTop
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -431,7 +461,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebNextRightTop>
@@ -439,7 +469,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 												{index % 8 === 7 && (
 													<CelebNextRightBottom
 														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
+														onClick={e =>
+															onSelectMember(member, e, index)
+														}
 													>
 														<Image
 															size="9.25rem"
@@ -466,7 +498,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 															}
 														>
 															<span className="badgeItem">
-																{selectedMemberNum}
+																{badgeNumList[index]}
 															</span>
 														</CountBadge>
 													</CelebNextRightBottom>

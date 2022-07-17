@@ -11,6 +11,7 @@ import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { customApiClient } from '../../utils/apiClient';
+import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 
 export default function Followings() {
 	const navigate = useNavigate();
@@ -92,7 +93,7 @@ export default function Followings() {
 				</MainText>
 			</TopNav>
 			<ContentWrap padding="0">
-				{followingList.length > 0 &&
+				{followingList.length > 0 ? (
 					followingList.map((following, index) => (
 						<FollowingUserInfo
 							key={following.userIdx}
@@ -142,7 +143,21 @@ export default function Followings() {
 								</>
 							)}
 						</FollowingUserInfo>
-					))}
+					))
+				) : (
+					<NoFollowWrap >
+						<NoFollowerIcon
+							style={{ width: '3.75rem', height: '3.75rem' }}
+						></NoFollowerIcon>
+						<SubText></SubText>
+						<SubText color="#262626" fontsize="1rem" margin="1rem 0 0.5rem 0">
+							아직 팔로잉한 스러버가 없네요
+						</SubText>
+						<SubText color="#8d8d8d" fontsize="0.875rem">
+							소통하고 싶은 스러버를 찾아봐요
+						</SubText>
+					</NoFollowWrap>
+				)}
 			</ContentWrap>
 		</MainContainer>
 	);
@@ -197,3 +212,11 @@ const FollowButton = styled.div`
 	position: relative;
 	z-index: '900';
 `;
+
+export const NoFollowWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 11.25rem;
+`

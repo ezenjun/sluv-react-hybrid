@@ -17,7 +17,9 @@ import {
 	FollowingUserImage,
 	FollowingUserInfo,
 	FollowingUserTextWrap,
+	NoFollowWrap,
 } from './Followings';
+import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 
 export default function Followers() {
 	const navigate = useNavigate();
@@ -99,7 +101,7 @@ export default function Followers() {
 				</MainText>
 			</TopNav>
 			<ContentWrap padding="0">
-				{followerList.length > 0 &&
+				{followerList.length > 0 ? (
 					followerList.map((follower, index) => (
 						<FollowingUserInfo
 							key={follower.userIdx}
@@ -149,7 +151,21 @@ export default function Followers() {
 								</>
 							)}
 						</FollowingUserInfo>
-					))}
+					))
+				) : (
+					<NoFollowWrap>
+						<NoFollowerIcon
+							style={{ width: '3.75rem', height: '3.75rem' }}
+						></NoFollowerIcon>
+						<SubText></SubText>
+						<SubText color="#262626" fontsize="1rem" margin="1rem 0 0.5rem 0">
+							아직 팔로우한 스러버가 없네요
+						</SubText>
+						<SubText color="#8d8d8d" fontsize="0.875rem">
+							더 열심히 소통해봐요!
+						</SubText>
+					</NoFollowWrap>
+				)}
 			</ContentWrap>
 		</MainContainer>
 	);

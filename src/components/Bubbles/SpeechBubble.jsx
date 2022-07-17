@@ -32,6 +32,15 @@ export const SpeechBubbleWrap = styled.div`
 	.highlight {
 		color: #9e30f4;
 	}
+	.itemDetailText {
+		font: 0.875rem;
+		color: #564b5c;
+		font-weight: 400;
+	}
+	.itemDetailTextBold {
+		color: #2b1e34;
+		font-weight: 600;
+	}
 `;
 
 export const ImgUploadBubbleWrap = styled.div`
