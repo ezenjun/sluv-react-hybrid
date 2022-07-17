@@ -13,9 +13,12 @@ import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
 import { useSetRecoilState } from 'recoil';
-import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
 import { checkMobile } from '../../App';
-
+import {
+	SignupProgressState,
+	SocialLoginUserIdxState,
+	SocialLoginCompleteState,
+} from '../../recoil/User';
 export default function Login() {
 	const navigate = useNavigate();
 
@@ -24,7 +27,7 @@ export default function Login() {
 
 	async function handleCallbackResponse(response) {
 		// console.log("encoded JWT ID Token: " + response.credential);
-		
+
 		const url = `/auth/google-login?code=${response.credential}`;
 		const data = await customApiClient('get', url);
 		console.log(data);
@@ -45,7 +48,6 @@ export default function Login() {
 	}
 
 	const getMyFcmTokenAndAutoLogin = async () => {
-
 		localStorage.removeItem('isFcmLoad');
 		let localFcm = localStorage.getItem('fcmToken');
 
@@ -106,8 +108,8 @@ export default function Login() {
 			localStorage.setItem('myUserIdx', data.result.userIdx);
 			navigate('/home');
 		}
-
 	};
+	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
 
 	async function handleCallbackResponse(response) {
 		console.log('Encoded JWT ID token: ' + response.credential);
@@ -118,13 +120,21 @@ export default function Login() {
 		if (data.code === 3001) {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
-			navigate('/home');
+			if (data.result.nickname === 'tempNickName') {
+				setCurrentPage(4);
+				setUserIdx(data.result.userIdx);
+				console.log(data.result.userIdx);
+				navigate('/signup');
+			} else {
+				navigate('/home');
+			}
 		}
 		if (data.code === 1000) {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			// 닉네임으로 페이지 변경
-			setSocialLoginComplete(true);
+
+			setUserIdx(data.result.userIdx);
 			setCurrentPage(4);
 			navigate('/signup');
 		}

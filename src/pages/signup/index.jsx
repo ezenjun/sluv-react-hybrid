@@ -5,7 +5,11 @@ import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
-import { SignupProgressState, SocialLoginCompleteState, SocialLoginUserIdxState } from '../../recoil/User';
+import {
+	SignupProgressState,
+	SocialLoginCompleteState,
+	SocialLoginUserIdxState,
+} from '../../recoil/User';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -252,8 +256,8 @@ export default function Signup() {
 	async function handleAuthCodeSendAPI() {
 		const url = `/auth/sms?phone=${phoneNumber}`;
 		const data = await customApiClient('get', url);
-		if(!data) return;
-		if(data.isSuccess) {
+		if (!data) return;
+		if (data.isSuccess) {
 			beginTimer();
 		}
 	}
@@ -317,22 +321,23 @@ export default function Signup() {
 		const postUserSignupUri = '/auth/signup';
 		const data = await customApiClient('post', postUserSignupUri, body);
 
-		if(!data) return;
-		if(!data.isSuccess) return;
+		if (!data) return;
+		if (!data.isSuccess) return;
 
 		console.log(data.result.jwt);
 		localStorage.setItem('myUserIdx', data.result.userIdx);
 		localStorage.setItem('x-access-token', data.result.jwt);
 
 		handleNextClick();
-	}
+	};
 
 	const onPatchNickname = async () => {
 		console.log(nickname);
 		const body = {
 			nickName: nickname,
 		};
-		
+		console.log('구글로그인 후', typeof socialLoginUserIdx);
+		console.log(`/users/${socialLoginUserIdx}/nickname`);
 		const uri = `/users/${socialLoginUserIdx}/nickname`;
 		const data = await customApiClient('patch', uri, body);
 		console.log(data);
@@ -340,7 +345,7 @@ export default function Signup() {
 		if (!data.isSuccess) return;
 
 		handleNextClick();
-	}
+	};
 
 	async function handleSignUpAPI() {
 		const url = `/users/nickname-check?nickname=${nickname}`;
