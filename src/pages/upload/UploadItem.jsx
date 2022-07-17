@@ -43,7 +43,6 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
-import { FALSE } from 'sass';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -291,7 +290,7 @@ export default function UploadItem() {
 			.on('complete', evt => {
 				let temp = [];
 				temp = imgUrlList;
-				if(index == checkedElement) {
+				if (index == checkedElement) {
 					temp.push({
 						isRepresent: 1,
 						itemImgUrl:
@@ -355,7 +354,7 @@ export default function UploadItem() {
 	};
 
 	const onClickUploadBtnStart = () => {
-		if(isUploadConfirm) {
+		if (isUploadConfirm) {
 			onClickUploadItem(selectedFileList);
 		} else {
 			setToastMessageBottomPosition('1.625rem');
@@ -370,18 +369,18 @@ export default function UploadItem() {
 				setToastMessageWrapStatus(false);
 			}, 2300);
 		}
-	}
+	};
 
-	const onClickPreviewImg = (index) => {
+	const onClickPreviewImg = index => {
 		console.log(index);
-	}
-	const onClickPreviewImgDelete = (index) => {
+	};
+	const onClickPreviewImgDelete = index => {
 		setCheckedElement(0);
 		let temp = [];
 		temp = previewImgUrlList;
 		temp.splice(index, 1);
 		setPreviewImgUrlList([...temp]);
-	}
+	};
 	const onChangeRadioButton = e => {
 		console.log(e.target.value);
 		setCheckedElement(e.target.value);
