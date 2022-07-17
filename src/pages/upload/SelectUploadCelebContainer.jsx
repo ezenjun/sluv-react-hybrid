@@ -79,7 +79,7 @@ export default function SelectUploadCelebContainer() {
 			console.log(data.message);
 			return;
 		}
-		console.log(data.result);
+		console.log('내 관심셀럽 리스트', data.result);
 		setFavoriteCelebList(data.result);
 	}
 
@@ -127,7 +127,6 @@ export default function SelectUploadCelebContainer() {
 	};
 
 	const onClickUploadCeleb = (celeb, e) => {
-		console.log(celeb);
 		setSelectedCeleb(celeb);
 		if(celeb.isGroup === 1) {
 			setCurrentPage(1);
