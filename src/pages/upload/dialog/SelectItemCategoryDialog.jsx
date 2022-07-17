@@ -30,7 +30,7 @@ export default function SelectItemCategoryDialog(props) {
 	};
 
 	const closeDialog = () => {
-		
+		setBottomMenuStatusState(false);
 	}
 
 	const setSelectedMainFilter = input => {
@@ -66,7 +66,7 @@ export default function SelectItemCategoryDialog(props) {
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv style={{ border: '1px solid red' }} openStatus={bottomMenuStatusState}>
+			<BottomDialogDiv openStatus={bottomMenuStatusState}>
 				<CloseWrap>
 					<div
 						style={{
