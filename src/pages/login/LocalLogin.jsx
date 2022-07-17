@@ -40,7 +40,7 @@ export default function LocalLogin() {
 	useEffect(() => {
 		setEmail(localStorage.getItem('myEmail'));
 		setEmailValid(true);
-	},[]);
+	}, []);
 
 	const handleEmail = e => {
 		setEmail(e.target.value);
@@ -85,20 +85,20 @@ export default function LocalLogin() {
 			setRememberIdCheck(false);
 		}
 	};
-	
+
 	const handleBackClick = () => {
 		navigate('/');
 	};
 
 	const handleEnterEvent = () => {
-		if(window.event.keyCode===13) {
+		if (window.event.keyCode === 13) {
 			handleLoginAPI();
 		}
 	};
 
 	// 이메일 비밀번호 확인 API
 	async function handleLoginAPI() {
-		if(rememberIdCheck) {
+		if (rememberIdCheck) {
 			localStorage.setItem('myEmail', email);
 		} else {
 			localStorage.setItem('myEmail', '');
@@ -116,7 +116,7 @@ export default function LocalLogin() {
 			localStorage.setItem('myUserIdx', data.result.userIdx);
 			//토큰저장
 			localStorage.setItem('x-access-token', data.result.jwt);
-			
+
 			navigate('/home');
 		} else {
 			setToastMessageBottomPosition('1.625rem');
@@ -162,14 +162,14 @@ export default function LocalLogin() {
 								type="text"
 								placeholder="이메일을 입력해주세요"
 							/>
-							{email.length !== 0 && emailValid ? (
+							{email && email.length !== 0 && emailValid ? (
 								<IconWrap>
 									<Check />
 								</IconWrap>
 							) : (
 								<></>
 							)}
-							{email.length !== 0 && !emailValid ? (
+							{email && email.length !== 0 && !emailValid ? (
 								<IconWrap onClick={emailInputReset}>
 									<Delete />
 								</IconWrap>

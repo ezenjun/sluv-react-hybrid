@@ -13,9 +13,12 @@ import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
 import { useSetRecoilState } from 'recoil';
-import { SignupProgressState, SocialLoginCompleteState } from '../../recoil/User';
 import { checkMobile } from '../../App';
-
+import {
+	SignupProgressState,
+	SocialLoginUserIdxState,
+	SocialLoginCompleteState,
+} from '../../recoil/User';
 export default function Login() {
 	const navigate = useNavigate();
 
@@ -52,6 +55,7 @@ export default function Login() {
 			}
 		}
 	};
+	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
 
 	async function handleCallbackResponse(response) {
 		console.log('Encoded JWT ID token: ' + response.credential);
@@ -62,13 +66,21 @@ export default function Login() {
 		if (data.code === 3001) {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
-			navigate('/home');
+			if (data.result.nickname === 'tempNickName') {
+				setCurrentPage(4);
+				setUserIdx(data.result.userIdx);
+				console.log(data.result.userIdx);
+				navigate('/signup');
+			} else {
+				navigate('/home');
+			}
 		}
 		if (data.code === 1000) {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			// 닉네임으로 페이지 변경
-			setSocialLoginComplete(true);
+
+			setUserIdx(data.result.userIdx);
 			setCurrentPage(4);
 			navigate('/signup');
 		}
@@ -112,7 +124,7 @@ export default function Login() {
 			localStorage.setItem('x-access-token', data.result.jwt);
 			navigate('/home');
 		}
-		if (data.code === 1000) {
+		if (data.code === 1000 || data.result.nickName === 'tempNickName') {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			// 닉네임으로 페이지 변경
