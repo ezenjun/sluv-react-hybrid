@@ -57,8 +57,6 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		getMoreItem();
 	}, [getMoreItem]);
 
-
-
 	const getBrandList = async () => {
 		const data = await customApiClient('get', '/brands');
 
@@ -83,11 +81,11 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 			}
 		});
 
-		setCurrentBrandList(searchResult);
+		setRenderingList(searchResult);
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
-		setCurrentBrandList(brandList);
+		setRenderingList(brandList.slice(0, renderDataNum));
 	};
 
 	const onClickBrandItem = brand => {
