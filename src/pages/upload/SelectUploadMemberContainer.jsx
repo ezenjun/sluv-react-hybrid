@@ -23,7 +23,6 @@ export default function SelectUploadMemberContainer() {
 	const setUploadPopupStatus = useSetRecoilState(UploadPopupState);
 
 	const onSelectMember = (member, e) => {
-		console.log(member);
 		setSelectedMember(member);
 		setCurrentPage(2);
 	}
