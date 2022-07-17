@@ -28,7 +28,9 @@ import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 
 import { ReactComponent as ItemLinkIcon } from '../../assets/Icons/itemLinkIcon.svg';
 import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_rightArrow.svg';
+import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { PopUpModalState } from '../../recoil/PopUpModal';
 import {
 	BottomDialogDiv,
 	BottomDialogWrap,
@@ -54,6 +56,7 @@ export default function ItemDetail() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
 	const [myUserIdx, setMyUserIdx] = useState(false);
 
 	const [reportDialogStatus, setReportDialogStatus] = useState(false);
@@ -67,6 +70,18 @@ export default function ItemDetail() {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 		// window.location.reload();
+	};
+	const onDeleteMyUploadItem = async itemIdx => {
+		const data = await customApiClient('patch', `/items/${itemIdx}/status`);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		} else {
+			setPopUpModalStatusState(false);
+			console.log('아이템 삭제', data.result);
+			navigate(-1);
+		}
 	};
 	const settings = {
 		dots: true,
@@ -122,6 +137,9 @@ export default function ItemDetail() {
 	};
 	const getOpenStatus = input => {
 		setOpenState(input);
+	};
+	const onCancleDelete = () => {
+		setPopUpModalStatusState(false);
 	};
 
 	// 아이템 하단의 추천 아이템 바인더 버튼
@@ -291,9 +309,8 @@ export default function ItemDetail() {
 	const getItemInfo = async () => {
 		let uri = ``;
 		let idx = localStorage.getItem('myUserIdx');
-		if (myUserIdx) {
+		if (idx) {
 			uri = `/items/${itemIdx}?userIdx=${idx}`;
-			
 		} else {
 			uri = `/items/${itemIdx}`;
 		}
@@ -306,6 +323,7 @@ export default function ItemDetail() {
 		}
 		// 아이템 정보 저장
 		setItemInfo(data.result.itemInfo);
+		console.log('isMe', data.result.itemInfo);
 		// 아이템 바인더 저장 여부
 		if (data.result.itemInfo.isDib === 'Y') setIsDib(true);
 		else setIsDib(false);
@@ -417,29 +435,6 @@ export default function ItemDetail() {
 
 	return (
 		<MainContainer padding="0 0 0 0">
-			{itemInfo.isMe === 'Y' ? (
-				<BottomSlideMenu>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportPost}>
-						수정하기
-					</SubText>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportUser}>
-						삭제하기
-					</SubText>
-				</BottomSlideMenu>
-			) : (
-				<BottomSlideMenu>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportPost}>
-						수정 요청하기
-					</SubText>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportUser}>
-						게시글 신고하기
-					</SubText>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onReportUser}>
-						'{itemInfo.nickName}'님 신고하기
-					</SubText>
-				</BottomSlideMenu>
-			)}
-
 			<TopNav
 				style={{
 					justifyContent: 'space-between',
@@ -951,25 +946,65 @@ export default function ItemDetail() {
 							onClick={() => setReportDialogStatus(false)}
 						></Close>
 					</CloseWrap>
-					<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem' }}>
-						<div
-							style={{ paddingBottom: '1.875rem' }}
-							onClick={() => navigate(`/report/comment/${itemIdx}`)}
-						>
-							수정 요청하기
+					{itemInfo.isMe === 'Y' ? (
+						<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem 1.25rem' }}>
+							<div
+								style={{ paddingBottom: '1.875rem' }}
+								onClick={() => navigate(`/report/comment/${itemIdx}`)}
+							>
+								수정하기
+							</div>
+							<div
+								style={{ paddingBottom: '1.875rem' }}
+								onClick={() => setPopUpModalStatusState(true)}
+							>
+								삭제하기
+							</div>
 						</div>
-						<div
-							style={{ paddingBottom: '1.875rem' }}
-							onClick={() => navigate(`/report/post/${itemIdx}`)}
-						>
-							게시글 신고하기
+					) : (
+						<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem' }}>
+							<div
+								style={{ paddingBottom: '1.875rem' }}
+								onClick={() => navigate(`/report/comment/${itemIdx}`)}
+							>
+								수정 요청하기
+							</div>
+							<div
+								style={{ paddingBottom: '1.875rem' }}
+								onClick={() => navigate(`/report/post/${itemIdx}`)}
+							>
+								게시글 신고하기
+							</div>
+							<div onClick={() => navigate(`/report/user/${itemInfo.uploaderIdx}`)}>
+								'{itemInfo.nickName}'님 신고하기
+							</div>
 						</div>
-						<div onClick={() => navigate(`/report/user/${itemInfo.uploaderIdx}`)}>
-							'{itemInfo.nickName}'님 신고하기
-						</div>
-					</div>
+					)}
 				</BottomDialogDiv>
 			</BottomDialogWrap>
+
+			<PopUpModal closeButton={true}>
+				<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
+					선택하신 아이템을 <br />
+					삭제하시나요?
+				</MainText>
+				<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
+					선택하신 아이템은
+					<br />
+					삭제되어 복구하실 수 없어요
+				</SubText>
+				<ButtonWrap>
+					<Button backgroundColor="#c9c9c9" onClick={onCancleDelete}>
+						취소
+					</Button>
+					<Button
+						backgroundColor="#9e30f4"
+						onClick={() => onDeleteMyUploadItem(itemInfo.itemIdx)}
+					>
+						삭제
+					</Button>
+				</ButtonWrap>
+			</PopUpModal>
 		</MainContainer>
 	);
 }
@@ -1159,4 +1194,22 @@ const ImageWrap = styled.div`
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;
+`;
+
+const ButtonWrap = styled.div`
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+`;
+const Button = styled.div`
+	background-color: ${props => props.backgroundColor};
+	box-sizing: border-box;
+	width: 47%;
+	height: 3rem;
+	padding: 0.9375rem 0;
+	font-family: Pretendard;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 1.9rem;
+	color: #fff;
 `;

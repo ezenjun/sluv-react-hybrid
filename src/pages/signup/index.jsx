@@ -834,7 +834,9 @@ export default function Signup() {
 						</CompletePageLabel>
 					</CompleteTopWrap>
 					<BottomWrap>
-						<StyledLink onClick={() => navigate('/select/celebrity', { state: pathname})}>
+						<StyledLink
+							onClick={() => navigate('/select/celebrity', { state: pathname })}
+						>
 							<PurpleButton>관심 셀럽 등록하러 가기</PurpleButton>
 						</StyledLink>
 					</BottomWrap>
