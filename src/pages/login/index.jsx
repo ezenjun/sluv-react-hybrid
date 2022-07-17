@@ -22,41 +22,18 @@ export default function Login() {
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
-	async function handleCallbackResponse(response) {
-		// console.log("encoded JWT ID Token: " + response.credential);
-		
-		const url = `/auth/google-login?code=${response.credential}`;
-		const data = await customApiClient('get', url);
-		console.log(data);
-
-		if (data.code === 3001) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			navigate('/home');
-		}
-		if (data.code === 1000) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			// 닉네임으로 페이지 변경
-			setSocialLoginComplete(true);
-			setCurrentPage(4);
-			navigate('/signup');
-		}
-	}
-
 	const getAutoLogin = async () => {
 		const data = await customApiClient('get', '/auth/auto-login');
 		console.log(data);
-		if(!data) return;
-		if(!data.isSuccess) return;
+		if (!data) return;
+		if (!data.isSuccess) return;
 
-		if(data.code === 1001) {
+		if (data.code === 1001) {
 			navigate('/home');
 		}
-	}
+	};
 
 	const getMyFcmToken = async () => {
-
 		localStorage.removeItem('isFcmLoad');
 		let localFcm = localStorage.getItem('fcmToken');
 
@@ -76,6 +53,27 @@ export default function Login() {
 		}
 	};
 
+	async function handleCallbackResponse(response) {
+		console.log('Encoded JWT ID token: ' + response.credential);
+		const url = `/auth/google-login?code=${response.credential}`;
+		const data = await customApiClient('get', url);
+		console.log(data);
+
+		if (data.code === 3001) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			navigate('/home');
+		}
+		if (data.code === 1000) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			// 닉네임으로 페이지 변경
+			setSocialLoginComplete(true);
+			setCurrentPage(4);
+			navigate('/signup');
+		}
+	}
+
 	useEffect(() => {
 		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
 		setCurrentPage(1);
@@ -86,23 +84,21 @@ export default function Login() {
 		// 자동 로그인 API 호출
 		getAutoLogin();
 
-
 		/* global google*/
-
-		// if(google.accounts.id) {
-		// 	google.accounts.id.initialize({
-		// 		client_id: GoogleClient_ID,
-		// 		callback: handleCallbackResponse,
-		// 	});
-		// 	google.accounts.id.renderButton(document.querySelector('#google'), {
-		// 		type: 'icon',
-		// 		theme: 'outline',
-		// 		size: 'large',
-		// 		width: '40px',
-		// 		shape: 'circle',
-		// 	});
-		// }
-		// eslint-disable-next-line
+		window.onload = function () {
+			google.accounts.id.initialize({
+				client_id: GoogleClient_ID,
+				callback: handleCallbackResponse,
+			});
+			google.accounts.id.renderButton(document.getElementById('google'), {
+				type: 'icon',
+				theme: 'outline',
+				size: 'large',
+				width: '40px',
+				shape: 'circle',
+			});
+			google.accounts.id.prompt(); // also display the One Tap dialog
+		};
 	}, []);
 
 	const getKakaoJwt = async () => {
@@ -122,7 +118,6 @@ export default function Login() {
 			// 닉네임으로 페이지 변경
 		}
 	};
-	
 
 	return (
 		<MainContainer>
@@ -184,7 +179,7 @@ const MainContainer = styled.div`
 	flex-direction: column;
 	/* justify-content: space-evenly; */
 	height: 100%;
-	width: 100%; 
+	width: 100%;
 `;
 
 const LogoContainer = styled.div`
@@ -275,7 +270,6 @@ const GoogleButton = styled.div`
 	justify-content: center;
 	margin-bottom: 12px;
 `;
-
 
 const LoginText = styled(Link)`
 	text-decoration: underline;

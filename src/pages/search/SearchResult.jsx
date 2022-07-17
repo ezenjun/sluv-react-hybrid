@@ -100,19 +100,29 @@ export default function SearchResult() {
 	const getSelectedItemFilter = (main, sub, text) => {
 		setSelectedItemFilter(text);
 		setMainItem(main);
-		setSubItem(sub);
-		console.log('메인', main);
-		console.log('서브', sub);
+
+		var tmp = '';
+		for (var i = 0; i < sub.length; i++) {
+			tmp += sub[i];
+			if (i !== sub.length - 1) {
+				tmp += '+';
+			}
+		}
+		setSubItem(tmp);
 		console.log(selectedItemFilter);
 	};
 	const [mainprice, setMainPrice] = useState(0);
 	const getSelectedPriceFilter = (main, text) => {
 		setSelectedPriceFilter(text);
+		setMainPrice(main);
+		console.log('가격 메인', main);
 		console.log(selectedPriceFilter);
 	};
-	const getSelectedAlignFilter = input => {
-		setSelectedAlignFilter(input);
-		console.log(selectedAlignFilter);
+	const [mainAlign, setMainAlign] = useState('');
+	const getSelectedAlignFilter = (main, text) => {
+		setSelectedAlignFilter(text);
+		setMainAlign(main);
+		console.log('정렬메인', main);
 	};
 	const getSelectedColorFilter = input => {
 		setSelectedColorFilter(input);
@@ -137,6 +147,7 @@ export default function SearchResult() {
 		navigate('../search');
 	};
 
+	// 맨 처음 필터 없이 가져올 때
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
@@ -155,23 +166,7 @@ export default function SearchResult() {
 		setSearchResultList(data.result.searchItemList);
 	};
 
-	const [page, setPage] = useState(1);
-	const [loading, setLoading] = useState(false);
-
-	const [ref, inView] = useInView();
-	const [blockRerender, setBlockRerender] = useState(false);
-	const getNewItems = useCallback(async () => {
-		if (!blockRerender) {
-			setLoading(true);
-			getAFterSearchResultList(location.state.searchInput, page);
-			setLoading(false);
-		}
-	}, [page]);
-
-	useEffect(() => {
-		getNewItems();
-	}, [getNewItems]);
-
+	// 필터 없이 무한스크롤
 	const getAFterSearchResultList = async (queryKeyword, pageIdx) => {
 		const data = await customApiClient(
 			'get',
@@ -210,6 +205,44 @@ export default function SearchResult() {
 			// setSearchResultList([...searchResultList, data.result.searchItemList]);
 		}
 	};
+	// 필터 있는 경우 처음으로 부를 API
+	const getFilteredSearchResultList = async queryKeyword => {
+		const data = await customApiClient(
+			'get',
+			`/search/filter?search_word=&${queryKeyword}parent=&sub=&price=&order=&page=1&pageSize=2`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			if (data.code === 3070) {
+				setSearchResultList([]);
+			}
+			return;
+		}
+		console.log('getHotKeywordList', data.result.searchItemList);
+		setSearchResultList(data.result.searchItemList);
+	};
+
+	// 무한스크롤 정의
+	const [page, setPage] = useState(1);
+	const [loading, setLoading] = useState(false);
+
+	const [ref, inView] = useInView();
+	const [blockRerender, setBlockRerender] = useState(false);
+	const getNewItems = useCallback(async () => {
+		if (!blockRerender) {
+			setLoading(true);
+			getAFterSearchResultList(location.state.searchInput, page);
+			setLoading(false);
+		}
+	}, [page]);
+
+	useEffect(() => {
+		if (isSelected) {
+		} else {
+			getNewItems();
+		}
+	}, [getNewItems]);
 	useEffect(() => {
 		// 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
 		if (inView && !loading) {
@@ -219,6 +252,8 @@ export default function SearchResult() {
 			}
 		}
 	}, [inView, loading]);
+	// 무한 스크롤
+
 	useEffect(() => {
 		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
@@ -312,7 +347,7 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
+				{/* <Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
 					{selectedColorFilter ? selectedColorFilter : '색상'}
 					<DownArrow
 						style={{
@@ -321,7 +356,7 @@ export default function SearchResult() {
 							marginLeft: '0.125rem',
 						}}
 					></DownArrow>
-				</Filter>
+				</Filter> */}
 			</FilterContainer>
 			{/* )} */}
 
@@ -542,7 +577,7 @@ export default function SearchResult() {
 				getSelectedItemFilter={getSelectedItemFilter}
 				getSelectedPriceFilter={getSelectedPriceFilter}
 				getSelectedAlignFilter={getSelectedAlignFilter}
-				getSelectedColorFilter={getSelectedColorFilter}
+				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
 			></SearchBottomSlideMenu>
 		</MainContainer>

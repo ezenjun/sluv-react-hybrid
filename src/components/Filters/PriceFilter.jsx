@@ -14,7 +14,7 @@ export function PriceFilter(props) {
 		props.getSelectedMainFilter(input);
 	};
 	const setSelectedMainFilterIdx = input => {
-		props.getSelectedMainFilterIdx(input);
+		props.getSelectedPriceFilterIdx(input);
 	};
 
 	const onMainSelect = filter => {
