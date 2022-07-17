@@ -321,8 +321,8 @@ export const UploadPopup = styled.div`
 	width: 11.0625rem;
 	bottom: 1.125rem;
 	color: #fff;
-	font-size: 1.125rem;
-	font-weight: 700;
+	font-size: 1rem;
+	font-weight: 400;
 	background-color: #9e30f4;
 	border-radius: 16px;
 
