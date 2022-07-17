@@ -105,8 +105,9 @@ export default function SearchResult() {
 		console.log('서브', sub);
 		console.log(selectedItemFilter);
 	};
-	const getSelectedPriceFilter = input => {
-		setSelectedPriceFilter(input);
+	const [mainprice, setMainPrice] = useState(0);
+	const getSelectedPriceFilter = (main, text) => {
+		setSelectedPriceFilter(text);
 		console.log(selectedPriceFilter);
 	};
 	const getSelectedAlignFilter = input => {
