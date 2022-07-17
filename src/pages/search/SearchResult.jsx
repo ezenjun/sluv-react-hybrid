@@ -86,49 +86,29 @@ export default function SearchResult() {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
+	const childFunc = React.useRef(null);
+
 	// 정렬
 	const [selectedTab, setSelectedTab] = useState(1);
 	const getSelectedTab = input => {
 		setSelectedTab(input);
 	};
 
-	const childFunc = React.useRef(null);
-
-	const [mainItem, setMainItem] = useState();
-	const [subItem, setSubItem] = useState();
-	const getSelectedItemFilter = (main, sub, text) => {
+	const getSelectedItemFilter = text => {
 		setSelectedItemFilter(text);
-		setMainItem(main);
+	};
 
-		var tmp = '';
-		if (sub) {
-			for (var i = 0; i < sub.length; i++) {
-				tmp += sub[i];
-				if (i !== sub.length - 1) {
-					tmp += '+';
-				}
-			}
-		}
-		setSubItem(tmp);
-		console.log(selectedItemFilter);
-	};
-	const [mainprice, setMainPrice] = useState();
-	const getSelectedPriceFilter = (main, text) => {
+	const getSelectedPriceFilter = text => {
 		setSelectedPriceFilter(text);
-		setMainPrice(main);
-		console.log('가격 메인', main);
-		console.log(selectedPriceFilter);
 	};
-	const [mainAlign, setMainAlign] = useState();
-	const getSelectedAlignFilter = (main, text) => {
+
+	const getSelectedAlignFilter = text => {
 		setSelectedAlignFilter(text);
-		setMainAlign(main);
-		console.log('정렬메인', main);
 	};
-	const getSelectedColorFilter = input => {
-		setSelectedColorFilter(input);
-		console.log(selectedColorFilter);
-	};
+	// const getSelectedColorFilter = input => {
+	// 	setSelectedColorFilter(input);
+	// 	console.log(selectedColorFilter);
+	// };
 
 	const changeView = () => {
 		setView(!view);
@@ -147,11 +127,8 @@ export default function SearchResult() {
 	const onBackClick = () => {
 		navigate('../search');
 	};
-	const [completeStatus, setCompleteStatus] = useState(false);
-	const getCompleteStatus = input => {
-		setCompleteStatus(getCompleteStatus);
-	};
-	// 맨 처음 필터 없이 가져올 때'
+
+	// 필터 클릭하고 searchResultList 변경
 	const getFilteredSearchList = inputList => {
 		setSearchResultList([...inputList]);
 	};
@@ -211,10 +188,6 @@ export default function SearchResult() {
 			setSearchResultList([...newArr]);
 			// setSearchResultList([...searchResultList, data.result.searchItemList]);
 		}
-	};
-	// 필터 있는 경우 처음으로 부를 API
-	const getFilteredSearchResultList = input => {
-		setSearchResultList([...input]);
 	};
 
 	// 무한스크롤 정의
@@ -348,7 +321,7 @@ export default function SearchResult() {
 			{/* )} */}
 
 			<FeedContainer>
-				{searchResultList.length > 0 ? (
+				{searchResultList ? (
 					<ItemContainer>
 						<FilterWrap>
 							<SubText fontsize="14px" color="#8d8d8d">
@@ -558,7 +531,7 @@ export default function SearchResult() {
 				)}
 			</FeedContainer>
 			<SearchBottomSlideMenu
-				searchList={searchResultList}
+				searchResultList={searchResultList}
 				childFunc={childFunc}
 				selectedTab={selectedTab}
 				getSelectedTab={getSelectedTab}
@@ -567,7 +540,6 @@ export default function SearchResult() {
 				getSelectedAlignFilter={getSelectedAlignFilter}
 				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
-				getCompleteStatus={getCompleteStatus}
 				getFilteredSearchList={getFilteredSearchList}
 				queryKeyword={queryKeyword}
 			></SearchBottomSlideMenu>

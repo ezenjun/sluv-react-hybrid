@@ -54,8 +54,9 @@ export function SearchBottomSlideMenu(props) {
 		setSelectedItemFilterList([]);
 		setSelectedPriceMainFilter(null);
 		setSelectedAlignMainFilter(null);
-		setSelectedColorStatusList([]);
-		setSelectedColorFilterList([]);
+		// setSelectedColorStatusList([]);
+		// setSelectedColorFilterList([]);
+		props.getFilteredSearchList(props.searchResultList); //필터링을 삭제했을 때는 기존 리스트보여줌
 	};
 
 	const AfterFilterComplete = async (mainItem, subItem, mainprice, mainAlign, queryKeyword) => {
@@ -77,9 +78,6 @@ export function SearchBottomSlideMenu(props) {
 		}).then(function (response) {
 			console.log(response.data.message);
 			console.log(response.data);
-			// let temp = props.searchList;
-			// let newArr = temp.concat(response.data.result.searchItemList);
-			// console.log('필터링된 리스트', newArr);
 			props.getFilteredSearchList(response.data.result.searchItemList);
 		});
 	};
@@ -92,29 +90,26 @@ export function SearchBottomSlideMenu(props) {
 		var mainprice = null;
 		var mainAlign = null;
 		if (selectedItemMainFilter !== 0) {
+			// 아이템 필터중에 선택한게 존재할 경우
 			if (selectedItemFilterList.length === 0) {
-				props.getSelectedItemFilter(
-					filterList[selectedItemMainFilter - 1].name,
-					'',
-					filterList[selectedItemMainFilter - 1].name
-				);
+				// 아이템 상위 카테고리만 선택
+				props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
 				mainItem = filterList[selectedItemMainFilter - 1].name;
-				console.log(selectedItemFilterList.length);
 			} else {
+				// 아이템 하위 카테고리 선택
 				if (selectedItemFilterList.length === 1) {
+					// 하위 카테고리에서 1개 선택
 					props.getSelectedItemFilter(
-						selectedItemFilterList[selectedItemMainFilter - 1].name,
-						selectedItemFilterList,
-						`${selectedItemFilterList[0]}`
+						selectedItemFilterList[selectedItemMainFilter - 1].name
 					);
 					mainItem = filterList[selectedItemMainFilter - 1].name;
 					subItem = selectedItemFilterList[selectedItemMainFilter - 1].name;
 				} else {
+					// 하위 카테고리에서 여러개 선택
 					props.getSelectedItemFilter(
-						filterList[selectedItemMainFilter - 1].name,
-						selectedItemFilterList,
 						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
 					);
+					// 쿼리용 '하위카테고리 하위카테고리'
 					var tmp = ' ';
 					if (selectedItemFilterList) {
 						for (var i = 0; i < selectedItemFilterList.length; i++) {
@@ -127,32 +122,34 @@ export function SearchBottomSlideMenu(props) {
 					mainItem = filterList[selectedItemMainFilter - 1].name;
 					subItem = tmp;
 				}
-
-				console.log('selectedItemFilterList', selectedItemFilterList);
 			}
 		} else {
+			// 아이템 카테고리 선택 안한 경우
 			props.getSelectedItemFilter();
 		}
 
 		if (selectedPriceMainFilter !== null) {
-			props.getSelectedPriceFilter(selectedPriceFilterIdx, selectedPriceMainFilter);
-			console.log(selectedPriceFilterIdx);
+			// 가격 가테고리 선택
+			// result 필터에 보여지는 text
+			props.getSelectedPriceFilter(selectedPriceMainFilter);
+			// params용
 			mainprice = selectedPriceFilterIdx;
 		} else {
+			// 가격 카테고리 선택 안한 경우
 			props.getSelectedPriceFilter();
 		}
 
 		if (selectedAlignMainFilter !== null) {
-			props.getSelectedAlignFilter(selectedAlignEnglish, selectedAlignMainFilter);
+			// 정렬 카테고리 선택
+			// result 필터에 보여지는 text
+			props.getSelectedAlignFilter(selectedAlignMainFilter);
+			// params용
 			mainAlign = selectedAlignEnglish;
 		} else {
+			// 정렬 카테고리 선택 안한 경우
 			props.getSelectedAlignFilter();
 		}
-		console.log('mainItem', mainItem);
-		console.log('subItem', subItem);
-		console.log('mainprice', mainprice);
-		console.log('mainAlign', mainAlign);
-		console.log(queryKeyword);
+
 		AfterFilterComplete(mainItem, subItem, mainprice, mainAlign, queryKeyword);
 
 		// if (selectedColorFilterList.length > 0) {
@@ -207,14 +204,14 @@ export function SearchBottomSlideMenu(props) {
 	};
 
 	// 색상
-	const [selectedColorStatusList, setSelectedColorStatusList] = useState([]);
-	const [selectedColorFilterList, setSelectedColorFilterList] = useState([]);
-	const getSelectedColorStatusList = input => {
-		setSelectedColorStatusList(input);
-	};
-	const getSelectedColorFilterList = input => {
-		setSelectedColorFilterList(input);
-	};
+	// const [selectedColorStatusList, setSelectedColorStatusList] = useState([]);
+	// const [selectedColorFilterList, setSelectedColorFilterList] = useState([]);
+	// const getSelectedColorStatusList = input => {
+	// 	setSelectedColorStatusList(input);
+	// };
+	// const getSelectedColorFilterList = input => {
+	// 	setSelectedColorFilterList(input);
+	// };
 
 	useEffect(() => {
 		props.childFunc.current = onReset;
@@ -224,8 +221,8 @@ export function SearchBottomSlideMenu(props) {
 		if (
 			selectedItemMainFilter === 0 &&
 			selectedPriceMainFilter === null &&
-			selectedAlignMainFilter === null &&
-			selectedColorFilterList.length === 0
+			selectedAlignMainFilter === null
+			// && selectedColorFilterList.length === 0
 		) {
 			setIsSelected(false);
 			props.getIsSelected(false);
@@ -237,7 +234,7 @@ export function SearchBottomSlideMenu(props) {
 		selectedItemMainFilter,
 		selectedPriceMainFilter,
 		selectedAlignMainFilter,
-		selectedColorFilterList,
+		// selectedColorFilterList,
 	]);
 
 	const closeDialog = () => {
