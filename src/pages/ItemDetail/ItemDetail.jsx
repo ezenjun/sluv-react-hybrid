@@ -412,7 +412,7 @@ export default function ItemDetail() {
 
 	useEffect(() => {
 		// 하단바 띄워주기
-		//
+		
 		getItemInfo();
 		setBottomNavStatus(false);
 	}, [itemIdx, myUserIdx]);
