@@ -11,6 +11,7 @@ import { customApiClient } from '../../utils/apiClient';
 import qs from 'qs';
 import { SubText } from '../Texts/SubText';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 // export const filterList = [
 // 	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
@@ -80,19 +81,30 @@ export function SearchBottomSlideMenu(props) {
 	const AfterFilterComplete = async (mainItem, subItem, mainprice, mainAlign, queryKeyword) => {
 		console.log(queryKeyword);
 		console.log(mainItem);
-		const params = qs.stringify({
-			parent: mainItem,
-			sub: subItem,
-			price: mainprice,
-			order: mainAlign,
-			page: 1,
-			pageSize: 8,
+		// const params = qs.stringify({
+		// 	parent: mainItem,
+		// 	sub: subItem,
+		// 	price: mainprice,
+		// 	order: mainAlign,
+		// 	page: 1,
+		// 	pageSize: 8,
+		// });
+		// const data = await customApiClient(
+		// 	'get',
+		// 	`/search/filter?search_word=${queryKeyword}`,
+		// 	params
+		// );
+		const data = await customApiClient('get', `/search/filter`, {
+			params: {
+				search_word: queryKeyword,
+				parent: mainItem,
+				sub: subItem,
+				price: mainprice,
+				order: mainAlign,
+				page: 1,
+				pageSize: 8,
+			},
 		});
-		const data = await customApiClient(
-			'get',
-			`/search/filter?search_word=${queryKeyword}`,
-			params
-		);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -20,6 +20,11 @@ import SelectMemberContainer from '../../components/containers/SelectMemberConta
 import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function SelectCeleb() {
+
+	const { state } = useLocation();
+	console.log(state);
+
+	
 
 	const navigate = useNavigate();
 
@@ -97,7 +102,7 @@ export default function SelectCeleb() {
 			console.log(data.message);
 			return;
 		}
-		console.log(data.result)
+		console.log(data.result);
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 
