@@ -14,7 +14,7 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { TopRadiusContainer } from '../../components/containers/TopRadiusContainer';
 import { MainText } from '../../components/Texts/MainText';
-import { BottomNavState } from '../../recoil/BottomNav';
+import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { ChooseCelebCurrentPageState } from '../../recoil/Celebrity';
 import { CelebIndexState, UploadCelebState, UploadMemberState } from '../../recoil/Upload';
 import SelectUploadCelebContainer from './SelectUploadCelebContainer';
@@ -42,6 +42,8 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
+import { FALSE } from 'sass';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -52,6 +54,7 @@ export default function UploadItem() {
 	const selectedCeleb = useRecoilValue(UploadCelebState);
 	const selectedMember = useRecoilValue(UploadMemberState);
 	const [bottomMenuStatusState, setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -91,6 +94,7 @@ export default function UploadItem() {
 	const [visible, setVisible] = useState(false);
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
+	const [confirmPopupStatus, setConfirmPopupStatus] = useState(false);
 
 	const now = new Date();
 
@@ -134,6 +138,12 @@ export default function UploadItem() {
 	useEffect(() => {
 		console.log('상위 카테고리 : ', selectedItemMainFilter);
 		console.log('하위 카테고리 : ', selectedItemSubFilter);
+		console.log('브랜드', brandObj.brandIdx);
+		console.log('제품명', productName);
+		console.log('날짜', date);
+		console.log('장소', place);
+		console.log('가격', selectedPriceMainFilterIdx);
+		console.log('이미지미리보기리스트', previewImgUrlList);
 
 		if (
 			selectedItemMainFilter &&
@@ -341,6 +351,7 @@ export default function UploadItem() {
 		}
 
 		console.log('아이템 업로드 완료');
+		setConfirmPopupStatus(true);
 	};
 
 	const onClickUploadBtnStart = () => {
@@ -374,6 +385,12 @@ export default function UploadItem() {
 	const onChangeRadioButton = e => {
 		console.log(e.target.value);
 		setCheckedElement(e.target.value);
+	};
+
+	const onClickYes = () => {
+		setConfirmPopupStatus(false);
+		setUploadPopupStatus(false);
+		navigate('/home');
 	};
 
 	return (
@@ -586,9 +603,7 @@ export default function UploadItem() {
 											alt="미리보기 이미지"
 										/>
 										{checkedElement == index && (
-											<RepresentDiv>
-												대표
-											</RepresentDiv>
+											<RepresentDiv>대표</RepresentDiv>
 										)}
 
 										<ImgDelete
@@ -661,7 +676,7 @@ export default function UploadItem() {
 							<PriceFilter
 								selectedMainFilter={selectedPriceMainFilter}
 								getSelectedMainFilter={getSelectedPriceMainFilter}
-								getSelectedMainFilterIdx={getSelectedPriceMainFilterIdx}
+								getSelectedPriceFilterIdx={getSelectedPriceMainFilterIdx}
 							></PriceFilter>
 							<ButtonWrap>
 								<PurpleButton
@@ -674,6 +689,36 @@ export default function UploadItem() {
 							</ButtonWrap>
 						</BottomSlideMenu>
 					)}
+
+					<WholePage openStatus={confirmPopupStatus}>
+						<ModalWrap>
+							<div
+								style={{
+									marginTop: '1.5rem',
+									fontSize: '1.125rem',
+									fontWeight: 'bold',
+									color: '#262626',
+								}}
+							>
+								아이템이 등록되었어요
+							</div>
+							<div
+								style={{
+									fontSize: '0.875rem',
+									color: '#8d8d8d',
+									margin: '0.75rem 0 2rem',
+									lineHeight: '1.36',
+								}}
+							>
+								등록해주셔서 감사해요!
+								<br />
+								기다리고 있던 정보였어요
+							</div>
+							<PurpleButton onClick={onClickYes} marginBottom="0">
+								확인
+							</PurpleButton>
+						</ModalWrap>
+					</WholePage>
 				</MainContainer>
 			)}
 		</>
