@@ -34,6 +34,18 @@
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
 
 		<script>
+			//안드로이드 뒤로가기
+			const android_back_press = () => {
+
+				if (test) {
+					$('.back_link_sub').click();
+					return
+				}
+
+				$('#back_link').get(0).click();
+
+			}
+
 			//모바일 기기 체크
 			const checkMobile = () => {
 				var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
