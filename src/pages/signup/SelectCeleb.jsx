@@ -24,8 +24,6 @@ export default function SelectCeleb() {
 	const { state } = useLocation();
 	console.log(state);
 
-	
-
 	const navigate = useNavigate();
 
 	const [checkStatusList, setCheckStatusList] = useState([]);
@@ -246,7 +244,10 @@ export default function SelectCeleb() {
 		<>
 			{currentPage === 0 && (
 				<MainContainer>
-					<TopNav>
+					<TopNav style={{ justifyContent: 'space-between' }}>
+						{state === '/settings' &&
+							(<BackButton onClick={() => navigate(-1)} />)
+						}
 						<NavRight>
 							{selectedNum > 0 && (
 								<SubText margin="0 1rem" color="#9e30f4">
@@ -314,7 +315,7 @@ export default function SelectCeleb() {
 						{!searchFailStatus && (
 							<ListContainer>
 								{currentCelebList.length > 0 &&
-									currentCelebList.map((celeb,index) => (
+									currentCelebList.map((celeb, index) => (
 										<Celeb
 											key={celeb.celebIdx}
 											onClick={e => onSelectCeleb(celeb, e, index)}
@@ -334,7 +335,9 @@ export default function SelectCeleb() {
 											<CountBadge
 												status={checkStatusList[celeb.celebIdx - 1]}
 											>
-												<span className="badgeItem">{badgeNumList[index]}</span>
+												<span className="badgeItem">
+													{badgeNumList[index]}
+												</span>
 											</CountBadge>
 										</Celeb>
 									))}
