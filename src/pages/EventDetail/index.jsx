@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -8,14 +9,19 @@ import { ReactComponent as DemoDay1 } from '../../assets/Event/DemoDay1.svg';
 import { ReactComponent as DemoDay2 } from '../../assets/Event/DemoDay2.svg';
 import { ReactComponent as DemoDay3 } from '../../assets/Event/DemoDay3.svg';
 import { ReactComponent as DemoDay4 } from '../../assets/Event/DemoDay4.svg';
+import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function EventDetail() {
 	const navigate = useNavigate();
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const location = useLocation();
 	const EventName = location.state.eventName;
 	const backClick = () => {
 		navigate(-1);
 	};
+	useEffect(() => {
+		setBottomNavStatus(false);
+	});
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav>

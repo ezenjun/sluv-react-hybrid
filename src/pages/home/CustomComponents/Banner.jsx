@@ -9,7 +9,8 @@ import { ReactComponent as BubbleHeart } from '../../../assets/Icons/bubbleHeart
 export const BannerComponent = props => {
 	const navigate = useNavigate();
 	const onUploadQuestionClick = () => {
-		navigate('/upload/question');
+		navigate('/upload/item');
+		console.log('clicked');
 	};
 	const [windowSize, setWindowSize] = useState(false);
 	useEffect(() => {
@@ -19,8 +20,8 @@ export const BannerComponent = props => {
 	}, []);
 
 	return (
-		<BannerWrap>
-			<Banner backgroundcolor={props.color} onClick={onUploadQuestionClick}>
+		<BannerWrap onClick={onUploadQuestionClick}>
+			<Banner backgroundcolor={props.color}>
 				{windowSize ? (
 					<BannerText>
 						<MainText
