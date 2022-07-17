@@ -8,6 +8,7 @@ import { ReactComponent as GrayArrow } from '../../assets/Icons/icon_mypage_arro
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
+import { ReactComponent as NoUploadItemIcon } from '../../assets/Icons/icon_no_upload_item.svg';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
@@ -104,7 +105,7 @@ export default function MyPageContainer({
 					/>
 				</div>
 				<div className="contentWrap">
-					{uploadInfo.uploadItemList.length > 0 &&
+					{uploadInfo.uploadItemList.length > 0 ? (
 						uploadInfo.uploadItemList.slice(0, 10).map((item, index) => (
 							<MyPageGridItem
 								key={item.itemIdx}
@@ -154,7 +155,18 @@ export default function MyPageContainer({
 									{item.itemName}
 								</SubText>
 							</MyPageGridItem>
-						))}
+						))
+					) : (
+						<NoItemUploadWrap>
+							<NoUploadItemIcon style={{ width: '2rem', height: '2rem' }} />
+							<div>업로드한 아이템이 없어요</div>
+							<div>
+								좋아하는 셀럽의 아이템 정보를 
+								<br/>
+								업로드하고 공유해 보아요
+							</div>
+						</NoItemUploadWrap>
+					)}
 				</div>
 			</MyUploadWrap>
 
@@ -233,4 +245,15 @@ const MyPageGridItem = styled.div`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
+`;
+
+const NoItemUploadWrap = styled.div`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-right: 1.25rem;
+	align-items: center;
+
+
+	border: 1px solid red;
 `;
