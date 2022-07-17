@@ -105,7 +105,7 @@ export default function MyPageContainer({
 					/>
 				</div>
 				<div className="contentWrap">
-					{uploadInfo.uploadItemList.length > 0 ? (
+					{uploadInfo.uploadItemList.length > 0 && (
 						uploadInfo.uploadItemList.slice(0, 10).map((item, index) => (
 							<MyPageGridItem
 								key={item.itemIdx}
@@ -156,16 +156,6 @@ export default function MyPageContainer({
 								</SubText>
 							</MyPageGridItem>
 						))
-					) : (
-						<NoItemUploadWrap>
-							<NoUploadItemIcon style={{ width: '2rem', height: '2rem' }} />
-							<div>업로드한 아이템이 없어요</div>
-							<div>
-								좋아하는 셀럽의 아이템 정보를 
-								<br/>
-								업로드하고 공유해 보아요
-							</div>
-						</NoItemUploadWrap>
 					)}
 				</div>
 			</MyUploadWrap>
@@ -207,12 +197,13 @@ const MyUploadWrap = styled.div`
 		padding: 0 1.25rem;
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 0.875rem;
+		// margin-bottom: 0.875rem;
 	}
 	.contentWrap {
 		display: flex;
 		flex-direction: row;
 		padding-left: 1.25rem;
+		margin-top: 0.875rem;
 
 		overflow-x: scroll;
 		::-webkit-scrollbar {
