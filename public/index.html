@@ -32,48 +32,46 @@
 			}
 		</style>
 		<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 		<script>
-			
 			//모바일 기기 체크
-    const checkMobile = () => {
+			const checkMobile = () => {
+				var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
 
-      var varUA = navigator.userAgent.toLowerCase(); //userAgent 값 얻기
+				if (varUA.indexOf('android') > -1) {
+					//안드로이드
+					return 'android';
+				} else if (
+					varUA.indexOf('iphone') > -1 ||
+					varUA.indexOf('ipad') > -1 ||
+					varUA.indexOf('ipod') > -1
+				) {
+					//IOS
+					return 'ios';
+				} else {
+					//아이폰, 안드로이드 외
+					return 'other';
+				}
+			};
 
-      if (varUA.indexOf('android') > -1) {
-        //안드로이드
-        return "android";
-      } else if (varUA.indexOf("iphone") > -1 || varUA.indexOf("ipad") > -1 || varUA.indexOf("ipod") > -1) {
-        //IOS
-        return "ios";
-      } else {
-        //아이폰, 안드로이드 외
-        return "other";
-      }
+			window.onload = async function inital() {
+				const current_user_platform = checkMobile();
+				console.log(current_user_platform);
 
-    }
-
-    window.onload = async function inital() {
-
-      const current_user_platform = checkMobile();
-			console.log(current_user_platform);
-
-      //fcm token 가져오기 -> 앱 업데이트 되면 주석처리
-      if (current_user_platform == 'android') {
-
-        try {
-          const fcmToken = await window.android.getFcmToken();
-					if(fcmToken) {
-						localStorage.setItem('fcmToken', fcmToken);
-					} else {
-						alert('Token이 없습니다.')
+				//fcm token 가져오기 -> 앱 업데이트 되면 주석처리
+				if (current_user_platform == 'android') {
+					try {
+						const fcmToken = await window.android.getFcmToken();
+						if (fcmToken) {
+							localStorage.setItem('fcmToken', fcmToken);
+						} else {
+							alert('Token이 없습니다.');
+						}
+					} catch (err) {
+						console.log(err);
 					}
-					
-        }
-        catch (err) {
-          console.log(err);
-        }
-      }
-    }
+				}
+			};
 		</script>
 	</head>
 	<body>
