@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
-import { BottomMenuStatusState, TotalSelectedFilterState } from '../../recoil/BottomSlideMenu';
+import { BottomMenuStatusState, SearchInputState } from '../../recoil/BottomSlideMenu';
 import { AlignFilter } from '../Filters/AlignFilter';
 import { PriceFilter } from '../Filters/PriceFilter';
 import { ColorFilter } from '../Filters/ColorFilter';
@@ -41,6 +41,7 @@ export const filterList = [
 
 export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
+	const searchInputState = useRecoilValue(SearchInputState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [isSelected, setIsSelected] = useState(false);
 	const location = useLocation();
@@ -56,10 +57,35 @@ export function SearchBottomSlideMenu(props) {
 		setSelectedAlignMainFilter(null);
 		// setSelectedColorStatusList([]);
 		// setSelectedColorFilterList([]);
-		props.getFilteredSearchList(props.searchResultList); //필터링을 삭제했을 때는 기존 리스트보여줌
+		console.log('searchInputState', searchInputState);
+		getSearchResultList(searchInputState);
+	};
+	const getSearchResultList = async queryKeyword => {
+		const data = await customApiClient(
+			'get',
+			`/search?search_word=${queryKeyword}&page=1&pageSize=8`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			if (data.code === 3070) {
+				props.getFilteredSearchList([]);
+			}
+			return;
+		}
+		console.log('getSearchResultList', data.result.searchItemList);
+		props.getFilteredSearchList(data.result.searchItemList);
 	};
 
 	const AfterFilterComplete = async (mainItem, subItem, mainprice, mainAlign, queryKeyword) => {
+		console.log(
+			'mainItem, subItem, mainprice, mainAlign, queryKeyword',
+			mainItem,
+			subItem,
+			mainprice,
+			mainAlign,
+			queryKeyword
+		);
 		axios({
 			method: 'get',
 			url: 'https://dev.cmc-sluv.shop/search/filter?',
@@ -78,7 +104,12 @@ export function SearchBottomSlideMenu(props) {
 		}).then(function (response) {
 			console.log(response.data.message);
 			console.log(response.data);
-			props.getFilteredSearchList(response.data.result.searchItemList);
+			if (response.data.code === 3070) {
+				props.getFilteredSearchList([]);
+			}
+			if (response.data.code === 1000) {
+				props.getFilteredSearchList(response.data.result.searchItemList);
+			}
 		});
 	};
 
@@ -99,11 +130,10 @@ export function SearchBottomSlideMenu(props) {
 				// 아이템 하위 카테고리 선택
 				if (selectedItemFilterList.length === 1) {
 					// 하위 카테고리에서 1개 선택
-					props.getSelectedItemFilter(
-						selectedItemFilterList[selectedItemMainFilter - 1].name
-					);
+					console.log('selectedItemFilterList', selectedItemFilterList);
+					props.getSelectedItemFilter(selectedItemFilterList[0]);
 					mainItem = filterList[selectedItemMainFilter - 1].name;
-					subItem = selectedItemFilterList[selectedItemMainFilter - 1].name;
+					subItem = selectedItemFilterList[0];
 				} else {
 					// 하위 카테고리에서 여러개 선택
 					props.getSelectedItemFilter(
@@ -148,6 +178,7 @@ export function SearchBottomSlideMenu(props) {
 		} else {
 			// 정렬 카테고리 선택 안한 경우
 			props.getSelectedAlignFilter();
+			mainAlign = 'latest';
 		}
 
 		AfterFilterComplete(mainItem, subItem, mainprice, mainAlign, queryKeyword);

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { BottomMenuStatusState, SearchInputState } from '../../recoil/BottomSlideMenu';
 import { customApiClient } from '../../utils/apiClient';
 import { useInView } from 'react-intersection-observer';
 
@@ -48,6 +48,7 @@ export default function SearchResult() {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const setSearchInputStatus = useSetRecoilState(SearchInputState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
 	const [searchInput, setSearchInput] = useState('');
@@ -76,10 +77,12 @@ export default function SearchResult() {
 				queryKeyword = queryKeyword.replaceAll(' ', '+');
 				console.log('with blank', queryKeyword);
 			}
+			setSearchInputStatus(searchInput);
 			setSearchInput(searchInput);
 			// setSearchInput(searchInput);
 			navigate(`/search/result`, { state: { searchInput } });
 			getSearchResultList(queryKeyword);
+			childFunc.current();
 		}
 	};
 
@@ -130,7 +133,7 @@ export default function SearchResult() {
 
 	// 필터 클릭하고 searchResultList 변경
 	const getFilteredSearchList = inputList => {
-		setSearchResultList([...inputList]);
+		setSearchResultList(inputList);
 	};
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
@@ -146,7 +149,7 @@ export default function SearchResult() {
 			}
 			return;
 		}
-		console.log('getHotKeywordList', data.result.searchItemList);
+		console.log('getSearchResultList', data.result.searchItemList);
 		setSearchResultList(data.result.searchItemList);
 	};
 
@@ -224,6 +227,7 @@ export default function SearchResult() {
 	useEffect(() => {
 		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
+		setSearchInputStatus(location.state.searchInput);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
 		setQueryKeyword(queryKeyword);
@@ -321,7 +325,7 @@ export default function SearchResult() {
 			{/* )} */}
 
 			<FeedContainer>
-				{searchResultList ? (
+				{searchResultList && searchResultList.length > 0 ? (
 					<ItemContainer>
 						<FilterWrap>
 							<SubText fontsize="14px" color="#8d8d8d">
