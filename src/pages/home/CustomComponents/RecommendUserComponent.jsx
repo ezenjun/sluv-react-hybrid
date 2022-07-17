@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { customApiClient } from '../../../utils/apiClient';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
+import { ReactComponent as UserBasicProfileImg } from '../../../assets/Icons/user_basic_profile_img.svg';
 
 import { FavoriteCelebListState } from '../../../recoil/Celebrity';
 
@@ -157,7 +158,14 @@ export function RecommendUserComponent() {
 								onClick={() => onClickUserProfile(user.userIdx)}
 								key={user.userIdx}
 							>
-								<ProfileImg src={user.profileImgUrl}></ProfileImg>
+								{user.profileImgUrl ? (
+									<ProfileImg src={user.profileImgUrl}></ProfileImg>
+								) : (
+									<UserBasicProfileImg
+										style={{ width: '3.875rem', height: '3.875rem' }}
+									></UserBasicProfileImg>
+								)}
+
 								<SubText
 									fontsize="0.875rem"
 									margin="0.5rem 0 0.1875rem 0"
@@ -207,7 +215,7 @@ const RecommendUserWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 40px 20px 50px 20px;
+	padding: 40px 0px 50px 20px;
 	background-color: #f8f7fa;
 `;
 const UserWrap = styled.div`

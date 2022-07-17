@@ -15,7 +15,7 @@ import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
-
+import { ReactComponent as UserBasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as EditButton } from '../../assets/Icons/threedot_Black.svg';
 import { ReactComponent as ShareButton } from '../../assets/Icons/Share.svg';
@@ -498,7 +498,14 @@ export default function ItemDetail() {
 						padding="2rem"
 					>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
-							<UserImage src={itemInfo.profileImgUrl}></UserImage>
+							{itemInfo.profileImgUrl ? (
+								<UserImage src={itemInfo.profileImgUrl}></UserImage>
+							) : (
+								<UserBasicProfileImg
+									style={{ width: '1.5rem', height: '1.5rem' }}
+								></UserBasicProfileImg>
+							)}
+
 							<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
 								{itemInfo.nickName}
 							</SubText>

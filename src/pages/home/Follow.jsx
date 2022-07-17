@@ -8,7 +8,7 @@ import { LargeViewItem } from '../../components/LargeViewWrap/LargeViewItem';
 import { LargeViewImage } from '../../components/LargeViewWrap/LargeViewImage';
 import { ImageText } from '../../components/ImageText';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
-
+import { ReactComponent as UserBasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
@@ -301,7 +301,17 @@ export default function Follow() {
 										<SubText fontsize="1rem">{item.ItemName}</SubText>
 									</ItemTextWrap>
 									<SubInfoWrap>
-										<ProfileImg src={item.profileImgUrl}></ProfileImg>
+										{item.profileImgUrl ? (
+											<ProfileImg src={item.profileImgUrl}></ProfileImg>
+										) : (
+											<UserBasicProfileImg
+												style={{
+													width: '2.25rem',
+													height: '2.25rem',
+													marginRight: '0.5rem',
+												}}
+											></UserBasicProfileImg>
+										)}
 										<SubText margin="0 "> {item.nickName}</SubText>
 										<Dot></Dot>
 										<SubText color="#8d8d8d"> {item.uploadTime}</SubText>
@@ -322,11 +332,17 @@ export default function Follow() {
 										onClick={() => onClickUserProfile(sluver.userIdx)}
 										key={sluver.userIdx}
 									>
-										<ProfileImg
-											size="62px"
-											marginright="0"
-											src={sluver.profileImgUrl}
-										></ProfileImg>
+										{sluver.profileImgUrl ? (
+											<ProfileImg src={sluver.profileImgUrl}></ProfileImg>
+										) : (
+											<UserBasicProfileImg
+												style={{
+													width: '2.25rem',
+													height: '2.25rem',
+													marginRight: '0.5rem',
+												}}
+											></UserBasicProfileImg>
+										)}
 										<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
 											{sluver.nickName}
 										</SubText>
@@ -378,7 +394,19 @@ export default function Follow() {
 									>
 										<UserTop>
 											<UserInfo>
-												<UserImage src={sluver.profileImgUrl}></UserImage>
+												{sluver.profileImgUrl ? (
+													<UserImage
+														src={sluver.profileImgUrl}
+													></UserImage>
+												) : (
+													<UserBasicProfileImg
+														style={{
+															width: '2.25rem',
+															height: '2.25rem',
+															marginRight: '0.5rem',
+														}}
+													></UserBasicProfileImg>
+												)}
 												<UserInfoText>
 													<SubText margin="0 ">
 														{' '}

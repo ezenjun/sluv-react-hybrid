@@ -263,9 +263,12 @@ export default function AddBinder() {
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="centerText">
 					바인더 만들기
-					<BinderHelp style={{ margin: '0 0.25rem' }} onClick={onClickHelp}></BinderHelp>
+					<BinderHelp
+						style={{ margin: '0 0.25rem', zIndex: '20' }}
+						onClick={onClickHelp}
+					></BinderHelp>
 					<MiniInfoDialog
-						style={{ top: '1.875rem', left: '-4.375rem' }}
+						style={{ top: '1.875rem', left: '-4.375rem', zIndex: '10' }}
 						openStatus={binderHelpStatus}
 					>
 						<TopWrap>
@@ -410,7 +413,7 @@ export const MiniInfoDialog = styled.div`
 	display: ${props => (props.openStatus ? 'block' : 'none')};
 	position: absolute;
 	text-align: start;
-	z-index: 10000;
+	z-index: 100;
 
 	margin-top: 0.4063rem;
 	width: 14.9375rem;
