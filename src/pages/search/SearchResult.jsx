@@ -27,6 +27,8 @@ import { GridItem } from '../../components/GridItems/GridItem';
 import { GridImage } from '../../components/GridItems/GridImage';
 import { ImageText } from '../../components/ImageText';
 
+import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as PlusButton } from '../../assets/Icons/plusButton.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as NoResult } from '../../assets/Icons/noResult.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
@@ -36,6 +38,13 @@ import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
+
+import {
+	BottomDialogDiv,
+	BottomDialogWrap,
+	BottomSlideMenu,
+	CloseWrap,
+} from '../../components/containers/BottomSlideMenu';
 
 import {
 	ToastMessageBottomPositionState,
@@ -119,6 +128,7 @@ export default function SearchResult() {
 	const onFilterClick = idx => {
 		setBottomMenuStatusState(true);
 		setSelectedTab(idx);
+		setOpenState(false);
 	};
 
 	const onHandleChangeSearch = e => {
@@ -151,6 +161,16 @@ export default function SearchResult() {
 		}
 		console.log('getSearchResultList', data.result.searchItemList);
 		setSearchResultList(data.result.searchItemList);
+		var tmp = [];
+		for (var i = 0; i < data.result.searchItemList.length; i++) {
+			if (data.result.searchItemList[i].isDib === 'Y') {
+				tmp.push(true);
+			} else {
+				tmp.push(false);
+			}
+		}
+		console.log(tmp);
+		setLatestIsBinderList([...tmp]);
 	};
 
 	// 필터 없이 무한스크롤
@@ -159,7 +179,6 @@ export default function SearchResult() {
 			'get',
 			`/search?search_word=${queryKeyword}&page=${pageIdx}&pageSize=8`
 		);
-		console.log('');
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -192,6 +211,127 @@ export default function SearchResult() {
 			// setSearchResultList([...searchResultList, data.result.searchItemList]);
 		}
 	};
+
+	// 아이템 바인더 찜
+	const [binderList, setBinderList] = useState([]);
+	const getBinderList = async () => {
+		const data = await customApiClient('get', '/binders');
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		setBinderList(data.result);
+		console.log('바인더 리스트', data.result);
+	};
+	const [openState, setOpenState] = useState(false);
+	const onCreateBinder = itemIdx => {
+		navigate('/binder/add', {
+			state: { item: itemIdx },
+		});
+	};
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
+	const [latestIsBinderList, setLatestIsBinderList] = useState([]);
+
+	const onAddBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		getBinderList();
+		setOpenState(true);
+		setSelectedItemIdx(itemIdx);
+		console.log(itemIdx);
+		console.log('selectedItemIdx', selectedItemIdx);
+		// setBottomMenuStatusState(true);
+	};
+	const getOpenStatus = input => {
+		setOpenState(input);
+	};
+	// console.log('셀렉트아이템인덱스', selectedItemIdx);
+	const onSelectBinder = binderIdx => {
+		console.log('셀렉트 바인더', selectedItemIdx);
+
+		for (var i = 0; i < binderList.length; i++) {
+			if (binderList[i].binderIdx === binderIdx) {
+				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
+			}
+		}
+	};
+	const onDeleteBinderClick = (e, itemIdx) => {
+		e.stopPropagation();
+		DeleteFromBinderAPI(itemIdx);
+	};
+
+	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
+		const body = {
+			itemIdx: itemIdx,
+			binderIdx: binderIdx,
+		};
+		console.log(body);
+		const Uri = '/dibs';
+		const data = await customApiClient('post', Uri, body);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			if (searchResultList[i]) {
+				if (searchResultList[i].itemIdx === itemIdx) {
+					tempLatest[i] = !tempLatest[i];
+					setLatestIsBinderList([...tempLatest]);
+					console.log('clicked');
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+
+		setOpenState(false);
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 ${binderName} 바인더에 저장됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
+	async function DeleteFromBinderAPI(itemIdx) {
+		const Uri = `/dibs/${itemIdx}`;
+		const data = await customApiClient('delete', Uri);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
+		console.log('latestIsBinderList', latestIsBinderList);
+		let tempLatest = latestIsBinderList;
+		for (var i = 0; i < latestIsBinderList.length; i++) {
+			if (searchResultList[i]) {
+				if (searchResultList[i].itemIdx === itemIdx) {
+					tempLatest[i] = !tempLatest[i];
+					setLatestIsBinderList([...tempLatest]);
+					console.log('clicked');
+				}
+			}
+		}
+		console.log('tempLatest', tempLatest);
+
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage(`아이템이 바인더에서 삭제됐어요`);
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
+	}
 
 	// 무한스크롤 정의
 	const [page, setPage] = useState(1);
@@ -231,6 +371,7 @@ export default function SearchResult() {
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
 		setQueryKeyword(queryKeyword);
+		getSearchResultList(queryKeyword);
 	}, []);
 	return (
 		<MainContainer padding="0 0 0 0">
@@ -351,7 +492,7 @@ export default function SearchResult() {
 							<LargeViewWrap>
 								{searchResultList && (
 									<>
-										{searchResultList.map(item => (
+										{searchResultList.map((item, index) => (
 											<>
 												<LargeViewItem
 													onClick={() => {
@@ -368,20 +509,30 @@ export default function SearchResult() {
 															>
 																{item.name}'s
 															</SubText>
-															{item.isDib === 'Y' ? (
+															{latestIsBinderList[index] === true ? (
 																<BinderRed
+																	onClick={e =>
+																		onDeleteBinderClick(
+																			e,
+																			item.itemIdx
+																		)
+																	}
 																	style={{
 																		width: '1.5rem',
 																		height: '1.5rem',
-																		zIndex: '50',
 																	}}
 																/>
 															) : (
 																<BinderWhite
+																	onClick={e =>
+																		onAddBinderClick(
+																			e,
+																			item.itemIdx
+																		)
+																	}
 																	style={{
 																		width: '1.5rem',
 																		height: '1.5rem',
-																		zIndex: '50',
 																	}}
 																/>
 															)}
@@ -422,9 +573,9 @@ export default function SearchResult() {
 							<GridItemWrap>
 								{searchResultList && (
 									<>
-										{searchResultList.map((item, idx) => (
+										{searchResultList.map((item, index) => (
 											<>
-												{searchResultList.length - 1 === idx ? (
+												{searchResultList.length - 1 === index ? (
 													<GridItem
 														onClick={() => {
 															onDetailItemClick(item.itemIdx);
@@ -440,12 +591,34 @@ export default function SearchResult() {
 																>
 																	{item.name}'s
 																</SubText>
-																<BinderWhite
-																	style={{
-																		width: '1.375rem',
-																		height: '1.375rem',
-																	}}
-																/>
+																{latestIsBinderList[index] ===
+																true ? (
+																	<BinderRed
+																		onClick={e =>
+																			onDeleteBinderClick(
+																				e,
+																				item.itemIdx
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																) : (
+																	<BinderWhite
+																		onClick={e =>
+																			onAddBinderClick(
+																				e,
+																				item.itemIdx
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																)}
 															</ImageText>
 														</GridImage>
 														<SubText
@@ -482,12 +655,34 @@ export default function SearchResult() {
 																>
 																	{item.name}'s
 																</SubText>
-																<BinderWhite
-																	style={{
-																		width: '1.375rem',
-																		height: '1.375rem',
-																	}}
-																/>
+																{latestIsBinderList[index] ===
+																true ? (
+																	<BinderRed
+																		onClick={e =>
+																			onDeleteBinderClick(
+																				e,
+																				item.itemIdx
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																) : (
+																	<BinderWhite
+																		onClick={e =>
+																			onAddBinderClick(
+																				e,
+																				item.itemIdx
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																)}
 															</ImageText>
 														</GridImage>
 														<SubText
@@ -547,6 +742,46 @@ export default function SearchResult() {
 				getFilteredSearchList={getFilteredSearchList}
 				queryKeyword={queryKeyword}
 			></SearchBottomSlideMenu>
+
+			<BottomDialogWrap openStatus={openState}>
+				<div
+					onClick={() => setOpenState(false)}
+					style={{ height: '100%', width: '100%' }}
+				></div>
+				<BottomDialogDiv openStatus={openState}>
+					<CloseWrap>
+						<Close
+							style={{
+								width: '1.5rem',
+								height: '1.5rem',
+								position: 'absolute',
+								right: '1.25rem',
+							}}
+							onClick={() => setOpenState(false)}
+						></Close>
+					</CloseWrap>
+					<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+						<ImageWrap>
+							<PlusButton></PlusButton>
+						</ImageWrap>
+						<SubText fontsize="1rem" margin="0.9375rem 0">
+							바인더 만들기
+						</SubText>
+					</RowWrap>
+					<HorizontalLine></HorizontalLine>
+					{binderList.map(binder => (
+						<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+							<ImageWrap></ImageWrap>
+							<SubText fontsize="1rem" margin="0.9375rem 0">
+								{binder.name}
+							</SubText>
+							<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+								&nbsp;({binder.dibCount})
+							</SubText>
+						</RowWrap>
+					))}
+				</BottomDialogDiv>
+			</BottomDialogWrap>
 		</MainContainer>
 	);
 }
@@ -631,4 +866,24 @@ const ViewButton = styled.div`
 	&:hover {
 		cursor: pointer;
 	}
+`;
+
+const RowWrap = styled.div`
+	display: flex;
+	width: 100%;
+	padding: 0 1.25rem;
+	margin-bottom: 1rem;
+	box-sizing: border-box;
+	text-align: center;
+	align-items: center;
+`;
+const ImageWrap = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-color: #f6f6f6;
+	border-radius: 0.8125rem;
+	margin-right: 1.25rem;
 `;
