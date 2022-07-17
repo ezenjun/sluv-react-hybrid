@@ -61,7 +61,6 @@ export default function SelectCeleb() {
 			temp2 = new Array(totalCelebList.length).fill(0);
 			setCheckStatusList(temp);
 			setBadgeNumList(temp2);
-			console.log(temp2);
 		}
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if(popularCelebList.length < 1) {
@@ -98,6 +97,7 @@ export default function SelectCeleb() {
 			console.log(data.message);
 			return;
 		}
+		console.log(data.result)
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 
