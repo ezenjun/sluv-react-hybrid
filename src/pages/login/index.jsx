@@ -25,10 +25,16 @@ export default function Login() {
 	const getAutoLogin = async () => {
 		const data = await customApiClient('get', '/auth/auto-login');
 		console.log(data);
-		if (!data) return;
-		if (!data.isSuccess) return;
 
-		if (data.code === 1001) {
+		if(!data) return;
+		
+		if(!data.isSuccess) {
+			console.log('자동로그인 X');
+		}
+
+
+		if(data.code === 1001) {
+			localStorage.setItem('myUserIdx', data.result.userIdx);
 			navigate('/home');
 		}
 	};
@@ -42,6 +48,18 @@ export default function Login() {
 		}
 
 		const current_user_platform = checkMobile;
+
+		//앱 버전관련 로직
+		// try {
+		// 	if (current_user_platform == 'android') {
+		// 		const verson = await window.android.getVersionName();
+		// 		localStorage.setItem('versonName', verson);
+		// 	} else if (current_user_platform == 'ios') {
+		// 		window.webkit.messageHandlers.getVersionName.postMessage('hihi');
+		// 	}
+		// } catch (err) {
+		// 	localStorage.removeItem('versonName');
+		// }
 
 		if (current_user_platform == 'android' && !localFcm) {
 			try {
