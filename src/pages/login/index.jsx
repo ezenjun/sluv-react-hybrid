@@ -44,23 +44,7 @@ export default function Login() {
 		}
 	}
 
-	const getAutoLogin = async () => {
-		const data = await customApiClient('get', '/auth/auto-login');
-		console.log(data);
-		if(!data) return;
-		
-		if(!data.isSuccess) {
-			console.log('자동로그인 X');
-		}
-
-
-		if(data.code === 1001) {
-			localStorage.setItem('myUserIdx', data.result.userIdx);
-			navigate('/home');
-		}
-	}
-
-	const getMyFcmToken = async () => {
+	const getMyFcmTokenAndAutoLogin = async () => {
 		localStorage.removeItem('isFcmLoad');
 		let localFcm = localStorage.getItem('fcmToken');
 
@@ -90,6 +74,38 @@ export default function Login() {
 				console.log(err);
 			}
 		}
+
+		const data = await customApiClient('get', '/auth/auto-login');
+		console.log(data);
+		if (!data) return;
+
+		if (!data.isSuccess) {
+			localStorage.removeItem('x-access-token');
+
+			if (current_user_platform == 'android') {
+				//splash close 함수 호출
+				try {
+					window.android.closeSplash();
+				} catch (err) {
+					console.log(err);
+				}
+			} else if (current_user_platform == 'ios') {
+				//splash close 함수 호출
+				try {
+					window.webkit.messageHandlers.closeSplash.postMessage('hihi');
+				} catch (err) {
+					console.log(err);
+				}
+			}
+
+			return;
+		}
+
+		if (data.code === 1001) {
+			localStorage.setItem('myUserIdx', data.result.userIdx);
+			navigate('/home');
+		}
+
 	};
 
 	useEffect(() => {
@@ -97,12 +113,7 @@ export default function Login() {
 		setCurrentPage(1);
 		setSocialLoginComplete(false);
 
-		getMyFcmToken();
-
-		// 자동 로그인 API 호출
-		getAutoLogin();
-
-
+		getMyFcmTokenAndAutoLogin();
 		/* global google*/
 
 		// if(google.accounts.id) {
