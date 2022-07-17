@@ -600,7 +600,14 @@ export default function ItemDetail() {
 
 					<UserInfo>
 						<Left onClick={() => onClickUserProfile(itemInfo.uploaderIdx)}>
-							<UserImage size="3.25rem" src={itemInfo.profileImgUrl}></UserImage>
+							{itemInfo.profileImgUrl ? (
+								<UserImage size="3.25rem" src={itemInfo.profileImgUrl}></UserImage>
+							) : (
+								<UserBasicProfileImg
+									style={{ width: '3.25rem', height: '3.25rem' }}
+								></UserBasicProfileImg>
+							)}
+
 							<UserTextWrap>
 								{itemInfo.isMe === 'Y' ? (
 									<SubText
