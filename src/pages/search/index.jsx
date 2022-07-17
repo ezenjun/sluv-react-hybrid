@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
 
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -19,12 +19,18 @@ import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { UploadPopup, UploadPopupWrap } from '../home';
 import { useNavigate } from 'react-router-dom';
+import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
 
 export default function Search() {
 	const navigate = useNavigate();
 
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
+
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const uploadPopupStatus = useRecoilValue(UploadPopupState);
 	const [rankDate, setRankDate] = useState('');
 	const [searchInput, setSearchInput] = useState('');
 	const [isCollapsed, setIsCollapsed] = useState(true);
@@ -143,6 +149,20 @@ export default function Search() {
 		speed: 500,
 		cssEase: 'linear',
 		arrows: false,
+	};
+	const onClickUploadQuestion = () => {
+		setUploadPopupStatus(false);
+		setToastMessageBottomPosition('4rem');
+		setToastMessage('준비 중이에요. 조금만 기다려주세요!');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 	};
 
 	useEffect(() => {
@@ -408,10 +428,7 @@ export default function Search() {
 						/>
 						<span>정보 공유하기</span>
 					</div>
-					<div
-						onClick={() => navigate('/upload/question')}
-						className="uploadPopupBtn bottomBtn"
-					>
+					<div onClick={onClickUploadQuestion} className="uploadPopupBtn bottomBtn">
 						<IconUploadQuestion
 							style={{
 								width: '1.125rem',

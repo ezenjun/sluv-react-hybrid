@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
@@ -20,6 +20,9 @@ import SelectMemberContainer from '../../components/containers/SelectMemberConta
 import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function SelectCeleb() {
+
+	const { state } = useLocation();
+	console.log(state);
 
 	const navigate = useNavigate();
 
@@ -61,7 +64,6 @@ export default function SelectCeleb() {
 			temp2 = new Array(totalCelebList.length).fill(0);
 			setCheckStatusList(temp);
 			setBadgeNumList(temp2);
-			console.log(temp2);
 		}
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if(popularCelebList.length < 1) {
@@ -98,6 +100,7 @@ export default function SelectCeleb() {
 			console.log(data.message);
 			return;
 		}
+		console.log(data.result);
 		setTotalCelebList(data.result);
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 
@@ -241,7 +244,10 @@ export default function SelectCeleb() {
 		<>
 			{currentPage === 0 && (
 				<MainContainer>
-					<TopNav>
+					<TopNav style={{ justifyContent: 'space-between' }}>
+						{state === '/settings' &&
+							(<BackButton onClick={() => navigate(-1)} />)
+						}
 						<NavRight>
 							{selectedNum > 0 && (
 								<SubText margin="0 1rem" color="#9e30f4">
@@ -309,7 +315,7 @@ export default function SelectCeleb() {
 						{!searchFailStatus && (
 							<ListContainer>
 								{currentCelebList.length > 0 &&
-									currentCelebList.map((celeb,index) => (
+									currentCelebList.map((celeb, index) => (
 										<Celeb
 											key={celeb.celebIdx}
 											onClick={e => onSelectCeleb(celeb, e, index)}
@@ -329,7 +335,9 @@ export default function SelectCeleb() {
 											<CountBadge
 												status={checkStatusList[celeb.celebIdx - 1]}
 											>
-												<span className="badgeItem">{badgeNumList[index]}</span>
+												<span className="badgeItem">
+													{badgeNumList[index]}
+												</span>
 											</CountBadge>
 										</Celeb>
 									))}

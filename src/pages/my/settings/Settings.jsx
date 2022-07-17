@@ -14,7 +14,7 @@ import { PopUpModalState } from '../../../recoil/PopUpModal';
 
 export default function Settings() {
     const navigate = useNavigate();
-		const { state } = useLocation();
+		const { state, pathname } = useLocation();
 
 		const setBottomNavStatus = useSetRecoilState(BottomNavState);
 		const setPopUpModalState = useSetRecoilState(PopUpModalState);
@@ -56,7 +56,9 @@ export default function Settings() {
 						>
 							비밀번호 변경
 						</div>
-						<div onClick={() => navigate('/select/celebrity')}>셀럽 선택 편집</div>
+						<div onClick={() => navigate('/select/celebrity', {
+							state: pathname
+						})}>셀럽 선택 편집</div>
 					</div>
 				</ItemWrap>
 				<ItemWrap>
