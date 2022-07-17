@@ -7,8 +7,10 @@ import { AlignFilter } from '../Filters/AlignFilter';
 import { PriceFilter } from '../Filters/PriceFilter';
 import { ColorFilter } from '../Filters/ColorFilter';
 import { ItemFilter } from '../Filters/ItemFilter';
-
+import { customApiClient } from '../../utils/apiClient';
+import qs from 'qs';
 import { SubText } from '../Texts/SubText';
+import { useLocation } from 'react-router-dom';
 
 // export const filterList = [
 // 	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
@@ -40,12 +42,12 @@ export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [isSelected, setIsSelected] = useState(false);
-
+	const location = useLocation();
 	const onReset = () => {
 		props.getSelectedItemFilter();
 		props.getSelectedPriceFilter();
 		props.getSelectedAlignFilter();
-		props.getSelectedColorFilter();
+		// props.getSelectedColorFilter();
 		setSelectedItemMainFilter(0);
 		setSelectedItemStatusList([]);
 		setSelectedItemFilterList([]);
@@ -54,8 +56,61 @@ export function SearchBottomSlideMenu(props) {
 		setSelectedColorStatusList([]);
 		setSelectedColorFilterList([]);
 	};
-	const onSubmit = e => {
+
+	// const getFilteredSearchResultList = async queryKeyword => {
+	// 	const data = await customApiClient('get', `/search/filter?search_word=&${queryKeyword}`, {
+	// 		parent: mainItem,
+	// 		sub: subItem,
+	// 		price: mainprice,
+	// 		order: mainAlign,
+	// 		page: 1,
+	// 		pageSize: 2,
+	// 	});
+	// 	if (!data) return;
+	// 	if (!data.isSuccess) {
+	// 		console.log(data.message);
+	// 		return;
+	// 	}
+	// 	let tmp=props.searchList;
+	// 	let newArr = tmp.concat(data.result.searchItemList);
+	// 	console.log('필터링된 리스트', newArr);
+	// 	props.getFilteredSearchResultList(newArr);
+
+	// };
+	const AfterFilterComplete = async (mainItem, subItem, mainprice, mainAlign, queryKeyword) => {
+		console.log(queryKeyword);
+		console.log(mainItem);
+		const params = qs.stringify({
+			parent: mainItem,
+			sub: subItem,
+			price: mainprice,
+			order: mainAlign,
+			page: 1,
+			pageSize: 8,
+		});
+		const data = await customApiClient(
+			'get',
+			`/search/filter?search_word=${queryKeyword}`,
+			params
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			return;
+		}
+		let temp = props.searchList;
+		let newArr = temp.concat(data.result.searchItemList);
+		console.log('필터링된 리스트', newArr);
+		props.getFilteredSearchResultList(newArr);
+	};
+
+	const onSubmit = (e, queryKeyword) => {
 		setBottomMenuStatusState(false);
+		console.log('서브밋 쿼리 키워드', queryKeyword);
+		var mainItem = null;
+		var subItem = null;
+		var mainprice = null;
+		var mainAlign = null;
 		if (selectedItemMainFilter !== 0) {
 			if (selectedItemFilterList.length === 0) {
 				props.getSelectedItemFilter(
@@ -63,20 +118,34 @@ export function SearchBottomSlideMenu(props) {
 					'',
 					filterList[selectedItemMainFilter - 1].name
 				);
+				mainItem = filterList[selectedItemMainFilter - 1].name;
 				console.log(selectedItemFilterList.length);
 			} else {
 				if (selectedItemFilterList.length === 1) {
 					props.getSelectedItemFilter(
-						filterList[selectedItemMainFilter - 1].name,
+						selectedItemFilterList[selectedItemMainFilter - 1].name,
 						selectedItemFilterList,
 						`${selectedItemFilterList[0]}`
 					);
+					mainItem = filterList[selectedItemMainFilter - 1].name;
+					subItem = selectedItemFilterList[selectedItemMainFilter - 1].name;
 				} else {
 					props.getSelectedItemFilter(
 						filterList[selectedItemMainFilter - 1].name,
 						selectedItemFilterList,
 						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
 					);
+					var tmp = '';
+					if (selectedItemFilterList) {
+						for (var i = 0; i < selectedItemFilterList.length; i++) {
+							tmp += selectedItemFilterList[i];
+							if (i !== selectedItemFilterList.length - 1) {
+								tmp += '+';
+							}
+						}
+					}
+					mainItem = filterList[selectedItemMainFilter - 1].name;
+					subItem = tmp;
 				}
 
 				console.log('selectedItemFilterList', selectedItemFilterList);
@@ -88,15 +157,23 @@ export function SearchBottomSlideMenu(props) {
 		if (selectedPriceMainFilter !== null) {
 			props.getSelectedPriceFilter(selectedPriceFilterIdx, selectedPriceMainFilter);
 			console.log(selectedPriceFilterIdx);
+			mainprice = selectedPriceFilterIdx;
 		} else {
 			props.getSelectedPriceFilter();
 		}
 
 		if (selectedAlignMainFilter !== null) {
 			props.getSelectedAlignFilter(selectedAlignEnglish, selectedAlignMainFilter);
+			mainAlign = selectedAlignEnglish;
 		} else {
 			props.getSelectedAlignFilter();
 		}
+		console.log('mainItem', mainItem);
+		console.log('subItem', subItem);
+		console.log('mainprice', mainprice);
+		console.log('mainAlign', mainAlign);
+		console.log(queryKeyword);
+		AfterFilterComplete(mainItem, subItem, mainprice, mainAlign, queryKeyword);
 
 		// if (selectedColorFilterList.length > 0) {
 		// 	if (selectedColorFilterList.length === 1) {
@@ -158,6 +235,7 @@ export function SearchBottomSlideMenu(props) {
 	const getSelectedColorFilterList = input => {
 		setSelectedColorFilterList(input);
 	};
+
 	useEffect(() => {
 		props.childFunc.current = onReset;
 	}, []);
@@ -275,7 +353,10 @@ export function SearchBottomSlideMenu(props) {
 					<ResetButton active={isSelected} onClick={onReset}>
 						초기화
 					</ResetButton>
-					<SubmitButton active={isSelected} onClick={e => onSubmit(e)}>
+					<SubmitButton
+						active={isSelected}
+						onClick={e => onSubmit(e, props.queryKeyword)}
+					>
 						선택 완료
 					</SubmitButton>
 				</ButtonWrap>
@@ -307,7 +388,7 @@ const BottomDialogDiv = styled.div`
 	font-weight: 600;
 	color: #000000;
 	width: 100%;
-	min-height: 8rem;
+	min-height: 16.25rem;
 	border-radius: 1rem 1rem 0 0;
 	padding: 1.25rem 0 1.25rem 0;
 	box-sizing: border-box;
