@@ -56,7 +56,7 @@ export default function Settings() {
 						>
 							비밀번호 변경
 						</div>
-						<div>셀럽 선택 편집</div>
+						<div onClick={() => navigate('/select/celebrity')}>셀럽 선택 편집</div>
 					</div>
 				</ItemWrap>
 				<ItemWrap>

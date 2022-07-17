@@ -20,6 +20,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { useEffect } from 'react';
 
 export default function LocalLogin() {
 	const navigate = useNavigate();
@@ -35,6 +36,11 @@ export default function LocalLogin() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	useEffect(() => {
+		setEmail(localStorage.getItem('myEmail'));
+		setEmailValid(true);
+	},[]);
 
 	const handleEmail = e => {
 		setEmail(e.target.value);
@@ -92,6 +98,12 @@ export default function LocalLogin() {
 
 	// 이메일 비밀번호 확인 API
 	async function handleLoginAPI() {
+		if(rememberIdCheck) {
+			localStorage.setItem('myEmail', email);
+		} else {
+			localStorage.setItem('myEmail', '');
+		}
+
 		const body = {
 			email: email,
 			pwd: password,
@@ -150,7 +162,7 @@ export default function LocalLogin() {
 								type="text"
 								placeholder="이메일을 입력해주세요"
 							/>
-							{emailValid ? (
+							{email.length !== 0 && emailValid ? (
 								<IconWrap>
 									<Check />
 								</IconWrap>
