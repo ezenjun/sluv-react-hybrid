@@ -177,7 +177,7 @@ export default function SearchResult() {
 	const getAFterSearchResultList = async (queryKeyword, pageIdx) => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=${pageIdx}&pageSize=2`
+			`/search?search_word=${queryKeyword}&page=${pageIdx}&pageSize=8`
 		);
 		console.log('');
 		if (!data) return;
@@ -213,26 +213,8 @@ export default function SearchResult() {
 		}
 	};
 	// 필터 있는 경우 처음으로 부를 API
-	const getFilteredSearchResultList = async queryKeyword => {
-		const data = await customApiClient('get', `/search/filter?search_word=&${queryKeyword}`, {
-			parent: mainItem,
-			sub: subItem,
-			price: mainprice,
-			order: mainAlign,
-			page: 1,
-			pageSize: 2,
-		});
-		if (!data) return;
-		if (!data.isSuccess) {
-			console.log(data.message);
-			if (data.code === 3070) {
-				setSearchResultList([]);
-			}
-			return;
-		}
-		console.log('필터링된 리스트', data.result.searchItemList);
-		setSearchResultList(data.result.searchItemList);
-		setCompleteStatus(false);
+	const getFilteredSearchResultList = input => {
+		setSearchResultList([...input]);
 	};
 
 	// 무한스크롤 정의
@@ -271,14 +253,6 @@ export default function SearchResult() {
 		setBottomMenuStatusState(false);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
-		let blank = ' ';
-		let isBlank = queryKeyword.includes(blank);
-		if (isBlank) {
-			queryKeyword = queryKeyword.replaceAll(' ', '+');
-			console.log('with blank', queryKeyword);
-		}
-		console.log(queryKeyword);
-		getSearchResultList(queryKeyword);
 		setQueryKeyword(queryKeyword);
 	}, []);
 	return (
