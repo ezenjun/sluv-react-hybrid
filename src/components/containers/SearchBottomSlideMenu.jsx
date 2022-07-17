@@ -11,6 +11,7 @@ import { customApiClient } from '../../utils/apiClient';
 import qs from 'qs';
 import { SubText } from '../Texts/SubText';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 // export const filterList = [
 // 	{ idx: 1, name: '상의', list: ['반소매', '긴소매', '아우터'] },
@@ -57,51 +58,30 @@ export function SearchBottomSlideMenu(props) {
 		setSelectedColorFilterList([]);
 	};
 
-	// const getFilteredSearchResultList = async queryKeyword => {
-	// 	const data = await customApiClient('get', `/search/filter?search_word=&${queryKeyword}`, {
-	// 		parent: mainItem,
-	// 		sub: subItem,
-	// 		price: mainprice,
-	// 		order: mainAlign,
-	// 		page: 1,
-	// 		pageSize: 2,
-	// 	});
-	// 	if (!data) return;
-	// 	if (!data.isSuccess) {
-	// 		console.log(data.message);
-	// 		return;
-	// 	}
-	// 	let tmp=props.searchList;
-	// 	let newArr = tmp.concat(data.result.searchItemList);
-	// 	console.log('필터링된 리스트', newArr);
-	// 	props.getFilteredSearchResultList(newArr);
-
-	// };
 	const AfterFilterComplete = async (mainItem, subItem, mainprice, mainAlign, queryKeyword) => {
-		console.log(queryKeyword);
-		console.log(mainItem);
-		const params = qs.stringify({
-			parent: mainItem,
-			sub: subItem,
-			price: mainprice,
-			order: mainAlign,
-			page: 1,
-			pageSize: 8,
+		axios({
+			method: 'get',
+			url: 'https://dev.cmc-sluv.shop/search/filter?',
+			params: {
+				search_word: queryKeyword,
+				parent: mainItem,
+				sub: subItem,
+				price: mainprice,
+				order: mainAlign,
+				page: 1,
+				pageSize: 8,
+			},
+			headers: {
+				'X-ACCESS-TOKEN': localStorage.getItem('x-access-token'),
+			},
+		}).then(function (response) {
+			console.log(response.data.message);
+			console.log(response.data);
+			// let temp = props.searchList;
+			// let newArr = temp.concat(response.data.result.searchItemList);
+			// console.log('필터링된 리스트', newArr);
+			props.getFilteredSearchList(response.data.result.searchItemList);
 		});
-		const data = await customApiClient(
-			'get',
-			`/search/filter?search_word=${queryKeyword}`,
-			params
-		);
-		if (!data) return;
-		if (!data.isSuccess) {
-			console.log(data.message);
-			return;
-		}
-		let temp = props.searchList;
-		let newArr = temp.concat(data.result.searchItemList);
-		console.log('필터링된 리스트', newArr);
-		props.getFilteredSearchResultList(newArr);
 	};
 
 	const onSubmit = (e, queryKeyword) => {
@@ -135,12 +115,12 @@ export function SearchBottomSlideMenu(props) {
 						selectedItemFilterList,
 						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
 					);
-					var tmp = '';
+					var tmp = ' ';
 					if (selectedItemFilterList) {
 						for (var i = 0; i < selectedItemFilterList.length; i++) {
 							tmp += selectedItemFilterList[i];
 							if (i !== selectedItemFilterList.length - 1) {
-								tmp += '+';
+								tmp += ' ';
 							}
 						}
 					}
