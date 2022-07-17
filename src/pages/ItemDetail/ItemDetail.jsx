@@ -54,7 +54,7 @@ export default function ItemDetail() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	const [myUserIdx, setMyUserIdx] = useState(-1);
+	const [myUserIdx, setMyUserIdx] = useState(false);
 
 	const [reportDialogStatus, setReportDialogStatus] = useState(false);
 
@@ -290,11 +290,14 @@ export default function ItemDetail() {
 
 	const getItemInfo = async () => {
 		let uri = ``;
+		let idx = localStorage.getItem('myUserIdx');
 		if (myUserIdx) {
-			uri = `/items/${itemIdx}?userIdx=${myUserIdx}`;
+			uri = `/items/${itemIdx}?userIdx=${idx}`;
+			
 		} else {
 			uri = `/items/${itemIdx}`;
 		}
+
 		const data = await customApiClient('get', uri);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -406,16 +409,11 @@ export default function ItemDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-	useEffect(() => {
-		setMyUserIdx(localStorage.getItem('myUserIdx'));
-	}, []);
 
 	useEffect(() => {
-		// 하단바 띄워주기
-		//
 		getItemInfo();
 		setBottomNavStatus(false);
-	}, [itemIdx, myUserIdx]);
+	}, [itemIdx]);
 
 	return (
 		<MainContainer padding="0 0 0 0">
