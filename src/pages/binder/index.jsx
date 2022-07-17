@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
@@ -67,7 +67,7 @@ export default function Binder() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setPopUpModalStatusState = useSetRecoilState(PopUpModalState);
@@ -294,6 +294,21 @@ export default function Binder() {
 		reader.readAsDataURL(file);
 
 		setBottomMenuStatusState(false);
+	};
+
+	const onClickUploadQuestion = () => {
+		setUploadPopupStatus(false);
+		setToastMessageBottomPosition('4rem');
+		setToastMessage('준비 중이에요. 조금만 기다려주세요!');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 	};
 
 	return (
@@ -595,10 +610,7 @@ export default function Binder() {
 						/>
 						<span>정보 공유하기</span>
 					</div>
-					<div
-						onClick={() => navigate('/upload/question')}
-						className="uploadPopupBtn bottomBtn"
-					>
+					<div onClick={onClickUploadQuestion} className="uploadPopupBtn bottomBtn">
 						<IconUploadQuestion
 							style={{
 								width: '1.125rem',

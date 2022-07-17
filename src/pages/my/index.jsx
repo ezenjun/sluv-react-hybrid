@@ -27,7 +27,7 @@ import styled from 'styled-components';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import MyPageContainer from './MyPageContainer';
 import ProfileContainer from './ProfileContainer';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { UploadPopup, UploadPopupWrap } from '../home';
@@ -57,7 +57,7 @@ export default function My() {
 	const [myUploadIsDibList, setMyUploadIsDibList] = useState([]);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const uploadPopupStatus = useRecoilValue(UploadPopupState);
+	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
@@ -213,6 +213,21 @@ export default function My() {
 		}
 		console.log('UnFollowUser', data.message);
 		setFollowStatus(false);
+	};
+
+	const onClickUploadQuestion = () => {
+		setUploadPopupStatus(false);
+		setToastMessageBottomPosition('4rem');
+		setToastMessage('준비 중이에요. 조금만 기다려주세요!');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 	};
 
 	return (
@@ -431,10 +446,7 @@ export default function My() {
 						/>
 						<span>정보 공유하기</span>
 					</div>
-					<div
-						onClick={() => navigate('/upload/question')}
-						className="uploadPopupBtn bottomBtn"
-					>
+					<div onClick={onClickUploadQuestion} className="uploadPopupBtn bottomBtn">
 						<IconUploadQuestion
 							style={{
 								width: '1.125rem',
