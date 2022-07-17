@@ -40,7 +40,6 @@ export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [isSelected, setIsSelected] = useState(false);
-	
 
 	const onReset = () => {
 		props.getSelectedItemFilter();
@@ -59,46 +58,57 @@ export function SearchBottomSlideMenu(props) {
 		setBottomMenuStatusState(false);
 		if (selectedItemMainFilter !== 0) {
 			if (selectedItemFilterList.length === 0) {
-				props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
+				props.getSelectedItemFilter(
+					filterList[selectedItemMainFilter - 1].name,
+					'',
+					filterList[selectedItemMainFilter - 1].name
+				);
 				console.log(selectedItemFilterList.length);
 			} else {
 				if (selectedItemFilterList.length === 1) {
-					props.getSelectedItemFilter(`${selectedItemFilterList[0]}`);
+					props.getSelectedItemFilter(
+						filterList[selectedItemMainFilter - 1].name,
+						selectedItemFilterList,
+						`${selectedItemFilterList[0]}`
+					);
 				} else {
 					props.getSelectedItemFilter(
+						filterList[selectedItemMainFilter - 1].name,
+						selectedItemFilterList,
 						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
 					);
 				}
 
-				console.log(selectedItemFilterList.length);
+				console.log('selectedItemFilterList', selectedItemFilterList);
 			}
 		} else {
 			props.getSelectedItemFilter();
 		}
 
 		if (selectedPriceMainFilter !== null) {
-			props.getSelectedPriceFilter(selectedPriceMainFilter);
+			props.getSelectedPriceFilter(selectedPriceFilterIdx, selectedPriceMainFilter);
+			console.log(selectedPriceFilterIdx);
 		} else {
 			props.getSelectedPriceFilter();
 		}
 
 		if (selectedAlignMainFilter !== null) {
-			props.getSelectedAlignFilter(selectedAlignMainFilter);
+			props.getSelectedAlignFilter(selectedAlignEnglish, selectedAlignMainFilter);
 		} else {
 			props.getSelectedAlignFilter();
 		}
 
-		if (selectedColorFilterList.length > 0) {
-			if (selectedColorFilterList.length === 1) {
-				props.getSelectedColorFilter(selectedColorFilterList[0].name);
-			} else {
-				props.getSelectedColorFilter(
-					`${selectedColorFilterList[0].name} 외 ${selectedColorFilterList.length - 1}`
-				);
-			}
-		} else {
-			props.getSelectedColorFilter();
-		}
+		// if (selectedColorFilterList.length > 0) {
+		// 	if (selectedColorFilterList.length === 1) {
+		// 		props.getSelectedColorFilter(selectedColorFilterList[0].name);
+		// 	} else {
+		// 		props.getSelectedColorFilter(
+		// 			`${selectedColorFilterList[0].name} 외 ${selectedColorFilterList.length - 1}`
+		// 		);
+		// 	}
+		// } else {
+		// 	props.getSelectedColorFilter();
+		// }
 		e.preventDefault();
 	};
 	// 아이템 종류
@@ -118,14 +128,25 @@ export function SearchBottomSlideMenu(props) {
 
 	// 가격대
 	const [selectedPriceMainFilter, setSelectedPriceMainFilter] = useState(null);
+	const [selectedPriceFilterIdx, setSelectedPriceFilterIdx] = useState(0);
 	const getSelectedPriceMainFilter = input => {
 		setSelectedPriceMainFilter(input);
+	};
+	const getSelectedPriceFilterIdx = input => {
+		setSelectedPriceFilterIdx(input);
 	};
 
 	// 정렬
 	const [selectedAlignMainFilter, setSelectedAlignMainFilter] = useState(null);
+	const [selectedAlignEnglish, setSelectedAlignEnglish] = useState('');
 	const getSelectedAlignMainFilter = input => {
 		setSelectedAlignMainFilter(input);
+		if (input === '최신순') {
+			setSelectedAlignEnglish('latest');
+		} else {
+			setSelectedAlignEnglish('hot');
+		}
+		console.log(input);
 	};
 
 	// 색상
@@ -178,10 +199,10 @@ export function SearchBottomSlideMenu(props) {
 			idx: 3,
 			name: '정렬',
 		},
-		{
-			idx: 4,
-			name: '색상',
-		},
+		// {
+		// 	idx: 4,
+		// 	name: '색상',
+		// },
 	];
 	// const [selectedTab, setSelectedTab] = useState(1);
 	const onClickTab = idx => {
@@ -232,6 +253,7 @@ export function SearchBottomSlideMenu(props) {
 					<PriceFilter
 						selectedMainFilter={selectedPriceMainFilter}
 						getSelectedMainFilter={getSelectedPriceMainFilter}
+						getSelectedPriceFilterIdx={getSelectedPriceFilterIdx}
 					></PriceFilter>
 				)}
 				{props.selectedTab === 3 && (
@@ -240,14 +262,14 @@ export function SearchBottomSlideMenu(props) {
 						getSelectedMainFilter={getSelectedAlignMainFilter}
 					></AlignFilter>
 				)}
-				{props.selectedTab === 4 && (
+				{/* {props.selectedTab === 4 && (
 					<ColorFilter
 						selectedStatusList={selectedColorStatusList}
 						selectedFilterList={selectedColorFilterList}
 						getSelectedStatusList={getSelectedColorStatusList}
 						getSelectedFilterList={getSelectedColorFilterList}
 					></ColorFilter>
-				)}
+				)} */}
 
 				<ButtonWrap>
 					<ResetButton active={isSelected} onClick={onReset}>
@@ -300,6 +322,7 @@ export const ButtonWrap = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
+	margin: 1.25rem 0 0 0;
 	padding: 0 1.25rem;
 `;
 const ResetButton = styled.div`

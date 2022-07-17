@@ -10,6 +10,9 @@ export function AlignFilter(props) {
 	const setSelectedMainFilter = input => {
 		props.getSelectedMainFilter(input);
 	};
+	const setSelectedAlignEnglish = input => {
+		props.getSelectedAlignEnglish(input);
+	};
 
 	const onMainSelect = filter => {
 		if (props.selectedMainFilter === filter.name) {

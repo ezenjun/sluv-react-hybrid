@@ -37,6 +37,13 @@ import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
 
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
+
 export default function SearchResult() {
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -50,6 +57,11 @@ export default function SearchResult() {
 	const [selectedPriceFilter, setSelectedPriceFilter] = useState();
 	const [selectedAlignFilter, setSelectedAlignFilter] = useState();
 	const [selectedColorFilter, setSelectedColorFilter] = useState();
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const [isSelected, setIsSelected] = useState(false);
 	const getIsSelected = input => {
@@ -74,7 +86,7 @@ export default function SearchResult() {
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
-
+	// 정렬
 	const [selectedTab, setSelectedTab] = useState(1);
 	const getSelectedTab = input => {
 		setSelectedTab(input);
@@ -82,17 +94,35 @@ export default function SearchResult() {
 
 	const childFunc = React.useRef(null);
 	const getResetFunction = input => {};
-	const getSelectedItemFilter = input => {
-		setSelectedItemFilter(input);
+
+	const [mainItem, setMainItem] = useState('');
+	const [subItem, setSubItem] = useState([]);
+	const getSelectedItemFilter = (main, sub, text) => {
+		setSelectedItemFilter(text);
+		setMainItem(main);
+
+		var tmp = '';
+		for (var i = 0; i < sub.length; i++) {
+			tmp += sub[i];
+			if (i !== sub.length - 1) {
+				tmp += '+';
+			}
+		}
+		setSubItem(tmp);
 		console.log(selectedItemFilter);
 	};
-	const getSelectedPriceFilter = input => {
-		setSelectedPriceFilter(input);
+	const [mainprice, setMainPrice] = useState(0);
+	const getSelectedPriceFilter = (main, text) => {
+		setSelectedPriceFilter(text);
+		setMainPrice(main);
+		console.log('가격 메인', main);
 		console.log(selectedPriceFilter);
 	};
-	const getSelectedAlignFilter = input => {
-		setSelectedAlignFilter(input);
-		console.log(selectedAlignFilter);
+	const [mainAlign, setMainAlign] = useState('');
+	const getSelectedAlignFilter = (main, text) => {
+		setSelectedAlignFilter(text);
+		setMainAlign(main);
+		console.log('정렬메인', main);
 	};
 	const getSelectedColorFilter = input => {
 		setSelectedColorFilter(input);
@@ -117,6 +147,7 @@ export default function SearchResult() {
 		navigate('../search');
 	};
 
+	// 맨 처음 필터 없이 가져올 때
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
@@ -135,23 +166,7 @@ export default function SearchResult() {
 		setSearchResultList(data.result.searchItemList);
 	};
 
-	const [page, setPage] = useState(1);
-	const [loading, setLoading] = useState(false);
-
-	const [ref, inView] = useInView();
-	const [blockRerender, setBlockRerender] = useState(false);
-	const getNewItems = useCallback(async () => {
-		if (!blockRerender) {
-			setLoading(true);
-			getAFterSearchResultList(location.state.searchInput, page);
-			setLoading(false);
-		}
-	}, [page]);
-
-	useEffect(() => {
-		getNewItems();
-	}, [getNewItems]);
-
+	// 필터 없이 무한스크롤
 	const getAFterSearchResultList = async (queryKeyword, pageIdx) => {
 		const data = await customApiClient(
 			'get',
@@ -167,14 +182,67 @@ export default function SearchResult() {
 			if (data.code === 2060) {
 				//더이상 아이템이 없을 때
 				setBlockRerender(true);
-				alert('더이상 아이템이 없어요');
+				setToastMessageBottomPosition('3.125rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage('더이상 아이템이 없어요');
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
 			}
 			return;
 		} else {
 			console.log('아이템 리스트 다시 불러오기', data.result.searchItemList);
-			setSearchResultList([...searchResultList, data.result.searchItemList]);
+			let temp = [];
+			temp = searchResultList;
+			let newArr = temp.concat(data.result.searchItemList);
+			console.log(newArr);
+
+			setSearchResultList([...newArr]);
+			// setSearchResultList([...searchResultList, data.result.searchItemList]);
 		}
 	};
+	// 필터 있는 경우 처음으로 부를 API
+	const getFilteredSearchResultList = async queryKeyword => {
+		const data = await customApiClient(
+			'get',
+			`/search/filter?search_word=&${queryKeyword}parent=&sub=&price=&order=&page=1&pageSize=2`
+		);
+		if (!data) return;
+		if (!data.isSuccess) {
+			console.log(data.message);
+			if (data.code === 3070) {
+				setSearchResultList([]);
+			}
+			return;
+		}
+		console.log('getHotKeywordList', data.result.searchItemList);
+		setSearchResultList(data.result.searchItemList);
+	};
+
+	// 무한스크롤 정의
+	const [page, setPage] = useState(1);
+	const [loading, setLoading] = useState(false);
+
+	const [ref, inView] = useInView();
+	const [blockRerender, setBlockRerender] = useState(false);
+	const getNewItems = useCallback(async () => {
+		if (!blockRerender) {
+			setLoading(true);
+			getAFterSearchResultList(location.state.searchInput, page);
+			setLoading(false);
+		}
+	}, [page]);
+
+	useEffect(() => {
+		if (isSelected) {
+		} else {
+			getNewItems();
+		}
+	}, [getNewItems]);
 	useEffect(() => {
 		// 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
 		if (inView && !loading) {
@@ -184,7 +252,10 @@ export default function SearchResult() {
 			}
 		}
 	}, [inView, loading]);
+	// 무한 스크롤
+
 	useEffect(() => {
+		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
@@ -198,7 +269,7 @@ export default function SearchResult() {
 		getSearchResultList(queryKeyword);
 	}, []);
 	return (
-		<MainContainer padding="0 0 3.125rem 0">
+		<MainContainer padding="0 0 0 0">
 			<TopNav>
 				<BackButton
 					onClick={onBackClick}
@@ -276,7 +347,7 @@ export default function SearchResult() {
 						}}
 					></DownArrow>
 				</Filter>
-				<Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
+				{/* <Filter onClick={() => onFilterClick(4)} selected={selectedColorFilter}>
 					{selectedColorFilter ? selectedColorFilter : '색상'}
 					<DownArrow
 						style={{
@@ -285,7 +356,7 @@ export default function SearchResult() {
 							marginLeft: '0.125rem',
 						}}
 					></DownArrow>
-				</Filter>
+				</Filter> */}
 			</FilterContainer>
 			{/* )} */}
 
@@ -506,7 +577,7 @@ export default function SearchResult() {
 				getSelectedItemFilter={getSelectedItemFilter}
 				getSelectedPriceFilter={getSelectedPriceFilter}
 				getSelectedAlignFilter={getSelectedAlignFilter}
-				getSelectedColorFilter={getSelectedColorFilter}
+				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
 			></SearchBottomSlideMenu>
 		</MainContainer>
