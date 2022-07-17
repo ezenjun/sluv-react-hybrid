@@ -54,7 +54,7 @@ export default function ItemDetail() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	const [myUserIdx, setMyUserIdx] = useState(-1);
+	const [myUserIdx, setMyUserIdx] = useState(false);
 
 	const [reportDialogStatus, setReportDialogStatus] = useState(false);
 
