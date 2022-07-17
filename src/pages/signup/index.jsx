@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { customApiClient } from '../../utils/apiClient';
@@ -28,6 +28,8 @@ import {
 } from '../../recoil/ToastMessage';
 
 export default function Signup() {
+	const { pathname } = useLocation();
+
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 	const socialLoginUserIdx = useRecoilValue(SocialLoginUserIdxState);
@@ -832,7 +834,7 @@ export default function Signup() {
 						</CompletePageLabel>
 					</CompleteTopWrap>
 					<BottomWrap>
-						<StyledLink to={'/select/celebrity'}>
+						<StyledLink onClick={() => navigate('/select/celebrity', { state: pathname})}>
 							<PurpleButton>관심 셀럽 등록하러 가기</PurpleButton>
 						</StyledLink>
 					</BottomWrap>
@@ -1016,7 +1018,7 @@ const AuthButton = styled.button`
 		color: #262626;
 	}
 `;
-const StyledLink = styled(Link)`
+const StyledLink = styled.div`
 	text-decoration: none;
 	color: inherit;
 	&:focus,
