@@ -132,8 +132,8 @@ export default function UploadItem() {
 	}, []);
 
 	useEffect(() => {
-		console.log('상위 카테고리 : ', selectedItemMainFilter.celebIdx);
-		console.log('하위 카테고리 : ', selectedItemSubFilter.memberIdx);
+		console.log('상위 카테고리 : ', selectedItemMainFilter);
+		console.log('하위 카테고리 : ', selectedItemSubFilter);
 
 		if (
 			selectedItemMainFilter &&
