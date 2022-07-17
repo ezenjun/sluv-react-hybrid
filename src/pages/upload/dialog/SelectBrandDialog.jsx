@@ -13,60 +13,51 @@ import { customApiClient } from '../../../utils/apiClient';
 import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
 import Loading from '../../../components/Loading';
 import { render } from '@testing-library/react';
+import { useInView } from 'react-intersection-observer';
+import { useCallback } from 'react';
 
 export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
-
-	
 	const [brandList, setBrandList] = useRecoilState(BrandListState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [currentBrandList, setCurrentBrandList] = useState([]);
 	const [renderingList, setRenderingList] = useState([]);
 	const [searchInput, setSearchInput] = useState('');
-	const [renderDataNum, setRenderDataNum] = useState(20);
+	const [renderDataNum, setRenderDataNum] = useState(40);
 
-	const [target, setTarget] = useState(null);
+	const [ref, inView] = useInView();
 	const [isLoaded, setIsLoaded] = useState(true);
 
 	useEffect(() => {
-		if(brandList.length < 1) {
+		if (brandList.length < 1) {
 			getBrandList();
 		} else {
 			setCurrentBrandList(brandList);
 			console.log('brandList : 데이터 있어서 조회 안해!!');
 		}
-	},[]);
+	}, []);
 
-	useEffect(() => {
-		let observer;
-		if (target) {
-			observer = new IntersectionObserver(onIntersect, {
-				threshold: 0.1,
-			});
-			observer.observe(target);
-			setRenderDataNum(renderDataNum + 20);
-		}
-    return () => observer && observer.disconnect();
-	},[target]);
-
-	useEffect(() => {
-		setIsLoaded(false);
-	},[renderingList])
-
-	const onIntersect = ([entry], observer) => {
-		if (entry.isIntersecting && !isLoaded) {
-			observer.unobserve(entry.target);
-			getMoreItem();
-			observer.observe(entry.target);
-		}
-	};
-
-	const getMoreItem = () => {
+	const getMoreItem = useCallback(() => {
 		setIsLoaded(true);
 
 		setRenderingList(renderingList => [
-			...renderingList.concat(currentBrandList.slice(renderDataNum - 20, renderDataNum)),
+			...renderingList.concat(currentBrandList.slice(renderDataNum - 40, renderDataNum)),
 		]);
-	};
+
+		setIsLoaded(false);
+	}, [renderDataNum]);
+
+	useEffect(() => {
+		if(inView && !isLoaded) {
+			setRenderDataNum(renderDataNum + 40);
+		}
+	}, [inView, isLoaded]);
+
+	// `getItems` 가 바뀔 때 마다 함수 실행
+	useEffect(() => {
+		getMoreItem();
+	}, [getMoreItem]);
+
+
 
 	const getBrandList = async () => {
 		const data = await customApiClient('get', '/brands');
@@ -77,7 +68,7 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		setBrandList(data.result);
 		setCurrentBrandList(data.result);
 		setRenderingList(data.result.slice(0, renderDataNum));
-	}
+	};
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
@@ -85,7 +76,7 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		const value = e.target.value;
 
 		const searchResult = brandList.filter(brand => {
-			if(brand.brandKr.includes(value)) {
+			if (brand.brandKr.includes(value)) {
 				return brand.brandKr.includes(value);
 			} else if (brand.brandEn.includes(value)) {
 				return brand.brandEn.includes(value);
@@ -99,12 +90,12 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 		setCurrentBrandList(brandList);
 	};
 
-	const onClickBrandItem = (brand) => {
+	const onClickBrandItem = brand => {
 		setFlag(true);
 		setBrandObj(brand);
 		setBrand(brand.brandKr + ' ' + brand.brandEn);
 		setBottomMenuStatusState(false);
-	}
+	};
 
 	return (
 		<SelectBrandDialogContainer>
@@ -128,19 +119,16 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 
 			<BrandListWrap>
 				{renderingList.length > 0 &&
-					renderingList.map((brand,index) => {
+					renderingList.map((brand, index) => {
 						return (
-							<BrandListItem
-								onClick={() => onClickBrandItem(brand)}
-								key={index}
-							>
+							<BrandListItem onClick={() => onClickBrandItem(brand)} key={index}>
 								<SelectIcon style={{ width: '1.5rem', height: '1.5rem' }} />
 								<span className="brandKr">{brand.brandKr}</span>
 								<span className="brandEn">{brand.brandEn}</span>
 							</BrandListItem>
 						);
 					})}
-				<div className="Target-Element" ref={setTarget}></div>
+				<div className="Target-Element" ref={ref}></div>
 			</BrandListWrap>
 		</SelectBrandDialogContainer>
 	);
@@ -161,7 +149,7 @@ const BrandListWrap = styled.div`
 
 	.Target-Element {
 		width: 100vw;
-		height: 10px;
+		height: 30px;
 		display: flex;
 		justify-content: center;
 		text-align: center;

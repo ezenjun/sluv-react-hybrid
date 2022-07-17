@@ -7,12 +7,13 @@ import { HorizontalLine } from '../../../components/Lines/HorizontalLine';
 import { ReactComponent as Close } from '../../../assets/Icons/CloseX.svg';
 import { useRecoilState } from 'recoil';
 import { BottomMenuStatusState } from '../../../recoil/BottomSlideMenu';
+import { PurpleButton } from '../../../components/Buttons/PurpleButton';
 
 export default function SelectItemCategoryDialog(props) {
 
 	const [bottomMenuStatusState,setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
 
-	const closeDialog = () => {
+	const onClickConfirmBtn = () => {
 		if (props.selectedMainFilter) {
 			if (props.selectedSubFilter) {
 				props.setCategory(
@@ -27,6 +28,10 @@ export default function SelectItemCategoryDialog(props) {
 		}
 		setBottomMenuStatusState(false);
 	};
+
+	const closeDialog = () => {
+		
+	}
 
 	const setSelectedMainFilter = input => {
 		props.getSelectedMainFilter(input);
@@ -44,8 +49,8 @@ export default function SelectItemCategoryDialog(props) {
 		} else {
 			setSelectedMainFilter(idx);
 			setSelectedSubFilter(filterList[idx-1].list[0]);
-			
 		}
+		console.log(props.selectedMainFilter);
 	};
 
 	const onSubSelect = (subfilter, index) => {
@@ -54,13 +59,14 @@ export default function SelectItemCategoryDialog(props) {
 		} else {
 			setSelectedSubFilter(subfilter);
 		}
+		console.log(props.selectedSubFilter);
 		
 	}
 
 	return (
 		<BottomDialogWrap openStatus={bottomMenuStatusState}>
 			<div onClick={closeDialog} style={{ height: '100%', width: '100%' }}></div>
-			<BottomDialogDiv openStatus={bottomMenuStatusState}>
+			<BottomDialogDiv style={{ border: '1px solid red' }} openStatus={bottomMenuStatusState}>
 				<CloseWrap>
 					<div
 						style={{
@@ -118,6 +124,9 @@ export default function SelectItemCategoryDialog(props) {
 						)}
 					</BottomWrap>
 				</FilterContainer>
+				<div onClick={onClickConfirmBtn} style={{ margin: '1.25rem 1.25rem 0' }}>
+					<PurpleButton style={{ fontSize: '1rem' }}>선택 완료</PurpleButton>
+				</div>
 			</BottomDialogDiv>
 		</BottomDialogWrap>
 	);
