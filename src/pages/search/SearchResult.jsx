@@ -93,32 +93,33 @@ export default function SearchResult() {
 	};
 
 	const childFunc = React.useRef(null);
-	const getResetFunction = input => {};
 
-	const [mainItem, setMainItem] = useState('');
-	const [subItem, setSubItem] = useState([]);
+	const [mainItem, setMainItem] = useState();
+	const [subItem, setSubItem] = useState();
 	const getSelectedItemFilter = (main, sub, text) => {
 		setSelectedItemFilter(text);
 		setMainItem(main);
 
 		var tmp = '';
-		for (var i = 0; i < sub.length; i++) {
-			tmp += sub[i];
-			if (i !== sub.length - 1) {
-				tmp += '+';
+		if (sub) {
+			for (var i = 0; i < sub.length; i++) {
+				tmp += sub[i];
+				if (i !== sub.length - 1) {
+					tmp += '+';
+				}
 			}
 		}
 		setSubItem(tmp);
 		console.log(selectedItemFilter);
 	};
-	const [mainprice, setMainPrice] = useState(0);
+	const [mainprice, setMainPrice] = useState();
 	const getSelectedPriceFilter = (main, text) => {
 		setSelectedPriceFilter(text);
 		setMainPrice(main);
 		console.log('가격 메인', main);
 		console.log(selectedPriceFilter);
 	};
-	const [mainAlign, setMainAlign] = useState('');
+	const [mainAlign, setMainAlign] = useState();
 	const getSelectedAlignFilter = (main, text) => {
 		setSelectedAlignFilter(text);
 		setMainAlign(main);
@@ -146,13 +147,19 @@ export default function SearchResult() {
 	const onBackClick = () => {
 		navigate('../search');
 	};
-
-	// 맨 처음 필터 없이 가져올 때
+	const [completeStatus, setCompleteStatus] = useState(false);
+	const getCompleteStatus = input => {
+		setCompleteStatus(getCompleteStatus);
+	};
+	// 맨 처음 필터 없이 가져올 때'
+	const getFilteredSearchList = inputList => {
+		setSearchResultList([...inputList]);
+	};
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=1&pageSize=2`
+			`/search?search_word=${queryKeyword}&page=1&pageSize=8`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -207,10 +214,14 @@ export default function SearchResult() {
 	};
 	// 필터 있는 경우 처음으로 부를 API
 	const getFilteredSearchResultList = async queryKeyword => {
-		const data = await customApiClient(
-			'get',
-			`/search/filter?search_word=&${queryKeyword}parent=&sub=&price=&order=&page=1&pageSize=2`
-		);
+		const data = await customApiClient('get', `/search/filter?search_word=&${queryKeyword}`, {
+			parent: mainItem,
+			sub: subItem,
+			price: mainprice,
+			order: mainAlign,
+			page: 1,
+			pageSize: 2,
+		});
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -219,8 +230,9 @@ export default function SearchResult() {
 			}
 			return;
 		}
-		console.log('getHotKeywordList', data.result.searchItemList);
+		console.log('필터링된 리스트', data.result.searchItemList);
 		setSearchResultList(data.result.searchItemList);
+		setCompleteStatus(false);
 	};
 
 	// 무한스크롤 정의
@@ -253,7 +265,7 @@ export default function SearchResult() {
 		}
 	}, [inView, loading]);
 	// 무한 스크롤
-
+	const [queryKeyword, setQueryKeyword] = useState('');
 	useEffect(() => {
 		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
@@ -267,6 +279,7 @@ export default function SearchResult() {
 		}
 		console.log(queryKeyword);
 		getSearchResultList(queryKeyword);
+		setQueryKeyword(queryKeyword);
 	}, []);
 	return (
 		<MainContainer padding="0 0 0 0">
@@ -571,6 +584,7 @@ export default function SearchResult() {
 				)}
 			</FeedContainer>
 			<SearchBottomSlideMenu
+				searchList={searchResultList}
 				childFunc={childFunc}
 				selectedTab={selectedTab}
 				getSelectedTab={getSelectedTab}
@@ -579,6 +593,9 @@ export default function SearchResult() {
 				getSelectedAlignFilter={getSelectedAlignFilter}
 				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
+				getCompleteStatus={getCompleteStatus}
+				getFilteredSearchList={getFilteredSearchList}
+				queryKeyword={queryKeyword}
 			></SearchBottomSlideMenu>
 		</MainContainer>
 	);
