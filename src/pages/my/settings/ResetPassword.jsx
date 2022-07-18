@@ -58,7 +58,7 @@ export default function Index() {
 	};
 	const onClickChangePassword = async () => {
 		const body = {
-			purpose: 0,
+			purpose: 1,
 			pwd: password1,
 		};
 
