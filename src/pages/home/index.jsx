@@ -40,7 +40,7 @@ export default function Home() {
 		{
 			idx: 1,
 			name: '맞춤',
-			to: '/',
+			to: '',
 			path: '/home',
 		},
 		{
