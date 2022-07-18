@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../../../assets/Logo/LogoHome.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
 import { MainContainer } from '../../../components/containers/MainContainer';
@@ -26,6 +26,7 @@ import {
 
 export default function Index() {
 	const navigate = useNavigate();
+	const { jwt } = useParams();
 
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -58,7 +59,7 @@ export default function Index() {
 	};
 	const onClickChangePassword = async () => {
 		const body = {
-			purpose: 1,
+			purpose: 0,
 			pwd: password1,
 		};
 
