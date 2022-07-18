@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Slider from 'react-slick';
 import { customApiClient } from '../../utils/apiClient';
 
@@ -434,7 +434,9 @@ export default function ItemDetail() {
 	};
 
 	const onClickItemPostEdit = () => {
-		console.log('아이템 수정하기')
+		navigate('/upload/item', {
+			state: itemIdx
+		});
 	}
 
 	useEffect(() => {

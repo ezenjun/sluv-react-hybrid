@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import {
@@ -47,6 +47,7 @@ import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 export default function UploadItem() {
 	const navigate = useNavigate();
 	const imgInput = useRef();
+	const { state } = useLocation();
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
@@ -128,10 +129,16 @@ export default function UploadItem() {
 	});
 
 	useEffect(() => {
+		if(state) {
+			setCurrentPage(2);
+		} else {
+			setCurrentPage(0);
+		}
+
 		setBottomMenuStatusState(false);
 		setBottomNavStatus(false);
 		setIsImgUploadComplete(false);
-		setCurrentPage(0);
+		
 	}, []);
 
 	useEffect(() => {
