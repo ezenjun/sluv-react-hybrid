@@ -254,7 +254,7 @@ export default function SelectCeleb() {
 									{selectedNum}개 선택
 								</SubText>
 							)}
-							<NextButton status={isCelebConfirm} onClick={onHandleNextButton}>
+							<NextButton fontsize="1rem" status={isCelebConfirm} onClick={onHandleNextButton}>
 								다음
 							</NextButton>
 						</NavRight>
