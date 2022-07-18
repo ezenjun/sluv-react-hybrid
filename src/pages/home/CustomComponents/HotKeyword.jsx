@@ -10,6 +10,7 @@ import { VerticalLine } from '../../../components/Lines/VerticalLine';
 import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.svg';
 
 export function HotKeyword() {
+	const navigate = useNavigate();
 	const [keywordList, setKeywordList] = useState([]);
 	const getHotKeywordList = async () => {
 		const data = await customApiClient('get', `/homes/hot-keywords`);
@@ -22,6 +23,9 @@ export function HotKeyword() {
 		console.log('HotKeyword', data.result);
 		setKeywordList(temp);
 		console.log('HotKeyword', keywordList);
+	};
+	const onKeywordClick = searchInput => {
+		navigate(`/search/result`, { state: { searchInput } });
 	};
 
 	useEffect(() => {
@@ -37,18 +41,24 @@ export function HotKeyword() {
 			<ChipContainer>
 				<ChipWrap>
 					{keywordList.slice(0, 5).map(keyword => (
-						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword} onClick={() => onKeywordClick(keyword.keyword)}>
+							{keyword.keyword}
+						</Chip>
 					))}
 				</ChipWrap>
 
 				<ChipWrap style={{ padding: '0 1.75rem' }}>
 					{keywordList.slice(5, 10).map(keyword => (
-						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword} onClick={() => onKeywordClick(keyword.keyword)}>
+							{keyword.keyword}
+						</Chip>
 					))}
 				</ChipWrap>
 				<ChipWrap>
 					{keywordList.slice(10, 15).map(keyword => (
-						<Chip key={keyword.keyword}>{keyword.keyword}</Chip>
+						<Chip key={keyword.keyword} onClick={() => onKeywordClick(keyword.keyword)}>
+							{keyword.keyword}
+						</Chip>
 					))}
 				</ChipWrap>
 			</ChipContainer>

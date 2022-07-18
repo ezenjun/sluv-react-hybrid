@@ -138,7 +138,7 @@ export default function SearchResult() {
 		setSearchInput('');
 	};
 	const onBackClick = () => {
-		navigate('../search');
+		navigate(-1);
 	};
 
 	// 필터 클릭하고 searchResultList 변경
@@ -159,6 +159,7 @@ export default function SearchResult() {
 			}
 			return;
 		}
+		console.log('queryKeyword', queryKeyword);
 		console.log('결과받아와봐', data.result.searchItemList);
 		setSearchResultList(data.result.searchItemList);
 		var tmp = [];
@@ -370,6 +371,7 @@ export default function SearchResult() {
 		setSearchInputStatus(location.state.searchInput);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
+		console.log('location.state.searchInput', location.state.searchInput);
 		setQueryKeyword(queryKeyword);
 		getSearchResultList(queryKeyword);
 	}, []);
