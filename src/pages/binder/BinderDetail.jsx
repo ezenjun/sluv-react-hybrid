@@ -89,6 +89,8 @@ export default function BinderDetail() {
 			let temp = selectedStatusList;
 			temp[index] = !temp[index];
 			setSelectedStatusList(temp);
+		} else {
+			navigate(`/item/detail/${itemIdx}`);
 		}
 	};
 
@@ -120,19 +122,10 @@ export default function BinderDetail() {
 	};
 	// 아이템 삭제 선택 후 팹업 모달에서 삭제 확인
 	const onConfirmDelete = () => {
+		console.log('clicked');
 		setPopUpModalStatusState(false);
 		setBottomMenuStatusState(false);
 		deleteDipList(params.idx);
-		setToastMessageBottomPosition('3.875rem');
-		setToastMessageWrapStatus(true);
-		setToastMessageStatus(true);
-		setToastMessage('아이템이 삭제되었어요');
-		setTimeout(() => {
-			setToastMessageStatus(false);
-		}, 2000);
-		setTimeout(() => {
-			setToastMessageWrapStatus(false);
-		}, 2300);
 	};
 	// 바인더 내 찜 목록
 	const getDipList = async binderIdx => {
@@ -158,6 +151,16 @@ export default function BinderDetail() {
 			console.log(data.message);
 			return;
 		}
+		setToastMessageBottomPosition('3.875rem');
+		setToastMessageWrapStatus(true);
+		setToastMessageStatus(true);
+		setToastMessage('아이템이 삭제되었어요');
+		setTimeout(() => {
+			setToastMessageStatus(false);
+		}, 2000);
+		setTimeout(() => {
+			setToastMessageWrapStatus(false);
+		}, 2300);
 		getDipList(params.idx);
 	};
 	// 바인더 내 선택 찜 타 바인더로 이동
@@ -368,10 +371,10 @@ export default function BinderDetail() {
 					삭제되어 복구하실 수 없어요
 				</SubText>
 				<ButtonWrap>
-					<Button backgroundColor="#c9c9c9" onClick={() => onCancleDelete}>
+					<Button backgroundColor="#c9c9c9" onClick={onCancleDelete}>
 						취소
 					</Button>
-					<Button backgroundColor="#9e30f4" onClick={() => onConfirmDelete}>
+					<Button backgroundColor="#9e30f4" onClick={onConfirmDelete}>
 						삭제
 					</Button>
 				</ButtonWrap>
