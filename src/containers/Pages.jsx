@@ -96,7 +96,7 @@ export default function Pages() {
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/edit/profile" element={<EditProfile />} />
 			<Route path="/settings/edit/password" element={<EditPassword />} />
-			<Route path="/settings/reset/password" element={<ResetPassword />} />
+			<Route path="/settings/reset/password/:jwt" element={<ResetPassword />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />
