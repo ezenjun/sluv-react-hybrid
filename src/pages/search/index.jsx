@@ -19,7 +19,12 @@ import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 import { UploadPopup, UploadPopupWrap } from '../home';
 import { useNavigate } from 'react-router-dom';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../recoil/ToastMessage';
 
 export default function Search() {
 	const navigate = useNavigate();
@@ -121,18 +126,19 @@ export default function Search() {
 	};
 
 	const onClickKeyword = searchInput => {
+		console.log('searchInput', searchInput);
 		navigate(`/search/result`, { state: { searchInput } });
 	};
 
 	const settings = {
 		dots: true,
-		fade: true,
+		fade: false,
 		infinite: true,
 		speed: 500,
 		slidesToShow: 1,
 		slidesToScroll: 1,
 		autoplay: true,
-		autoplaySpeed: 3000,
+		autoplaySpeed: 5000,
 		cssEase: 'linear',
 		arrows: false,
 	};
@@ -287,7 +293,7 @@ export default function Search() {
 															fontsize="0.875rem"
 															fontweight="bold"
 															color="#9e30f4"
-															margin="1rem 1rem 1rem 0"
+															margin="1rem 1rem 1rem 0.1875rem"
 														>
 															{index + 1}
 														</SubText>
@@ -307,17 +313,16 @@ export default function Search() {
 														.slice(5, 10)
 														.map((rank, index) => (
 															<EachRank
-																key={index}
+																key={index + 5}
 																onClick={() =>
 																	onClickKeyword(rank.searchWord)
 																}
 															>
 																<SubText
-																	key={index}
 																	fontsize="0.875rem"
 																	fontweight="bold"
 																	color="#9e30f4"
-																	margin="1rem 1rem 1rem 0"
+																	margin="1rem 1rem 1rem 0.1875rem"
 																>
 																	{index + 6}
 																</SubText>
@@ -504,6 +509,10 @@ const HotSearch = styled.div`
 	transition: all 0.3s ease-out;
 	.slick-dots li.slick-active button:before {
 		color: #9e30f4;
+		margin: 0;
+	}
+	.slick-dots {
+		margin-bottom: 0.625rem;
 	}
 `;
 const CollapsedRow = styled.div`
