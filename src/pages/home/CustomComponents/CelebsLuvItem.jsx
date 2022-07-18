@@ -14,6 +14,11 @@ import { ReactComponent as NoItem } from '../../../assets/Icons/noItemIcon.svg';
 import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../../assets/Icons/binderRed.svg';
+
+import { ReactComponent as Diamond } from '../../../assets/Custom/Custom_diamond.svg';
+import { ReactComponent as Crown } from '../../../assets/Custom/Custom_crown.svg';
+import { ReactComponent as Present } from '../../../assets/Custom/Custom_present.svg';
+import { ReactComponent as Heart } from '../../../assets/Custom/Custom_heart.svg';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -21,7 +26,8 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../../recoil/ToastMessage';
 
-export const CelebsLuvItem = ({ celeb }) => {
+export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
+	console.log(ComponentIndex);
 	const navigate = useNavigate();
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -359,15 +365,54 @@ export const CelebsLuvItem = ({ celeb }) => {
 		<>
 			<ItemContainer>
 				<TextWrap>
-					<MainText fontsize="1.5rem">
-						#{celeb.name}'s
-						<br />
-						LUV 아이템
-					</MainText>
-					<RightArrow
-						onClick={() => onDetailCelebClick(celeb)}
-						style={{ marginRight: '1.25rem' }}
-					></RightArrow>
+					<div style={{ display: 'flex', flexDirection: 'column' }}>
+						<MainText fontsize="1.5rem">#{celeb.name}'s</MainText>
+						<div style={{ display: 'flex', alignItems: 'center' }}>
+							<MainText fontsize="1.5rem">LUV 아이템</MainText>
+							{ComponentIndex % 4 === 0 ? (
+								<Crown
+									style={{
+										width: '1.5rem',
+										height: '1.5rem',
+										marginLeft: '0.3125rem',
+									}}
+								/>
+							) : (
+								<>
+									{ComponentIndex % 4 === 1 ? (
+										<Diamond
+											style={{
+												width: '1.5rem',
+												height: '1.5rem',
+												marginLeft: '0.3125rem',
+											}}
+										/>
+									) : (
+										<>
+											{ComponentIndex % 4 === 2 ? (
+												<Present
+													style={{
+														width: '1.5rem',
+														height: '1.5rem',
+														marginLeft: '0.3125rem',
+													}}
+												/>
+											) : (
+												<Heart
+													style={{
+														width: '1.5rem',
+														height: '1.5rem',
+														marginLeft: '0.3125rem',
+													}}
+												/>
+											)}
+										</>
+									)}
+								</>
+							)}
+						</div>
+					</div>
+					<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
 				</TextWrap>
 				<ChipWrap>
 					<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
@@ -383,24 +428,28 @@ export const CelebsLuvItem = ({ celeb }) => {
 						</Chip>
 					))}
 				</ChipWrap>
-				<HorizontalLine />
+				<HorizontalLine style={{ marginRight: '1.25rem', marginLeft: '1.25rem' }} />
 				{CurrentList.length > 0 && (
 					<FilterWrap>
-						{filterList.map(item => {
-							return (
-								<SubText
-									key={item.idx}
-									fontsize="0.875rem"
-									fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
-									margin="0 1rem 0 0 "
-									onClick={() => onFilterClick(item.idx)}
-									selected={selectedFilter === item.idx}
-									color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
-								>
-									{item.name}
-								</SubText>
-							);
-						})}
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[0].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[0].idx)}
+							selected={selectedFilter === filterList[0].idx}
+							color={selectedFilter === filterList[0].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[0].name}
+						</SubText>
+						<VerticalLine />
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[1].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[1].idx)}
+							selected={selectedFilter === filterList[1].idx}
+							color={selectedFilter === filterList[1].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[1].name}
+						</SubText>
 					</FilterWrap>
 				)}
 				<>
@@ -530,7 +579,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 										justifyContent: 'center',
 										alignContent: 'center',
 										alignItems: 'center',
-										paddingBottom: '2.5rem',
+										padding: '1.25rem 1.25rem 2.5rem 1.25rem',
 										width: '100%',
 									}}
 								>
@@ -560,6 +609,7 @@ export const CelebsLuvItem = ({ celeb }) => {
 								justifyContent: 'center',
 								alignItems: 'center',
 								paddingBottom: '2.5rem',
+								paddingRight: '1.25rem',
 								width: '100%',
 							}}
 						>
@@ -601,14 +651,13 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: ${props => props.padding || '2.5rem 0 1.25rem 1.25rem'};
 `;
 const TextWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
 	margin-bottom: ${props => props.marginbottom || '20px'};
-	padding: ${props => props.padding};
+	padding: 1.25rem 1.25rem 0 1.25rem;
 `;
 const ChipWrap = styled.div`
 	overflow-x: scroll;
@@ -616,6 +665,7 @@ const ChipWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+	padding: 0 0 0 1.25rem;
 `;
 const Chip = styled.div`
 	display: inline-block;
@@ -634,6 +684,7 @@ const FilterWrap = styled.div`
 	text-align: center;
 	align-items: center;
 	margin-bottom: 1rem;
+	padding-left: 1.25rem;
 `;
 
 const ItemWrap = styled.div`
@@ -643,6 +694,7 @@ const ItemWrap = styled.div`
 	grid-auto-rows: minmax(6.25rem, auto);
 	row-gap: 0.6875rem;
 	column-gap: 0.6875rem;
+	padding: 0 1.25rem 1.25rem 1.25rem;
 `;
 const Item = styled.div`
 	display: flex;
