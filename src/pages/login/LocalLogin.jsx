@@ -315,7 +315,8 @@ const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
 	border-radius: 0.625rem;
-	padding: 1rem;
+	padding: 0.875rem;
+	caret-color: #9e30f4;
 	:focus {
 		border: 1px solid #9e30f4;
 	}

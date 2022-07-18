@@ -6,6 +6,7 @@ export const PurpleButton = styled.button`
 	width: ${props => props.width || '100%'};
 	border: none;
 	font-family: Pretendard;
+	font-size: 1rem;
 	font-weight: bold;
 	border-radius: 4rem;
 	background-color: #9e30f4;

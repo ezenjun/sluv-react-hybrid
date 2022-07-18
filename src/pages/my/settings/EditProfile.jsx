@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
-import { MainContainer } from '../../../components/containers/MainContainer'
-import { TopNav } from '../../../components/containers/TopNav'
+import { MainContainer } from '../../../components/containers/MainContainer';
+import { TopNav } from '../../../components/containers/TopNav';
 import { Input } from '../../../components/Input';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
@@ -18,8 +18,17 @@ import AWS from 'aws-sdk';
 import { REGION, USER_PROFILE_IMAGE_S3_BUCKET } from '../../../utils/s3Module';
 import { customApiClient } from '../../../utils/apiClient';
 import { useSetRecoilState } from 'recoil';
-import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../../recoil/ToastMessage';
-import { BottomDialogDiv, BottomDialogWrap, CloseWrap } from '../../../components/containers/BottomSlideMenu';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../../recoil/ToastMessage';
+import {
+	BottomDialogDiv,
+	BottomDialogWrap,
+	CloseWrap,
+} from '../../../components/containers/BottomSlideMenu';
 
 AWS.config.update({
 	region: REGION,
@@ -50,11 +59,10 @@ export default function EditProfile() {
 		setProfileImgUrl(state.url);
 		setNewProfileImgUrl('');
 		setNicknameValid(true);
-
-	},[]);
+	}, []);
 
 	useEffect(() => {
-		if(nickname && newProfileImgUrl) {
+		if (nickname && newProfileImgUrl) {
 			patchUserProfile();
 		}
 	}, [nickname, newProfileImgUrl]);
@@ -85,11 +93,11 @@ export default function EditProfile() {
 	const onClickCurrentImgDelete = () => {
 		setProfileImgUrl('');
 		setBottomDialogStatus(false);
-	}
-	const onClickProfileChange = (e) => {
+	};
+	const onClickProfileChange = e => {
 		e.preventDefault();
 		profileImgInput.current.click();
-	}
+	};
 
 	const handleNickname = e => {
 		setNickname(e.target.value);
@@ -137,7 +145,7 @@ export default function EditProfile() {
 
 	const patchUserProfile = async () => {
 		let body = {};
-		if(newProfileImgUrl) {
+		if (newProfileImgUrl) {
 			body = {
 				nickName: nickname,
 				profileImgUrl: newProfileImgUrl,
@@ -153,22 +161,25 @@ export default function EditProfile() {
 				profileImgUrl: null,
 			};
 		}
-		
+
 		console.log(body);
 		const data = await customApiClient('patch', '/users/profiles', body);
 		console.log(data);
-		if(!data) return;
-		if(!data.isSuccess) return;
+		if (!data) return;
+		if (!data.isSuccess) return;
 
 		console.log(data);
 
 		navigate(-1);
-	}
+	};
 
 	const getCheckNickname = async () => {
-		const data = await customApiClient('get', `/users/profiles/nickname-check?nickname=${nickname}`);
+		const data = await customApiClient(
+			'get',
+			`/users/profiles/nickname-check?nickname=${nickname}`
+		);
 		console.log(data);
-		if(!data) return;
+		if (!data) return;
 
 		if (data.isSuccess) {
 			if (selectedFile) {
@@ -176,7 +187,6 @@ export default function EditProfile() {
 			} else {
 				patchUserProfile();
 			}
-			
 		} else if (data.code === 3002) {
 			setNicknameValid(false);
 
@@ -192,8 +202,7 @@ export default function EditProfile() {
 				setToastMessageWrapStatus(false);
 			}, 2300);
 		}
-	}
-
+	};
 
 	return (
 		<MainContainer>
@@ -326,9 +335,9 @@ const ErrorMessage = styled.div`
 `;
 
 const ProfileImgWrap = styled.div`
-	margin-top: 2.5rem; 
+	margin-top: 2.5rem;
 	height: 6.25rem;
-	display: flex; 
+	display: flex;
 	justify-content: center;
 
 	.userProfileImg {
@@ -363,6 +372,3 @@ const IconWrap = styled.div.attrs(props => ({
 		}`
 			: ''};
 `;
-
-
-

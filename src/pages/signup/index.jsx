@@ -17,7 +17,7 @@ import { SubText } from '../../components/Texts/SubText';
 import { Input } from '../../components/Input';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
-import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+import { ReactComponent as Congratulation } from '../../assets/Signup/Congratulation.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
 import {
@@ -248,10 +248,6 @@ export default function Signup() {
 				}
 			}
 		}, 1000);
-	};
-	const handleAuthSend = () => {
-		handleAuthCodeSendAPI();
-		beginTimer();
 	};
 
 	// 인증번호 발송 API
@@ -820,7 +816,9 @@ export default function Signup() {
 			{currentPage === 5 && (
 				<ContentWrap>
 					<CompleteTopWrap>
-						<Present></Present>
+						<Congratulation
+							style={{ width: '3.75rem', height: '3.75rem' }}
+						></Congratulation>
 						<NameText color="#9e30f4">
 							{nickname}
 							<NameText> 님</NameText>
@@ -926,7 +924,7 @@ const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
 	border-radius: 0.5rem;
-	padding: 1rem;
+	padding: 0.875rem;
 	:focus {
 		border: 1px solid #9e30f4;
 	}
@@ -951,7 +949,7 @@ const InputPhone = styled.div`
 	width: 100%;
 	color: inherit;
 	border-radius: 0.5rem;
-	padding: 1rem;
+	padding: 0.875rem;
 	margin-right: 0.6875rem;
 	&:active,
 	&:focus-within {
@@ -991,6 +989,7 @@ const AuthButton = styled.button`
 	border: none;
 	height: 3rem;
 	flex-shrink: 0;
+	color: #262626;
 	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
 	font-size: 0.875rem;

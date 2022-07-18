@@ -12,6 +12,7 @@ export const Input = styled.input`
 	border: none;
 	margin: ${props => props.margin || '0'};
 	background-color: white;
+	caret-color: #9e30f4;
 	&:disabled {
 		::placeholder {
 			color: #dadada;

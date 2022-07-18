@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
@@ -24,13 +25,26 @@ export default function FindPassword() {
 			setEmailValid(false);
 		}
 	};
+	async function handleFindPasswordAPI(email) {
+		const url = `/auth/forget-pwd`;
+		const body = { email: email };
+		const data = await customApiClient('post', url, body);
+		if (!data) return;
+		console.log(data);
+		if (data.isSuccess) {
+			navigate('/find/password/result', { state: { email: email } });
+		}
+		if (data.code === 5002) {
+			navigate('/find/password/result', { state: { email: '' } });
+		}
+	}
 	const emailInputReset = () => {
 		setEmail('');
 	};
 
 	const navigate = useNavigate();
 	const handleNextClick = () => {
-		navigate('/find/password/result');
+		handleFindPasswordAPI(email);
 	};
 	const handleBackClick = () => {
 		navigate('/login');
@@ -51,7 +65,7 @@ export default function FindPassword() {
 							<Input
 								value={email}
 								onChange={handleEmail}
-								type="text"
+								type="email"
 								placeholder="sluv@email.com"
 							/>
 							{emailValid ? (
