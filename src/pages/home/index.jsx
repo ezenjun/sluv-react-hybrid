@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as Logo } from '../../assets/Logo/LogoHome.svg';
 import { ReactComponent as Notice } from '../../assets/Icons/alarm.svg';
@@ -23,7 +23,7 @@ import {
 
 export default function Home() {
 	const navigate = useNavigate();
-
+	const location = useLocation();
 	const [tabIndex, setTabIndex] = useState(1);
 	const [noticeState, setNoticeState] = useState(false);
 
@@ -40,24 +40,29 @@ export default function Home() {
 		{
 			idx: 1,
 			name: '맞춤',
-			to: '',
+			to: '/',
+			path: '/home',
 		},
 		{
 			idx: 2,
 			name: '팔로잉',
 			to: 'follow',
+			path: '/home/follow',
 		},
 		{
 			idx: 3,
 			name: '질문',
 			to: 'question',
+			path: '/home/question',
 		},
 		{
 			idx: 4,
 			name: '이벤트',
 			to: 'event',
+			path: '/home/event',
 		},
 	];
+
 	const [selectedTab, setSelectedTab] = useState(1);
 	const onClickTab = (idx, name) => {
 		setSelectedTab(idx);
@@ -70,9 +75,6 @@ export default function Home() {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
 		postFcmToken();
-
-
-
 		// 관심셀럽 조회 API 호출
 		if (favoriteCelebList.length < 1) {
 			getFavoriteCeleb();
@@ -149,11 +151,9 @@ export default function Home() {
 					platform: platform,
 					type: 'UPDATE',
 				});
-				
 			}, 3000);
 		}
-		
-	}
+	};
 
 	const getFavoriteCeleb = async () => {
 		const data = await customApiClient('get', '/interest');
@@ -182,7 +182,7 @@ export default function Home() {
 		setTimeout(() => {
 			setToastMessageWrapStatus(false);
 		}, 2300);
-	}
+	};
 
 	return (
 		<>
@@ -200,9 +200,9 @@ export default function Home() {
 								to={item.to}
 								key={item.idx}
 								onClick={() => onClickTab(item.idx, item.name)}
-								selected={selectedTab === item.idx}
+								selected={location.pathname === item.path}
 							>
-								<Tab selected={selectedTab === item.idx}>{item.name}</Tab>
+								<Tab selected={location.pathname === item.path}>{item.name}</Tab>
 							</StyledLink>
 						);
 					})}
@@ -227,10 +227,7 @@ export default function Home() {
 							/>
 							<span>정보 공유하기</span>
 						</div>
-						<div
-							onClick={onClickUploadQuestion}
-							className="uploadPopupBtn bottomBtn"
-						>
+						<div onClick={onClickUploadQuestion} className="uploadPopupBtn bottomBtn">
 							<IconUploadQuestion
 								style={{
 									width: '1.125rem',
