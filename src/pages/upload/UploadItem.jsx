@@ -51,8 +51,8 @@ export default function UploadItem() {
 
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const selectedCeleb = useRecoilValue(UploadCelebState);
-	const selectedMember = useRecoilValue(UploadMemberState);
+	const [selectedCeleb, setSelectedCeleb] = useRecoilState(UploadCelebState);
+	const [selectedMember, setSelectedMember] = useRecoilState(UploadMemberState);
 	const [bottomMenuStatusState, setBottomMenuStatusState] = useRecoilState(BottomMenuStatusState);
 	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
 
@@ -130,6 +130,8 @@ export default function UploadItem() {
 
 	useEffect(() => {
 		if(state) {
+			setSelectedCeleb();
+			setSelectedMember();
 			setCurrentPage(2);
 		} else {
 			setCurrentPage(0);

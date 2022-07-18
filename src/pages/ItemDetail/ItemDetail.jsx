@@ -440,6 +440,11 @@ export default function ItemDetail() {
 	}
 
 	useEffect(() => {
+		
+
+	},[]);
+
+	useEffect(() => {
 		getItemInfo();
 		setBottomNavStatus(false);
 	}, [itemIdx]);
