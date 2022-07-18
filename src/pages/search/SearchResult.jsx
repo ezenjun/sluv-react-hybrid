@@ -149,7 +149,7 @@ export default function SearchResult() {
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=1&pageSize=8`
+			`/search?search_word=${queryKeyword}&page=1&pageSize=20`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
