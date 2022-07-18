@@ -8,6 +8,7 @@ import { SubText } from '../../../components/Texts/SubText';
 import { VerticalLine } from '../../../components/Lines/VerticalLine';
 
 import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.svg';
+import { ReactComponent as Icon } from '../../../assets/Custom/Custom_target.svg';
 
 export const HotItemComponent = () => {
 	const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const HotItemComponent = () => {
 		navigate('/hot');
 	};
 	const [selectedFilter, setSelectedFilter] = useState(1);
-	const tabList = [
+	const filterList = [
 		{
 			idx: 1,
 			name: '일간',
@@ -69,31 +70,40 @@ export const HotItemComponent = () => {
 	return (
 		<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
 			<TextWrap padding="0 1.25rem 0 0">
-				<MainText fontsize="1.5rem">
-					#스러버's
-					<br />
-					HOT 아이템
-				</MainText>
+				<div style={{ display: 'flex', flexDirection: 'column' }}>
+					<MainText fontsize="1.5rem">#스러버's</MainText>
+					<div style={{ display: 'flex', alignItems: 'center' }}>
+						<MainText fontsize="1.5rem">HOT 아이템</MainText>
+						<Icon
+							style={{ width: '1.5rem', height: '1.5rem', marginLeft: '0.3125rem' }}
+						/>
+					</div>
+				</div>
+
 				<RightArrow onClick={onHotClick}></RightArrow>
 			</TextWrap>
 			{dailyList.length > 0 && weeklyList.length > 0 ? (
 				<>
 					<FilterWrap>
-						{tabList.map(item => {
-							return (
-								<SubText
-									key={item.idx}
-									fontsize="0.875rem"
-									fontweight={selectedFilter === item.idx ? 'bold' : 'normal'}
-									margin="0 1rem 0 0 "
-									onClick={() => onFilterClick(item.idx)}
-									selected={selectedFilter === item.idx}
-									color={selectedFilter === item.idx ? '#262626' : '#8D8D8D'}
-								>
-									{item.name}
-								</SubText>
-							);
-						})}
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[0].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[0].idx)}
+							selected={selectedFilter === filterList[0].idx}
+							color={selectedFilter === filterList[0].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[0].name}
+						</SubText>
+						<VerticalLine />
+						<SubText
+							fontsize="0.875rem"
+							fontweight={selectedFilter === filterList[1].idx ? 'bold' : 'normal'}
+							onClick={() => onFilterClick(filterList[1].idx)}
+							selected={selectedFilter === filterList[1].idx}
+							color={selectedFilter === filterList[1].idx ? '#262626' : '#8D8D8D'}
+						>
+							{filterList[1].name}
+						</SubText>
 					</FilterWrap>
 					<HotItemWrap>
 						{selectedFilter === 1 ? ( // 인기순
