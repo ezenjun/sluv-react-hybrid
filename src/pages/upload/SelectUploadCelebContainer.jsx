@@ -208,7 +208,10 @@ export default function SelectUploadCelebContainer() {
 					<ListContainer>
 						{currentCelebList.length > 0 &&
 							currentCelebList.map(celeb => (
-								<Celeb key={celeb.celebIdx} onClick={(e)=> onClickUploadCeleb(celeb, e)}>
+								<Celeb
+									key={celeb.celebIdx}
+									onClick={e => onClickUploadCeleb(celeb, e)}
+								>
 									<Image size="6.25rem" key={celeb.id}>
 										<img
 											className="celebImg"
@@ -281,6 +284,7 @@ export default function SelectUploadCelebContainer() {
 					<RequestWrap>
 						<RequestButton>
 							<PurpleButton
+								style={{ fontSize: '0.875rem' }}
 								boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 								marginBottom="0"
 								onClick={() => navigate('../../request/celebrity')}
