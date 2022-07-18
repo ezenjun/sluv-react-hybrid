@@ -364,7 +364,10 @@ export const CelebsLuvItem = ({ celeb }) => {
 						<br />
 						LUV 아이템
 					</MainText>
-					<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
+					<RightArrow
+						onClick={() => onDetailCelebClick(celeb)}
+						style={{ marginRight: '1.25rem' }}
+					></RightArrow>
 				</TextWrap>
 				<ChipWrap>
 					<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
@@ -598,7 +601,7 @@ const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: ${props => props.padding || '2.5rem 1.25rem 1.25rem 1.25rem'};
+	padding: ${props => props.padding || '2.5rem 0 1.25rem 1.25rem'};
 `;
 const TextWrap = styled.div`
 	display: flex;

@@ -305,6 +305,7 @@ export default function ItemDetail() {
 		}
 		setIsFollow(!isFollow);
 	};
+	const [itemLink, setItemLink] = useState('');
 
 	const getItemInfo = async () => {
 		let uri = ``;
@@ -337,6 +338,10 @@ export default function ItemDetail() {
 		setDibCnt(data.result.itemInfo.dibCnt);
 		// 아이템 좋아요 횟수
 		setLikeCnt(data.result.itemInfo.itemLikeCnt);
+		// 링크 존재
+		if (data.result.itemInfo.sellerSite) {
+			setItemLink('https://' + data.result.itemInfo.sellerSite);
+		}
 
 		// 같은 셀럽의 아이템 저장 / 바인더 저장 여부 isDib
 		setsameCelebItemList(data.result.sameCelebItemList);
@@ -563,32 +568,34 @@ export default function ItemDetail() {
 						</div>
 					</ItemInfoContainer>
 					{itemInfo.sellerSite && (
-						<ItemLInkContainer>
-							<ItemLInkWrap>
-								<ItemLinkIcon
-									style={{ width: '2.875rem', height: '2.875rem' }}
-								></ItemLinkIcon>
-								<ItemTextWrap>
-									<SubText fontsize="0.875rem">
-										어디서 구매할 수 있는지 알려드릴게요!
-									</SubText>
-									<div
-										style={{
-											display: 'flex',
-											alignItems: 'center',
-											marginTop: '6px',
-										}}
-									>
-										<SubText color="#9E30F4">
-											해당 아이템 판매 사이트로 이동
+						<a target="_blank" href={itemLink}>
+							<ItemLInkContainer>
+								<ItemLInkWrap>
+									<ItemLinkIcon
+										style={{ width: '2.875rem', height: '2.875rem' }}
+									></ItemLinkIcon>
+									<ItemTextWrap>
+										<SubText fontsize="0.875rem">
+											어디서 구매할 수 있는지 알려드릴게요!
 										</SubText>
-										<PurpleRightArrow
-											style={{ width: '0.875rem', height: '0.875rem' }}
-										></PurpleRightArrow>
-									</div>
-								</ItemTextWrap>
-							</ItemLInkWrap>
-						</ItemLInkContainer>
+										<div
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												marginTop: '6px',
+											}}
+										>
+											<SubText color="#9E30F4">
+												해당 아이템 판매 사이트로 이동
+											</SubText>
+											<PurpleRightArrow
+												style={{ width: '0.875rem', height: '0.875rem' }}
+											></PurpleRightArrow>
+										</div>
+									</ItemTextWrap>
+								</ItemLInkWrap>
+							</ItemLInkContainer>
+						</a>
 					)}
 
 					<UserInfo>
