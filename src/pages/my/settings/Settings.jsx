@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
-import { MainContainer } from '../../../components/containers/MainContainer'
-import { TopNav } from '../../../components/containers/TopNav'
+import { MainContainer } from '../../../components/containers/MainContainer';
+import { TopNav } from '../../../components/containers/TopNav';
 import { Button, ButtonWrap, PopUpModal } from '../../../components/PopUp/PopUpModal';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
@@ -13,25 +13,25 @@ import { BottomNavState } from '../../../recoil/BottomNav';
 import { PopUpModalState } from '../../../recoil/PopUpModal';
 
 export default function Settings() {
-    const navigate = useNavigate();
-		const { state, pathname } = useLocation();
+	const navigate = useNavigate();
+	const { state, pathname } = useLocation();
 
-		const setBottomNavStatus = useSetRecoilState(BottomNavState);
-		const setPopUpModalState = useSetRecoilState(PopUpModalState);
+	const setBottomNavStatus = useSetRecoilState(BottomNavState);
+	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
-		useEffect(() => {
-			setBottomNavStatus(false);
-		}, []);
+	useEffect(() => {
+		setBottomNavStatus(false);
+	}, []);
 
-		const onClickLogout = () => {
-			localStorage.removeItem('x-access-token');
-			localStorage.removeItem('myUserIdx');
+	const onClickLogout = () => {
+		localStorage.removeItem('x-access-token');
+		localStorage.removeItem('myUserIdx');
 
-			setPopUpModalState(false);
-			navigate('/');
-		}
+		setPopUpModalState(false);
+		navigate('/');
+	};
 
-    return (
+	return (
 		<MainContainer>
 			<TopNav>
 				<BackButton onClick={() => navigate(-1)} />
@@ -56,12 +56,18 @@ export default function Settings() {
 						>
 							비밀번호 변경
 						</div>
-						<div onClick={() => navigate('/select/celebrity', {
-							state: pathname
-						})}>셀럽 선택 편집</div>
+						<div
+							onClick={() =>
+								navigate('/select/celebrity', {
+									state: pathname,
+								})
+							}
+						>
+							셀럽 선택 편집
+						</div>
 					</div>
 				</ItemWrap>
-				<ItemWrap>
+				{/* <ItemWrap>
 					<TitleWrap>알림 설정</TitleWrap>
 					<div className="buttonWrap">
 						<div
@@ -78,7 +84,7 @@ export default function Settings() {
 							</SwitchWrap>
 						</div>
 					</div>
-				</ItemWrap>
+				</ItemWrap> */}
 				<ItemWrap>
 					<TitleWrap>서비스 정보</TitleWrap>
 					<div className="buttonWrap">
@@ -91,7 +97,6 @@ export default function Settings() {
 						<div className="marginBottom" onClick={() => navigate('/settings/privacy')}>
 							개인정보 처리방침
 						</div>
-						<div>수정필요</div>
 					</div>
 				</ItemWrap>
 				<ItemWrap>
@@ -207,5 +212,3 @@ const SwitchWrap = styled.label`
 		border-radius: 50%;
 	}
 `;
-
-
