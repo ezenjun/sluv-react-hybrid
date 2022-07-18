@@ -1,25 +1,24 @@
 <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#6c7jraw14a)">
-        <rect width="80" height="80" rx="40" fill="#fff"/>
-        <path d="M74-4H6C.477-4-4 .477-4 6v68C-4 79.523.477 84 6 84h68c5.523 0 10-4.477 10-10V6C84 .477 79.523-4 74-4z" fill="url(#tq4w7egpwb)"/>
-        <mask id="0i14nknygc" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="12" y="22" width="56" height="74">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M46.26 41.92a10.983 10.983 0 0 0 4.593-8.957c0-6.055-4.86-10.963-10.854-10.963-5.994 0-10.853 4.908-10.853 10.963 0 3.7 1.814 6.97 4.592 8.956-11.967 2.855-20.873 13.714-20.873 26.674 0 15.137 12.148 27.408 27.134 27.408 14.985 0 27.133-12.271 27.133-27.408 0-12.96-8.905-23.819-20.872-26.674z" fill="#D9D9D9"/>
-        </mask>
-        <g mask="url(#0i14nknygc)">
-            <ellipse cx="40" cy="46.5" rx="35" ry="35.5" fill="url(#ouziwhyc1d)"/>
-        </g>
-    </g>
-    <defs>
-        <linearGradient id="tq4w7egpwb" x1="40.5" y1="82" x2="42" y2="-1" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#EBEBEB"/>
-            <stop offset="1" stop-color="#fff" stop-opacity=".08"/>
-        </linearGradient>
-        <linearGradient id="ouziwhyc1d" x1="40" y1="18.988" x2="40.022" y2="117.944" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#FFEEF2"/>
-            <stop offset="1" stop-color="#FFCCD7"/>
-        </linearGradient>
-        <clipPath id="6c7jraw14a">
-            <rect width="80" height="80" rx="40" fill="#fff"/>
-        </clipPath>
-    </defs>
+<g clip-path="url(#clip0_2645_12176)">
+<path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" fill="url(#paint0_linear_2645_12176)"/>
+<mask id="mask0_2645_12176" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="12" y="22" width="56" height="74">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M46.2601 41.9191C49.0386 39.9337 50.8526 36.6623 50.8526 32.963C50.8526 26.9083 45.9934 22 39.9992 22C34.0051 22 29.1459 26.9083 29.1459 32.963C29.1459 36.6622 30.9598 39.9335 33.7381 41.9189C21.7709 44.7738 12.8652 55.633 12.8652 68.5932C12.8652 83.7299 25.0133 96.0006 39.9986 96.0006C54.984 96.0006 67.132 83.7299 67.132 68.5932C67.132 55.6333 58.2268 44.7744 46.2601 41.9191Z" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_2645_12176)">
+<ellipse cx="40" cy="46.5" rx="35" ry="35.5" fill="url(#paint1_linear_2645_12176)"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_2645_12176" x1="40" y1="-12" x2="42.6389" y2="195.967" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFEBEF"/>
+<stop offset="1" stop-color="#FF5C7E"/>
+</linearGradient>
+<linearGradient id="paint1_linear_2645_12176" x1="39.9997" y1="18.9875" x2="40.0216" y2="117.944" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFEEF2"/>
+<stop offset="1" stop-color="#FFCCD7"/>
+</linearGradient>
+<clipPath id="clip0_2645_12176">
+<path d="M0 40C0 17.9086 17.9086 0 40 0C62.0914 0 80 17.9086 80 40C80 62.0914 62.0914 80 40 80C17.9086 80 0 62.0914 0 40Z" fill="white"/>
+</clipPath>
+</defs>
 </svg>

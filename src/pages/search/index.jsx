@@ -231,7 +231,12 @@ export default function Search() {
 										>
 											<Slider {...verticalsettings}>
 												{hotSearchList.map((rank, index) => (
-													<div key={rank.searchWord}>
+													<div
+														key={rank.searchWord}
+														onClick={() =>
+															onClickKeyword(rank.searchWord)
+														}
+													>
 														<SubText
 															fontsize="0.875rem"
 															fontweight="bold"
