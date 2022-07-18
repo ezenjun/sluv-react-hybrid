@@ -144,7 +144,7 @@ export default function UploadItem() {
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
 			setBrand(state.brandKr);
-			setBrandObj({ brandIdx : 0});
+			setBrandObj({ brandIdx : state.brandIdx});
 			setIsBrand(true);
 			setProductName(state.itemName);
 			setIsProductName(true);
@@ -154,7 +154,7 @@ export default function UploadItem() {
 			setIsPlace(true);
 			setPrice(state.price);
 			setIsPrice(true);
-			setSelectedPriceMainFilterIdx(0);
+			setSelectedPriceMainFilterIdx(state.priceNumber);
 			setExtraInfo(state.content);
 			setIsExtraInfo(state.content ? true : false);
 			setLink(state.sellerSite);
@@ -363,20 +363,40 @@ export default function UploadItem() {
 	};
 
 	const onPostUpload = async () => {
-		const body = {
-			celebIdx: selectedCeleb.celebIdx,
-			memberIdx: selectedMember.memberIdx,
-			parentCategory: filterList[selectedItemMainFilter - 1].name,
-			subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
-			brandIdx: brandObj.brandIdx,
-			name: productName,
-			whenDiscovery: date,
-			whereDiscovery: place,
-			price: selectedPriceMainFilterIdx,
-			content: extraInfo,
-			sellerSite: link,
-			itemImgUrlList: imgUrlList,
-		};
+		let body = {};
+		if(state) {
+			body = {
+				celebIdx: selectedCeleb.celebIdx,
+				memberIdx: selectedMember.memberIdx,
+				parentCategory: selectedItemMainFilter,
+				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
+				brandIdx: brandObj.brandIdx,
+				name: productName,
+				whenDiscovery: date,
+				whereDiscovery: place,
+				price: selectedPriceMainFilterIdx,
+				content: extraInfo,
+				sellerSite: link,
+				itemImgUrlList: imgUrlList,
+			};
+
+		} else {
+			body = {
+				celebIdx: selectedCeleb.celebIdx,
+				memberIdx: selectedMember.memberIdx,
+				parentCategory: filterList[selectedItemMainFilter - 1].name,
+				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
+				brandIdx: brandObj.brandIdx,
+				name: productName,
+				whenDiscovery: date,
+				whereDiscovery: place,
+				price: selectedPriceMainFilterIdx,
+				content: extraInfo,
+				sellerSite: link,
+				itemImgUrlList: imgUrlList,
+			};
+		}
+		
 
 		console.log('넘아가는 데이터', body);
 		let data = {};
