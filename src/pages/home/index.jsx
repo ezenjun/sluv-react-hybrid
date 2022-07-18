@@ -191,7 +191,7 @@ export default function Home() {
 					<LogoWrap to="">
 						<Logo style={{ width: '3.75rem', height: '1.4375rem' }} />
 					</LogoWrap>
-					<NavRight to="../notice">{noticeState ? <Notice /> : <NoNotice />}</NavRight>
+					{/* <NavRight to="../notice">{noticeState ? <Notice /> : <NoNotice />}</NavRight> */}
 				</TopNav>
 				<TabContainer>
 					{tabList.map(item => {
