@@ -12,7 +12,7 @@ import { SubText } from '../../components/Texts/SubText';
 import { BottomNavState } from '../../recoil/BottomNav';
 import { customApiClient } from '../../utils/apiClient';
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
-
+import { ReactComponent as BasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 export default function Followings() {
 	const navigate = useNavigate();
 	const { idx } = useParams();
@@ -102,10 +102,16 @@ export default function Followings() {
 							}}
 						>
 							<FollowingLeft>
-								<FollowingUserImage
-									size="3.25rem"
-									src={following.profileImgUrl}
-								></FollowingUserImage>
+								{following.profileImgUrl ? (
+									<FollowingUserImage
+										size="3.25rem"
+										src={following.profileImgUrl}
+									></FollowingUserImage>
+								) : (
+									<BasicProfileImg
+										style={{ width: '3.25rem', height: '3.25rem' }}
+									></BasicProfileImg>
+								)}
 								<FollowingUserTextWrap>
 									<SubText
 										font-weight="600"
@@ -145,7 +151,7 @@ export default function Followings() {
 						</FollowingUserInfo>
 					))
 				) : (
-					<NoFollowWrap >
+					<NoFollowWrap>
 						<NoFollowerIcon
 							style={{ width: '3.75rem', height: '3.75rem' }}
 						></NoFollowerIcon>
@@ -219,4 +225,4 @@ export const NoFollowWrap = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin-top: 11.25rem;
-`
+`;

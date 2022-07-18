@@ -19,6 +19,7 @@ import {
 	FollowingUserTextWrap,
 	NoFollowWrap,
 } from './Followings';
+import { ReactComponent as BasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 import { ReactComponent as NoFollowerIcon } from '../../assets/Icons/noFollower.svg';
 
 export default function Followers() {
@@ -110,10 +111,17 @@ export default function Followers() {
 							}}
 						>
 							<FollowingLeft>
-								<FollowingUserImage
-									size="3.25rem"
-									src={follower.profileImgUrl}
-								></FollowingUserImage>
+								{follower.profileImgUrl ? (
+									<FollowingUserImage
+										size="3.25rem"
+										src={follower.profileImgUrl}
+									></FollowingUserImage>
+								) : (
+									<BasicProfileImg
+										style={{ width: '3.25rem', height: '3.25rem' }}
+									></BasicProfileImg>
+								)}
+
 								<FollowingUserTextWrap>
 									<SubText
 										font-weight="600"

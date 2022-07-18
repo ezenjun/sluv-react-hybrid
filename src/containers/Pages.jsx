@@ -45,6 +45,7 @@ import Followers from '../pages/my/Followers';
 import Followings from '../pages/my/Followings';
 import EditProfile from '../pages/my/settings/EditProfile';
 import EditPassword from '../pages/my/settings/EditPassword';
+import ResetPassword from '../pages/my/settings/ResetPassword';
 import EventDetail from '../pages/EventDetail';
 
 export default function Pages() {
@@ -95,6 +96,7 @@ export default function Pages() {
 			<Route path="/settings" element={<Settings />} />
 			<Route path="/settings/edit/profile" element={<EditProfile />} />
 			<Route path="/settings/edit/password" element={<EditPassword />} />
+			<Route path="/settings/reset/password" element={<ResetPassword />} />
 			<Route path="/settings/privacy" element={<Privacy />} />
 			<Route path="/settings/terms-of-use" element={<TermsOfUse />} />
 			<Route path="/faq" element={<Faq />} />

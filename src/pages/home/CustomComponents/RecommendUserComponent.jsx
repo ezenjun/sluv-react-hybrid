@@ -6,7 +6,7 @@ import { customApiClient } from '../../../utils/apiClient';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 import { ReactComponent as UserBasicProfileImg } from '../../../assets/Icons/user_basic_profile_img.svg';
-
+import { ReactComponent as Icon } from '../../../assets/Custom/Custom_fire.svg';
 import { FavoriteCelebListState } from '../../../recoil/Celebrity';
 
 export function RecommendUserComponent() {
@@ -135,6 +135,7 @@ export function RecommendUserComponent() {
 		<RecommendUserWrap>
 			<TextWrap>
 				<MainText fontsize="1.5rem">인기 스러버 추천</MainText>
+				<Icon style={{ width: '1.5rem', height: '1.5rem', marginLeft: '0.3125rem' }}></Icon>
 			</TextWrap>
 			<ChipWrap>
 				<Chip selected={selected === 0} onClick={() => onChipClick(0)}>
@@ -272,8 +273,7 @@ const FollowButton = styled.div`
 `;
 const TextWrap = styled.div`
 	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
+	align-items: center;
 	margin-bottom: ${props => props.marginbottom || '20px'};
 	padding: ${props => props.padding};
 `;
