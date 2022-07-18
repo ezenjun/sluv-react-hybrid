@@ -130,8 +130,37 @@ export default function UploadItem() {
 
 	useEffect(() => {
 		if(state) {
-			setSelectedCeleb();
-			setSelectedMember();
+			console.log(state);
+			setSelectedCeleb({
+				celebIdx: state.celebIdx,
+				name: state.celebName,
+			});
+			setSelectedMember({
+				memberIdx: state.memberIdx,
+				name: state.memberName,
+			});
+			setSelectedItemMainFilter(state.parentCategory);
+			setSelectedItemSubFilter(state.subCategory);
+			setCategory(state.parentCategory + ' > ' + state.subCategory);
+			setIsCategory(true);
+			setProductName(state.itemName);
+			setIsProductName(true);
+			setDate(state.whenDiscovery);
+			setIsDate(true);
+			setPlace(state.whereDiscovery);
+			setIsPlace(true);
+			// setPrice(state.price);
+			// setIsPrice(true);
+			// setSelectedPriceMainFilterIdx();
+			setExtraInfo(state.content);
+			setIsExtraInfo(state.content ? true : false);
+			setLink(state.sellerSite);
+			setIsLink(state.sellerSite ? true : false);
+
+
+
+
+
 			setCurrentPage(2);
 		} else {
 			setCurrentPage(0);
@@ -351,15 +380,33 @@ export default function UploadItem() {
 		};
 
 		console.log('넘아가는 데이터', body);
-		const data = await customApiClient('post', '/items', body);
+		let data = {};
+		if(state) {
+			data = await customApiClient('patch', `/items/${state.itemIdx}`, body);
+		} else {
+			data = await customApiClient('post', '/items', body);
+		}
+		
 		console.log(data);
 		if (!data) return;
 
-		if (data.code === 6000) {
-		}
-
 		console.log('아이템 업로드 완료');
-		setConfirmPopupStatus(true);
+		if(state) {
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessage('게시글이 수정되었어요');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+				navigate(-1);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+		} else {
+			setConfirmPopupStatus(true);
+		}
 	};
 
 	const onClickUploadBtnStart = () => {

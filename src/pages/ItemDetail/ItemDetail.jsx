@@ -435,14 +435,10 @@ export default function ItemDetail() {
 
 	const onClickItemPostEdit = () => {
 		navigate('/upload/item', {
-			state: itemIdx
+			state: itemInfo
 		});
 	}
 
-	useEffect(() => {
-		
-
-	},[]);
 
 	useEffect(() => {
 		getItemInfo();
