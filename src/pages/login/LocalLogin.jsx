@@ -159,7 +159,7 @@ export default function LocalLogin() {
 							<Input
 								value={email}
 								onChange={handleEmail}
-								type="text"
+								type="email"
 								placeholder="이메일을 입력해주세요"
 							/>
 							{email && email.length !== 0 && emailValid ? (
