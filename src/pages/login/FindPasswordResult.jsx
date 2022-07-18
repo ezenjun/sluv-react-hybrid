@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -7,11 +7,13 @@ import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+import { ReactComponent as SendEmail } from '../../assets/Signup/SendEmail.svg';
+import { ReactComponent as NoEmail } from '../../assets/Signup/FindEmail.svg';
 
 export default function FindPasswordResult() {
 	const [idExist, setIdExist] = useState(true);
 	const navigate = useNavigate();
+	const location = useLocation();
 	const handleNextClick = () => {
 		if (idExist) navigate('/login');
 		else navigate('/');
@@ -19,6 +21,40 @@ export default function FindPasswordResult() {
 	const handleBackClick = () => {
 		navigate('/find/password');
 	};
+	let maskingFunc = {
+		checkNull: function (str) {
+			if (typeof str == 'undefined' || str == null || str === '') {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		email: function (str) {
+			let originStr = str;
+			let emailStr = originStr.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+			let strLength;
+
+			if (this.checkNull(originStr) == true || this.checkNull(emailStr) == true) {
+				return originStr;
+			} else {
+				strLength = emailStr.toString().split('@')[0].length - 4;
+
+				// ex1) abcdefg12345@naver.com => ab**********@naver.com
+				return originStr
+					.toString()
+					.replace(new RegExp('.(?=.{0,' + strLength + '}@)', 'g'), '*');
+			}
+		},
+	};
+	const [email, setEmail] = useState('');
+	useEffect(() => {
+		if (location.state.email !== '') {
+			setIdExist(true);
+			setEmail(maskingFunc.email(location.state.email));
+		} else {
+			setIdExist(false);
+		}
+	}, []);
 	return (
 		<MainContainer>
 			<TopNav>
@@ -27,15 +63,19 @@ export default function FindPasswordResult() {
 			{idExist ? (
 				<ContentWrap>
 					<CompleteTopWrap>
-						<Present></Present>
+						<SendEmail></SendEmail>
 						<CompletePageLabel>
-							<MainText>아래 이메일로 비밀번호</MainText>
-							<MainText>변경링크를 보내드렸어요.</MainText>
-							<SubText fontsize="14px" color="#8d8d8d" margin="16px 0">
+							<MainText fontsize="1.25rem">
+								아래 이메일로 비밀번호
+								<br />
+								변경링크를 보내드렸어요
+							</MainText>
+
+							<SubText fontsize="0.875rem" color="#8d8d8d" margin="1rem 0 0 0">
 								개인정보 보호를 위해 뒷자리는 ***로 표시할게요.
 							</SubText>
 						</CompletePageLabel>
-						<EmailWrap>sss123123****@naver.com</EmailWrap>
+						<EmailWrap>{email}</EmailWrap>
 					</CompleteTopWrap>
 					<BottomWrap>
 						<PurpleButton onClick={handleNextClick}>로그인으로 돌아가기 </PurpleButton>
@@ -44,11 +84,15 @@ export default function FindPasswordResult() {
 			) : (
 				<ContentWrap>
 					<CompleteTopWrap>
-						<Present></Present>
+						<NoEmail></NoEmail>
 						<CompletePageLabel>
-							<MainText>이메일 가입 내역이 </MainText>
-							<MainText>존재하지 않아요.</MainText>
-							<SubText fontsize="14px" color="#8d8d8d" margin="16px 0">
+							<MainText fontsize="1.25rem">
+								이메일 가입 내역이
+								<br />
+								존재하지 않아요
+							</MainText>
+
+							<SubText fontsize="0.875rem" color="#8d8d8d" margin="16px 0">
 								스럽 회원가입 진행 후 이용해 주세요
 							</SubText>
 						</CompletePageLabel>
@@ -82,6 +126,7 @@ const CompletePageLabel = styled.div`
 	align-items: center;
 	margin-top: 2rem;
 	margin-bottom: 1.5rem;
+	text-align: center;
 `;
 const BottomWrap = styled.div``;
 

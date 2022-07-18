@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
@@ -7,10 +7,13 @@ import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { ReactComponent as Present } from '../../assets/Icons/Present.svg';
+import { ReactComponent as SendEmail } from '../../assets/Signup/SendEmail.svg';
+import { ReactComponent as NoEmail } from '../../assets/Signup/FindEmail.svg';
+import { customApiClient } from '../../utils/apiClient';
 
 export default function FindEmailResult() {
 	const [idExist, setIdExist] = useState(false);
+	const location = useLocation();
 	const navigate = useNavigate();
 	const handleNextClick = () => {
 		if (idExist) navigate('/login');
@@ -19,6 +22,49 @@ export default function FindEmailResult() {
 	const handleBackClick = () => {
 		navigate('/find/email');
 	};
+	const [emailInfo, setEmailInfo] = useState();
+	async function handleFindEmailAPI(phoneNumber) {
+		const url = `/auth/forget-email?phone=${phoneNumber}`;
+		const data = await customApiClient('get', url);
+		if (!data) return;
+		if (data.isSuccess) {
+			console.log(maskingFunc.email(data.result.email));
+			setEmailInfo(maskingFunc.email(data.result.email));
+			setIdExist(false);
+		} else {
+			setIdExist(false);
+		}
+	}
+	let maskingFunc = {
+		checkNull: function (str) {
+			if (typeof str == 'undefined' || str == null || str === '') {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		email: function (str) {
+			let originStr = str;
+			let emailStr = originStr.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+			let strLength;
+
+			if (this.checkNull(originStr) == true || this.checkNull(emailStr) == true) {
+				return originStr;
+			} else {
+				strLength = emailStr.toString().split('@')[0].length - 4;
+
+				// ex1) abcdefg12345@naver.com => ab**********@naver.com
+				return originStr
+					.toString()
+					.replace(new RegExp('.(?=.{0,' + strLength + '}@)', 'g'), '*');
+			}
+		},
+	};
+
+	useEffect(() => {
+		const phone = location.state.phone;
+		handleFindEmailAPI(phone);
+	}, []);
 	return (
 		<MainContainer>
 			<TopNav>
@@ -28,7 +74,7 @@ export default function FindEmailResult() {
 			{idExist ? (
 				<ContentWrap>
 					<CompleteTopWrap>
-						<Present></Present>
+						<SendEmail style={{ width: '3.75rem', height: '3.75rem' }}></SendEmail>
 						<CompletePageLabel>
 							<MainText>입력하신 번호로</MainText>
 							<MainText>찾은 이메일이에요.</MainText>
@@ -36,7 +82,7 @@ export default function FindEmailResult() {
 								개인정보 보호를 위해 뒷자리는 ***로 표시할게요.
 							</SubText>
 						</CompletePageLabel>
-						<EmailWrap>sss123123****@naver.com</EmailWrap>
+						<EmailWrap>{emailInfo}</EmailWrap>
 					</CompleteTopWrap>
 					<BottomWrap>
 						<PurpleButton onClick={handleNextClick}>로그인으로 돌아가기 </PurpleButton>
@@ -45,7 +91,7 @@ export default function FindEmailResult() {
 			) : (
 				<ContentWrap>
 					<CompleteTopWrap>
-						<Present></Present>
+						<NoEmail style={{ width: '3.75rem', height: '3.75rem' }}></NoEmail>
 						<CompletePageLabel>
 							<MainText>이메일 가입 내역이 </MainText>
 							<MainText>존재하지 않아요.</MainText>
