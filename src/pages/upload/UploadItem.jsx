@@ -143,23 +143,22 @@ export default function UploadItem() {
 			setSelectedItemSubFilter(state.subCategory);
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
+			setBrand(state.brandKr);
+			setBrandObj({ brandIdx : 0});
+			setIsBrand(true);
 			setProductName(state.itemName);
 			setIsProductName(true);
 			setDate(state.whenDiscovery);
 			setIsDate(true);
 			setPlace(state.whereDiscovery);
 			setIsPlace(true);
-			// setPrice(state.price);
-			// setIsPrice(true);
-			// setSelectedPriceMainFilterIdx();
+			setPrice(state.price);
+			setIsPrice(true);
+			setSelectedPriceMainFilterIdx(0);
 			setExtraInfo(state.content);
 			setIsExtraInfo(state.content ? true : false);
 			setLink(state.sellerSite);
 			setIsLink(state.sellerSite ? true : false);
-
-
-
-
 
 			setCurrentPage(2);
 		} else {
