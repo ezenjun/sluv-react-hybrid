@@ -265,11 +265,7 @@ export default function My() {
 				<ProfileWrap>
 					<ProfileContentsWrap>
 						{userInfo.profileImgUrl ? (
-							<img
-								className="userProfileImg"
-								src={userInfo.profileImgUrl}
-								alt="유저 프로필 사진"
-							/>
+							<ProfileImg className="userProfileImg" src={userInfo.profileImgUrl} />
 						) : (
 							<UserBasicProfileImg className="userProfileImg" />
 						)}
@@ -494,6 +490,8 @@ const ProfileContentsWrap = styled.div`
 		height: 5rem;
 		border-radius: 50%;
 		position: absolute;
+		background-position: 50%;
+		background-repeat: no-repeat;
 		top: -2.5rem;
 		left: 50%;
 		transform: translate(-50%, 0);
@@ -583,4 +581,16 @@ const FollowButton = styled.div`
 	position: relative;
 	z-index: '900';
 	box-sizing: border-box;
+`;
+const ProfileImg = styled.div`
+	width: ${props => props.size || '1.375rem'};
+	height: ${props => props.size || '1.375rem'};
+	/* width: 1.375rem;
+	height: 1.375rem; */
+	border-radius: 50%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	background-image: url(${props => props.src});
+	margin-right: ${props => props.marginright || '0.5rem'}; ;
 `;

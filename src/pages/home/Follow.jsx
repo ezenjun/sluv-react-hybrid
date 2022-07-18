@@ -333,12 +333,15 @@ export default function Follow() {
 										key={sluver.userIdx}
 									>
 										{sluver.profileImgUrl ? (
-											<ProfileImg src={sluver.profileImgUrl}></ProfileImg>
+											<ProfileImg
+												src={sluver.profileImgUrl}
+												size="3.875rem"
+											></ProfileImg>
 										) : (
 											<UserBasicProfileImg
 												style={{
-													width: '2.25rem',
-													height: '2.25rem',
+													width: '3.875rem',
+													height: '3.875rem',
 													marginRight: '0.5rem',
 												}}
 											></UserBasicProfileImg>

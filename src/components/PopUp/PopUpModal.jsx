@@ -32,8 +32,6 @@ export function PopUpModal({ children, closeButton, closeFunction }) {
 	);
 }
 
-
-
 export const WholePage = styled.div`
 	display: ${props => (props.openStatus ? 'flex' : 'none')};
 	justify-content: center;
