@@ -9,14 +9,14 @@ export const apiClient = axios.create({
 });
 
 
-export const customApiClient = async (method, url, data) => {
+export const customApiClient = async (method, url, data, jwtKey) => {
 
     try {
         const result = await apiClient(url, {
 			method: method,
 			data: data,
 			headers: {
-				'X-ACCESS-TOKEN': localStorage.getItem('x-access-token'),
+				'X-ACCESS-TOKEN': localStorage.getItem(jwtKey ? jwtKey : 'x-access-token'),
 			},
 		});
 

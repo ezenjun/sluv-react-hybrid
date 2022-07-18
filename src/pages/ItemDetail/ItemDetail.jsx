@@ -433,6 +433,10 @@ export default function ItemDetail() {
 		}, 2300);
 	};
 
+	const onClickItemPostEdit = () => {
+		console.log('아이템 수정하기')
+	}
+
 	useEffect(() => {
 		getItemInfo();
 		setBottomNavStatus(false);
@@ -957,7 +961,7 @@ export default function ItemDetail() {
 						<div style={{ fontSize: '1rem', padding: '1.5rem 1.25rem 1.25rem' }}>
 							<div
 								style={{ paddingBottom: '1.875rem' }}
-								onClick={() => navigate(`/report/comment/${itemIdx}`)}
+								onClick={onClickItemPostEdit}
 							>
 								수정하기
 							</div>

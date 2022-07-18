@@ -63,7 +63,7 @@ export default function Index() {
 			pwd: password1,
 		};
 
-		const data = await customApiClient('patch', '/users/pwd', body);
+		const data = await customApiClient('patch', '/users/pwd', body, jwt);
 		console.log(data);
 
 		if (!data) return;
