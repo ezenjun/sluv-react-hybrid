@@ -583,7 +583,9 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 										width: '100%',
 									}}
 								>
-									<NoItem></NoItem>
+									<NoItem
+										style={{ width: '3.75rem', height: '3.75rem' }}
+									></NoItem>
 									<SubText
 										margin="1rem 0 0.5rem 0"
 										fontsize="0.875rem"
@@ -613,7 +615,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 								width: '100%',
 							}}
 						>
-							<NoItem></NoItem>
+							<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
 							<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
 								아직 해당 셀럽의 아이템이 존재하지 않아요
 							</SubText>
