@@ -192,323 +192,327 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 						color="white"
 						borderRight="8px solid #9e30f4"
 					>
-						<div>{data[currentMemberPage].name}</div>
+						<div>{data[currentMemberPage].name && data[currentMemberPage].name}</div>
 					</SpeechBubbleWrap>
 				</BottomWrap>
 
 				<MembersContainer>
 					{(function () {
-						let renderList = [];
-						for (let i = 0; i < data[currentMemberPage].memberList.length; i += 8) {
-							renderList.push(
-								<RepeatWrap>
-									{data[currentMemberPage].memberList
-										.slice(i, i + 8)
-										.map((member, index) => (
-											<>
-												{index % 8 === 0 && (
-													<CelebLeftTop
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+						if(data[currentMemberPage].memberList.length > 0) {
+							let renderList = [];
+							for (let i = 0; i < data[currentMemberPage].memberList.length; i += 8) {
+								renderList.push(
+									<RepeatWrap>
+										{data[currentMemberPage].memberList
+											.slice(i, i + 8)
+											.map((member, index) => (
+												<>
+													{index % 8 === 0 && (
+														<CelebLeftTop
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="dim"></div>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="dim"></div>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebLeftTop>
+													)}
+													{index % 8 === 1 && (
+														<CelebRightTop
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebLeftTop>
-												)}
-												{index % 8 === 1 && (
-													<CelebRightTop
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebRightTop>
+													)}
+													{index % 8 === 2 && (
+														<CelebLeftBottom
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebLeftBottom>
+													)}
+													{index % 8 === 3 && (
+														<CelebRightBottom
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebRightTop>
-												)}
-												{index % 8 === 2 && (
-													<CelebLeftBottom
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebRightBottom>
+													)}
+													{index % 8 === 4 && (
+														<CelebNextLeftBottom
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebNextLeftBottom>
+													)}
+													{index % 8 === 5 && (
+														<CelebNextLeftTop
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebLeftBottom>
-												)}
-												{index % 8 === 3 && (
-													<CelebRightBottom
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebNextLeftTop>
+													)}
+													{index % 8 === 6 && (
+														<CelebNextRightTop
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebNextRightTop>
+													)}
+													{index % 8 === 7 && (
+														<CelebNextRightBottom
+															key={member.memberIdx}
+															onClick={e =>
+																onSelectMember(member, e, index)
 															}
 														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebRightBottom>
-												)}
-												{index % 8 === 4 && (
-													<CelebNextLeftBottom
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebNextLeftBottom>
-												)}
-												{index % 8 === 5 && (
-													<CelebNextLeftTop
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebNextLeftTop>
-												)}
-												{index % 8 === 6 && (
-													<CelebNextRightTop
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebNextRightTop>
-												)}
-												{index % 8 === 7 && (
-													<CelebNextRightBottom
-														key={member.memberIdx}
-														onClick={e =>
-															onSelectMember(member, e, index)
-														}
-													>
-														<Image
-															size="9.25rem"
-															border={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="memberName">
-																{member.name}
-															</div>
-														</Image>
-														<CountBadge
-															status={
-																checkStatusList[
-																	member.memberIdx - 1
-																]
-															}
-														>
-															<span className="badgeItem">
-																{badgeNumList[index]}
-															</span>
-														</CountBadge>
-													</CelebNextRightBottom>
-												)}
-											</>
-										))}
-								</RepeatWrap>
-							);
+															<Image
+																size="9.25rem"
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</Image>
+															<CountBadge
+																status={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<span className="badgeItem">
+																	{badgeNumList[index]}
+																</span>
+															</CountBadge>
+														</CelebNextRightBottom>
+													)}
+												</>
+											))}
+									</RepeatWrap>
+								);
+							}
+							return renderList;
+
 						}
-						return renderList;
+						
 					})()}
 				</MembersContainer>
 			</ContentWrap>
