@@ -13,6 +13,7 @@ export const TopNav = styled.div`
 	padding: 0.9375rem 1.25rem;
 	align-items: center;
 	text-align: center;
+
 	// 상단바 중앙 텍스트
 	.centerText {
 		display: flex;

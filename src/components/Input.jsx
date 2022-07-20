@@ -6,13 +6,15 @@ export const Input = styled.input`
 	height: 1.0625rem;
 	width: 100%;
 	font-size: 0.875rem;
-	font-weight: 400;
+	font-weight: normal;
 	font-family: Pretendard;
 	outline: none;
 	border: none;
+	padding: 0;
 	margin: ${props => props.margin || '0'};
 	background-color: white;
 	caret-color: #9e30f4;
+
 	&:disabled {
 		::placeholder {
 			color: #dadada;

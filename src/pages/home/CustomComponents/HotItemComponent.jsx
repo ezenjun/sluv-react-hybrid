@@ -68,8 +68,8 @@ export const HotItemComponent = () => {
 		console.log(weeklyList);
 	}, []);
 	return (
-		<ItemContainer padding="0.625rem 0 1.875rem 1.25rem">
-			<TextWrap padding="0 1.25rem 0 0">
+		<ItemContainer padding="0.625rem 0 1.875rem 0">
+			<TextWrap padding="0 1.25rem 0 1.25rem">
 				<div style={{ display: 'flex', flexDirection: 'column' }}>
 					<MainText fontsize="1.5rem">#스러버's</MainText>
 					<div style={{ display: 'flex', alignItems: 'center' }}>
@@ -211,26 +211,35 @@ const FilterWrap = styled.div`
 	text-align: center;
 	align-items: center;
 	margin-bottom: 1rem;
+	padding-left: 1.25rem;
 `;
 
 const HotItemWrap = styled.div`
 	display: grid;
 	gap: 0.625rem;
 	height: 31.75rem;
-	padding: 0 1.25rem 1.25rem 0;
+	padding: 0 1.25rem 1.25rem 1.25rem;
 	/*  margin-right: 20px; */
 	overflow-x: scroll;
 	grid-template-columns: repeat(8, minmax(10.125rem, auto));
 	grid-template-rows: 1fr 1fr 1fr;
+	::-webkit-scrollbar-corner {
+		height: 1.25rem;
+	}
 	/* box-sizing: border-box; */
 	::-webkit-scrollbar {
-		margin-top: 10px;
-		width: 5px;
+		margin-top: 0.625rem;
+		width: 80%;
 		height: 4px;
 		background-color: #f0f0f0; /* 또는 트랙에 추가한다 */
-		bottom: 100px;
+		bottom: 6.25rem;
+		left: 1.25rem;
 	}
-
+	::-webkit-scrollbar-button:start:decrement,
+	::-webkit-scrollbar-button:end:increment {
+		height: 1.25rem;
+		background-color: white;
+	}
 	/* 썸(thumb) 추가 */
 	::-webkit-scrollbar-thumb {
 		margin-top: 10px;

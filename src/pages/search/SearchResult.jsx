@@ -388,9 +388,9 @@ export default function SearchResult() {
 			</TopNav>
 			<div style={{ padding: '0.5rem 1.25rem' }}>
 				<InputWrap>
-					<IconWrap>
-						<SearchIcon />
-					</IconWrap>
+					<SearchIcon
+						style={{ width: '1.125rem', height: '1.125rem', flexShrink: '0' }}
+					/>
 					<Input
 						onKeyUp={handleEnterEvent}
 						value={searchInput}

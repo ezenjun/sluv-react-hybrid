@@ -93,7 +93,9 @@ export default function ItemDetail() {
 		cssEase: 'linear',
 		arrows: false,
 		dotsClass: 'slick-dots line-indicator',
-		customPaging: i => <div style={{ position: 'fixed', width: '100%', top: '0' }}></div>,
+		customPaging: i => (
+			<div style={{ position: 'fixed', width: '100%', top: '0', margin: '0' }}></div>
+		),
 	};
 
 	const [itemInfo, setItemInfo] = useState([]);
@@ -435,10 +437,9 @@ export default function ItemDetail() {
 
 	const onClickItemPostEdit = () => {
 		navigate('/upload/item', {
-			state: itemInfo
+			state: itemInfo,
 		});
-	}
-
+	};
 
 	useEffect(() => {
 		getItemInfo();
@@ -490,11 +491,13 @@ export default function ItemDetail() {
 							{itemInfo.itemName}
 						</SubText>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
-							<SubText fontweight="normal">
+							<SubText fontweight="normal" color="#8d8d8d">
 								{itemInfo.parentCategory} {'>'} {itemInfo.subCategory}
 							</SubText>
 							<Dot></Dot>
-							<SubText fontweight="normal">{itemInfo.uploadTime}</SubText>
+							<SubText fontweight="normal" color="#8d8d8d">
+								{itemInfo.uploadTime}
+							</SubText>
 						</div>
 					</ItemInfoContainer>
 					<ItemInfoContainer
@@ -511,7 +514,7 @@ export default function ItemDetail() {
 								></UserBasicProfileImg>
 							)}
 
-							<SubText fontsize="0.875rem" fontweight="600" margin="0 0 0 0.375rem">
+							<SubText fontsize="0.75rem" fontweight="600" margin="0 0 0 0.375rem">
 								{itemInfo.nickName}
 							</SubText>
 						</div>
@@ -579,7 +582,11 @@ export default function ItemDetail() {
 							<ItemLInkContainer>
 								<ItemLInkWrap>
 									<ItemLinkIcon
-										style={{ width: '2.875rem', height: '2.875rem' }}
+										style={{
+											width: '2.875rem',
+											height: '2.875rem',
+											marginRight: '1rem',
+										}}
 									></ItemLinkIcon>
 									<ItemTextWrap>
 										<SubText fontsize="0.875rem">
@@ -618,8 +625,8 @@ export default function ItemDetail() {
 							<UserTextWrap>
 								{itemInfo.isMe === 'Y' ? (
 									<SubText
-										font-weight="600"
-										font-size="0.875rem"
+										fontweight="600"
+										fontsize="0.875rem"
 										margin="0 0 0.25rem 0"
 									>
 										{itemInfo.nickName}
@@ -634,15 +641,15 @@ export default function ItemDetail() {
 									</SubText>
 								) : (
 									<SubText
-										font-weight="600"
-										font-size="0.875rem"
+										fontweight="600"
+										fontsize="0.875rem"
 										margin="0 0 0.25rem 0"
 									>
 										{itemInfo.nickName}
 									</SubText>
 								)}
 
-								<SubText font-weight="600" font-size="0.875rem">
+								<SubText fontweight="normal" fontsize="0.75rem">
 									{itemInfo.id}
 								</SubText>
 							</UserTextWrap>
@@ -666,7 +673,7 @@ export default function ItemDetail() {
 					{sameCelebItemList.length > 0 && (
 						<MyUploadWrap>
 							<div className="titleWrap">
-								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								<MainText fontweight="bold" fontsize="1.125rem">
 									같은 셀럽의 아이템
 								</MainText>
 							</div>
@@ -733,7 +740,7 @@ export default function ItemDetail() {
 					{otherUserDibItemList.length > 0 && (
 						<MyUploadWrap>
 							<div className="titleWrap">
-								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								<MainText fontweight="bold" fontsize="1.125rem">
 									다른 스러버들이 함께 보관한 아이템
 								</MainText>
 							</div>
@@ -800,7 +807,7 @@ export default function ItemDetail() {
 					{sameBrandItemList.length > 0 && (
 						<MyUploadWrap>
 							<div className="titleWrap">
-								<MainText style={{ fontWeight: '600' }} fontsize="1.125rem">
+								<MainText fontweight="bold" fontsize="1.125rem">
 									같은 브랜드의 아이템
 								</MainText>
 							</div>
@@ -1042,15 +1049,18 @@ const ImageContainer = styled.div`
 		background: #f0f0f0;
 		opacity: 50%;
 		border-radius: 5px;
+		padding: 0;
 		margin: 0;
 	}
 	.line-indicator li:hover {
 		background: #c3c3c3;
+		margin: 0;
 	}
 	.line-indicator li.slick-active {
 		background: #fff;
 		opacity: 100%;
 		transition: 0.3s ease-in-out;
+		margin: 0;
 	}
 `;
 
@@ -1171,7 +1181,6 @@ const ItemLInkWrap = styled.div`
 	display: flex;
 	padding: 1.25rem 1.625rem;
 	flex-direction: row;
-	justify-content: space-between;
 	border: 1px solid #ebebeb;
 	border-radius: 1rem;
 `;

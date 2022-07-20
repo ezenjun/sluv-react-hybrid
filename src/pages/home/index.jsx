@@ -267,6 +267,7 @@ const NavRight = styled(Link)`
 const TabContainer = styled.div`
 	display: flex;
 	padding: 0.6875rem 1.25rem 0 1.25rem;
+	border-bottom: 1px solid #ebebeb;
 `;
 
 const Tab = styled.div`

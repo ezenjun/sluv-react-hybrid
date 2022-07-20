@@ -5,11 +5,12 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { BackButton } from '../../components/Buttons/BackButton';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactComponent as DemoDay1 } from '../../assets/Event/DemoDay1.svg';
-import { ReactComponent as DemoDay2 } from '../../assets/Event/DemoDay2.svg';
-import { ReactComponent as DemoDay3 } from '../../assets/Event/DemoDay3.svg';
-import { ReactComponent as DemoDay4 } from '../../assets/Event/DemoDay4.svg';
+
 import { BottomNavState } from '../../recoil/BottomNav';
+import firstimg from '../../assets/Event/0.png';
+import secondimg from '../../assets/Event/1.png';
+import thirdimg from '../../assets/Event/2.png';
+import fourthimg from '../../assets/Event/3.png';
 
 export default function EventDetail() {
 	const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function EventDetail() {
 		setBottomNavStatus(false);
 	});
 	return (
-		<MainContainer padding="0 0 0 0">
+		<MainContainer padding="0" margin="0">
 			<TopNav>
 				<BackButton onClick={backClick} />
 				<div style={{ fontSize: '1.125rem' }} className="centerText">
@@ -31,34 +32,42 @@ export default function EventDetail() {
 				</div>
 			</TopNav>
 			<FeedContainer>
-				<DemoDay1
+				<img
 					style={{
 						width: '100%',
 						height: '23.4375rem',
 						marginBottom: '8px',
 					}}
-				></DemoDay1>
-				<DemoDay2
+					src={firstimg}
+					alt="first"
+				></img>
+				<img
 					style={{
 						width: '100%',
 						height: '23.4375rem',
 						marginBottom: '8px',
 					}}
-				></DemoDay2>
-				<DemoDay3
+					src={secondimg}
+					alt="first"
+				></img>
+				<img
 					style={{
 						width: '100%',
 						height: '23.4375rem',
 						marginBottom: '8px',
 					}}
-				></DemoDay3>
-				<DemoDay4
+					src={thirdimg}
+					alt="first"
+				></img>
+				<img
 					style={{
 						width: '100%',
 						height: '23.4375rem',
 						marginBottom: '8px',
 					}}
-				></DemoDay4>
+					src={fourthimg}
+					alt="first"
+				></img>
 			</FeedContainer>
 		</MainContainer>
 	);
@@ -66,9 +75,13 @@ export default function EventDetail() {
 
 const FeedContainer = styled.div`
 	height: 100vh;
-	padding: 0 0 3.75rem 0;
+	margin: 0;
+	padding: 0 0 2.5rem 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
+	}
+	svg > rect {
+		width: 100%;
 	}
 `;

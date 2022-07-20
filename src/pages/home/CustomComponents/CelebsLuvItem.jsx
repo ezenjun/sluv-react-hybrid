@@ -414,20 +414,25 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 					</div>
 					<RightArrow onClick={() => onDetailCelebClick(celeb)}></RightArrow>
 				</TextWrap>
-				<ChipWrap>
-					<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
-						{celeb.name}
-					</Chip>
-					{celeb.memberList.map((member, idx) => (
-						<Chip
-							key={idx}
-							selected={selectedChip === idx + 1}
-							onClick={() => onChipClick(idx + 1, member.memberIdx)}
-						>
-							{member.name}
+				{celeb.memberList.length > 0 ? (
+					<ChipWrap>
+						<Chip selected={selectedChip === 0} onClick={() => onChipClick(0)}>
+							{celeb.name}
 						</Chip>
-					))}
-				</ChipWrap>
+						{celeb.memberList.map((member, idx) => (
+							<Chip
+								key={idx}
+								selected={selectedChip === idx + 1}
+								onClick={() => onChipClick(idx + 1, member.memberIdx)}
+							>
+								{member.name}
+							</Chip>
+						))}
+					</ChipWrap>
+				) : (
+					<></>
+				)}
+
 				<HorizontalLine style={{ marginRight: '1.25rem', marginLeft: '1.25rem' }} />
 				{CurrentList.length > 0 && (
 					<FilterWrap>
@@ -560,6 +565,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 											</SubText>
 											<SubText
 												color="#262626"
+												fontweight="regular"
 												style={{
 													textOverflow: 'ellipsis',
 													whiteSpace: 'nowrap',
@@ -658,7 +664,6 @@ const TextWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
-	margin-bottom: ${props => props.marginbottom || '20px'};
 	padding: 1.25rem 1.25rem 0 1.25rem;
 `;
 const ChipWrap = styled.div`
@@ -667,7 +672,7 @@ const ChipWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
-	padding: 0 0 0 1.25rem;
+	padding: 1.25rem 0 0 1.25rem;
 `;
 const Chip = styled.div`
 	display: inline-block;
@@ -675,7 +680,7 @@ const Chip = styled.div`
 	padding: 0.625rem 1rem;
 	margin-right: 0.5rem;
 	border-radius: 1.9rem;
-	border: solid 1px #e2e0e0;
+	border: ${props => (props.selected ? 'none' : 'solid 1px #e2e0e0')};
 	background-color: ${props => (props.selected ? '#2b1e34' : '#fff')};
 	color: ${props => (props.selected ? '#fff' : '#2b1e34')};
 	font-size: 0.875rem;
