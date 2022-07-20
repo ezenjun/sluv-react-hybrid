@@ -919,7 +919,7 @@ export default function ItemDetail() {
 						></LikeButtonGrey>
 					)}
 
-					<SubText fontsize="0.875rem" margin="0 0 0 0.25rem">
+					<SubText fontsize="0.875rem" style={{ width: '0.9375rem', textAlign: 'end' }}>
 						{likeCnt}
 					</SubText>
 				</AlignDiv>

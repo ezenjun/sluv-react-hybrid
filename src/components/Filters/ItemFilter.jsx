@@ -89,9 +89,9 @@ export function ItemFilter(props) {
 
 export const FilterContainer = styled.div`
 	display: flex;
-	padding: 1.25rem;
+	padding: 1.25rem 1.25rem 0 1.25rem;
 	flex-direction: column;
-	height: 18.5625rem;
+	/* height: 18.5625rem; */
 `;
 export const Filter = styled.div`
 	display: flex;
