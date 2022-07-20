@@ -177,6 +177,15 @@ export default function LocalLogin() {
 								<></>
 							)}
 						</InputWrap>
+						<ErrorMessage>
+							{!emailValid && email.length !== 0 ? (
+								<SubText color="#ef0000" fontweight="normal">
+									올바른 이메일을 입력해주세요
+								</SubText>
+							) : (
+								<></>
+							)}
+						</ErrorMessage>
 					</FormWrap>
 					<FormWrap marginBottom="16px">
 						<SubText margin="0 0 0.5rem 0">비밀번호</SubText>
@@ -203,6 +212,15 @@ export default function LocalLogin() {
 								<></>
 							)}
 						</InputWrap>
+						<ErrorMessage>
+							{!passwordValid && password.length !== 0 ? (
+								<SubText color="#ef0000" fontweight="normal">
+									영문, 숫자, 특수문자 포함 8자 이상 입력해주세요
+								</SubText>
+							) : (
+								<></>
+							)}
+						</ErrorMessage>
 					</FormWrap>
 					<LoginOptionWrap>
 						<TermsWrap>
@@ -250,9 +268,18 @@ export default function LocalLogin() {
 							</SubText>
 						</TermsWrap>
 					</LoginOptionWrap>
-					<PurpleButton marginBottom="26px" onClick={handleLoginAPI}>
+					{/* <PurpleButton marginBottom="26px" onClick={handleLoginAPI}>
 						로그인
-					</PurpleButton>
+					</PurpleButton> */}
+					{emailValid && passwordValid ? (
+						<PurpleButton onClick={handleLoginAPI} marginBottom="26px">
+							로그인
+						</PurpleButton>
+					) : (
+						<PurpleButton disabled={true} marginBottom="26px">
+							로그인
+						</PurpleButton>
+					)}
 					<FindWrap>
 						<StyledLink to="/find/email" color="#6a6a6a">
 							아이디 찾기
@@ -365,4 +392,8 @@ const FindWrap = styled.div`
 const Line = styled.div`
 	border-right: 1px solid #e2e0e0;
 	margin: 0 10px;
+`;
+const ErrorMessage = styled.div`
+	display: flex;
+	margin-top: 0.5rem;
 `;
