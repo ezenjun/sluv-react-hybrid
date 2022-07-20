@@ -188,9 +188,9 @@ export default function Search() {
 			</TopNav>
 			<div style={{ padding: '0.5rem 1.25rem' }}>
 				<InputWrap>
-					<IconWrap>
-						<SearchIcon />
-					</IconWrap>
+					<SearchIcon
+						style={{ width: '1.125rem', height: '1.125rem', flexShrink: '0' }}
+					/>
 					<Input
 						onKeyUp={handleEnterEvent}
 						value={searchInput}
@@ -201,7 +201,7 @@ export default function Search() {
 					/>
 					{searchInput.length !== 0 ? (
 						<IconWrap onClick={onClickInputDelete}>
-							<Delete />
+							<Delete style={{ width: '1.125rem', height: '1.125rem' }} />
 						</IconWrap>
 					) : (
 						<></>
@@ -266,16 +266,16 @@ export default function Search() {
 									</CollapsedRow>
 								) : (
 									<>
-										<CollapsedRow style={{ marginBottom: '0.625rem' }}>
+										<CollapsedRow style={{ marginBottom: '1.125rem' }}>
 											<div>
 												<SubText
 													fontsize="0.875rem"
 													fontweight="bold"
-													margin="0 1rem 0 0"
+													margin="0 0.625rem 0 0"
 												>
 													HOT 랭킹
 												</SubText>
-												<SubText fontweight="normal">
+												<SubText fontweight="normal" color="#8d8d8d">
 													{rankDate && <>{rankDate}</>}
 												</SubText>
 											</div>
@@ -294,18 +294,25 @@ export default function Search() {
 															onClickKeyword(rank.searchWord)
 														}
 													>
-														<SubText
-															fontsize="0.875rem"
-															fontweight="bold"
-															color="#9e30f4"
-															margin="1rem 1rem 1rem 0.1875rem"
+														<div
+															style={{
+																width: '1.625rem',
+															}}
 														>
-															{index + 1}
-														</SubText>
+															<SubText
+																fontsize="0.875rem"
+																fontweight="bold"
+																color="#9e30f4"
+																margin="0.5rem 0"
+															>
+																{index + 1}
+															</SubText>
+														</div>
+
 														<SubText
 															fontsize="0.875rem"
 															fontweight="600"
-															margin="16px 0"
+															margin="0.5rem 0"
 														>
 															{rank.searchWord}
 														</SubText>
@@ -318,23 +325,30 @@ export default function Search() {
 														.slice(5, 10)
 														.map((rank, index) => (
 															<EachRank
-																key={index + 5}
+																key={index}
 																onClick={() =>
 																	onClickKeyword(rank.searchWord)
 																}
 															>
-																<SubText
-																	fontsize="0.875rem"
-																	fontweight="bold"
-																	color="#9e30f4"
-																	margin="1rem 1rem 1rem 0.1875rem"
+																<div
+																	style={{
+																		width: '1.625rem',
+																	}}
 																>
-																	{index + 6}
-																</SubText>
+																	<SubText
+																		fontsize="0.875rem"
+																		fontweight="bold"
+																		color="#9e30f4"
+																		margin="0.5rem 0"
+																	>
+																		{index + 6}
+																	</SubText>
+																</div>
+
 																<SubText
 																	fontsize="0.875rem"
 																	fontweight="600"
-																	margin="16px 0"
+																	margin="0.5rem 0"
 																>
 																	{rank.searchWord}
 																</SubText>
@@ -469,8 +483,11 @@ export default function Search() {
 export const InputWrap = styled.div`
 	display: flex;
 	align-items: center;
+	box-sizing: border-box;
 	border-radius: 0.8125rem;
-	padding: 1rem;
+	height: 3rem;
+	padding-left: 1.1875rem;
+	padding-right: 0.9375rem;
 	border: solid 1px #c9c9c9;
 	margin: ${props => props.margin || '0'};
 	:focus {
@@ -480,6 +497,7 @@ export const InputWrap = styled.div`
 		border: 1px solid #9e30f4;
 	}
 `;
+
 const SearchBottom = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -508,7 +526,7 @@ const HotSearch = styled.div`
 	background-color: #fbf6ff;
 	box-sizing: border-box;
 	border-radius: 1rem;
-	height: ${props => (props.collapsed ? '3.5625rem' : '100%')};
+	height: ${props => (props.collapsed ? '57px' : '16.4375rem')};
 	overflow: hidden;
 	padding: 1.25rem;
 	transition: all 0.3s ease-out;
@@ -517,7 +535,10 @@ const HotSearch = styled.div`
 		margin: 0;
 	}
 	.slick-dots {
-		margin-bottom: 0.625rem;
+		bottom: -2.5rem;
+	}
+	.slick-dots li {
+		margin: 0;
 	}
 `;
 const CollapsedRow = styled.div`
@@ -528,7 +549,10 @@ const CollapsedRow = styled.div`
 	align-items: center;
 `;
 const EachRank = styled.div`
-	margin: 1rem 0;
+	display: flex;
+	box-sizing: border-box;
+	flex-grow: 0;
+	align-items: center;
 `;
 const HotKeyword = styled.div`
 	display: flex;

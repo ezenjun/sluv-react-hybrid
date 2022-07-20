@@ -26,29 +26,31 @@ export default function Event() {
 					</DDAY>
 				</Top>
 
-				<Bottom>
-					<BottomTop>
-						<DemodayEvetnIcon
-							style={{
-								width: '11.4375rem',
-								height: '2.9438rem',
-								marginBottom: '1.5625rem',
-							}}
-						></DemodayEvetnIcon>
-					</BottomTop>
+				{/* <Bottom> */}
+				<BottomTop>
+					<DemodayEvetnIcon
+						style={{
+							width: '11.4375rem',
+							height: '2.9438rem',
+						}}
+					></DemodayEvetnIcon>
+				</BottomTop>
 
-					<TextWrap>
-						<MainText fontsize="1.125rem" fontweight="700" color="white">
-							스럽 X CMC 10기 데모데이 이벤트
-						</MainText>
-						<HorizontalLine color="1px solid rgba(255, 255, 255, 0.2);"></HorizontalLine>
-						<SubText fontsize="0.875rem" fontweight="400" color="white">
-							인스타그램 스토리로 스럽을 홍보하고,
-							<br />
-							기프티콘을 받아가세요!
-						</SubText>
-					</TextWrap>
-				</Bottom>
+				<TextWrap>
+					<MainText fontsize="1.125rem" fontweight="700" color="white">
+						스럽 X CMC 10기 데모데이 이벤트
+					</MainText>
+					<HorizontalLine
+						color="1px solid rgba(255, 255, 255, 0.2);"
+						margin="0.375rem 0"
+					></HorizontalLine>
+					<SubText fontsize="0.875rem" fontweight="400" color="white">
+						인스타그램 스토리로 스럽을 홍보하고,
+						<br />
+						기프티콘을 받아가세요!
+					</SubText>
+				</TextWrap>
+				{/* </Bottom> */}
 			</EventCard>
 		</FeedContainer>
 	);

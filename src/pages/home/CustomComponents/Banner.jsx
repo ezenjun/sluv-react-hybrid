@@ -93,6 +93,7 @@ export const BannerComponent = props => {
 
 const BannerWrap = styled.div`
 	margin-top: 2rem;
+	margin-bottom: 1.25rem;
 	padding: 0 1.25rem;
 `;
 const Banner = styled.div`

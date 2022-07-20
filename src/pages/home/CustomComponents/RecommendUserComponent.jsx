@@ -134,7 +134,9 @@ export function RecommendUserComponent() {
 	return (
 		<RecommendUserWrap>
 			<TextWrap>
-				<MainText fontsize="1.5rem">인기 스러버 추천</MainText>
+				<MainText fontsize="1.5rem" margin="0 0 0 1.25rem">
+					인기 스러버 추천
+				</MainText>
 				<Icon style={{ width: '1.5rem', height: '1.5rem', marginLeft: '0.3125rem' }}></Icon>
 			</TextWrap>
 			<ChipWrap>
@@ -216,7 +218,7 @@ const RecommendUserWrap = styled.div`
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
-	padding: 40px 0px 50px 20px;
+	padding: 40px 0px 50px 0px;
 	background-color: #f8f7fa;
 `;
 const UserWrap = styled.div`
@@ -227,6 +229,7 @@ const UserWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+	padding-left: 1.25rem;
 `;
 const User = styled.div`
 	display: flex;
@@ -242,12 +245,6 @@ const User = styled.div`
 	border-radius: 16px;
 	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.05);
 	background-color: rgba(255, 255, 255, 0.4);
-`;
-const SkeletonProfileImg = styled.div`
-	width: 3.875rem;
-	height: 3.875rem;
-	border-radius: 50%;
-	background-color: #8d8d8d;
 `;
 const ProfileImg = styled.div`
 	width: 3.875rem;
@@ -283,6 +280,7 @@ const ChipWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+	padding: 0 0 0 1.25rem;
 `;
 const Chip = styled.div`
 	display: inline-block;

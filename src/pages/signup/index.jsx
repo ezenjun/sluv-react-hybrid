@@ -45,7 +45,7 @@ export default function Signup() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-
+	setCurrentPage(2);
 	const allBtnEvent = () => {
 		if (allCheck === false) {
 			setAllCheck(true);
@@ -138,8 +138,10 @@ export default function Signup() {
 			setPhoneNumber(e.target.value);
 			if (e.target.value.length === 11) {
 				setPhoneNumberValid(true);
+				setAuthCodeDisabled(false);
 			} else {
 				setPhoneNumberValid(false);
+				setAuthCodeDisabled(true);
 			}
 		}
 	};
@@ -158,6 +160,8 @@ export default function Signup() {
 			}
 		}
 	};
+	const [authSendCnt, setAuthSendCnt] = useState(0);
+	const [authCodeDisabled, setAuthCodeDisabled] = useState(true);
 	const authCodeInputReset = () => {
 		setAuthCode('');
 	};
@@ -192,7 +196,7 @@ export default function Signup() {
 
 	const handleNickname = e => {
 		setNickname(e.target.value);
-		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/; // 한글 영문 숫자 1글자 이상 regex
+		const regex = /^.{0,15}$/; // 한글 영문 숫자 1글자 이상 regex
 		if (regex.test(e.target.value)) {
 			setNicknameValid(true);
 		} else {
@@ -236,6 +240,7 @@ export default function Signup() {
 				setCodeInputAccess(false);
 				setAuthCode('');
 				setAuthCodeValid(false);
+				setAuthCodeDisabled(false);
 			} else {
 				if (sec === 0) {
 					min = min - 1;
@@ -256,7 +261,9 @@ export default function Signup() {
 		const data = await customApiClient('get', url);
 		if (!data) return;
 		if (data.isSuccess) {
+			setAuthCodeDisabled(true);
 			beginTimer();
+			setAuthSendCnt(authSendCnt + 1);
 		}
 	}
 	// 인증번호 확인 API
@@ -573,25 +580,49 @@ export default function Signup() {
 									/>
 									{phoneNumberValid ? (
 										<IconWrap>
-											<Check />
+											<Check style={{ width: '18px', height: '18px' }} />
 										</IconWrap>
 									) : (
 										<></>
 									)}
 									{phoneNumber.length !== 0 && !phoneNumberValid ? (
 										<IconWrap onClick={phoneInputReset}>
-											<Delete />
+											<Delete style={{ width: '18px', height: '18px' }} />
 										</IconWrap>
 									) : (
 										<></>
 									)}
 								</InputPhone>
-								{phoneNumberValid ? (
-									<AuthButton disabled={false} onClick={handleAuthCodeSendAPI}>
-										인증하기
-									</AuthButton>
+								{authSendCnt === 0 ? (
+									<>
+										{phoneNumberValid ? (
+											<AuthButton
+												disabled={authCodeDisabled}
+												onClick={handleAuthCodeSendAPI}
+											>
+												인증하기
+											</AuthButton>
+										) : (
+											<AuthButton disabled={authCodeDisabled}>
+												인증하기
+											</AuthButton>
+										)}
+									</>
 								) : (
-									<AuthButton disabled={true}>인증하기</AuthButton>
+									<>
+										{phoneNumberValid ? (
+											<AuthButton
+												disabled={authCodeDisabled}
+												onClick={handleAuthCodeSendAPI}
+											>
+												재발송
+											</AuthButton>
+										) : (
+											<AuthButton disabled={authCodeDisabled}>
+												재발송
+											</AuthButton>
+										)}
+									</>
 								)}
 
 								{/* 재발송 버튼 */}
@@ -630,7 +661,7 @@ export default function Signup() {
 
 								{authCode.length !== 0 && !authCodeValid ? (
 									<IconWrap onClick={authCodeInputReset}>
-										<Delete />
+										<Delete style={{ width: '18px', height: '18px' }} />
 									</IconWrap>
 								) : (
 									<></>
@@ -645,7 +676,7 @@ export default function Signup() {
 								)}
 								{authCodeValid ? (
 									<IconWrap>
-										<Check />
+										<Check style={{ width: '18px', height: '18px' }} />
 									</IconWrap>
 								) : (
 									<></>
@@ -654,7 +685,7 @@ export default function Signup() {
 							<ErrorMessage>
 								{!authCodeValid && authCode.length !== 0 ? (
 									<SubText color="#ef0000" fontweight="normal">
-										올바른 인증번호 형식이 아닙니다
+										올바른 인증번호 형식이 아니에요
 									</SubText>
 								) : (
 									<></>
@@ -777,6 +808,7 @@ export default function Signup() {
 									onChange={handleNickname}
 									type="text"
 									placeholder="언제든지 수정이 가능해요"
+									maxLength="15"
 								/>
 								{nicknameValid ? (
 									<IconWrap>
@@ -826,7 +858,12 @@ export default function Signup() {
 						<CompletePageLabel>
 							<MainText>스럽 회원가입을</MainText>
 							<MainText>축하드려요!</MainText>
-							<SubText fontsize="1rem" color="#4A4A4A" margin="1.875rem">
+							<SubText
+								fontsize="0.875rem"
+								fontweight="regular"
+								color="#8D8D8D"
+								margin="0.75rem"
+							>
 								스럽에서 다양한 활동 기대할게요
 							</SubText>
 						</CompletePageLabel>
@@ -895,8 +932,8 @@ const NameText = styled.span`
 	font-size: 1.125rem;
 	font-weight: bold;
 	font-family: Pretendard;
-	margin-top: 1rem;
-	margin-bottom: 2rem;
+	margin-top: 1.25rem;
+	margin-bottom: 0.75rem;
 	color: ${props => props.color || '#262626'};
 `;
 
@@ -993,7 +1030,7 @@ const AuthButton = styled.button`
 	border-radius: ${props => props.borderradius || '24px'};
 	font-weight: bold;
 	font-size: 0.875rem;
-	background-color: ${props => props.backgroundcolor || '#ebebeb'};
+	background-color: ${props => props.backgroundcolor || '#dadada'};
 	padding: 1rem 1.125rem 0.9375rem;
 	:disabled {
 		border: none;
