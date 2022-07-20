@@ -24,7 +24,6 @@ import {
 	BottomSlideMenu,
 } from '../../components/containers/BottomSlideMenu';
 import styled from 'styled-components';
-import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import MyPageContainer from './MyPageContainer';
 import ProfileContainer from './ProfileContainer';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';

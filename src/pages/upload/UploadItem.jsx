@@ -23,6 +23,7 @@ import { ReactComponent as InfoIcon } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { ReactComponent as Plus } from '../../assets/Icons/img_upload_plus_icon.svg';
 import { ReactComponent as ImgDelete } from '../../assets/Icons/icon_preview_img_delete.svg';
+import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
 import { MiniInfoDialog, TopWrap } from '../binder/AddBinder';
 import { SubText } from '../../components/Texts/SubText';
 import AWS from 'aws-sdk';
@@ -765,32 +766,48 @@ export default function UploadItem() {
 					)}
 
 					<WholePage openStatus={confirmPopupStatus}>
-						<ModalWrap>
+						<ModalWrap style={{ position: 'relative' }}>
+							<img
+								src={PopupBackgroundGradient}
+								alt=""
+								style={{
+									position: 'absolute',
+									width: '100%',
+									top: '0',
+									zIndex: '0',
+								}}
+							/>
 							<div
 								style={{
-									marginTop: '1.5rem',
-									fontSize: '1.125rem',
-									fontWeight: 'bold',
-									color: '#262626',
+									zIndex: '1',
 								}}
 							>
-								아이템이 등록되었어요
+								<div
+									style={{
+										marginTop: '1.5rem',
+										fontSize: '1.125rem',
+										fontWeight: 'bold',
+										color: '#262626',
+									}}
+								>
+									아이템이 등록되었어요
+								</div>
+								<div
+									style={{
+										fontSize: '0.875rem',
+										color: '#8d8d8d',
+										margin: '0.75rem 0 2rem',
+										lineHeight: '1.36',
+									}}
+								>
+									등록해주셔서 감사해요!
+									<br />
+									기다리고 있던 정보였어요
+								</div>
+								<PurpleButton onClick={onClickYes} marginBottom="0">
+									확인
+								</PurpleButton>
 							</div>
-							<div
-								style={{
-									fontSize: '0.875rem',
-									color: '#8d8d8d',
-									margin: '0.75rem 0 2rem',
-									lineHeight: '1.36',
-								}}
-							>
-								등록해주셔서 감사해요!
-								<br />
-								기다리고 있던 정보였어요
-							</div>
-							<PurpleButton onClick={onClickYes} marginBottom="0">
-								확인
-							</PurpleButton>
 						</ModalWrap>
 					</WholePage>
 				</MainContainer>

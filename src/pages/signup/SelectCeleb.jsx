@@ -254,7 +254,7 @@ export default function SelectCeleb() {
 									{selectedNum}개 선택
 								</SubText>
 							)}
-							<NextButton status={isCelebConfirm} onClick={onHandleNextButton}>
+							<NextButton fontsize="1rem" status={isCelebConfirm} onClick={onHandleNextButton}>
 								다음
 							</NextButton>
 						</NavRight>
@@ -407,6 +407,7 @@ export default function SelectCeleb() {
 							<RequestWrap>
 								<RequestButton>
 									<PurpleButton
+										style={{fontSize: '0.875rem'}}
 										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 										marginBottom="0"
 										onClick={() => navigate('../../request/celebrity')}

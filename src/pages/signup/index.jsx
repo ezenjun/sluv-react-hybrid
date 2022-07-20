@@ -519,7 +519,7 @@ export default function Signup() {
 									</span>
 								</SubText>
 							</TermsWrap>
-							<TermsWrap>
+							{/* <TermsWrap>
 								{marketingCheck ? (
 									<IconWrap
 										button="true"
@@ -540,7 +540,7 @@ export default function Signup() {
 								<SubText fontweight="normal" fontsize="0.875rem">
 									[선택] 광고성 정보 수신 및 마케팅 활용 동의
 								</SubText>
-							</TermsWrap>
+							</TermsWrap> */}
 						</FormWrap>
 					</TopWrap>
 					<BottomWrap>

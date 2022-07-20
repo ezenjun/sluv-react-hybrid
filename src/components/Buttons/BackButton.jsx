@@ -22,7 +22,7 @@ export const BackButton = ({ openStatus, onClick }) => {
 	const socialLoginComplete = useRecoilValue(SocialLoginCompleteState);
 
 	return (
-		<ButtonWrap id="back_link" openStatus={socialLoginComplete} onClick={onClick}>
+		<ButtonWrap openStatus={socialLoginComplete} onClick={onClick}>
 			<LeftArrow style={{ width: '1.5rem', height: '1.5rem' }} />
 		</ButtonWrap>
 	);

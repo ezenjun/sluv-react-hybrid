@@ -70,221 +70,224 @@ export default function SelectUploadMemberContainer() {
 
 				<MembersContainer>
 					{(function () {
-						let renderList = [];
-						for (let i = 0; i < selectedCeleb.memberList.length; i += 8) {
-							renderList.push(
-								<RepeatWrap>
-									{selectedCeleb.memberList
-										.slice(i, i + 8)
-										.map((member, index) => (
-											<>
-												{index % 8 === 0 && (
-													<CelebLeftTop
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div className="dim"></div>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebLeftTop>
-												)}
-												{index % 8 === 1 && (
-													<CelebRightTop
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebRightTop>
-												)}
-												{index % 8 === 2 && (
-													<CelebLeftBottom
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebLeftBottom>
-												)}
-												{index % 8 === 3 && (
-													<CelebRightBottom
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebRightBottom>
-												)}
-												{index % 8 === 4 && (
-													<CelebNextLeftBottom
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebNextLeftBottom>
-												)}
-												{index % 8 === 5 && (
-													<CelebNextLeftTop
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebNextLeftTop>
-												)}
-												{index % 8 === 6 && (
-													<CelebNextRightTop
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebNextRightTop>
-												)}
-												{index % 8 === 7 && (
-													<CelebNextRightBottom
-														key={member.memberIdx}
-														onClick={e => onSelectMember(member, e)}
-													>
-														<Image size="9.25rem">
-															<img
-																className="celebImg"
-																src={member.memberImgUrl}
-																alt="셀럽이미지"
-															/>
-															<div
-																style={{
-																	zIndex: '100',
-																	marginBottom: '0.75rem',
-																	fontSize: '1rem',
-																	fontWeight: 'bold',
-																}}
-																className="memberName"
-															>
-																{member.name}
-															</div>
-														</Image>
-													</CelebNextRightBottom>
-												)}
-											</>
-										))}
-								</RepeatWrap>
-							);
+						if (Object.keys(selectedCeleb).length !== 0 ) {
+							let renderList = [];
+							for (let i = 0; i < selectedCeleb.memberList.length; i += 8) {
+								renderList.push(
+									<RepeatWrap>
+										{selectedCeleb.memberList
+											.slice(i, i + 8)
+											.map((member, index) => (
+												<>
+													{index % 8 === 0 && (
+														<CelebLeftTop
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div className="dim"></div>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebLeftTop>
+													)}
+													{index % 8 === 1 && (
+														<CelebRightTop
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebRightTop>
+													)}
+													{index % 8 === 2 && (
+														<CelebLeftBottom
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebLeftBottom>
+													)}
+													{index % 8 === 3 && (
+														<CelebRightBottom
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebRightBottom>
+													)}
+													{index % 8 === 4 && (
+														<CelebNextLeftBottom
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebNextLeftBottom>
+													)}
+													{index % 8 === 5 && (
+														<CelebNextLeftTop
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebNextLeftTop>
+													)}
+													{index % 8 === 6 && (
+														<CelebNextRightTop
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebNextRightTop>
+													)}
+													{index % 8 === 7 && (
+														<CelebNextRightBottom
+															key={member.memberIdx}
+															onClick={e => onSelectMember(member, e)}
+														>
+															<Image size="9.25rem">
+																<img
+																	className="celebImg"
+																	src={member.memberImgUrl}
+																	alt="셀럽이미지"
+																/>
+																<div
+																	style={{
+																		zIndex: '100',
+																		marginBottom: '0.75rem',
+																		fontSize: '1rem',
+																		fontWeight: 'bold',
+																	}}
+																	className="memberName"
+																>
+																	{member.name}
+																</div>
+															</Image>
+														</CelebNextRightBottom>
+													)}
+												</>
+											))}
+									</RepeatWrap>
+								);
+							}
+							return renderList;
 						}
-						return renderList;
+
 					})()}
 				</MembersContainer>
 			</ContentWrap>
