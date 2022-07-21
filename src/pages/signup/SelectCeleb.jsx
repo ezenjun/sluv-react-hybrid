@@ -564,6 +564,21 @@ export const ImgCircle = styled.div`
 	border-radius: 50%;
 	margin-bottom: 0.5rem;
 	border: ${props => (props.border ? '0.1875rem solid #9e30f4' : 'none')};
+	box-sizing: border-box;
+
+	&:hover {
+		cursor: pointer;
+	}
+	@media screen and (max-width: 350px) {
+		width: 5.3125rem;
+		height: 5.3125rem;
+		margin-bottom: 0.375rem;
+	}
+	@media screen and (max-width: 320px) {
+		width: 4.375rem;
+		height: 4.375rem;
+		margin-bottom: 0.3125rem;
+	}
 `;
 
 export const Image = styled.div`
@@ -608,8 +623,8 @@ export const Image = styled.div`
 export const CountBadge = styled.span`
 	border: 1px solid black;
 	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
+	top: ${props => props.location || '0.4375rem'};
+	right: ${props => props.location || '0.4375rem'};
 	display: ${props => (props.status ? 'flex' : 'none')};
 	justify-content: center;
 	align-items: center;
