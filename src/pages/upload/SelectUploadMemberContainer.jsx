@@ -13,6 +13,7 @@ import { BottomWrap, CelebLeftBottom, CelebLeftTop, CelebNextLeftBottom, CelebNe
 import { SubText } from '../../components/Texts/SubText';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { UploadPopupState } from '../../recoil/BottomNav';
+import styled from 'styled-components';
 
 export default function SelectUploadMemberContainer() {
 	const navigate = useNavigate();
@@ -84,25 +85,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div className="dim"></div>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebLeftTop>
 													)}
 													{index % 8 === 1 && (
@@ -110,24 +100,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebRightTop>
 													)}
 													{index % 8 === 2 && (
@@ -135,24 +115,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebLeftBottom>
 													)}
 													{index % 8 === 3 && (
@@ -160,24 +130,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebRightBottom>
 													)}
 													{index % 8 === 4 && (
@@ -185,24 +145,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebNextLeftBottom>
 													)}
 													{index % 8 === 5 && (
@@ -210,24 +160,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebNextLeftTop>
 													)}
 													{index % 8 === 6 && (
@@ -235,24 +175,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebNextRightTop>
 													)}
 													{index % 8 === 7 && (
@@ -260,24 +190,14 @@ export default function SelectUploadMemberContainer() {
 															key={member.memberIdx}
 															onClick={e => onSelectMember(member, e)}
 														>
-															<Image size="9.25rem">
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
-																<div
-																	style={{
-																		zIndex: '100',
-																		marginBottom: '0.75rem',
-																		fontSize: '1rem',
-																		fontWeight: 'bold',
-																	}}
-																	className="memberName"
-																>
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+															>
+																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 														</CelebNextRightBottom>
 													)}
 												</>
@@ -294,3 +214,31 @@ export default function SelectUploadMemberContainer() {
 		</MainContainer>
 	);
 }
+
+const ImgCircle = styled.div`
+	background: url(${props => props.src});
+	width: ${props => props.size || '6.25rem'};
+	height: ${props => props.size || '6.25rem'};
+	background-size: cover;
+	background-position: 50%;
+	background-repeat: no-repeat;
+	border-radius: 50%;
+	margin-bottom: 0.5rem;
+	border: ${props => (props.border ? '0.1875rem solid #9e30f4' : 'none')};
+	box-sizing: border-box;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	color: white;
+
+	&:hover {
+		cursor: pointer;
+	}
+	.memberName {
+		z-index: 1000;
+		margin-bottom: 0.75rem;
+		font-size: 1rem;
+		font-weight: 700;
+	}
+`;
