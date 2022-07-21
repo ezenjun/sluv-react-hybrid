@@ -11,20 +11,17 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { TopRadiusContainer } from '../../components/containers/TopRadiusContainer';
 import { MainText } from '../../components/Texts/MainText';
-import { PopUpModal } from '../../components/PopUp/PopUpModal';
+import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 
 import { ReactComponent as Unchecked } from '../../assets/Icons/icon_circular_checkbox_empty.svg';
 import { ReactComponent as Checked } from '../../assets/Icons/icon_circular_checkbox_fill.svg';
+import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
 import { customApiClient } from '../../utils/apiClient';
-import { useSetRecoilState } from 'recoil';
-import { PopUpModalState } from '../../recoil/PopUpModal';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function ReportUser() {
 	const navigate = useNavigate();
 	const { idx } = useParams();
-
-	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
 	const [extraOpinion, setExtraOpinion] = useState('');
 	const [isExtraOpinion, setIsExtraOpinion] = useState(false);
@@ -52,6 +49,7 @@ export default function ReportUser() {
 	]);
 	const [isConfirm, setIsConfirm] = useState(false);
 	const [checkedElement, setCheckedElement] = useState(-1);
+	const [popupStatus, setPopupStatus] = useState(false);
 
 	const onChangeExtraOpinion = e => {
 		if (e.target.value) {
@@ -84,11 +82,11 @@ export default function ReportUser() {
 		if(!data.isSuccess) return;
 		console.log(data);
 
-		setPopUpModalState(true);
+		setPopupStatus(true);
 	}
 
 	const onClickYes = () => {
-		setPopUpModalState(false);
+		setPopupStatus(false);
 		navigate(-1);
 	}
 
@@ -149,31 +147,51 @@ export default function ReportUser() {
 				</InputSpeechBubbleWrap>
 			</TopRadiusContainer>
 
-			<PopUpModal closeButton={false}>
-				<div
-					style={{
-						marginTop: '1.5rem',
-						fontSize: '1.125rem',
-						fontWeight: 'bold',
-						color: '#262626',
-					}}
-				>
-					사용자가 신고되었어요
-				</div>
-				<div
-					style={{
-						fontSize: '0.875rem',
-						color: '#8d8d8d',
-						margin: '0.75rem 0 2rem',
-						lineHeight: '1.36'
-					}}
-				>
-					해당 사용자를 검수할게요
-					<br />
-					조금만 기다려 주세요!
-				</div>
-				<PurpleButton onClick={onClickYes} marginBottom="0">확인</PurpleButton>
-			</PopUpModal>
+			<WholePage openStatus={popupStatus}>
+				<ModalWrap>
+					<img
+						src={PopupBackgroundGradient}
+						alt=""
+						style={{
+							position: 'absolute',
+							height: '100%',
+							top: '0',
+							zIndex: '0',
+						}}
+					/>
+					<div
+						style={{
+							zIndex: '1',
+						}}
+					>
+						<div
+							style={{
+								marginTop: '1.5rem',
+								fontSize: '1.125rem',
+								fontWeight: 'bold',
+								color: '#262626',
+							}}
+						>
+							사용자가 신고되었어요
+						</div>
+						<div
+							style={{
+								fontSize: '0.875rem',
+								color: '#8d8d8d',
+								margin: '0.75rem 0 2rem',
+								lineHeight: '1.36',
+							}}
+						>
+							해당 사용자를 검수할게요
+							<br />
+							조금만 기다려 주세요!
+						</div>
+						<PurpleButton onClick={onClickYes} marginBottom="0">
+							확인
+						</PurpleButton>
+					</div>
+				</ModalWrap>
+			</WholePage>
 		</MainContainer>
 	);
 }

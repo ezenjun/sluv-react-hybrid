@@ -9,12 +9,12 @@ import { MainText } from '../../components/Texts/MainText';
 import { CheckboxWrap, CircularCheckboxWrap } from './ReportUser';
 import { ReactComponent as Unchecked } from '../../assets/Icons/icon_circular_checkbox_empty.svg';
 import { ReactComponent as Checked } from '../../assets/Icons/icon_circular_checkbox_fill.svg';
+import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
 import { InputSpeechBubbleWrap, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
 import { customApiClient } from '../../utils/apiClient';
-import { ModalWrap, PopUpModal, WholePage } from '../../components/PopUp/PopUpModal';
+import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
-import { useSetRecoilState } from 'recoil';
-import { PopUpModalState } from '../../recoil/PopUpModal';
+
 
 export default function ReportComment() {
 	const navigate = useNavigate();
@@ -149,31 +149,47 @@ export default function ReportComment() {
 
 			<WholePage openStatus={popupStatus}>
 				<ModalWrap>
+					<img
+						src={PopupBackgroundGradient}
+						alt=""
+						style={{
+							position: 'absolute',
+							height: '100%',
+							top: '0',
+							zIndex: '0',
+						}}
+					/>
 					<div
 						style={{
-							marginTop: '1.5rem',
-							fontSize: '1.125rem',
-							fontWeight: 'bold',
-							color: '#262626',
+							zIndex: '1',
 						}}
 					>
-						수정이 요청되었어요
+						<div
+							style={{
+								marginTop: '1.5rem',
+								fontSize: '1.125rem',
+								fontWeight: 'bold',
+								color: '#262626',
+							}}
+						>
+							수정이 요청되었어요
+						</div>
+						<div
+							style={{
+								fontSize: '0.875rem',
+								color: '#8d8d8d',
+								margin: '0.75rem 0 2rem',
+								lineHeight: '1.36',
+							}}
+						>
+							업로더에게 수정 요청 알림이 가요
+							<br />
+							정보의 질을 높여주셔서 감사해요
+						</div>
+						<PurpleButton onClick={onClickYes} marginBottom="0">
+							확인
+						</PurpleButton>
 					</div>
-					<div
-						style={{
-							fontSize: '0.875rem',
-							color: '#8d8d8d',
-							margin: '0.75rem 0 2rem',
-							lineHeight: '1.36',
-						}}
-					>
-						업로더에게 수정 요청 알림이 가요
-						<br />
-						정보의 질을 높여주셔서 감사해요
-					</div>
-					<PurpleButton onClick={onClickYes} marginBottom="0">
-						확인
-					</PurpleButton>
 				</ModalWrap>
 			</WholePage>
 		</MainContainer>
