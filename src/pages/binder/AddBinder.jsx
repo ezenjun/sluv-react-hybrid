@@ -353,7 +353,7 @@ const FeedContainer = styled.div`
 	height: 100vh;
 	padding: 4.375rem 1.25rem 1.25rem 1.25rem;
 	/* border: 1px solid black; */
-	overflow-y: scroll;
+	/* overflow-y: scroll; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
