@@ -97,6 +97,11 @@ export default function BinderDetail() {
 	//바인더 상세 편집버튼 클릭
 	const onEdit = () => {
 		setEditStatus(!editStatus);
+		setSelectedItemList([]);
+		let temp;
+		(temp = []).length = selectedStatusList.length;
+		temp.fill(false);
+		setSelectedStatusList([...temp]);
 	};
 	// 아이템 선택 후 이동 버튼
 	const onMoveItem = () => {
@@ -208,15 +213,44 @@ export default function BinderDetail() {
 					<BinderTextWrap>
 						{editStatus ? (
 							<>
-								<SubText color="#8d8d8d">{selectedItemList.length}개</SubText>
-								<SubText color="#8d8d8d" onClick={onEdit}>
+								{selectedItemList.length > 0 ? (
+									<SubText
+										color="#8d8d8d"
+										fontsize="0.875rem"
+										fontweight="normal"
+									>
+										{selectedItemList.length}개
+									</SubText>
+								) : (
+									<SubText
+										color="#8d8d8d"
+										fontsize="0.875rem"
+										fontweight="normal"
+									>
+										아이템 선택
+									</SubText>
+								)}
+
+								<SubText
+									color="#8d8d8d"
+									fontsize="0.875rem"
+									fontweight="normal"
+									onClick={onEdit}
+								>
 									취소
 								</SubText>
 							</>
 						) : (
 							<>
-								<SubText color="#8d8d8d">{dipList.length}개 보관중</SubText>
-								<SubText color="#8d8d8d" onClick={onEdit}>
+								<SubText color="#8d8d8d" fontsize="0.875rem" fontweight="normal">
+									{dipList.length}개 보관중
+								</SubText>
+								<SubText
+									color="#8d8d8d"
+									fontsize="0.875rem"
+									fontweight="normal"
+									onClick={onEdit}
+								>
 									편집
 								</SubText>
 							</>
@@ -273,7 +307,7 @@ export default function BinderDetail() {
 			) : (
 				<NoItemContainer>
 					<IconWrap>
-						<BinderEmpty style={{ width: '2.5rem', height: '2.5rem' }}></BinderEmpty>
+						<BinderEmpty style={{ width: '3.75rem', height: '3.75rem' }}></BinderEmpty>
 					</IconWrap>
 					<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.75rem 0">
 						바인더가 비어있어요

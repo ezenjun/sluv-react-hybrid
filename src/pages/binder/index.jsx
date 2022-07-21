@@ -191,7 +191,7 @@ export default function Binder() {
 		} else {
 			setPopUpModalStatusState(false);
 			setBottomMenuStatusState(false);
-			setToastMessageBottomPosition('3.875rem');
+			setToastMessageBottomPosition('4.125rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
 			setToastMessage(`${name} 바인더가 삭제되었어요`);
@@ -250,7 +250,7 @@ export default function Binder() {
 			body = {
 				coverImgUrl: '',
 				name: binderName,
-			}
+			};
 		} else {
 			body = { name: binderName };
 		}
@@ -332,8 +332,8 @@ export default function Binder() {
 					</TopNav>
 					<FeedContainer>
 						<BinderTextWrap>
-							<MainText fontsize="1.25rem">내바인더</MainText>
-							<SubText color="#8d8d8d" onClick={onAddBinder}>
+							<MainText fontsize="1.25rem">내 바인더</MainText>
+							<SubText color="#8d8d8d" fontsize="0.875rem" onClick={onAddBinder}>
 								바인더 추가
 							</SubText>
 						</BinderTextWrap>
@@ -365,8 +365,12 @@ export default function Binder() {
 													>
 														{item.name}
 													</SubText>
-													<SubText fontsize="0.75rem">
-														{item.dibCount} 개 보관중
+													<SubText
+														fontsize="0.75rem"
+														fontweight="normal"
+														color="#8d8d8d"
+													>
+														{item.dibCount}개 보관중
 													</SubText>
 												</GridItem>
 											) : (
@@ -458,7 +462,11 @@ export default function Binder() {
 															}
 														></EditBinder>
 													</GridItemInfo>
-													<SubText fontsize="0.75rem">
+													<SubText
+														fontsize="0.75rem"
+														fontweight="normal"
+														color="#8d8d8d"
+													>
 														{item.dibCount}개 보관중
 													</SubText>
 												</GridItem>

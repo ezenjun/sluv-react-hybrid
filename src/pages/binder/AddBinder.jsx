@@ -154,7 +154,7 @@ export default function AddBinder() {
 			console.log(data.message);
 			if (data.code === 3080) {
 				console.log('3080', data.message);
-				setToastMessageBottomPosition('1.625rem');
+				setToastMessageBottomPosition('3.75rem');
 				setToastMessageWrapStatus(true);
 				setToastMessageStatus(true);
 				setToastMessage('이미 같은 이름의 바인더가 있어요');
@@ -185,7 +185,7 @@ export default function AddBinder() {
 						return;
 					} else {
 						setBottomMenuStatusState(false);
-						setToastMessageBottomPosition('3.875rem');
+						setToastMessageBottomPosition('5rem');
 						setToastMessageWrapStatus(true);
 						setToastMessageStatus(true);
 						setToastMessage(`아이템이 ${binderName} 바인더로 이동했어요`);
@@ -211,7 +211,7 @@ export default function AddBinder() {
 						return;
 					}
 					setBottomMenuStatusState(false);
-					setToastMessageBottomPosition('3.875rem');
+					setToastMessageBottomPosition('5rem');
 					setToastMessageWrapStatus(true);
 					setToastMessageStatus(true);
 					setToastMessage(`아이템이 생성된 바인더로 이동했어요`);
@@ -226,10 +226,10 @@ export default function AddBinder() {
 				}
 			}
 			navigate('/binder');
-			setToastMessageBottomPosition('1.625rem');
+			setToastMessageBottomPosition('4.125rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
-			setToastMessage('바인더가 생성되었어요');
+			setToastMessage(`${binderName} 바인더가 생성되었어요`);
 			setTimeout(() => {
 				setToastMessageStatus(false);
 			}, 2000);
@@ -353,7 +353,7 @@ const FeedContainer = styled.div`
 	height: 100vh;
 	padding: 4.375rem 1.25rem 1.25rem 1.25rem;
 	/* border: 1px solid black; */
-	overflow-y: scroll;
+	/* overflow-y: scroll; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;

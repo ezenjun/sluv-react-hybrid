@@ -72,7 +72,7 @@ export default function FindPasswordResult() {
 							</MainText>
 
 							<SubText fontsize="0.875rem" color="#8d8d8d" margin="1rem 0 0 0">
-								개인정보 보호를 위해 뒷자리는 ***로 표시할게요.
+								개인정보 보호를 위해 뒷자리는 ***로 표시할게요
 							</SubText>
 						</CompletePageLabel>
 						<EmailWrap>{email}</EmailWrap>
@@ -116,7 +116,8 @@ const ContentWrap = styled.div`
 const CompleteTopWrap = styled.div`
 	display: flex;
 	height: 100%;
-	justify-content: center;
+	margin-top: 9.375rem;
+	/* justify-content: center; */
 	align-items: center;
 	flex-direction: column;
 `;
@@ -135,7 +136,9 @@ const EmailWrap = styled.div`
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	font-weight: bold;
+	font-weight: 600;
+	font-size: 1rem;
+	min-width: 13.125rem;
 	height: 2.75rem;
 	padding: 0 1.625rem;
 	background-color: #f4f4f4;

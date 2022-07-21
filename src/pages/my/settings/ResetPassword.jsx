@@ -171,9 +171,18 @@ export default function Index() {
 						<SubText
 							fontsize="0.8125rem"
 							fontweight="normal"
+							color="#6a6a6a"
 							style={{ lineHeight: '1.5' }}
 						>
-							문의사항은 <b>celebit.sluv@gmail.com</b>에 남겨주세요!
+							문의사항은&nbsp;
+							<SubText
+								fontsize="0.8125rem"
+								fontweight="normal"
+								style={{ lineHeight: '1.5' }}
+							>
+								celebit.sluv@gmail.com
+							</SubText>
+							&nbsp;에 남겨주세요!
 							<br />
 							감사합니다.
 						</SubText>

@@ -563,6 +563,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 											>
 												{item.brandKr}
 											</SubText>
+
 											<SubText
 												color="#262626"
 												fontweight="regular"
@@ -571,6 +572,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 													whiteSpace: 'nowrap',
 													overflow: 'hidden',
 													width: '100%',
+													marginBottom: '0.9375rem',
 												}}
 											>
 												{item.itemName}
@@ -672,6 +674,7 @@ const ChipWrap = styled.div`
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
+	box-sizing: border-box;
 	padding: 1.25rem 0 0 1.25rem;
 `;
 const Chip = styled.div`
@@ -679,6 +682,7 @@ const Chip = styled.div`
 	box-sizing: border-box;
 	padding: 0.625rem 1rem;
 	margin-right: 0.5rem;
+	margin-bottom: 0.0625rem;
 	border-radius: 1.9rem;
 	border: ${props => (props.selected ? 'none' : 'solid 1px #e2e0e0')};
 	background-color: ${props => (props.selected ? '#2b1e34' : '#fff')};
@@ -729,49 +733,32 @@ const Image = styled.div`
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 50%;
-	margin-bottom: 1rem;
+	margin-bottom: 0.75rem;
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
 	font-size: 0.8125rem;
-	@media screen and (width: 360px) {
-		width: 9.5625rem;
-		height: 9.5625rem;
+	@media screen and (max-width: 399px) {
+		width: 10.125rem;
+		height: 10.125rem;
 	}
-	@media screen and (width: 320px) {
+	@media screen and (max-width: 375px) {
+		width: 10.125rem;
+		height: 10.125rem;
+	}
+	@media screen and (max-width: 360px) {
 		width: 9.375rem;
 		height: 9.375rem;
+	}
+	@media screen and (width: 320px) {
+		width: 9.25rem;
+		height: 9.25rem;
 	}
 	@media screen and (width: 280px) {
 		width: 8.125rem;
 		height: 8.125rem;
 	}
 `;
-const SkeletonImg = styled.div`
-	display: flex;
-	justify-content: flex-start;
-	align-items: flex-end;
-	width: 10.125rem;
-	height: 10.125rem;
-	border-radius: 1rem;
-	background-color: #8d8d8d;
 
-	margin-bottom: 1rem;
-	box-sizing: border-box;
-	padding: 0.5rem 0.75rem;
-	font-size: 0.8125rem;
-	@media screen and (width: 360px) {
-		width: 9.5625rem;
-		height: 9.5625rem;
-	}
-	@media screen and (width: 320px) {
-		width: 9.375rem;
-		height: 9.375rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
-	}
-`;
 const ImageText = styled.div`
 	display: flex;
 	width: 100%;
