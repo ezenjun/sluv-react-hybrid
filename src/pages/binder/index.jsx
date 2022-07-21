@@ -83,6 +83,7 @@ export default function Binder() {
 
 	const [editBinderIdx, setEditBinderIdx] = useState(null);
 	const [binderEachIndexinList, setBinderEachIndexinList] = useState(null);
+	const [currentBinderImgUrl, setCurrentBinderImgUrl] = useState('');
 
 	// UseEffect
 	useEffect(() => {
@@ -112,6 +113,7 @@ export default function Binder() {
 	const onEditBinder = (binderIdx, listIdx) => {
 		setBottomMenuStatusState(true);
 		setEditBinderIdx(binderIdx);
+		setCurrentBinderImgUrl(binderList[listIdx].coverImgUrl);
 		setBinderEachIndexinList(listIdx);
 		setBinderName('');
 	};
@@ -121,12 +123,15 @@ export default function Binder() {
 		coverImgInput.current.click();
 	};
 	const onDefaultClick = () => {
-		alert('기본 커버');
+		setBottomMenuStatusState(false);
+		setCurrentBinderImgUrl('');
+		setSelectedFile('');
+		const imgEL = document.querySelector('.img__box');
+		imgEL.style.backgroundImage = null;
 	};
 	const editBinder = () => {
 		setCurrentPage('edit');
 		setBottomMenuStatusState(false);
-		setIsUploadSuccess(false);
 	};
 	const deleteBinder = () => {
 		setCurrentPage('delete');
@@ -241,6 +246,11 @@ export default function Binder() {
 				coverImgUrl: editedCoverImgUrl,
 				name: binderName,
 			};
+		} else if (!currentBinderImgUrl) {
+			body = {
+				coverImgUrl: '',
+				name: binderName,
+			}
 		} else {
 			body = { name: binderName };
 		}
@@ -511,11 +521,7 @@ export default function Binder() {
 							)}
 						</GridItemWrap>
 						<BottomSlideMenu>
-							<SubText
-								fontsize="1rem"
-								margin="0.9375rem 0"
-								onClick={() => editBinder(editBinderIdx)}
-							>
+							<SubText fontsize="1rem" margin="0.9375rem 0" onClick={editBinder}>
 								바인더 수정하기
 							</SubText>
 							<SubText
@@ -545,12 +551,23 @@ export default function Binder() {
 						</div>
 					</TopNav>
 					<FeedContainerEdit>
-						<AddImage
-							onClick={onAddCoverImage}
-							src={binderList[binderEachIndexinList].coverImgUrl}
-						>
-							<CoverImage className="img__box" />
-						</AddImage>
+						{currentBinderImgUrl ? (
+							<AddImage onClick={onAddCoverImage} src={currentBinderImgUrl}>
+								<CoverImage className="img__box" />
+							</AddImage>
+						) : (
+							<BasicCoverAddImage onClick={onAddCoverImage}>
+								<PictureIconBackground>
+									<BinderAddPicture
+										style={{ width: '2rem', height: '2rem' }}
+									></BinderAddPicture>
+								</PictureIconBackground>
+								<SubText fontweight="normal" color="#b1b1b1">
+									기본 커버
+								</SubText>
+								<CoverImage className="img__box" />
+							</BasicCoverAddImage>
+						)}
 						<input
 							type="file"
 							accept="image/*"
@@ -696,6 +713,18 @@ const FeedContainerEdit = styled.div`
 	}
 `;
 
+const BasicCoverAddImage = styled.div`
+	display: flex;
+	/* position: relative; */
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 10.125rem;
+	height: 10.125rem;
+	border-radius: 1rem;
+	background-color: #f6f6f6;
+`;
+
 const AddImage = styled.div`
 	display: flex;
 	flex-direction: column;
@@ -739,7 +768,7 @@ const PictureIconBackground = styled.div`
 	width: 3.125rem;
 	height: 3.125rem;
 	border-radius: 50%;
-	background-color: grey;
+	background-color: #ebebeb;
 	margin-bottom: 0.375rem;
 `;
 
