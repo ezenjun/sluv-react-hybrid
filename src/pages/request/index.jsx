@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { customApiClient } from '../../utils/apiClient';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
+import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
 
 export default function RequestCeleb() {
 	const navigate = useNavigate();
@@ -116,33 +117,49 @@ export default function RequestCeleb() {
 
 			<WholePage openStatus={popupStatus}>
 				<ModalWrap>
+					<img
+						src={PopupBackgroundGradient}
+						alt=""
+						style={{
+							position: 'absolute',
+							height: '100%',
+							top: '0',
+							zIndex: '0',
+						}}
+					/>
 					<div
 						style={{
-							marginTop: '1.5rem',
-							fontSize: '1.125rem',
-							fontWeight: 'bold',
-							color: '#262626',
+							zIndex: '1',
 						}}
 					>
-						'{name}'을
-						<br/>
-						요청해 주셔서 감사해요!
+						<div
+							style={{
+								marginTop: '1.5rem',
+								fontSize: '1.125rem',
+								fontWeight: 'bold',
+								color: '#262626',
+							}}
+						>
+							'{name}'을
+							<br />
+							요청해 주셔서 감사해요!
+						</div>
+						<div
+							style={{
+								fontSize: '0.875rem',
+								color: '#8d8d8d',
+								margin: '0.75rem 0 2rem',
+								lineHeight: '1.36',
+							}}
+						>
+							셀럽이 추가되면 이메일로 알려드릴게요!
+							<br />
+							다른 셀럽을 먼저 선택해주세요
+						</div>
+						<PurpleButton onClick={onClickYes} marginBottom="0">
+							확인
+						</PurpleButton>
 					</div>
-					<div
-						style={{
-							fontSize: '0.875rem',
-							color: '#8d8d8d',
-							margin: '0.75rem 0 2rem',
-							lineHeight: '1.36',
-						}}
-					>
-						셀럽이 추가되면 이메일로 알려드릴게요!
-						<br />
-						다른 셀럽을 먼저 선택해주세요
-					</div>
-					<PurpleButton onClick={onClickYes} marginBottom="0">
-						확인
-					</PurpleButton>
 				</ModalWrap>
 			</WholePage>
 		</MainContainer>
