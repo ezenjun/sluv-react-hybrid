@@ -120,7 +120,7 @@ export default function LocalLogin() {
 			navigate('/home');
 		} else {
 			setToastMessageBottomPosition('1.625rem');
-			setToastMessage('회원정보가 없어요. 아이디/비밀번호를 확인해 주세요.');
+			setToastMessage('아이디/비밀번호를 확인해 주세요.');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
 

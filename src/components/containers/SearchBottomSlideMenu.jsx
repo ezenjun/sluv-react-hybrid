@@ -411,7 +411,7 @@ export const ButtonWrap = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	box-sizing: border-box;
-	margin: 1.25rem 0 0 0;
+	margin: 2.5rem 0 0 0;
 	padding: 0 1.25rem;
 `;
 const ResetButton = styled.div`
@@ -420,11 +420,10 @@ const ResetButton = styled.div`
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: bold;
-	font-size: 16px;
 	font-weight: bold;
-	padding: 14px 0;
+	padding: 0.875rem 0;
 	width: 6.375rem;
 	height: 3rem;
 	margin-right: 0.5rem;
@@ -438,11 +437,10 @@ const SubmitButton = styled.div`
 	align-items: center;
 	justify-content: center;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: bold;
-	font-size: 16px;
 	font-weight: bold;
-	padding: 14px 0;
+	padding: 0.875rem 0;
 	width: 14.0625rem;
 	height: 3rem;
 	border-radius: 30.3774px;

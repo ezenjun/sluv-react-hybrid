@@ -89,21 +89,21 @@ export function ItemFilter(props) {
 
 export const FilterContainer = styled.div`
 	display: flex;
-	padding: 1.25rem 1.25rem 0 1.25rem;
+	padding: 1.25rem 0.625rem 1.25rem 1.25rem;
 	flex-direction: column;
-	/* height: 18.5625rem; */
+	height: 18.5625rem;
 `;
 export const Filter = styled.div`
 	display: flex;
 	align-items: center;
-	height: 48px;
+	height: 3rem;
 	flex-grow: 0;
-	font-size: 14px;
+	font-size: 0.875rem;
 	font-weight: normal;
 	margin-right: 0.5rem;
 	margin-bottom: 0.75rem;
-	padding: 16px 20px;
-	border-radius: 13px;
+	padding: 1rem 1.125rem;
+	border-radius: 0.8125rem;
 	border: solid 1px #e5cff6;
 	box-sizing: border-box;
 	color: ${props => (props.selected ? '#262626' : '#c9c9c9')};
