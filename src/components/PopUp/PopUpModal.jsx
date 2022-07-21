@@ -48,6 +48,8 @@ export const WholePage = styled.div`
 export const ModalWrap = styled.div`
 	display: flex;
 	flex-direction: column;
+	position: relative;
+	overflow: hidden;
 	/* /justify-content: center; */
 	text-align: center;
 	align-items: center;

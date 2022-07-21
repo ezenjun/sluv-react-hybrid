@@ -399,7 +399,7 @@ const BinderName = styled.input`
 	}
 	caret-color: #9e30f4;
 `;
-const PictureIconBackground = styled.div`
+export const PictureIconBackground = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;

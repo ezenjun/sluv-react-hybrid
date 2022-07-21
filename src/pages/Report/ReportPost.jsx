@@ -13,6 +13,7 @@ import { InputSpeechBubbleWrap, SpeechBubbleTextArea } from '../../components/Bu
 import { customApiClient } from '../../utils/apiClient';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
+import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
 
 export default function ReportPost() {
 	const { idx } = useParams();
@@ -146,31 +147,47 @@ export default function ReportPost() {
 
 			<WholePage openStatus={popupStatus}>
 				<ModalWrap>
+					<img
+						src={PopupBackgroundGradient}
+						alt=""
+						style={{
+							position: 'absolute',
+							height: '100%',
+							top: '0',
+							zIndex: '0',
+						}}
+					/>
 					<div
 						style={{
-							marginTop: '1.5rem',
-							fontSize: '1.125rem',
-							fontWeight: 'bold',
-							color: '#262626',
+							zIndex: '1',
 						}}
 					>
-						게시글이 신고되었어요
+						<div
+							style={{
+								marginTop: '1.5rem',
+								fontSize: '1.125rem',
+								fontWeight: 'bold',
+								color: '#262626',
+							}}
+						>
+							게시글이 신고되었어요
+						</div>
+						<div
+							style={{
+								fontSize: '0.875rem',
+								color: '#8d8d8d',
+								margin: '0.75rem 0 2rem',
+								lineHeight: '1.36',
+							}}
+						>
+							해당 게시글을 검수할게요
+							<br />
+							조금만 기다려주세요!
+						</div>
+						<PurpleButton onClick={onClickYes} marginBottom="0">
+							확인
+						</PurpleButton>
 					</div>
-					<div
-						style={{
-							fontSize: '0.875rem',
-							color: '#8d8d8d',
-							margin: '0.75rem 0 2rem',
-							lineHeight: '1.36',
-						}}
-					>
-						해당 게시글을 검수할게요
-						<br />
-						조금만 기다려주세요!
-					</div>
-					<PurpleButton onClick={onClickYes} marginBottom="0">
-						확인
-					</PurpleButton>
 				</ModalWrap>
 			</WholePage>
 		</MainContainer>
