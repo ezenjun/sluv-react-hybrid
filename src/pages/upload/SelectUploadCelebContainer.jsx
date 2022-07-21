@@ -4,7 +4,7 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { Celeb, IconWrap, Image, InputWrap, ListContainer, PopularCelebContainer, RequestButton, RequestWrap, SearchFailContainer, SearchFailDiv, SearchTab, Tab, TabWrap, TextWrap } from '../signup/SelectCeleb';
+import { Celeb, IconWrap, Image, ImgCircle, InputWrap, ListContainer, PopularCelebContainer, RequestButton, RequestWrap, SearchFailContainer, SearchFailDiv, SearchTab, Tab, TabWrap, TextWrap } from '../signup/SelectCeleb';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
@@ -212,13 +212,7 @@ export default function SelectUploadCelebContainer() {
 									key={celeb.celebIdx}
 									onClick={e => onClickUploadCeleb(celeb, e)}
 								>
-									<Image size="6.25rem" key={celeb.id}>
-										<img
-											className="celebImg"
-											src={celeb.celebImgUrl}
-											alt="셀럽이미지"
-										/>
-									</Image>
+									<ImgCircle key={celeb.id} src={celeb.celebImgUrl} />
 									{celeb.name}
 								</Celeb>
 							))}
@@ -265,13 +259,7 @@ export default function SelectUploadCelebContainer() {
 											onClick={undefined}
 											style={{ marginLeft: '0.6875rem' }}
 										>
-											<Image size="6.25rem" key={index} border={false}>
-												<img
-													className="celebImg"
-													src={popular.celebImgUrl}
-													alt="셀럽이미지"
-												/>
-											</Image>
+											<ImgCircle key={index} src={popular.celebImgUrl} />
 											{popular.name}
 										</Celeb>
 									))}

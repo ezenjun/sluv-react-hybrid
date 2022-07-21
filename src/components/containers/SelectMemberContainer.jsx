@@ -214,7 +214,20 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
+																size="9.25rem"
+																src={member.memberImgUrl}
+																border={
+																	checkStatusList[
+																		member.memberIdx - 1
+																	]
+																}
+															>
+																<div className="memberName">
+																	{member.name}
+																</div>
+															</ImgCircle>
+															{/* <Image
 																size="9.25rem"
 																border={
 																	checkStatusList[
@@ -231,8 +244,9 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</Image> */}
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -252,24 +266,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -289,24 +300,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -326,24 +334,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -363,24 +368,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -400,24 +402,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -437,24 +436,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -474,24 +470,21 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 																onSelectMember(member, e, index)
 															}
 														>
-															<Image
+															<ImgCircle
 																size="9.25rem"
+																src={member.memberImgUrl}
 																border={
 																	checkStatusList[
 																		member.memberIdx - 1
 																	]
 																}
 															>
-																<img
-																	className="celebImg"
-																	src={member.memberImgUrl}
-																	alt="셀럽이미지"
-																/>
 																<div className="memberName">
 																	{member.name}
 																</div>
-															</Image>
+															</ImgCircle>
 															<CountBadge
+																location="0.625rem"
 																status={
 																	checkStatusList[
 																		member.memberIdx - 1
@@ -519,6 +512,35 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		</>
 	);
 }
+
+const ImgCircle = styled.div`
+	background: url(${props => props.src});
+	width: ${props => props.size || '6.25rem'};
+	height: ${props => props.size || '6.25rem'};
+	background-size: cover;
+	background-position: 50%;
+	background-repeat: no-repeat;
+	border-radius: 50%;
+	margin-bottom: 0.5rem;
+	border: ${props => (props.border ? '0.1875rem solid #9e30f4' : 'none')};
+	box-sizing: border-box;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	color: white;
+	
+
+	&:hover {
+		cursor: pointer;
+	}
+	.memberName {
+		z-index: 1000;
+		margin-bottom: 0.75rem;
+		font-size: 1rem;
+		font-weight: 700;
+	}
+`;
 
 const Image = styled.div`
 	position: relative;

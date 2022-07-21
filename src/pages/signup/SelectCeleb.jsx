@@ -245,16 +245,18 @@ export default function SelectCeleb() {
 			{currentPage === 0 && (
 				<MainContainer>
 					<TopNav style={{ justifyContent: 'space-between' }}>
-						{state === '/settings' &&
-							(<BackButton onClick={() => navigate(-1)} />)
-						}
+						{state === '/settings' && <BackButton onClick={() => navigate(-1)} />}
 						<NavRight>
 							{selectedNum > 0 && (
 								<SubText margin="0 1rem" color="#9e30f4">
 									{selectedNum}개 선택
 								</SubText>
 							)}
-							<NextButton fontsize="1rem" status={isCelebConfirm} onClick={onHandleNextButton}>
+							<NextButton
+								fontsize="1rem"
+								status={isCelebConfirm}
+								onClick={onHandleNextButton}
+							>
 								다음
 							</NextButton>
 						</NavRight>
@@ -320,17 +322,11 @@ export default function SelectCeleb() {
 											key={celeb.celebIdx}
 											onClick={e => onSelectCeleb(celeb, e, index)}
 										>
-											<Image
-												size="6.25rem"
+											<ImgCircle
 												key={celeb.id}
+												src={celeb.celebImgUrl}
 												border={checkStatusList[celeb.celebIdx - 1]}
-											>
-												<img
-													className="celebImg"
-													src={celeb.celebImgUrl}
-													alt="셀럽이미지"
-												/>
-											</Image>
+											/>
 											{celeb.name}
 											<CountBadge
 												status={checkStatusList[celeb.celebIdx - 1]}
@@ -384,17 +380,11 @@ export default function SelectCeleb() {
 													onClick={undefined}
 													style={{ marginLeft: '0.6875rem' }}
 												>
-													<Image
-														size="6.25rem"
-														key={index}
+													<ImgCircle
+														key={popular.id}
+														src={popular.celebImgUrl}
 														border={false}
-													>
-														<img
-															className="celebImg"
-															src={popular.celebImgUrl}
-															alt="셀럽이미지"
-														/>
-													</Image>
+													/>
 													{popular.name}
 												</Celeb>
 											))}
@@ -407,7 +397,7 @@ export default function SelectCeleb() {
 							<RequestWrap>
 								<RequestButton>
 									<PurpleButton
-										style={{fontSize: '0.875rem'}}
+										style={{ fontSize: '0.875rem' }}
 										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
 										marginBottom="0"
 										onClick={() => navigate('../../request/celebrity')}
@@ -564,6 +554,33 @@ export const CelebNextRightBottom = styled.div`
 	font-size: 1rem;
 `;
 
+export const ImgCircle = styled.div`
+	background: url(${props => props.src});
+	width: ${props => props.size || '6.25rem'};
+	height: ${props => props.size || '6.25rem'};
+	background-size: cover;
+	background-position: 50%;
+	background-repeat: no-repeat;
+	border-radius: 50%;
+	margin-bottom: 0.5rem;
+	border: ${props => (props.border ? '0.1875rem solid #9e30f4' : 'none')};
+	box-sizing: border-box;
+
+	&:hover {
+		cursor: pointer;
+	}
+	@media screen and (max-width: 350px) {
+		width: 5.3125rem;
+		height: 5.3125rem;
+		margin-bottom: 0.375rem;
+	}
+	@media screen and (max-width: 320px) {
+		width: 4.375rem;
+		height: 4.375rem;
+		margin-bottom: 0.3125rem;
+	}
+`;
+
 export const Image = styled.div`
 	position: relative;
 	width: ${props => props.size || '6.25rem'};
@@ -606,8 +623,8 @@ export const Image = styled.div`
 export const CountBadge = styled.span`
 	border: 1px solid black;
 	position: absolute;
-	top: 0.5rem;
-	right: 0.5rem;
+	top: ${props => props.location || '0.4375rem'};
+	right: ${props => props.location || '0.4375rem'};
 	display: ${props => (props.status ? 'flex' : 'none')};
 	justify-content: center;
 	align-items: center;
