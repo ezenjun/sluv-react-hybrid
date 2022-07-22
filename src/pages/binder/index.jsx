@@ -24,7 +24,7 @@ import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg
 import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
 import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
 import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
-
+import { ReactComponent as BasicCover } from '../../assets/Binder/BasicCover.svg';
 import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
@@ -344,20 +344,38 @@ export default function Binder() {
 										<>
 											{item.isBasic === 0 ? ( // 기본 바인더
 												<GridItem key={item.binderIdx}>
-													<PinkBinder
-														style={{
-															width: '9.6875rem',
-															height: '9.6875rem',
-															marginBottom: '0.6875rem',
-															borderRadius: '1rem',
-														}}
-														onClick={() =>
-															onEachBinderClick(
-																item.binderIdx,
-																item.name
-															)
-														}
-													></PinkBinder>
+													{item.dibCount > 0 ? (
+														<PinkBinder
+															style={{
+																width: '9.6875rem',
+																height: '9.6875rem',
+																marginBottom: '0.6875rem',
+																borderRadius: '1rem',
+															}}
+															onClick={() =>
+																onEachBinderClick(
+																	item.binderIdx,
+																	item.name
+																)
+															}
+														></PinkBinder>
+													) : (
+														<BasicBinder
+															style={{
+																width: '9.6875rem',
+																height: '9.6875rem',
+																marginBottom: '0.6875rem',
+																borderRadius: '1rem',
+															}}
+															onClick={() =>
+																onEachBinderClick(
+																	item.binderIdx,
+																	item.name
+																)
+															}
+														></BasicBinder>
+													)}
+
 													<SubText
 														fontsize="1rem"
 														fontweight="bold"
@@ -529,7 +547,7 @@ export default function Binder() {
 							)}
 						</GridItemWrap>
 						<BottomSlideMenu>
-							<SubText fontsize="1rem" margin="0.9375rem 0" onClick={editBinder}>
+							<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={editBinder}>
 								바인더 수정하기
 							</SubText>
 							<SubText
@@ -565,7 +583,7 @@ export default function Binder() {
 							</AddImage>
 						) : (
 							<BasicCoverAddImage onClick={onAddCoverImage}>
-								<PictureIconBackground>
+								{/* <PictureIconBackground>
 									<BinderAddPicture
 										style={{ width: '2rem', height: '2rem' }}
 									></BinderAddPicture>
@@ -573,6 +591,10 @@ export default function Binder() {
 								<SubText fontweight="normal" color="#b1b1b1">
 									기본 커버
 								</SubText>
+								<CoverImage className="img__box" /> */}
+								<BasicCover
+									style={{ width: '10.125rem', height: '10.125rem' }}
+								></BasicCover>
 								<CoverImage className="img__box" />
 							</BasicCoverAddImage>
 						)}

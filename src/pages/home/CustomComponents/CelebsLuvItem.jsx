@@ -15,6 +15,10 @@ import { ReactComponent as RightArrow } from '../../../assets/Icons/right_arrow.
 import { ReactComponent as BinderWhite } from '../../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../../assets/Icons/binderRed.svg';
 
+import { ReactComponent as PinkBinder } from '../../../assets/Binder/PinkBinder.svg';
+import { ReactComponent as YellowBinder } from '../../../assets/Binder/YellowBinder.svg';
+import { ReactComponent as GreenBinder } from '../../../assets/Binder/GreenBinder.svg';
+import { ReactComponent as BlueBinder } from '../../../assets/Binder/BlueBinder.svg';
 import { ReactComponent as Diamond } from '../../../assets/Custom/Custom_diamond.svg';
 import { ReactComponent as Crown } from '../../../assets/Custom/Custom_crown.svg';
 import { ReactComponent as Present } from '../../../assets/Custom/Custom_present.svg';
@@ -633,7 +637,10 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			</ItemContainer>
 
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
-				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
+				<RowWrap
+					style={{ marginBottom: '0' }}
+					onClick={() => onCreateBinder(selectedItemIdx)}
+				>
 					<ImageWrap>
 						<PlusButton></PlusButton>
 					</ImageWrap>
@@ -641,10 +648,62 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 						바인더 만들기
 					</SubText>
 				</RowWrap>
-				<HorizontalLine></HorizontalLine>
+				<HorizontalLine
+					style={{ marginLeft: '1.25rem', marginRight: '1.25rem' }}
+				></HorizontalLine>
 				{binderList.map(binder => (
 					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
-						<ImageWrap></ImageWrap>
+						{binder.coverImgUrl ? (
+							<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+						) : (
+							<>
+								{!binder.isBasic ? (
+									<PinkBinder
+										style={{
+											width: '3.75rem',
+											height: '3.75rem',
+											marginRight: '1.25rem',
+											borderRadius: '1rem',
+										}}
+									></PinkBinder>
+								) : (
+									<>
+										{binder.binderIdx % 3 === 0 ? (
+											<YellowBinder
+												style={{
+													width: '3.75rem',
+													height: '3.75rem',
+													marginRight: '1.25rem',
+													borderRadius: '1rem',
+												}}
+											></YellowBinder>
+										) : (
+											<>
+												{binder.binderIdx % 3 === 1 ? (
+													<GreenBinder
+														style={{
+															width: '3.75rem',
+															height: '3.75rem',
+															marginRight: '1.25rem',
+															borderRadius: '1rem',
+														}}
+													></GreenBinder>
+												) : (
+													<BlueBinder
+														style={{
+															width: '3.75rem',
+															height: '3.75rem',
+															marginRight: '1.25rem',
+															borderRadius: '1rem',
+														}}
+													></BlueBinder>
+												)}
+											</>
+										)}
+									</>
+								)}
+							</>
+						)}
 						<SubText fontsize="1rem" margin="0.9375rem 0">
 							{binder.name}
 						</SubText>
@@ -780,6 +839,9 @@ const ImageWrap = styled.div`
 	justify-content: center;
 	width: 3.75rem;
 	height: 3.75rem;
+	background: url(${props => props.src});
+	background-position: 50%;
+	background-size: cover;
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;

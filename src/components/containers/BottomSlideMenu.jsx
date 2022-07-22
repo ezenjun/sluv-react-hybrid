@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as Close } from '../../assets/Icons/CloseX262626.svg';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { SubText } from '../Texts/SubText';
 
@@ -42,8 +42,6 @@ export function BottomSlideMenu({ menu, children, filters, open, getOpenStatus }
 						style={{
 							width: '1.5rem',
 							height: '1.5rem',
-							position: 'absolute',
-							right: '1.25rem',
 						}}
 						onClick={closeDialog}
 					></Close>
@@ -76,7 +74,7 @@ export const BottomDialogDiv = styled.div`
 	visibility: ${props => (props.openStatus ? 'visible' : 'hidden')};
 	opacity: ${props => (props.openStatus ? '1' : '0')};
 	transition: bottom 400ms ease-in-out;
-
+	z-index: 10000;
 	flex-direction: column;
 	background-color: white;
 	text-align: center;
@@ -85,13 +83,12 @@ export const BottomDialogDiv = styled.div`
 	font-weight: 600;
 	color: #000000;
 	width: 100%;
-	min-height: 8rem;
 	border-radius: 1rem 1rem 0 0;
 	padding: 1.25rem 0 1.25rem 0;
 	/* box-sizing: border-box; */
 `;
 export const CloseWrap = styled.div`
 	display: flex;
-	/* justify-content: flex-end; */
+	justify-content: flex-end;
 	padding: 0 1.25rem;
 `;
