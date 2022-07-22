@@ -18,7 +18,7 @@ import {
 } from '../../recoil/ToastMessage';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
-import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicBinder.svg';
+import { ReactComponent as BasicCover } from '../../assets/Binder/BasicCover.svg';
 import { ReactComponent as BinderHelp } from '../../assets/Icons/binderHelp.svg';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
@@ -93,7 +93,7 @@ export default function AddBinder() {
 	const handleBinderName = e => {
 		const { value, maxLength } = e.target;
 		setBinderName(value.slice(0, maxLength));
-		const regex = /^.{1,20}$/;
+		const regex = /^.{1,15}$/;
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
@@ -170,6 +170,7 @@ export default function AddBinder() {
 			const to = data.result.addedBinder;
 			console.log();
 			if (location.state) {
+				// 바인더 생성 후 아이템 저장
 				if (location.state.fromBinderIdx) {
 					console.log('바인더 옮겨');
 					const body = { itemIdxList: location.state.selectedList };
@@ -259,31 +260,38 @@ export default function AddBinder() {
 
 	return (
 		<MainContainer padding="0 0 0 0">
-			<TopNav style={{ justifyContent: 'space-between', zIndex: '10001' }}>
+			<TopNav
+				style={{ justifyContent: 'space-between', position: 'relative', zIndex: '100' }}
+			>
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="centerText">
 					바인더 만들기
 					<BinderHelp
-						style={{ margin: '0 0.25rem', zIndex: '20' }}
+						style={{ margin: '0 0.25rem', zIndex: '0', position: 'relative' }}
 						onClick={onClickHelp}
 					></BinderHelp>
 					<MiniInfoDialog
-						style={{ top: '1.875rem', left: '-4.375rem', zIndex: '10' }}
+						style={{ top: '1.875rem', left: '-50%', zIndex: '1' }}
 						openStatus={binderHelpStatus}
 					>
 						<TopWrap>
-							<SubText fontweight="bold" fontsize="0.875rem" color="#9E30F4">
+							<SubText fontsize="14px" fontweight="600" color="#9E30F4">
 								바인더 만들기
 							</SubText>
-							<Close onClick={onClickHelp}></Close>
+							<Close
+								style={{ width: '1rem', height: '1rem' }}
+								onClick={onClickHelp}
+							></Close>
 						</TopWrap>
 						<SubText
-							fontsize="0.875rem"
+							fontsize="14px"
+							fontweight="normal"
 							color="#564B5C"
-							style={{ whiteSpace: 'normal' }}
+							margin="0"
+							style={{ whiteSpace: 'normal', lineHeight: '1.125rem' }}
 						>
-							바인더 이름은 15자 이내로 입력해 주세요! <br />
-							이름과 커버 이미지는 언제 든지 수정이 가능해요
+							바인더 이름은 15자 이내로 입력이 가능하고, 이름과 커버는 언제든지 수정
+							할 수 있어요. 기본 커버의 컬러는 랜덤으로 들어가요!
 						</SubText>
 					</MiniInfoDialog>
 				</div>
@@ -301,19 +309,22 @@ export default function AddBinder() {
 				<AddImage onClick={onAddCoverImage}>
 					{!selectedFile && (
 						<>
-							<PictureIconBackground>
-								<BinderAddPicture
-									style={{ width: '2rem', height: '2rem' }}
-								></BinderAddPicture>
-							</PictureIconBackground>
 							{!isBasicCover ? (
-								<SubText fontweight="normal" color="#b1b1b1">
-									커버 이미지 추가
-								</SubText>
+								<>
+									<PictureIconBackground>
+										<BinderAddPicture
+											style={{ width: '2rem', height: '2rem' }}
+										></BinderAddPicture>
+									</PictureIconBackground>
+
+									<SubText fontweight="normal" color="#b1b1b1">
+										커버 이미지 추가
+									</SubText>
+								</>
 							) : (
-								<SubText fontweight="normal" color="#b1b1b1">
-									기본 커버
-								</SubText>
+								<BasicCover
+									style={{ width: '10.125rem', height: '10.125rem' }}
+								></BasicCover>
 							)}
 						</>
 					)}
@@ -331,19 +342,16 @@ export default function AddBinder() {
 					value={binderName}
 					type="text"
 					onChange={handleBinderName}
+					maxLength="15"
 				/>
 			</FeedContainer>
 			<BottomSlideMenu>
-				<div style={{ padding: '0.9375rem 0' }}>
-					<SubText fontsize="1rem" onClick={onAlbumClick}>
-						앨범에서 사진선택
-					</SubText>
-				</div>
-				<div style={{ padding: '0.9375rem 0' }}>
-					<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
-						기본 커버 선택
-					</SubText>
-				</div>
+				<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={onAlbumClick}>
+					앨범에서 사진선택
+				</SubText>
+				<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
+					기본 커버 선택
+				</SubText>
 			</BottomSlideMenu>
 		</MainContainer>
 	);
@@ -410,14 +418,15 @@ export const PictureIconBackground = styled.div`
 	margin-bottom: 0.375rem;
 `;
 export const MiniInfoDialog = styled.div`
-	display: ${props => (props.openStatus ? 'block' : 'none')};
+	display: ${props => (props.openStatus ? 'flex' : 'none')};
+	flex-direction: column;
 	position: absolute;
 	text-align: start;
-	z-index: 100;
-
+	z-index: 20;
+	box-sizing: border-box;
 	margin-top: 0.4063rem;
-	width: 14.9375rem;
-	padding: 1rem;
+	width: 15rem;
+	padding: 0.9375rem 0.75rem 0.9375rem 0.9375rem;
 	border-radius: 0.8125rem;
 	border: solid 1px #9e30f4;
 	background-color: #fbf6ff;
@@ -426,5 +435,6 @@ export const MiniInfoDialog = styled.div`
 export const TopWrap = styled.div`
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 0.75rem;
+	box-sizing: border-box;
+	margin-bottom: 10px;
 `;
