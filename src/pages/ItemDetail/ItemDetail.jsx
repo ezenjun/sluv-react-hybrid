@@ -26,6 +26,11 @@ import { ReactComponent as LikeButtonGrey } from '../../assets/Icons/likeButton.
 import { ReactComponent as LikeButtonRed } from '../../assets/Icons/likeButtonRed.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 
+import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg';
+import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
+import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
+import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
+
 import { ReactComponent as ItemLinkIcon } from '../../assets/Icons/itemLinkIcon.svg';
 import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_rightArrow.svg';
 import { PopUpModal } from '../../components/PopUp/PopUpModal';
@@ -944,7 +949,57 @@ export default function ItemDetail() {
 						key={binder.name}
 						onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
 					>
-						<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+						{binder.coverImgUrl ? (
+							<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+						) : (
+							<>
+								{!binder.isBasic ? (
+									<PinkBinder
+										style={{
+											width: '3.75rem',
+											height: '3.75rem',
+											marginRight: '1.25rem',
+											borderRadius: '1rem',
+										}}
+									></PinkBinder>
+								) : (
+									<>
+										{binder.binderIdx % 3 === 0 ? (
+											<YellowBinder
+												style={{
+													width: '3.75rem',
+													height: '3.75rem',
+													marginRight: '1.25rem',
+													borderRadius: '1rem',
+												}}
+											></YellowBinder>
+										) : (
+											<>
+												{binder.binderIdx % 3 === 1 ? (
+													<GreenBinder
+														style={{
+															width: '3.75rem',
+															height: '3.75rem',
+															marginRight: '1.25rem',
+															borderRadius: '1rem',
+														}}
+													></GreenBinder>
+												) : (
+													<BlueBinder
+														style={{
+															width: '3.75rem',
+															height: '3.75rem',
+															marginRight: '1.25rem',
+															borderRadius: '1rem',
+														}}
+													></BlueBinder>
+												)}
+											</>
+										)}
+									</>
+								)}
+							</>
+						)}
 						<SubText fontsize="1rem" margin="0.9375rem 0">
 							{binder.name}
 						</SubText>

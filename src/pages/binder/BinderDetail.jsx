@@ -373,7 +373,7 @@ export default function BinderDetail() {
 				<></>
 			)}
 			<BottomSlideMenu>
-				<RowWrap onClick={onCreateBinder}>
+				<RowWrap style={{ marginBottom: '0' }} onClick={onCreateBinder}>
 					<ImageWrap>
 						<PlusButton></PlusButton>
 					</ImageWrap>
@@ -381,10 +381,12 @@ export default function BinderDetail() {
 						바인더 만들기
 					</SubText>
 				</RowWrap>
-				<HorizontalLine></HorizontalLine>
+				<HorizontalLine
+					style={{ marginLeft: '1.25rem', marginRight: '1.25rem' }}
+				></HorizontalLine>
 				{binderList.map(binder => (
 					<RowWrap key={binder.name} onClick={() => onChangeBinder(binder.binderIdx)}>
-						<ImageWrap></ImageWrap>
+						<ImageWrap src={binder.coverImgUrl}></ImageWrap>
 						<SubText fontsize="1rem" margin="0.9375rem 0">
 							{binder.name}
 						</SubText>
@@ -560,6 +562,9 @@ const ImageWrap = styled.div`
 	justify-content: center;
 	width: 3.75rem;
 	height: 3.75rem;
+	background: url(${props => props.src});
+	background-position: 50%;
+	background-size: cover;
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;
