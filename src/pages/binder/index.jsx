@@ -134,8 +134,9 @@ export default function Binder() {
 		setBottomMenuStatusState(false);
 	};
 	const deleteBinder = () => {
-		setCurrentPage('delete');
+		// setCurrentPage('delete');
 		setPopUpModalStatusState(true);
+		setBottomMenuStatusState(false);
 	};
 	const cancleDelete = () => {
 		setPopUpModalStatusState(false);
@@ -614,7 +615,7 @@ export default function Binder() {
 					</FeedContainerEdit>
 					<BottomSlideMenu>
 						<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={onAlbumClick}>
-							앨범에서 사진선택
+							앨범에서 사진 선택
 						</SubText>
 						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
 							기본 커버 선택
@@ -622,27 +623,36 @@ export default function Binder() {
 					</BottomSlideMenu>
 				</MainContainer>
 			)}
-			{currentPage === 'delete' && (
-				<PopUpModal closeButton={true} closeFunction={cancleDelete}>
-					<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
-						선택하신 바인더를 <br />
-						삭제하시나요?
-					</MainText>
-					<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
-						선택하신 바인더 내의 아이템도
-						<br />
-						함께 삭제되어 복구하실 수 없어요
-					</SubText>
-					<ButtonWrap>
-						<Button backgroundColor="#c9c9c9" onClick={cancleDelete}>
-							취소
-						</Button>
-						<Button backgroundColor="#9e30f4" onClick={confirmDelete}>
-							삭제
-						</Button>
-					</ButtonWrap>
-				</PopUpModal>
-			)}
+			{/* {currentPage === 'delete' && ( */}
+			<PopUpModal closeButton={true} closeFunction={cancleDelete}>
+				<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
+					선택하신 바인더를 <br />
+					삭제하시나요?
+				</MainText>
+				<SubText
+					fontsize="0.875rem"
+					fontweight="normal"
+					margin="0 0 2rem 0"
+					color="#8d8d8d"
+				>
+					선택하신 바인더 내의 아이템도
+					<br />
+					함께 삭제되어 복구하실 수 없어요
+				</SubText>
+				<ButtonWrap>
+					<Button
+						backgroundColor="#c9c9c9"
+						onClick={cancleDelete}
+						style={{ marginRight: '0.5rem' }}
+					>
+						취소
+					</Button>
+					<Button backgroundColor="#9e30f4" onClick={confirmDelete}>
+						삭제
+					</Button>
+				</ButtonWrap>
+			</PopUpModal>
+			{/* )} */}
 
 			{/* 업로드 팝업 모달 */}
 			<UploadPopupWrap openStatus={uploadPopupStatus}>
@@ -810,13 +820,14 @@ const TopWrap = styled.div`
 
 const ButtonWrap = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	width: 100%;
 `;
 const Button = styled.div`
 	background-color: ${props => props.backgroundColor};
 	box-sizing: border-box;
-	width: 47%;
+	width: 9rem;
+	/* width: 50%; */
 	height: 3rem;
 	padding: 0.9375rem 0;
 	font-family: Pretendard;
