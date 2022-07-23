@@ -20,11 +20,11 @@ import { ReactComponent as IconUploadItem } from '../../assets/Icons/bottom_nav_
 import { ReactComponent as IconUploadQuestion } from '../../assets/Icons/bottom_nav_upload_question.svg';
 
 import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicBinder.svg';
-import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg';
-import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
-import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
-import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
-import { ReactComponent as BasicCover } from '../../assets/Binder/BasicCover.svg';
+import PinkBinder from '../../assets/Binder/PinkBinder.svg';
+import YellowBinder from '../../assets/Binder/YellowBinder.svg';
+import GreenBinder from '../../assets/Binder/GreenBinder.svg';
+import BlueBinder from '../../assets/Binder/BlueBinder.svg';
+import BasicCover from '../../assets/Binder/BasicCover.svg';
 import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
@@ -134,8 +134,9 @@ export default function Binder() {
 		setBottomMenuStatusState(false);
 	};
 	const deleteBinder = () => {
-		setCurrentPage('delete');
+		// setCurrentPage('delete');
 		setPopUpModalStatusState(true);
+		setBottomMenuStatusState(false);
 	};
 	const cancleDelete = () => {
 		setPopUpModalStatusState(false);
@@ -345,25 +346,20 @@ export default function Binder() {
 											{item.isBasic === 0 ? ( // 기본 바인더
 												<GridItem key={item.binderIdx}>
 													{item.dibCount > 0 ? (
-														<PinkBinder
-															style={{
-																width: '9.6875rem',
-																height: '9.6875rem',
-																marginBottom: '0.6875rem',
-																borderRadius: '1rem',
-															}}
+														<BinderImage
+															src={PinkBinder}
+															marginbottom="0.6875rem"
 															onClick={() =>
 																onEachBinderClick(
 																	item.binderIdx,
 																	item.name
 																)
 															}
-														></PinkBinder>
+														></BinderImage>
 													) : (
 														<BasicBinder
+															className="binderImg"
 															style={{
-																width: '9.6875rem',
-																height: '9.6875rem',
 																marginBottom: '0.6875rem',
 																borderRadius: '1rem',
 															}}
@@ -408,56 +404,40 @@ export default function Binder() {
 													) : (
 														<>
 															{item.binderIdx % 3 === 0 ? (
-																<YellowBinder
-																	style={{
-																		width: '9.6875rem',
-																		height: '9.6875rem',
-																		marginBottom: '0.6875rem',
-																		borderRadius: '1rem',
-																	}}
+																<BinderImage
+																	src={YellowBinder}
+																	marginbottom="0.6875rem"
 																	onClick={() =>
 																		onEachBinderClick(
 																			item.binderIdx,
 																			item.name
 																		)
 																	}
-																></YellowBinder>
+																></BinderImage>
 															) : (
 																<>
 																	{item.binderIdx % 3 === 1 ? (
-																		<GreenBinder
-																			style={{
-																				width: '9.6875rem',
-																				height: '9.6875rem',
-																				marginBottom:
-																					'0.6875rem',
-																				borderRadius:
-																					'1rem',
-																			}}
+																		<BinderImage
+																			src={GreenBinder}
+																			marginbottom="0.6875rem"
 																			onClick={() =>
 																				onEachBinderClick(
 																					item.binderIdx,
 																					item.name
 																				)
 																			}
-																		></GreenBinder>
+																		></BinderImage>
 																	) : (
-																		<BlueBinder
-																			style={{
-																				width: '9.6875rem',
-																				height: '9.6875rem',
-																				marginBottom:
-																					'0.6875rem',
-																				borderRadius:
-																					'1rem',
-																			}}
+																		<BinderImage
+																			src={BlueBinder}
+																			marginbottom="0.6875rem"
 																			onClick={() =>
 																				onEachBinderClick(
 																					item.binderIdx,
 																					item.name
 																				)
 																			}
-																		></BlueBinder>
+																		></BinderImage>
 																	)}
 																</>
 															)}
@@ -614,7 +594,7 @@ export default function Binder() {
 					</FeedContainerEdit>
 					<BottomSlideMenu>
 						<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={onAlbumClick}>
-							앨범에서 사진선택
+							앨범에서 사진 선택
 						</SubText>
 						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
 							기본 커버 선택
@@ -622,27 +602,36 @@ export default function Binder() {
 					</BottomSlideMenu>
 				</MainContainer>
 			)}
-			{currentPage === 'delete' && (
-				<PopUpModal closeButton={true} closeFunction={cancleDelete}>
-					<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
-						선택하신 바인더를 <br />
-						삭제하시나요?
-					</MainText>
-					<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
-						선택하신 바인더 내의 아이템도
-						<br />
-						함께 삭제되어 복구하실 수 없어요
-					</SubText>
-					<ButtonWrap>
-						<Button backgroundColor="#c9c9c9" onClick={cancleDelete}>
-							취소
-						</Button>
-						<Button backgroundColor="#9e30f4" onClick={confirmDelete}>
-							삭제
-						</Button>
-					</ButtonWrap>
-				</PopUpModal>
-			)}
+			{/* {currentPage === 'delete' && ( */}
+			<PopUpModal closeButton={true} closeFunction={cancleDelete}>
+				<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
+					선택하신 바인더를 <br />
+					삭제하시나요?
+				</MainText>
+				<SubText
+					fontsize="0.875rem"
+					fontweight="normal"
+					margin="0 0 2rem 0"
+					color="#8d8d8d"
+				>
+					선택하신 바인더 내의 아이템도
+					<br />
+					함께 삭제되어 복구하실 수 없어요
+				</SubText>
+				<ButtonWrap>
+					<Button
+						backgroundColor="#c9c9c9"
+						onClick={cancleDelete}
+						style={{ marginRight: '0.5rem' }}
+					>
+						취소
+					</Button>
+					<Button backgroundColor="#9e30f4" onClick={confirmDelete}>
+						삭제
+					</Button>
+				</ButtonWrap>
+			</PopUpModal>
+			{/* )} */}
 
 			{/* 업로드 팝업 모달 */}
 			<UploadPopupWrap openStatus={uploadPopupStatus}>
@@ -810,13 +799,14 @@ const TopWrap = styled.div`
 
 const ButtonWrap = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	width: 100%;
 `;
 const Button = styled.div`
 	background-color: ${props => props.backgroundColor};
 	box-sizing: border-box;
-	width: 47%;
+	width: 9rem;
+	/* width: 50%; */
 	height: 3rem;
 	padding: 0.9375rem 0;
 	font-family: Pretendard;
@@ -829,8 +819,7 @@ const BinderImage = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-end;
-	width: 10.125rem;
-	height: 10.125rem;
+	width: 100%;
 	border-radius: 1rem;
 	background-color: ${props => props.backgroundColor || '#f6f6f6'};
 	background-image: url(${props => props.src});
@@ -838,19 +827,12 @@ const BinderImage = styled.div`
 	background-position: 50%;
 	margin-bottom: ${props => props.marginbottom || '1rem'};
 	box-sizing: border-box;
-	padding: 0.5rem 0.75rem;
 	color: white;
 	font-size: 0.8125rem;
-	@media screen and (width: 360px) {
-		width: 9.5625rem;
-		height: 9.5625rem;
-	}
-	@media screen and (width: 320px) {
-		width: 8.4063rem;
-		height: 8.4063rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
+
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
 	}
 `;

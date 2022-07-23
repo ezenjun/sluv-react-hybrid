@@ -7,4 +7,14 @@ export const GridItem = styled.div`
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	box-sizing: border-box;
+	.binderImg {
+		width: 100%;
+		border-radius: 1rem;
+		:after {
+			content: '';
+			display: block;
+			padding-bottom: 100%;
+		}
+	}
 `;

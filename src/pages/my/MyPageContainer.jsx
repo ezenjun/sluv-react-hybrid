@@ -105,7 +105,7 @@ export default function MyPageContainer({
 					/>
 				</div>
 				<div className="contentWrap">
-					{uploadInfo.uploadItemList.length > 0 && (
+					{uploadInfo.uploadItemList.length > 0 &&
 						uploadInfo.uploadItemList.slice(0, 10).map((item, index) => (
 							<MyPageGridItem
 								key={item.itemIdx}
@@ -126,7 +126,6 @@ export default function MyPageContainer({
 												style={{
 													width: '1.5rem',
 													height: '1.5rem',
-													zIndex: '900',
 												}}
 											/>
 										) : (
@@ -135,7 +134,6 @@ export default function MyPageContainer({
 												style={{
 													width: '1.5rem',
 													height: '1.5rem',
-													zIndex: '900',
 												}}
 											/>
 										)}
@@ -155,8 +153,7 @@ export default function MyPageContainer({
 									{item.itemName}
 								</SubText>
 							</MyPageGridItem>
-						))
-					)}
+						))}
 				</div>
 			</MyUploadWrap>
 
@@ -233,6 +230,7 @@ const MyPageGridItem = styled.div`
 	flex-direction: column;
 	flex-shrink: 0;
 	white-space: nowrap;
+	width: 10.125rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
@@ -244,7 +242,6 @@ const NoItemUploadWrap = styled.div`
 	width: 100%;
 	margin-right: 1.25rem;
 	align-items: center;
-
 
 	border: 1px solid red;
 `;

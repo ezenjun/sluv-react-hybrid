@@ -778,8 +778,7 @@ const Image = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-end;
-	width: 10.125rem;
-	height: 10.125rem;
+	width: 100%;
 	border-radius: 1rem;
 	background-color: grey;
 	background-image: linear-gradient(
@@ -796,25 +795,10 @@ const Image = styled.div`
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
 	font-size: 0.8125rem;
-	@media screen and (max-width: 399px) {
-		width: 10.125rem;
-		height: 10.125rem;
-	}
-	@media screen and (max-width: 375px) {
-		width: 10.125rem;
-		height: 10.125rem;
-	}
-	@media screen and (max-width: 360px) {
-		width: 9.375rem;
-		height: 9.375rem;
-	}
-	@media screen and (width: 320px) {
-		width: 9.25rem;
-		height: 9.25rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
 	}
 `;
 
