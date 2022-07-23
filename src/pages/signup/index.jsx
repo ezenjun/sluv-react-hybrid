@@ -45,7 +45,7 @@ export default function Signup() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	setCurrentPage(2);
+	
 	const allBtnEvent = () => {
 		if (allCheck === false) {
 			setAllCheck(true);
