@@ -1114,7 +1114,7 @@ const ImageContainer = styled.div`
 		width: 1.875rem;
 		background: #f0f0f0;
 		opacity: 50%;
-		border-radius: 5px;
+		/* border-radius: 5px; */
 		padding: 0;
 		margin: 0;
 	}

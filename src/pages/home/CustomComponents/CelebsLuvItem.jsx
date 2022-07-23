@@ -23,6 +23,8 @@ import { ReactComponent as Diamond } from '../../../assets/Custom/Custom_diamond
 import { ReactComponent as Crown } from '../../../assets/Custom/Custom_crown.svg';
 import { ReactComponent as Present } from '../../../assets/Custom/Custom_present.svg';
 import { ReactComponent as Heart } from '../../../assets/Custom/Custom_heart.svg';
+import { ReactComponent as Flag } from '../../../assets/Custom/Custom_StarFlag.svg';
+import { ReactComponent as Shop } from '../../../assets/Custom/Custom_Shop.svg';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -373,7 +375,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 						<MainText fontsize="1.5rem">#{celeb.name}'s</MainText>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
 							<MainText fontsize="1.5rem">LUV 아이템</MainText>
-							{ComponentIndex % 4 === 0 ? (
+							{ComponentIndex % 6 === 0 ? (
 								<Crown
 									style={{
 										width: '1.5rem',
@@ -383,7 +385,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 								/>
 							) : (
 								<>
-									{ComponentIndex % 4 === 1 ? (
+									{ComponentIndex % 6 === 1 ? (
 										<Diamond
 											style={{
 												width: '1.5rem',
@@ -393,7 +395,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 										/>
 									) : (
 										<>
-											{ComponentIndex % 4 === 2 ? (
+											{ComponentIndex % 6 === 2 ? (
 												<Present
 													style={{
 														width: '1.5rem',
@@ -402,13 +404,37 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 													}}
 												/>
 											) : (
-												<Heart
-													style={{
-														width: '1.5rem',
-														height: '1.5rem',
-														marginLeft: '0.3125rem',
-													}}
-												/>
+												<>
+													{ComponentIndex % 6 === 3 ? (
+														<Flag
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																marginLeft: '0.3125rem',
+															}}
+														/>
+													) : (
+														<>
+															{ComponentIndex % 6 === 4 ? (
+																<Heart
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		marginLeft: '0.3125rem',
+																	}}
+																/>
+															) : (
+																<Shop
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		marginLeft: '0.3125rem',
+																	}}
+																/>
+															)}
+														</>
+													)}
+												</>
 											)}
 										</>
 									)}
