@@ -791,6 +791,12 @@ export default function ItemDetail() {
 											fontsize="1rem"
 											fontweight="bold"
 											margin="0 0 0.375rem 0 "
+											style={{
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+												width: '100%',
+											}}
 										>
 											{item.brandKr}
 										</SubText>
@@ -1254,11 +1260,22 @@ const MyPageGridItem = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
+	width: 10.125rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
+	@media screen and (width: 360px) {
+		width: 9.5625rem;
+	}
+	@media screen and (width: 320px) {
+		width: 8.4063rem;
+	}
+	@media screen and (width: 280px) {
+		width: 8.125rem;
+	}
 `;
+
 const RowWrap = styled.div`
 	display: flex;
 	width: 100%;
