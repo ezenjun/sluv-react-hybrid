@@ -835,12 +835,11 @@ const HotSearchWrap = styled.div`
 	margin-bottom: 1.25rem;
 `;
 const HotSearch = styled.div`
-	/* display: flex; */
 	align-items: center;
 	background-color: #fbf6ff;
 	box-sizing: border-box;
 	border-radius: 1rem;
-	height: ${props => (props.collapsed ? '57px' : '16.4375rem')};
+	height: ${props => (props.collapsed ? '3.5625rem' : '16.4375rem')};
 	overflow: hidden;
 	padding: 1.25rem;
 	transition: all 0.3s ease-out;
@@ -860,7 +859,6 @@ const CollapsedRow = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	box-sizing: border-box;
-	align-items: center;
 `;
 const EachRank = styled.div`
 	display: flex;
