@@ -613,7 +613,7 @@ export default function Binder() {
 						/>
 					</FeedContainerEdit>
 					<BottomSlideMenu>
-						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onAlbumClick}>
+						<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={onAlbumClick}>
 							앨범에서 사진선택
 						</SubText>
 						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>

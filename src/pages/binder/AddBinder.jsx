@@ -73,6 +73,9 @@ export default function AddBinder() {
 	const onDefaultClick = () => {
 		setBottomMenuStatusState(false);
 		setIsBasicCover(true);
+		setSelectedFile('');
+		const imgEL = document.querySelector('.img__box');
+		imgEL.style.backgroundImage = null;
 	};
 	const onClickHelp = () => setBinderHelpStatus(!binderHelpStatus);
 	const onChangeCoverImg = e => {
@@ -382,6 +385,9 @@ const AddImage = styled.div`
 `;
 
 export const CoverImage = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	position: absolute;
 	background-repeat: no-repeat;
 	background-position: center center;

@@ -26,10 +26,12 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
+import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 
 export default function Signup() {
 	const { pathname } = useLocation();
-
+	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 	const socialLoginUserIdx = useRecoilValue(SocialLoginUserIdxState);
@@ -45,7 +47,7 @@ export default function Signup() {
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
-	
+
 	const allBtnEvent = () => {
 		if (allCheck === false) {
 			setAllCheck(true);
@@ -266,6 +268,25 @@ export default function Signup() {
 			setAuthSendCnt(authSendCnt + 1);
 		}
 	}
+	// 휴대폰 번호 중복 체크
+	const [userEmail, setUserEmail] = useState('');
+	async function checkPhoneOverlap() {
+		const url = `/users/phone-check?phone=${phoneNumber}`;
+		const data = await customApiClient('get', url);
+		console.log(data);
+		if (data.isSuccess === true) {
+			handleAuthCodeCheckAPI();
+		} else {
+			if (data.code === 3007) {
+				console.log('중복된 번호');
+				setBottomMenuStatusState(true);
+				setUserEmail(data.result.email);
+			}
+		}
+	}
+	const gotoLogin = () => {
+		navigate('/login');
+	};
 	// 인증번호 확인 API
 	async function handleAuthCodeCheckAPI() {
 		const url = `/auth/sms/validation?phone=${phoneNumber}&certnum=${authCode}`;
@@ -695,11 +716,30 @@ export default function Signup() {
 					</TopWrap>
 					<BottomWrap>
 						{authCodeValid ? (
-							<PurpleButton onClick={handleAuthCodeCheckAPI}>다음</PurpleButton>
+							<PurpleButton onClick={checkPhoneOverlap}>다음</PurpleButton>
 						) : (
 							<PurpleButton disabled={true}>다음</PurpleButton>
 						)}
 					</BottomWrap>
+					<BottomSlideMenu>
+						<SubText fontsize="1rem" fontweight="bold" margin="0 0 0.75rem 0">
+							이미 가입된 휴대폰 번호에요
+						</SubText>
+						<SubText color="#9e30f4" fontsize="1rem" margin="0 0 0.25rem 0">
+							{userEmail}
+						</SubText>
+						<SubText fontsize="1rem" margin="0 0 1.625rem 0">
+							이메일로 가입하셨네요
+						</SubText>
+						<div>
+							<PurpleButton
+								onClick={gotoLogin}
+								style={{ width: '20.9375rem', height: '3rem' }}
+							>
+								로그인하러 가기
+							</PurpleButton>
+						</div>
+					</BottomSlideMenu>
 				</ContentWrap>
 			)}
 			{currentPage === 3 && (
