@@ -572,9 +572,9 @@ export default function Binder() {
 									기본 커버
 								</SubText>
 								<CoverImage className="img__box" /> */}
-								<BasicCover
+								<BasicBinder
 									style={{ width: '10.125rem', height: '10.125rem' }}
-								></BasicCover>
+								></BasicBinder>
 								<CoverImage className="img__box" />
 							</BasicCoverAddImage>
 						)}
