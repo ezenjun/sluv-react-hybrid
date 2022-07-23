@@ -1265,15 +1265,6 @@ const MyPageGridItem = styled.div`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
-	@media screen and (width: 360px) {
-		width: 9.5625rem;
-	}
-	@media screen and (width: 320px) {
-		width: 8.4063rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-	}
 `;
 
 const RowWrap = styled.div`
