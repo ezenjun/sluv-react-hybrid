@@ -286,6 +286,7 @@ export default function Signup() {
 	}
 	const gotoLogin = () => {
 		navigate('/login');
+		setBottomMenuStatusState(false);
 	};
 	// 인증번호 확인 API
 	async function handleAuthCodeCheckAPI() {
