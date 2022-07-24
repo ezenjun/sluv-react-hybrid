@@ -347,7 +347,11 @@ export default function ItemDetail() {
 		setLikeCnt(data.result.itemInfo.itemLikeCnt);
 		// 링크 존재
 		if (data.result.itemInfo.sellerSite) {
-			setItemLink('https://' + data.result.itemInfo.sellerSite);
+			if (data.result.itemInfo.sellerSite.slice(0, 5) !== 'https') {
+				setItemLink('https://' + data.result.itemInfo.sellerSite);
+			} else {
+				setItemLink(data.result.itemInfo.sellerSite);
+			}
 		}
 
 		// 같은 셀럽의 아이템 저장 / 바인더 저장 여부 isDib
@@ -384,6 +388,7 @@ export default function ItemDetail() {
 		}
 		setSameBrandItemIsDibList([...tmp]);
 	};
+	console.log('ItemLink', itemLink);
 	const FollowUser = async userIdx => {
 		// 팔로우 버튼 클릭
 		const data = await customApiClient('post', `/users/${userIdx}/follow`);
@@ -583,7 +588,7 @@ export default function ItemDetail() {
 						</div>
 					</ItemInfoContainer>
 					{itemInfo.sellerSite && (
-						<a target="_blank" href={itemLink}>
+						<a target="_blank" href={itemLink} rel="noopener noreferrer external">
 							<ItemLInkContainer>
 								<ItemLInkWrap>
 									<ItemLinkIcon
