@@ -203,17 +203,17 @@ export default function Login() {
 					이메일로 시작하기
 				</EmailButton>
 
-				{/* <Division>
+				<Division>
 					<div className="grayLine"></div>
 					<span className="divisionText">또는</span>
 					<div className="grayLine"></div>
-				</Division> */}
+				</Division>
 
-				{/* <div>
+				<div>
 					<GoogleButton>
 						<div id="google" />
 					</GoogleButton>
-				</div> */}
+				</div>
 			</ButtonContainer>
 			{/* <LocalLogin>
 				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
