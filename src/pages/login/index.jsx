@@ -148,20 +148,7 @@ export default function Login() {
 		getMyFcmTokenAndAutoLogin();
 
 		/* global google*/
-		window.onload = function () {
-			google.accounts.id.initialize({
-				client_id: GoogleClient_ID,
-				callback: handleCallbackResponse,
-			});
-			google.accounts.id.renderButton(document.getElementById('google'), {
-				type: 'icon',
-				theme: 'outline',
-				size: 'large',
-				width: '40px',
-				shape: 'circle',
-			});
-			google.accounts.id.prompt(); // also display the One Tap dialog
-		};
+		
 	}, []);
 
 	return (
@@ -203,17 +190,17 @@ export default function Login() {
 					이메일로 시작하기
 				</EmailButton>
 
-				{/* <Division>
+				<Division>
 					<div className="grayLine"></div>
 					<span className="divisionText">또는</span>
 					<div className="grayLine"></div>
-				</Division> */}
+				</Division>
 
-				{/* <div>
+				<div>
 					<GoogleButton>
 						<div id="google" />
 					</GoogleButton>
-				</div> */}
+				</div>
 			</ButtonContainer>
 			{/* <LocalLogin>
 				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>

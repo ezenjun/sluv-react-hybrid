@@ -636,7 +636,7 @@ export const CountBadge = styled.span`
 	border-radius: 50%;
 	width: 1.5rem;
 	height: 1.5rem;
-	z-index: 20000;
+	z-index: 5000;
 `;
 
 export const InputWrap = styled.div`
