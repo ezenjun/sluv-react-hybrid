@@ -182,14 +182,14 @@ export default function Login() {
 						<span className="boldText"> 셀럽의 아이템</span>을 만나보세요!
 					</LoginSpeechBubble>
 				</div>
-				<a href={KAKAO_AUTH_URL}>
+				{/* <a href={KAKAO_AUTH_URL}>
 					<KaKaoButton>
 						<KakaoIcon
 							style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
 						/>
 						<span className="kakaoBtnText">카카오로 시작하기</span>
 					</KaKaoButton>
-				</a>
+				</a> */}
 				<EmailButton to="/login">
 					<EmailIcon
 						style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
