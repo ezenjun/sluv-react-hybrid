@@ -140,6 +140,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		const data = await customApiClient('post', '/interest', body);
 
 		if (!data.isSuccess) {
+			alert(data.message);
 			console.log(data.message);
 			return;
 		}
