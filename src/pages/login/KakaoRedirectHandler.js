@@ -62,6 +62,7 @@ export default function KakaoRedirectHandler() {
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
 			}, 2300);
+			return;
 		}
 
 	};
