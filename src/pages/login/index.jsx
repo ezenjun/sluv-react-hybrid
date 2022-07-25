@@ -26,27 +26,27 @@ export default function Login() {
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
-	async function handleCallbackResponse(response) {
-		// console.log("encoded JWT ID Token: " + response.credential);
+	// async function handleCallbackResponse(response) {
+	// 	// console.log("encoded JWT ID Token: " + response.credential);
 
-		const url = `/auth/google-login?code=${response.credential}`;
-		const data = await customApiClient('get', url);
-		console.log(data);
+	// 	const url = `/auth/google-login?code=${response.credential}`;
+	// 	const data = await customApiClient('get', url);
+	// 	console.log(data);
 
-		if (data.code === 3001) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			navigate('/home');
-		}
-		if (data.code === 1000) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			// 닉네임으로 페이지 변경
-			setSocialLoginComplete(true);
-			setCurrentPage(4);
-			navigate('/signup');
-		}
-	}
+	// 	if (data.code === 3001) {
+	// 		console.log(data.result.jwt);
+	// 		localStorage.setItem('x-access-token', data.result.jwt);
+	// 		navigate('/home');
+	// 	}
+	// 	if (data.code === 1000) {
+	// 		console.log(data.result.jwt);
+	// 		localStorage.setItem('x-access-token', data.result.jwt);
+	// 		// 닉네임으로 페이지 변경
+	// 		setSocialLoginComplete(true);
+	// 		setCurrentPage(4);
+	// 		navigate('/signup');
+	// 	}
+	// }
 
 	const getMyFcmTokenAndAutoLogin = async () => {
 		localStorage.removeItem('isFcmLoad');
@@ -119,14 +119,19 @@ export default function Login() {
 		console.log(data);
 
 		if (data.code === 3001) {
+			console.log(data.code);
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			if (data.result.nickname === 'tempNickName') {
 				setCurrentPage(4);
+				console.log('처음 회원가입 jwt', data.result.jwt);
 				setUserIdx(data.result.userIdx);
 				console.log(data.result.userIdx);
 				navigate('/signup');
 			} else {
+				console.log('다시 로그인 jwt', data.result.jwt);
+				setUserIdx(data.result.userIdx);
+				console.log('user IDX', data.result.userIdx);
 				navigate('/home');
 			}
 		}
@@ -140,33 +145,32 @@ export default function Login() {
 			navigate('/signup');
 		}
 	}
-
+	const setGoogleButton = () => {
+		google.accounts.id.initialize({
+			client_id: GoogleClient_ID,
+			callback: handleCallbackResponse,
+		});
+		google.accounts.id.renderButton(document.getElementById('google'), {
+			type: 'icon',
+			theme: 'outline',
+			size: 'large',
+			width: '40px',
+			shape: 'circle',
+		});
+		google.accounts.id.prompt(); // also display the One Tap dialog
+	};
 	useEffect(() => {
 		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
 		setCurrentPage(1);
 		setSocialLoginComplete(false);
 
 		getMyFcmTokenAndAutoLogin();
-		window.addEventListener('DOMContentLoaded', function () {
-			console.log('domcontent');
-			/* global google*/
-			google.accounts.id.initialize({
-				client_id: GoogleClient_ID,
-				callback: handleCallbackResponse,
-			});
-			google.accounts.id.renderButton(document.getElementById('google'), {
-				type: 'icon',
-				theme: 'outline',
-				size: 'large',
-				width: '40px',
-				shape: 'circle',
-			});
-			google.accounts.id.prompt(); // also display the One Tap dialog
-		});
-		// window.addEventListener('load', () => {
-		// 	/* global google*/
 
-		// });
+		/* global google*/
+		if (window.onload) {
+			console.log('로드됨');
+			setGoogleButton();
+		}
 	}, []);
 
 	return (

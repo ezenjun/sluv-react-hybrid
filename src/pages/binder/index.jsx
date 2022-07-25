@@ -24,7 +24,7 @@ import PinkBinder from '../../assets/Binder/PinkBinder.svg';
 import YellowBinder from '../../assets/Binder/YellowBinder.svg';
 import GreenBinder from '../../assets/Binder/GreenBinder.svg';
 import BlueBinder from '../../assets/Binder/BlueBinder.svg';
-import BasicCover from '../../assets/Binder/BasicCover.svg';
+import BasicCover from '../../assets/Binder/BasicBinder.svg';
 import { customApiClient } from '../../utils/apiClient';
 import { SampleItems } from './sampleItems';
 
@@ -357,19 +357,16 @@ export default function Binder() {
 															}
 														></BinderImage>
 													) : (
-														<BasicBinder
-															className="binderImg"
-															style={{
-																marginBottom: '0.6875rem',
-																borderRadius: '1rem',
-															}}
+														<BinderImage
+															src={BasicCover}
+															marginbottom="0.6875rem"
 															onClick={() =>
 																onEachBinderClick(
 																	item.binderIdx,
 																	item.name
 																)
 															}
-														></BasicBinder>
+														></BinderImage>
 													)}
 
 													<SubText
@@ -478,16 +475,13 @@ export default function Binder() {
 									{binderList.map(item => (
 										<>
 											<GridItem key={item.binderIdx}>
-												<BasicBinder
-													style={{
-														width: '9.6875rem',
-														height: '9.6875rem',
-														marginBottom: '0.6875rem',
-													}}
+												<BinderImage
+													src={BasicCover}
+													marginbottom="0.6875rem"
 													onClick={() =>
 														onEachBinderClick(item.binderIdx, item.name)
 													}
-												></BasicBinder>
+												></BinderImage>
 												<SubText
 													fontsize="1rem"
 													fontweight="bold"
@@ -504,21 +498,32 @@ export default function Binder() {
 													backgroundColor="#fbf6ff"
 													marginbottom="0.6875rem"
 												>
-													<AddBinderButton
+													<div
 														style={{
-															width: '1.875rem',
-															height: '1.875rem',
+															display: 'flex',
+															width: '100%',
+															flexDirection: 'column',
+															justifyContent: 'center',
+															alignItems: 'center',
+															textAlign: 'center',
 														}}
-													></AddBinderButton>
-													<SubText
-														fontsize="0.8125rem"
-														margin="0.375rem 0 0.25rem 0"
 													>
-														나만의 바인더를
-													</SubText>
-													<SubText fontsize="0.8125rem">
-														만들어봐요!
-													</SubText>
+														<AddBinderButton
+															style={{
+																width: '1.875rem',
+																height: '1.875rem',
+															}}
+														></AddBinderButton>
+														<SubText
+															fontsize="0.8125rem"
+															margin="0.375rem 0 0.25rem 0"
+														>
+															나만의 바인더를
+														</SubText>
+														<SubText fontsize="0.8125rem">
+															만들어봐요!
+														</SubText>
+													</div>
 												</AddBinder>
 											</GridItem>
 										</>
@@ -688,32 +693,7 @@ const BinderTextWrap = styled.div`
 	margin-bottom: 1rem;
 	align-items: center;
 `;
-const AddBinder = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	/* height: 100%;
-	width: 100%; */
-	width: 9.6875rem;
-	height: 9.6875rem;
-	border-radius: 1rem;
-	text-align: center;
-	background-color: #fbf6ff;
-	color: #564b5c;
-	/* @media screen and (width: 360px) {
-		width: 9.5625rem;
-		height: 9.5625rem;
-	}
-	@media screen and (width: 320px) {
-		width: 8.4063rem;
-		height: 8.4063rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
-	} */
-`;
+
 const GridItemInfo = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -819,6 +799,28 @@ const BinderImage = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-end;
+	width: 100%;
+	border-radius: 1rem;
+	background-color: ${props => props.backgroundColor || '#f6f6f6'};
+	background-image: url(${props => props.src});
+	background-size: cover;
+	background-position: 50%;
+	margin-bottom: ${props => props.marginbottom || '1rem'};
+	box-sizing: border-box;
+	color: white;
+	font-size: 0.8125rem;
+
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
+	}
+`;
+const AddBinder = styled.div`
+	display: flex;
+	/* flex-direction: column; */
+	justify-content: flex-start;
+	align-items: center;
 	width: 100%;
 	border-radius: 1rem;
 	background-color: ${props => props.backgroundColor || '#f6f6f6'};
