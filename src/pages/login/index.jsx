@@ -146,22 +146,22 @@ export default function Login() {
 		setSocialLoginComplete(false);
 
 		getMyFcmTokenAndAutoLogin();
-		// window.addEventListener('DOMContentLoaded', function () {
-		// 	console.log('domcontent');
-		/* global google*/
-		google.accounts.id.initialize({
-			client_id: GoogleClient_ID,
-			callback: handleCallbackResponse,
+		window.addEventListener('DOMContentLoaded', function () {
+			console.log('domcontent');
+			/* global google*/
+			google.accounts.id.initialize({
+				client_id: GoogleClient_ID,
+				callback: handleCallbackResponse,
+			});
+			google.accounts.id.renderButton(document.getElementById('google'), {
+				type: 'icon',
+				theme: 'outline',
+				size: 'large',
+				width: '40px',
+				shape: 'circle',
+			});
+			google.accounts.id.prompt(); // also display the One Tap dialog
 		});
-		google.accounts.id.renderButton(document.getElementById('google'), {
-			type: 'icon',
-			theme: 'outline',
-			size: 'large',
-			width: '40px',
-			shape: 'circle',
-		});
-		google.accounts.id.prompt(); // also display the One Tap dialog
-		// });
 		// window.addEventListener('load', () => {
 		// 	/* global google*/
 
