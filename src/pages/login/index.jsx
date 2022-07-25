@@ -25,27 +25,27 @@ export default function Login() {
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 
-	async function handleCallbackResponse(response) {
-		// console.log("encoded JWT ID Token: " + response.credential);
+	// async function handleCallbackResponse(response) {
+	// 	// console.log("encoded JWT ID Token: " + response.credential);
 
-		const url = `/auth/google-login?code=${response.credential}`;
-		const data = await customApiClient('get', url);
-		console.log(data);
+	// 	const url = `/auth/google-login?code=${response.credential}`;
+	// 	const data = await customApiClient('get', url);
+	// 	console.log(data);
 
-		if (data.code === 3001) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			navigate('/home');
-		}
-		if (data.code === 1000) {
-			console.log(data.result.jwt);
-			localStorage.setItem('x-access-token', data.result.jwt);
-			// 닉네임으로 페이지 변경
-			setSocialLoginComplete(true);
-			setCurrentPage(4);
-			navigate('/signup');
-		}
-	}
+	// 	if (data.code === 3001) {
+	// 		console.log(data.result.jwt);
+	// 		localStorage.setItem('x-access-token', data.result.jwt);
+	// 		navigate('/home');
+	// 	}
+	// 	if (data.code === 1000) {
+	// 		console.log(data.result.jwt);
+	// 		localStorage.setItem('x-access-token', data.result.jwt);
+	// 		// 닉네임으로 페이지 변경
+	// 		setSocialLoginComplete(true);
+	// 		setCurrentPage(4);
+	// 		navigate('/signup');
+	// 	}
+	// }
 
 	const getMyFcmTokenAndAutoLogin = async () => {
 		localStorage.removeItem('isFcmLoad');
@@ -111,35 +111,49 @@ export default function Login() {
 	};
 	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
 
-	// async function handleCallbackResponse(response) {
-	// 	console.log('Encoded JWT ID token: ' + response.credential);
-	// 	const url = `/auth/google-login?code=${response.credential}`;
-	// 	const data = await customApiClient('get', url);
-	// 	console.log(data);
+	async function handleCallbackResponse(response) {
+		console.log('Encoded JWT ID token: ' + response.credential);
+		const url = `/auth/google-login?code=${response.credential}`;
+		const data = await customApiClient('get', url);
+		console.log(data);
 
-	// 	if (data.code === 3001) {
-	// 		console.log(data.result.jwt);
-	// 		localStorage.setItem('x-access-token', data.result.jwt);
-	// 		if (data.result.nickname === 'tempNickName') {
-	// 			setCurrentPage(4);
-	// 			setUserIdx(data.result.userIdx);
-	// 			console.log(data.result.userIdx);
-	// 			navigate('/signup');
-	// 		} else {
-	// 			navigate('/home');
-	// 		}
-	// 	}
-	// 	if (data.code === 1000) {
-	// 		console.log(data.result.jwt);
-	// 		localStorage.setItem('x-access-token', data.result.jwt);
-	// 		// 닉네임으로 페이지 변경
+		if (data.code === 3001) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			if (data.result.nickname === 'tempNickName') {
+				setCurrentPage(4);
+				setUserIdx(data.result.userIdx);
+				console.log(data.result.userIdx);
+				navigate('/signup');
+			} else {
+				navigate('/home');
+			}
+		}
+		if (data.code === 1000) {
+			console.log(data.result.jwt);
+			localStorage.setItem('x-access-token', data.result.jwt);
+			// 닉네임으로 페이지 변경
 
-	// 		setUserIdx(data.result.userIdx);
-	// 		setCurrentPage(4);
-	// 		navigate('/signup');
-	// 	}
-	// }
-
+			setUserIdx(data.result.userIdx);
+			setCurrentPage(4);
+			navigate('/signup');
+		}
+	}
+	const setGoogleButton = () => {
+		/* global google*/
+		google.accounts.id.initialize({
+			client_id: GoogleClient_ID,
+			callback: handleCallbackResponse,
+		});
+		google.accounts.id.renderButton(document.getElementById('google'), {
+			type: 'icon',
+			theme: 'outline',
+			size: 'large',
+			width: '40px',
+			shape: 'circle',
+		});
+		google.accounts.id.prompt(); // also display the One Tap dialog
+	};
 	useEffect(() => {
 		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
 		setCurrentPage(1);
@@ -147,21 +161,9 @@ export default function Login() {
 
 		getMyFcmTokenAndAutoLogin();
 
-		/* global google*/
-		window.onload = function () {
-			google.accounts.id.initialize({
-				client_id: GoogleClient_ID,
-				callback: handleCallbackResponse,
-			});
-			google.accounts.id.renderButton(document.getElementById('google'), {
-				type: 'icon',
-				theme: 'outline',
-				size: 'large',
-				width: '40px',
-				shape: 'circle',
-			});
-			google.accounts.id.prompt(); // also display the One Tap dialog
-		};
+		if (window.onload) {
+			setGoogleButton();
+		}
 	}, []);
 
 	return (
