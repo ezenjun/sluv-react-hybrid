@@ -23,6 +23,8 @@ import { ReactComponent as Diamond } from '../../../assets/Custom/Custom_diamond
 import { ReactComponent as Crown } from '../../../assets/Custom/Custom_crown.svg';
 import { ReactComponent as Present } from '../../../assets/Custom/Custom_present.svg';
 import { ReactComponent as Heart } from '../../../assets/Custom/Custom_heart.svg';
+import { ReactComponent as Flag } from '../../../assets/Custom/Custom_StarFlag.svg';
+import { ReactComponent as Shop } from '../../../assets/Custom/Custom_Shop.svg';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -373,7 +375,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 						<MainText fontsize="1.5rem">#{celeb.name}'s</MainText>
 						<div style={{ display: 'flex', alignItems: 'center' }}>
 							<MainText fontsize="1.5rem">LUV 아이템</MainText>
-							{ComponentIndex % 4 === 0 ? (
+							{ComponentIndex % 6 === 0 ? (
 								<Crown
 									style={{
 										width: '1.5rem',
@@ -383,7 +385,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 								/>
 							) : (
 								<>
-									{ComponentIndex % 4 === 1 ? (
+									{ComponentIndex % 6 === 1 ? (
 										<Diamond
 											style={{
 												width: '1.5rem',
@@ -393,7 +395,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 										/>
 									) : (
 										<>
-											{ComponentIndex % 4 === 2 ? (
+											{ComponentIndex % 6 === 2 ? (
 												<Present
 													style={{
 														width: '1.5rem',
@@ -402,13 +404,37 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 													}}
 												/>
 											) : (
-												<Heart
-													style={{
-														width: '1.5rem',
-														height: '1.5rem',
-														marginLeft: '0.3125rem',
-													}}
-												/>
+												<>
+													{ComponentIndex % 6 === 3 ? (
+														<Flag
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																marginLeft: '0.3125rem',
+															}}
+														/>
+													) : (
+														<>
+															{ComponentIndex % 6 === 4 ? (
+																<Heart
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		marginLeft: '0.3125rem',
+																	}}
+																/>
+															) : (
+																<Shop
+																	style={{
+																		width: '1.5rem',
+																		height: '1.5rem',
+																		marginLeft: '0.3125rem',
+																	}}
+																/>
+															)}
+														</>
+													)}
+												</>
 											)}
 										</>
 									)}
@@ -778,8 +804,7 @@ const Image = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-end;
-	width: 10.125rem;
-	height: 10.125rem;
+	width: 100%;
 	border-radius: 1rem;
 	background-color: grey;
 	background-image: linear-gradient(
@@ -796,25 +821,10 @@ const Image = styled.div`
 	box-sizing: border-box;
 	padding: 0.5rem 0.75rem;
 	font-size: 0.8125rem;
-	@media screen and (max-width: 399px) {
-		width: 10.125rem;
-		height: 10.125rem;
-	}
-	@media screen and (max-width: 375px) {
-		width: 10.125rem;
-		height: 10.125rem;
-	}
-	@media screen and (max-width: 360px) {
-		width: 9.375rem;
-		height: 9.375rem;
-	}
-	@media screen and (width: 320px) {
-		width: 9.25rem;
-		height: 9.25rem;
-	}
-	@media screen and (width: 280px) {
-		width: 8.125rem;
-		height: 8.125rem;
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
 	}
 `;
 

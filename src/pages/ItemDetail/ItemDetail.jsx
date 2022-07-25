@@ -347,7 +347,11 @@ export default function ItemDetail() {
 		setLikeCnt(data.result.itemInfo.itemLikeCnt);
 		// 링크 존재
 		if (data.result.itemInfo.sellerSite) {
-			setItemLink('https://' + data.result.itemInfo.sellerSite);
+			if (data.result.itemInfo.sellerSite.slice(0, 5) !== 'https') {
+				setItemLink('https://' + data.result.itemInfo.sellerSite);
+			} else {
+				setItemLink(data.result.itemInfo.sellerSite);
+			}
 		}
 
 		// 같은 셀럽의 아이템 저장 / 바인더 저장 여부 isDib
@@ -384,6 +388,7 @@ export default function ItemDetail() {
 		}
 		setSameBrandItemIsDibList([...tmp]);
 	};
+	console.log('ItemLink', itemLink);
 	const FollowUser = async userIdx => {
 		// 팔로우 버튼 클릭
 		const data = await customApiClient('post', `/users/${userIdx}/follow`);
@@ -583,7 +588,7 @@ export default function ItemDetail() {
 						</div>
 					</ItemInfoContainer>
 					{itemInfo.sellerSite && (
-						<a target="_blank" href={itemLink}>
+						<a target="_blank" href={itemLink} rel="noopener noreferrer external">
 							<ItemLInkContainer>
 								<ItemLInkWrap>
 									<ItemLinkIcon
@@ -791,6 +796,12 @@ export default function ItemDetail() {
 											fontsize="1rem"
 											fontweight="bold"
 											margin="0 0 0.375rem 0 "
+											style={{
+												textOverflow: 'ellipsis',
+												whiteSpace: 'nowrap',
+												overflow: 'hidden',
+												width: '100%',
+											}}
 										>
 											{item.brandKr}
 										</SubText>
@@ -1108,7 +1119,7 @@ const ImageContainer = styled.div`
 		width: 1.875rem;
 		background: #f0f0f0;
 		opacity: 50%;
-		border-radius: 5px;
+		/* border-radius: 5px; */
 		padding: 0;
 		margin: 0;
 	}
@@ -1254,11 +1265,13 @@ const MyPageGridItem = styled.div`
 	display: flex;
 	flex-direction: column;
 	flex-shrink: 0;
+	width: 10.125rem;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 0.6875rem;
 `;
+
 const RowWrap = styled.div`
 	display: flex;
 	width: 100%;

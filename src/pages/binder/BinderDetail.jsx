@@ -459,11 +459,11 @@ const ItemWrap = styled.div`
 	row-gap: 0.6875rem;
 	column-gap: 0.6875rem;
 
-	@media screen and (width: 280px) {
-		/* gap: 0.5rem; */
+	/* @media screen and (width: 280px) {
+		gap: 0.5rem;
 		row-gap: 0.6875rem;
 		column-gap: 0.5rem;
-	}
+	} */
 	/* white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis; */
@@ -479,9 +479,6 @@ const Item = styled.div`
 	text-overflow: ellipsis;
 `;
 const Image = styled.div`
-	/* display: flex;
-	justify-content: flex-start; */
-	/* align-items: flex-end; */
 	position: relative;
 	border-radius: 1rem;
 	background-color: ${props => props.backgroundColor || '#f6f6f6'};
@@ -496,23 +493,13 @@ const Image = styled.div`
 		url(${props => props.src});
 	background-repeat: no-repeat;
 	margin-bottom: 0.5rem;
-	box-sizing: border-box;
-	padding: 0.5rem 0.75rem;
-	font-size: 0.8125rem;
-	width: 6.5625rem;
-	height: 6.5625rem;
 
-	@media screen and (width: 360px) {
-		width: 6.25rem;
-		height: 6.25rem;
-	}
-	@media screen and (width: 320px) {
-		width: 5.375rem;
-		height: 5.375rem;
-	}
-	@media screen and (width: 280px) {
-		width: 4.6875rem;
-		height: 4.6875rem;
+	font-size: 0.8125rem;
+	width: 100%;
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
 	}
 `;
 const ImageText = styled.div`
@@ -521,6 +508,7 @@ const ImageText = styled.div`
 	align-items: center;
 	justify-content: space-between;
 	position: absolute;
+	left: 0.625rem;
 	bottom: 0.5rem;
 `;
 const CheckIconWrap = styled.div`
