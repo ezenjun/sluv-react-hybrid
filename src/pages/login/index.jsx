@@ -148,7 +148,20 @@ export default function Login() {
 		getMyFcmTokenAndAutoLogin();
 
 		/* global google*/
-		
+		window.onload = async function () {
+			await google.accounts.id.initialize({
+				client_id: GoogleClient_ID,
+				callback: handleCallbackResponse,
+			});
+			await google.accounts.id.renderButton(document.getElementById('google'), {
+				type: 'icon',
+				theme: 'outline',
+				size: 'large',
+				width: '40px',
+				shape: 'circle',
+			});
+			await google.accounts.id.prompt(); // also display the One Tap dialog
+		};
 	}, []);
 
 	return (
@@ -168,14 +181,14 @@ export default function Login() {
 						<span className="boldText"> 셀럽의 아이템</span>을 만나보세요!
 					</LoginSpeechBubble>
 				</div>
-				{/* <a href={KAKAO_AUTH_URL}>
+				<a href={KAKAO_AUTH_URL}>
 					<KaKaoButton>
 						<KakaoIcon
 							style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
 						/>
 						<span className="kakaoBtnText">카카오로 시작하기</span>
 					</KaKaoButton>
-				</a> */}
+				</a>
 				<EmailButton to="/login">
 					<EmailIcon
 						style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
