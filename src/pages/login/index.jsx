@@ -140,7 +140,15 @@ export default function Login() {
 			navigate('/signup');
 		}
 	}
-	const setGoogleButton = () => {
+
+	useEffect(() => {
+		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
+		setCurrentPage(1);
+		setSocialLoginComplete(false);
+
+		getMyFcmTokenAndAutoLogin();
+		// window.addEventListener('DOMContentLoaded', function () {
+		// 	console.log('domcontent');
 		/* global google*/
 		google.accounts.id.initialize({
 			client_id: GoogleClient_ID,
@@ -154,17 +162,11 @@ export default function Login() {
 			shape: 'circle',
 		});
 		google.accounts.id.prompt(); // also display the One Tap dialog
-	};
-	useEffect(() => {
-		// 로컬 로그인 페이지 및 뒤로 가기 버튼 상태 초기화
-		setCurrentPage(1);
-		setSocialLoginComplete(false);
+		// });
+		// window.addEventListener('load', () => {
+		// 	/* global google*/
 
-		getMyFcmTokenAndAutoLogin();
-
-		window.onload = function () {
-			setGoogleButton();
-		};
+		// });
 	}, []);
 
 	return (
