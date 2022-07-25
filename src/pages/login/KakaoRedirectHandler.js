@@ -5,12 +5,18 @@ import { customApiClient } from '../../utils/apiClient';
 import { useSetRecoilState } from 'recoil';
 import { SignupProgressState, SocialLoginUserIdxState } from '../../recoil/User';
 import Loading from '../../components/Loading';
+import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
 
 export default function KakaoRedirectHandler() {
 	const navigate = useNavigate();
 
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	useEffect(() => {
 		getKakaoJwt();
@@ -44,6 +50,20 @@ export default function KakaoRedirectHandler() {
 			setUserIdx(data.result.userIdx);
 			navigate('/signup');
 		}
+
+		if(!data.isSuccess) {
+			setToastMessageBottomPosition('3.75rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('카카오 로그인 실패');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+		}
+
 	};
 
 	return <Loading />;
