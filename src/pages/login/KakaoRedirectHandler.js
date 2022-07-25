@@ -25,12 +25,16 @@ export default function KakaoRedirectHandler() {
 			console.log('중복된 사용자입니다.');
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
+			localStorage.setItem('myUserIdx', data.result.userIdx);
 			if (data.result.nickname === 'tempNickName') {
 				setCurrentPage(4);
 				setUserIdx(data.result.userIdx);
+				console.log('처음 회원가입 jwt', data.result.jwt);
 				console.log(data.result.userIdx);
 				navigate('/signup');
 			} else {
+				console.log('다시 로그인 jwt', data.result.jwt);
+				setUserIdx(data.result.userIdx);
 				navigate('/home');
 			}
 		}
@@ -38,6 +42,7 @@ export default function KakaoRedirectHandler() {
 			console.log('최초 회원가입 사용자입니다.');
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
+			localStorage.setItem('myUserIdx', data.result.userIdx);
 			// 닉네임으로 페이지 변경
 			setCurrentPage(4);
 			setUserIdx(data.result.userIdx);
