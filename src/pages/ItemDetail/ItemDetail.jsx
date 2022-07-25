@@ -588,7 +588,7 @@ export default function ItemDetail() {
 						</div>
 					</ItemInfoContainer>
 					{itemInfo.sellerSite && (
-						<a target="_blank" href={itemLink} rel="noopener noreferrer external">
+						<a target="_blank" href={`javascript:void(window.open(${itemLink}, '팝업창 이름','width=#, height=#`))} rel="noopener noreferrer external">
 							<ItemLInkContainer>
 								<ItemLInkWrap>
 									<ItemLinkIcon
