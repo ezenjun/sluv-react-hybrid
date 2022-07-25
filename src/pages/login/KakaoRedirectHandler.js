@@ -51,7 +51,7 @@ export default function KakaoRedirectHandler() {
 			navigate('/signup');
 		}
 
-		if(!data.isSuccess) {
+		if(!data) {
 			setToastMessageBottomPosition('3.75rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
@@ -63,9 +63,7 @@ export default function KakaoRedirectHandler() {
 				setToastMessageWrapStatus(false);
 				navigate('/');
 			}, 2300);
-		
 		}
-
 	};
 
 	return <Loading />;
