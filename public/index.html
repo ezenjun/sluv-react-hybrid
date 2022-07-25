@@ -80,9 +80,7 @@
 						const fcmToken = await window.android.getFcmToken();
 						if (fcmToken) {
 							localStorage.setItem('fcmToken', fcmToken);
-						} else {
-							alert('Token이 없습니다.');
-						}
+						} 
 					} catch (err) {
 						console.log(err);
 					}
