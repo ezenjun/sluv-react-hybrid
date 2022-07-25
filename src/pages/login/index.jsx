@@ -148,7 +148,20 @@ export default function Login() {
 		getMyFcmTokenAndAutoLogin();
 
 		/* global google*/
-		
+		window.onload = function () {
+			google.accounts.id.initialize({
+				client_id: GoogleClient_ID,
+				callback: handleCallbackResponse,
+			});
+			google.accounts.id.renderButton(document.getElementById('google'), {
+				type: 'icon',
+				theme: 'outline',
+				size: 'large',
+				width: '40px',
+				shape: 'circle',
+			});
+			google.accounts.id.prompt(); // also display the One Tap dialog
+		};
 	}, []);
 
 	return (
