@@ -148,20 +148,20 @@ export default function Login() {
 		getMyFcmTokenAndAutoLogin();
 
 		/* global google*/
-		window.onload = async function () {
-			await google.accounts.id.initialize({
+		if (window.onload) {
+			google.accounts.id.initialize({
 				client_id: GoogleClient_ID,
 				callback: handleCallbackResponse,
 			});
-			await google.accounts.id.renderButton(document.getElementById('google'), {
+			google.accounts.id.renderButton(document.getElementById('google'), {
 				type: 'icon',
 				theme: 'outline',
 				size: 'large',
 				width: '40px',
 				shape: 'circle',
 			});
-			await google.accounts.id.prompt(); // also display the One Tap dialog
-		};
+			google.accounts.id.prompt(); // also display the One Tap dialog
+		}
 	}, []);
 
 	return (
