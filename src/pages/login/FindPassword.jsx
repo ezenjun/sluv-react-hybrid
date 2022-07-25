@@ -11,10 +11,11 @@ import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
-
+import Loading from '../../components/Loading';
 export default function FindPassword() {
 	const [email, setEmail] = useState('');
 	const [emailValid, setEmailValid] = useState(false);
+	const [loadingState, setLoadingState] = useState(false);
 	const handleEmail = e => {
 		setEmail(e.target.value);
 		const regex =
@@ -31,7 +32,9 @@ export default function FindPassword() {
 		const data = await customApiClient('post', url, body);
 		if (!data) return;
 		console.log(data);
+
 		if (data.isSuccess) {
+			setLoadingState(false);
 			navigate('/find/password/result', { state: { email: email } });
 		}
 		if (data.code === 5002) {
@@ -44,6 +47,7 @@ export default function FindPassword() {
 
 	const navigate = useNavigate();
 	const handleNextClick = () => {
+		setLoadingState(true);
 		handleFindPasswordAPI(email);
 	};
 	const handleBackClick = () => {
@@ -59,43 +63,49 @@ export default function FindPassword() {
 					<PageLabel>
 						<MainText fontsize="1.5rem">비밀번호 찾기</MainText>
 					</PageLabel>
-					<FormWrap>
-						<SubText margin="0 0 0.5rem 0">이메일 주소</SubText>
-						<InputWrap valid={emailValid} value={email}>
-							<Input
-								value={email}
-								onChange={handleEmail}
-								type="email"
-								placeholder="sluv@email.com"
-							/>
-							{emailValid ? (
-								<IconWrap>
-									<Check />
-								</IconWrap>
-							) : (
-								<></>
-							)}
-							{email.length !== 0 && !emailValid ? (
-								<IconWrap onClick={emailInputReset}>
-									<Delete />
-								</IconWrap>
-							) : (
-								<></>
-							)}
-						</InputWrap>
-						<ErrorMessage>
-							{!emailValid && email.length !== 0 ? (
-								<SubText color="#ef0000" fontweight="normal">
-									올바른 이메일을 입력해주세요.
-								</SubText>
-							) : (
-								<></>
-							)}
-						</ErrorMessage>
-					</FormWrap>
+					{!loadingState ? (
+						<FormWrap>
+							<SubText margin="0 0 0.5rem 0">이메일 주소</SubText>
+							<InputWrap valid={emailValid} value={email}>
+								<Input
+									value={email}
+									onChange={handleEmail}
+									type="email"
+									placeholder="sluv@email.com"
+								/>
+								{emailValid ? (
+									<IconWrap>
+										<Check />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+								{email.length !== 0 && !emailValid ? (
+									<IconWrap onClick={emailInputReset}>
+										<Delete />
+									</IconWrap>
+								) : (
+									<></>
+								)}
+							</InputWrap>
+							<ErrorMessage>
+								{!emailValid && email.length !== 0 ? (
+									<SubText color="#ef0000" fontweight="normal">
+										올바른 이메일을 입력해주세요.
+									</SubText>
+								) : (
+									<></>
+								)}
+							</ErrorMessage>
+						</FormWrap>
+					) : (
+						<div style={{ height: '5rem' }}>
+							<Loading></Loading>
+						</div>
+					)}
 				</TopWrap>
 				<BottomWrap>
-					{emailValid ? (
+					{emailValid && !loadingState ? (
 						<PurpleButton onClick={handleNextClick}>확인</PurpleButton>
 					) : (
 						<PurpleButton disabled={true}>확인</PurpleButton>
