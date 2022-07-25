@@ -112,7 +112,6 @@ export default function Faq() {
 
 			<a
 				href="https://open.kakao.com/o/s1IQ8upe"
-				target="blank"
 				style={{ textDecoration: 'none', padding: '0 1.25rem' }}
 			>
 				<PurpleButton style={{ fontSize: '1rem' }} marginBottom="1.625rem">
