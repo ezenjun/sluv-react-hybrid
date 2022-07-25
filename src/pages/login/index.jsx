@@ -210,11 +210,11 @@ export default function Login() {
 					<div className="grayLine"></div>
 				</Division>
 
-				<div>
+				{/* <div>
 					<GoogleButton>
 						<div id="google" />
 					</GoogleButton>
-				</div>
+				</div> */}
 			</ButtonContainer>
 			{/* <LocalLogin>
 				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
