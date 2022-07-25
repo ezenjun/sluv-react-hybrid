@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { customApiClient } from '../../utils/apiClient';
 import { useSetRecoilState } from 'recoil';
 import { SignupProgressState, SocialLoginUserIdxState } from '../../recoil/User';
+import Loading from '../../components/Loading';
 
 export default function KakaoRedirectHandler() {
 	const navigate = useNavigate();
@@ -45,5 +46,5 @@ export default function KakaoRedirectHandler() {
 		}
 	};
 
-	return <div>로그인중</div>;
+	return <Loading />;
 }
