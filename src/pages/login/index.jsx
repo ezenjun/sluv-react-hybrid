@@ -166,10 +166,10 @@ export default function Login() {
 		getMyFcmTokenAndAutoLogin();
 
 		/* global google*/
-		if (window.onload) {
+		window.onload = function () {
 			console.log('로드됨');
 			setGoogleButton();
-		}
+		};
 	}, []);
 
 	return (
