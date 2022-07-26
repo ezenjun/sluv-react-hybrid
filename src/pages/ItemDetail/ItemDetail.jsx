@@ -36,6 +36,7 @@ import { ReactComponent as PurpleRightArrow } from '../../assets/Icons/purple_ri
 import { PopUpModal } from '../../components/PopUp/PopUpModal';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { PopUpModalState } from '../../recoil/PopUpModal';
+
 import {
 	BottomDialogDiv,
 	BottomDialogWrap,
@@ -488,7 +489,7 @@ export default function ItemDetail() {
 				</div>
 			</TopNav>
 
-			{itemInfo && (
+			{itemInfo.length !== 0 ? (
 				<FeedContainer ref={listInnerRef}>
 					{/* <button
 						onClick={executeScroll}
@@ -914,6 +915,10 @@ export default function ItemDetail() {
 						</MyUploadWrap>
 					)}
 				</FeedContainer>
+			) : (
+				<div ref={listInnerRef} style={{ height: '5rem' }}>
+					<Loading></Loading>
+				</div>
 			)}
 
 			<BottomNavWrap openStatus={true}>
