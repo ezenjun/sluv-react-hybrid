@@ -31,6 +31,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../../recoil/ToastMessage';
+import Loading from '../../../components/Loading';
 
 export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 	console.log(ComponentIndex);
@@ -248,7 +249,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 	}
 	const [latestList, setLatestList] = useState([]);
 	const [hotList, setHotList] = useState([]);
-
+	const [loading, setLoading] = useState(true);
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
 			'get',
@@ -257,6 +258,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setLoading(false);
 			return;
 		}
 		setLatestList([...latestList, data.result]);
@@ -273,6 +275,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		}
 		setLatestIsBinderList([...latestIsBinderList, tmp]);
 		console.log('latest temp', tmp);
+		setLoading(false);
 	};
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
@@ -488,7 +491,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 					</FilterWrap>
 				)}
 				<>
-					{CurrentList ? (
+					{!loading ? (
 						<>
 							{CurrentList.length > 0 ? (
 								<ItemWrap>
@@ -642,22 +645,25 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 							)}
 						</>
 					) : (
-						<ItemContainer
-							style={{
-								display: 'flex',
-								alignContent: 'center',
-								justifyContent: 'center',
-								alignItems: 'center',
-								paddingBottom: '2.5rem',
-								paddingRight: '1.25rem',
-								width: '100%',
-							}}
-						>
-							<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
-							<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
-								아직 해당 셀럽의 아이템이 존재하지 않아요
-							</SubText>
-						</ItemContainer>
+						// <ItemContainer
+						// 	style={{
+						// 		display: 'flex',
+						// 		alignContent: 'center',
+						// 		justifyContent: 'center',
+						// 		alignItems: 'center',
+						// 		paddingBottom: '2.5rem',
+						// 		paddingRight: '1.25rem',
+						// 		width: '100%',
+						// 	}}
+						// >
+						// 	<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
+						// 	<SubText margin="1rem 0" fontsize="0.875rem" fontweight="bold">
+						// 		아직 해당 셀럽의 아이템이 존재하지 않아요
+						// 	</SubText>
+						// </ItemContainer>
+						<div style={{ height: '5rem' }}>
+							<Loading></Loading>
+						</div>
 					)}
 				</>
 			</ItemContainer>
@@ -806,7 +812,7 @@ const Image = styled.div`
 	align-items: flex-end;
 	width: 100%;
 	border-radius: 1rem;
-	background-color: grey;
+
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
@@ -825,6 +831,20 @@ const Image = styled.div`
 		content: '';
 		display: block;
 		padding-bottom: 100%;
+	}
+	:empty {
+		background: linear-gradient(to right, #eeeeee 10%, #dddddd 28%, #eeeeee 53%);
+		background-size: 100%;
+		animation: 2s loadingAnimation forwards infinite linear; //애니메이션 적용
+	}
+	@keyframes loadingAnimation {
+		//배경색 위치 이동하는 애니메이션
+		0% {
+			background-position: -20rem 0;
+		}
+		100% {
+			background-position: 20rem 0;
+		}
 	}
 `;
 

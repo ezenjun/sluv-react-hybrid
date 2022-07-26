@@ -234,7 +234,11 @@ export default function My() {
 
 	return (
 		<MainContainer>
-			{isAuthUser === -1 && <Loading />}
+			{isAuthUser === -1 && (
+				<div style={{ height: '5rem' }}>
+					<Loading></Loading>
+				</div>
+			)}
 			<TopNav>
 				{isAuthUser === 1 && (
 					<>

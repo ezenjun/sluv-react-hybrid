@@ -240,10 +240,10 @@ const User = styled.div`
 	align-items: center;
 	width: 9.0625rem;
 	height: 13.125rem;
-	padding: 20px;
-	margin-right: 11px;
-	border-radius: 16px;
-	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.05);
+	padding: 1.25rem;
+	margin-right: 0.6875rem;
+	border-radius: 1rem;
+	box-shadow: 0 0.125rem 1rem 0 rgba(0, 0, 0, 0.05);
 	background-color: rgba(255, 255, 255, 0.4);
 `;
 const ProfileImg = styled.div`

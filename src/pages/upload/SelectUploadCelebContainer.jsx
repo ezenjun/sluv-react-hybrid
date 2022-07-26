@@ -1,15 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import { ContentWrap } from '../../components/containers/ContentWrap';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
-import { Celeb, IconWrap, Image, ImgCircle, InputWrap, ListContainer, PopularCelebContainer, RequestButton, RequestWrap, SearchFailContainer, SearchFailDiv, SearchTab, Tab, TabWrap, TextWrap } from '../signup/SelectCeleb';
+import { ReactComponent as RequestCelebIcon } from '../../assets/Icons/RequestCeleb.svg';
+import { ReactComponent as RequestBubble } from '../../assets/Icons/RequestBubble.svg';
+import {
+	Celeb,
+	IconWrap,
+	Image,
+	ImgCircle,
+	InputWrap,
+	ListContainer,
+	PopularCelebContainer,
+	RequestButton,
+	RequestWrap,
+	SearchFailContainer,
+	SearchFailDiv,
+	SearchTab,
+	Tab,
+	TabWrap,
+	TextWrap,
+} from '../signup/SelectCeleb';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
 import { Input } from '../../components/Input';
-import { celebCategoryList, ChooseCelebCurrentPageState, FavoriteCelebListState, PopularCelebListState, TotalCelebListState } from '../../recoil/Celebrity';
+import {
+	celebCategoryList,
+	ChooseCelebCurrentPageState,
+	FavoriteCelebListState,
+	PopularCelebListState,
+	TotalCelebListState,
+} from '../../recoil/Celebrity';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
 import { useNavigate } from 'react-router-dom';
@@ -32,7 +56,19 @@ export default function SelectUploadCelebContainer() {
 	const setSelectedMember = useSetRecoilState(UploadMemberState);
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const setUploadPopupStatus = useSetRecoilState(UploadPopupState);
-
+	const [reachedBottom, setReachedBottom] = useState(false);
+	const listInnerRef = useRef();
+	const onScroll = () => {
+		if (listInnerRef.current) {
+			const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+			if (scrollTop + clientHeight >= scrollHeight) {
+				console.log('reached bottom');
+				setReachedBottom(true);
+			} else {
+				setReachedBottom(false);
+			}
+		}
+	};
 	useEffect(() => {
 		setSelectedCeleb({});
 		setSelectedMember({});
@@ -50,7 +86,7 @@ export default function SelectUploadCelebContainer() {
 		if (favoriteCelebList.length < 1) {
 			getFavoriteCeleb();
 		}
-	},[]);
+	}, []);
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
@@ -81,7 +117,7 @@ export default function SelectUploadCelebContainer() {
 		}
 		console.log('내 관심셀럽 리스트', data.result);
 		setFavoriteCelebList(data.result);
-	}
+	};
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
@@ -128,20 +164,19 @@ export default function SelectUploadCelebContainer() {
 
 	const onClickUploadCeleb = (celeb, e) => {
 		setSelectedCeleb(celeb);
-		if(celeb.isGroup === 1) {
+		if (celeb.isGroup === 1) {
 			setCurrentPage(1);
-		} else if(celeb.isGroup === 0) {
+		} else if (celeb.isGroup === 0) {
 			setCurrentPage(2);
 		}
-		
+
 		e.preventDefault();
-	}
+	};
 
 	const onClickClose = () => {
 		setUploadPopupStatus(false);
 		navigate(-1);
-	}
-
+	};
 
 	return (
 		<MainContainer>
@@ -153,7 +188,7 @@ export default function SelectUploadCelebContainer() {
 				<Close onClick={onClickClose} style={{ width: '24px', height: '24px' }} />
 			</TopNav>
 
-			<ContentWrap padding="0">
+			<ContentWrap padding="0" onScroll={onScroll} ref={listInnerRef}>
 				<TextWrap>
 					<MainText fontsize="1.5rem" margin="1.625rem 0 0.5rem 0">
 						누구의 아이템 정보를
@@ -269,18 +304,33 @@ export default function SelectUploadCelebContainer() {
 				)}
 
 				{!searchFailStatus && (
-					<RequestWrap>
-						<RequestButton>
-							<PurpleButton
-								style={{ fontSize: '0.875rem' }}
-								boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
-								marginBottom="0"
-								onClick={() => navigate('../../request/celebrity')}
-							>
-								셀럽 추가 요청하기
-							</PurpleButton>
-						</RequestButton>
-					</RequestWrap>
+					<>
+						<RequestWrap>
+							{reachedBottom ? (
+								<RequestBubble
+									style={{
+										visibility: 'hidden',
+										transition: 'visibility 0s linear 300ms, opacity 300ms',
+										opacity: '0',
+									}}
+								></RequestBubble>
+							) : (
+								<RequestBubble
+									style={{
+										visibility: 'visible',
+										transition: 'visibility 0s linear 0s, opacity 300ms',
+										opacity: '1',
+									}}
+								></RequestBubble>
+							)}
+
+							<RequestButton onClick={() => navigate('../../request/celebrity')}>
+								<RequestCelebIcon
+									style={{ width: '1.5rem', height: '1.5rem' }}
+								></RequestCelebIcon>
+							</RequestButton>
+						</RequestWrap>
+					</>
 				)}
 			</ContentWrap>
 		</MainContainer>

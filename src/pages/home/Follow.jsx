@@ -29,7 +29,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
-
+import Loading from '../../components/Loading';
 export default function Follow() {
 	const navigate = useNavigate();
 	const [followItemList, setFollowItemList] = useState([]);
@@ -162,7 +162,7 @@ export default function Follow() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	}
-
+	const [loading, setLoading] = useState(true);
 	const getFollowItemList = async () => {
 		const data = await customApiClient('get', `/homes/items/followers?page=1&pageSize=20`);
 		if (!data) return;
@@ -182,6 +182,7 @@ export default function Follow() {
 			}
 		}
 		setLatestIsBinderList([...tmp]);
+		setLoading(false);
 	};
 	const getSameFollowSluverList = async () => {
 		const data = await customApiClient('get', `/homes/similar-users`);
@@ -194,8 +195,7 @@ export default function Follow() {
 		setSameFollowSluverList([...temp]);
 		console.log('getSameFollowSluverList', data.result);
 	};
-	const onFollow = (e, userIdx) => {
-		e.stopPropagation();
+	const onFollow = userIdx => {
 		FollowUser(userIdx);
 		let tempList = sameFollowSluverList;
 		console.log('팔로우 클릭');
@@ -212,8 +212,7 @@ export default function Follow() {
 			}
 		}
 	};
-	const onUnFollow = (e, userIdx) => {
-		e.stopPropagation();
+	const onUnFollow = userIdx => {
 		UnFollowUser(userIdx);
 		let tempList = sameFollowSluverList;
 		console.log('언팔 클릭');
@@ -277,265 +276,319 @@ export default function Follow() {
 
 	return (
 		<FeedContainer ref={scrollRef}>
-			{followItemList.length > 0 ? (
-				<>
-					<LargeViewWrap padding="0 20px 40px 20px">
-						{showTopBtn ? (
-							<ScrollTop
-								onClick={executeScroll}
-								style={{
-									position: 'fixed',
-									bottom: '5rem',
-									right: '30px',
-									width: '3.125rem',
-									height: '3.125rem',
-									visibility: 'visible',
-									transition: 'visibility 0s linear 0s, opacity 300ms',
-									opacity: '1',
-								}}
-							></ScrollTop>
-						) : (
-							<ScrollTop
-								onClick={executeScroll}
-								style={{
-									position: 'fixed',
-									bottom: '5rem',
-									right: '30px',
-									width: '3.125rem',
-									height: '3.125rem',
-									visibility: 'hidden',
-									transition: 'visibility 0s linear 300ms, opacity 300ms',
-									opacity: '0',
-								}}
-							></ScrollTop>
-						)}
-
-						{followItemList.map((item, index) => (
-							<div key={item.itemIdx} onClick={() => onDetailItemClick(item.itemIdx)}>
-								<LargeViewItem>
-									<LargeViewImage src={item.itemImgUrl}>
-										<ImageText>
-											<SubText
-												fontsize="0.8125rem"
-												fontweight="bold"
-												color="white"
-											>
-												{item.name}'s
-											</SubText>
-											{latestIsBinderList && (
-												<>
-													{latestIsBinderList[index] === true ? (
-														<BinderRed
-															onClick={e =>
-																onDeleteBinderClick(item.itemIdx, e)
-															}
-															style={{
-																width: '1.5rem',
-																height: '1.5rem',
-															}}
-														/>
-													) : (
-														<BinderWhite
-															onClick={e =>
-																onAddBinderClick(e, item.itemIdx)
-															}
-															style={{
-																width: '1.5rem',
-																height: '1.5rem',
-															}}
-														/>
-													)}
-												</>
-											)}
-										</ImageText>
-									</LargeViewImage>
-									<ItemTextWrap>
-										<div
-											style={{
-												maxWidth: '30%',
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-											}}
-										>
-											<SubText fontsize="1rem">{item.brandKr}</SubText>
-										</div>
-
-										<VerticalLine></VerticalLine>
-										<div
-											style={{
-												maxWidth: '65%',
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-											}}
-										>
-											<SubText fontsize="1rem">{item.ItemName}</SubText>
-										</div>
-									</ItemTextWrap>
-									<SubInfoWrap>
-										{item.profileImgUrl ? (
-											<ProfileImg src={item.profileImgUrl}></ProfileImg>
-										) : (
-											<UserBasicProfileImg
-												style={{
-													width: '1.5rem',
-													height: '1.5rem',
-													marginRight: '0.5rem',
-												}}
-											></UserBasicProfileImg>
-										)}
-										<SubText margin="0 "> {item.nickName}</SubText>
-										<Dot></Dot>
-										<SubText color="#8d8d8d"> {item.uploadTime}</SubText>
-									</SubInfoWrap>
-								</LargeViewItem>
-								<HorizontalLine></HorizontalLine>
-							</div>
-						))}
-					</LargeViewWrap>
-					<RecommendUserWrap>
-						<TextWrap>
-							<MainText fontsize="1.125rem">같은 셀럽을 좋아하는 스러버</MainText>
-						</TextWrap>
-						<UserWrap>
-							{sameFollowSluverList &&
-								sameFollowSluverList.map(sluver => (
-									<User
-										onClick={() => onClickUserProfile(sluver.userIdx)}
-										key={sluver.userIdx}
-									>
-										{sluver.profileImgUrl ? (
-											<ProfileImg
-												src={sluver.profileImgUrl}
-												size="3.875rem"
-											></ProfileImg>
-										) : (
-											<UserBasicProfileImg
-												style={{
-													width: '3.875rem',
-													height: '3.875rem',
-													marginRight: '0.5rem',
-												}}
-											></UserBasicProfileImg>
-										)}
-										<SubText fontsize="0.875rem" margin="0.5rem 0 0.25rem 0">
-											{sluver.nickName}
-										</SubText>
-										<SubText color="#8d8d8d">@{sluver.id}</SubText>
-										{sluver.isFollow === 'Y' ? (
-											<FollowButton
-												follow={sluver.isFollow === 'Y'}
-												onClick={e => onUnFollow(e, sluver.userIdx)}
-											>
-												팔로잉
-											</FollowButton>
-										) : (
-											<FollowButton
-												follow={sluver.isFollow === 'Y'}
-												onClick={e => onFollow(e, sluver.userIdx)}
-											>
-												팔로우
-											</FollowButton>
-										)}
-									</User>
-								))}
-						</UserWrap>
-					</RecommendUserWrap>
-				</>
-			) : (
-				<>
-					<NoFollow>
-						<NoFollowerIcon
-							style={{ width: '3.75rem', height: '3.75rem' }}
-						></NoFollowerIcon>
-						<SubText></SubText>
-						<SubText color="#262626" fontsize="1rem" margin="1rem 0 0.5rem 0">
-							아직 팔로잉한 스러버가 없네요
-						</SubText>
-						<SubText color="#8d8d8d" fontsize="0.875rem">
-							소통하고 싶은 스러버를 찾아봐요
-						</SubText>
-					</NoFollow>
-					<RecommendFollow>
-						<MainText fontsize="18px" margin="0 0 1.625rem 0">
-							같은 셀럽을 좋아하는 스러버
-						</MainText>
-						{sameFollowSluverList ? (
+			<>
+				{!loading ? (
+					<>
+						{followItemList.length > 0 ? (
 							<>
-								{sameFollowSluverList.map(sluver => (
-									<RecommendUser
-										key={sluver.userIdx}
-										onClick={() => onClickUserProfile(sluver.userIdx)}
-									>
-										<UserTop>
-											<UserInfo>
-												{sluver.profileImgUrl ? (
-													<UserImage
-														src={sluver.profileImgUrl}
-													></UserImage>
-												) : (
-													<UserBasicProfileImg
+								<LargeViewWrap padding="0 20px 40px 20px">
+									{showTopBtn ? (
+										<ScrollTop
+											onClick={executeScroll}
+											style={{
+												position: 'fixed',
+												bottom: '4.375rem',
+												right: '0.75rem',
+												width: '3.125rem',
+												height: '3.125rem',
+												visibility: 'visible',
+												transition:
+													'visibility 0s linear 0s, opacity 300ms',
+												opacity: '1',
+											}}
+										></ScrollTop>
+									) : (
+										<ScrollTop
+											onClick={executeScroll}
+											style={{
+												position: 'fixed',
+												bottom: '4.375rem',
+												right: '0.75rem',
+												width: '3.125rem',
+												height: '3.125rem',
+												visibility: 'hidden',
+												transition:
+													'visibility 0s linear 300ms, opacity 300ms',
+												opacity: '0',
+											}}
+										></ScrollTop>
+									)}
+
+									{followItemList.map((item, index) => (
+										<div
+											key={item.itemIdx}
+											onClick={() => onDetailItemClick(item.itemIdx)}
+										>
+											<LargeViewItem>
+												<LargeViewImage src={item.itemImgUrl}>
+													<ImageText>
+														<SubText
+															fontsize="0.8125rem"
+															fontweight="bold"
+															color="white"
+														>
+															{item.name}'s
+														</SubText>
+														{latestIsBinderList && (
+															<>
+																{latestIsBinderList[index] ===
+																true ? (
+																	<BinderRed
+																		onClick={e =>
+																			onDeleteBinderClick(
+																				item.itemIdx,
+																				e
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																) : (
+																	<BinderWhite
+																		onClick={e =>
+																			onAddBinderClick(
+																				e,
+																				item.itemIdx
+																			)
+																		}
+																		style={{
+																			width: '1.5rem',
+																			height: '1.5rem',
+																		}}
+																	/>
+																)}
+															</>
+														)}
+													</ImageText>
+												</LargeViewImage>
+												<ItemTextWrap>
+													<div
 														style={{
-															width: '2.25rem',
-															height: '2.25rem',
-															marginRight: '0.5rem',
+															maxWidth: '30%',
+															overflow: 'hidden',
+															textOverflow: 'ellipsis',
 														}}
-													></UserBasicProfileImg>
-												)}
-												<UserInfoText>
-													<SubText margin="0 ">
+													>
+														<SubText fontsize="1rem">
+															{item.brandKr}
+														</SubText>
+													</div>
+
+													<VerticalLine></VerticalLine>
+													<div
+														style={{
+															maxWidth: '65%',
+															overflow: 'hidden',
+															textOverflow: 'ellipsis',
+														}}
+													>
+														<SubText fontsize="1rem">
+															{item.ItemName}
+														</SubText>
+													</div>
+												</ItemTextWrap>
+												<SubInfoWrap>
+													{item.profileImgUrl ? (
+														<ProfileImg
+															src={item.profileImgUrl}
+														></ProfileImg>
+													) : (
+														<UserBasicProfileImg
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																marginRight: '0.5rem',
+															}}
+														></UserBasicProfileImg>
+													)}
+													<SubText margin="0 "> {item.nickName}</SubText>
+													<Dot></Dot>
+													<SubText color="#8d8d8d">
 														{' '}
+														{item.uploadTime}
+													</SubText>
+												</SubInfoWrap>
+											</LargeViewItem>
+											<HorizontalLine></HorizontalLine>
+										</div>
+									))}
+								</LargeViewWrap>
+								<RecommendUserWrap>
+									<TextWrap>
+										<MainText fontsize="1.125rem">
+											같은 셀럽을 좋아하는 스러버
+										</MainText>
+									</TextWrap>
+									<UserWrap>
+										{sameFollowSluverList &&
+											sameFollowSluverList.map(sluver => (
+												<User
+													onClick={() =>
+														onClickUserProfile(sluver.userIdx)
+													}
+													key={sluver.userIdx}
+												>
+													{sluver.profileImgUrl ? (
+														<ProfileImg
+															src={sluver.profileImgUrl}
+															size="3.875rem"
+														></ProfileImg>
+													) : (
+														<UserBasicProfileImg
+															style={{
+																width: '3.875rem',
+																height: '3.875rem',
+																marginRight: '0.5rem',
+															}}
+														></UserBasicProfileImg>
+													)}
+													<SubText
+														fontsize="0.875rem"
+														margin="0.5rem 0 0.25rem 0"
+													>
 														{sluver.nickName}
 													</SubText>
-													<SubInfoWrap>
-														<SubText color="#8d8d8d">
-															@{sluver.id}
-														</SubText>
-														<Dot></Dot>
-														<SubText color="#8d8d8d">
-															{sluver.uploadCnt}개 업로드
-														</SubText>
-													</SubInfoWrap>
-												</UserInfoText>
-											</UserInfo>
-											{sluver.isFollow === 'Y' ? (
-												<FollowButton
-													follow={sluver.isFollow === 'Y'}
-													onClick={() => onUnFollow(sluver.userIdx)}
-													margintop="0"
-												>
-													팔로잉
-												</FollowButton>
-											) : (
-												<FollowButton
-													follow={sluver.isFollow === 'Y'}
-													onClick={() => onFollow(sluver.userIdx)}
-													margintop="0"
-												>
-													팔로우
-												</FollowButton>
-											)}
-										</UserTop>
-										<UserBottom>
-											{sluver.itemList && (
-												<>
-													{sluver.itemList.map(item => (
-														<UploadImage
-															key={item.itemIdx}
-															src={item.itemImgUrl}
-														></UploadImage>
-													))}
-												</>
-											)}
-										</UserBottom>
-									</RecommendUser>
-								))}
+													<SubText color="#8d8d8d">@{sluver.id}</SubText>
+													{sluver.isFollow === 'Y' ? (
+														<FollowButton
+															follow={sluver.isFollow === 'Y'}
+															onClick={() =>
+																onUnFollow(sluver.userIdx)
+															}
+														>
+															팔로잉
+														</FollowButton>
+													) : (
+														<FollowButton
+															follow={sluver.isFollow === 'Y'}
+															onClick={() => onFollow(sluver.userIdx)}
+														>
+															팔로우
+														</FollowButton>
+													)}
+												</User>
+											))}
+									</UserWrap>
+								</RecommendUserWrap>
 							</>
 						) : (
-							<></>
+							<>
+								<NoFollow>
+									<NoFollowerIcon
+										style={{ width: '3.75rem', height: '3.75rem' }}
+									></NoFollowerIcon>
+									<SubText></SubText>
+									<SubText
+										color="#262626"
+										fontsize="1rem"
+										margin="1rem 0 0.5rem 0"
+									>
+										아직 팔로잉한 스러버가 없네요
+									</SubText>
+									<SubText color="#8d8d8d" fontsize="0.875rem">
+										소통하고 싶은 스러버를 찾아봐요
+									</SubText>
+								</NoFollow>
+								<RecommendFollow>
+									<MainText fontsize="18px" margin="0 0 1.625rem 0">
+										같은 셀럽을 좋아하는 스러버
+									</MainText>
+									{sameFollowSluverList ? (
+										<>
+											{sameFollowSluverList.map(sluver => (
+												<RecommendUser key={sluver.userIdx}>
+													<UserTop>
+														<UserInfo
+															onClick={() =>
+																onClickUserProfile(sluver.userIdx)
+															}
+														>
+															{sluver.profileImgUrl ? (
+																<UserImage
+																	src={sluver.profileImgUrl}
+																></UserImage>
+															) : (
+																<UserBasicProfileImg
+																	style={{
+																		width: '2.25rem',
+																		height: '2.25rem',
+																		marginRight: '0.5rem',
+																	}}
+																></UserBasicProfileImg>
+															)}
+															<UserInfoText>
+																<SubText margin="0 ">
+																	{' '}
+																	{sluver.nickName}
+																</SubText>
+																<SubInfoWrap>
+																	<SubText color="#8d8d8d">
+																		@{sluver.id}
+																	</SubText>
+																	<Dot></Dot>
+																	<SubText color="#8d8d8d">
+																		{sluver.uploadCnt}개 업로드
+																	</SubText>
+																</SubInfoWrap>
+															</UserInfoText>
+														</UserInfo>
+														{sluver.isFollow === 'Y' ? (
+															<FollowButton
+																follow={sluver.isFollow === 'Y'}
+																onClick={() =>
+																	onUnFollow(sluver.userIdx)
+																}
+																margintop="0"
+															>
+																팔로잉
+															</FollowButton>
+														) : (
+															<FollowButton
+																follow={sluver.isFollow === 'Y'}
+																onClick={() =>
+																	onFollow(sluver.userIdx)
+																}
+																margintop="0"
+															>
+																팔로우
+															</FollowButton>
+														)}
+													</UserTop>
+													<UserBottom
+														onClick={() =>
+															onClickUserProfile(sluver.userIdx)
+														}
+													>
+														{sluver.itemList && (
+															<>
+																{sluver.itemList.map(item => (
+																	<UploadImage
+																		key={item.itemIdx}
+																		src={item.itemImgUrl}
+																	></UploadImage>
+																))}
+															</>
+														)}
+													</UserBottom>
+												</RecommendUser>
+											))}
+										</>
+									) : (
+										<></>
+									)}
+								</RecommendFollow>
+							</>
 						)}
-					</RecommendFollow>
-				</>
-			)}
+					</>
+				) : (
+					<div style={{ height: '5rem' }}>
+						<Loading></Loading>
+					</div>
+				)}
+			</>
+
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
 				<RowWrap
 					style={{ marginBottom: '0' }}
