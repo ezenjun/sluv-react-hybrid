@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { customApiClient } from '../../utils/apiClient';
-import { useSetRecoilState } from 'recoil';
-import { SignupProgressState, SocialLoginUserIdxState } from '../../recoil/User';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { AutoLoginState, SignupProgressState, SocialLoginUserIdxState } from '../../recoil/User';
 import Loading from '../../components/Loading';
 import { ToastMessageBottomPositionState, ToastMessageState, ToastMessageStatusState, ToastMessageWrapStatusState } from '../../recoil/ToastMessage';
 
@@ -12,6 +12,8 @@ export default function KakaoRedirectHandler() {
 
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
+
+	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
 
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -36,6 +38,7 @@ export default function KakaoRedirectHandler() {
 			if (data.result.nickname === 'tempNickName') {
 				setCurrentPage(4);
 				setUserIdx(data.result.userIdx);
+				setAutoLoginCheck(true);
 				console.log('처음 회원가입 jwt', data.result.jwt);
 				console.log(data.result.userIdx);
 				navigate('/signup');
@@ -52,6 +55,7 @@ export default function KakaoRedirectHandler() {
 			localStorage.setItem('myUserIdx', data.result.userIdx);
 			// 닉네임으로 페이지 변경
 			setCurrentPage(4);
+			setAutoLoginCheck(true);
 			setUserIdx(data.result.userIdx);
 			navigate('/signup');
 		}
