@@ -491,13 +491,17 @@ export default function My() {
 				</BottomDialogDiv>
 			</BottomDialogWrap>
 
-			<UploadPopupWrap onClick={() => setUploadPopupStatus(false)} openStatus={uploadPopupStatus}>
+			<UploadPopupWrap
+				onClick={() => setUploadPopupStatus(false)}
+				openStatus={uploadPopupStatus}
+			>
 				<UploadPopup>
 					<div onClick={() => navigate('/upload/item')} className="uploadPopupBtn topBtn">
 						<IconUploadItem
 							style={{
 								width: '1.125rem',
 								height: '1.125rem',
+								marginLeft: '0.375rem',
 								marginRight: '0.5rem',
 							}}
 						/>
@@ -508,6 +512,7 @@ export default function My() {
 							style={{
 								width: '1.125rem',
 								height: '1.125rem',
+								marginLeft: '0.375rem',
 								marginRight: '0.5rem',
 							}}
 						/>

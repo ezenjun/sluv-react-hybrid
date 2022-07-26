@@ -225,6 +225,7 @@ export default function Home() {
 								style={{
 									width: '1.125rem',
 									height: '1.125rem',
+									marginLeft: '0.375rem',
 									marginRight: '0.5rem',
 								}}
 							/>
@@ -235,6 +236,7 @@ export default function Home() {
 								style={{
 									width: '1.125rem',
 									height: '1.125rem',
+									marginLeft: '0.375rem',
 									marginRight: '0.5rem',
 								}}
 							/>

@@ -665,6 +665,7 @@ export default function Binder() {
 							style={{
 								width: '1.125rem',
 								height: '1.125rem',
+								marginLeft: '0.375rem',
 								marginRight: '0.5rem',
 							}}
 						/>
@@ -676,6 +677,7 @@ export default function Binder() {
 								width: '1.125rem',
 								height: '1.125rem',
 								marginRight: '0.5rem',
+								marginLeft: '0.375rem',
 							}}
 						/>
 						<span>질문 올리기</span>
