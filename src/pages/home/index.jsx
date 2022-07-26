@@ -212,7 +212,10 @@ export default function Home() {
 				</FeedContainer>
 
 				{/* 업로드 팝업 모달 */}
-				<UploadPopupWrap openStatus={uploadPopupStatus}>
+				<UploadPopupWrap
+					onClick={() => setUploadPopupStatus(false)}
+					openStatus={uploadPopupStatus}
+				>
 					<UploadPopup>
 						<div
 							onClick={() => navigate('/upload/item')}

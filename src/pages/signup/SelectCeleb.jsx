@@ -23,7 +23,6 @@ import {
 	FavoriteCelebListState,
 	PopularCelebListState,
 	TotalCelebListState,
-	UserFavoriteCelebIdxListState,
 } from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
@@ -259,7 +258,7 @@ export default function SelectCeleb() {
 				<MainContainer>
 					<TopNav style={{ justifyContent: 'space-between' }}>
 						{state === '/settings' && <BackButton onClick={() => navigate(-1)} />}
-						<NavRight style={{alignItems: 'center'}}>
+						<NavRight style={{ alignItems: 'center' }}>
 							{selectedNum > 0 && (
 								<SubText fontsize="1rem" margin="0 1rem" color="#9e30f4">
 									{selectedNum}개 선택
@@ -294,9 +293,13 @@ export default function SelectCeleb() {
 
 						<SearchTab>
 							<InputWrap>
-								<IconWrap>
-									<SearchIcon />
-								</IconWrap>
+								<SearchIcon
+									style={{
+										width: '1.125rem',
+										height: '1.125rem',
+										flexShrink: '0',
+									}}
+								/>
 								<Input
 									value={searchInput}
 									onChange={onHandleChangeSearch}
@@ -304,12 +307,10 @@ export default function SelectCeleb() {
 									placeholder="활동명을 한글로 검색해주세요"
 									margin="0 0 0 0.375rem"
 								/>
-								{searchInput.length !== 0 ? (
+								{searchInput.length !== 0 && (
 									<IconWrap onClick={onClickInputDelete}>
-										<Delete />
+										<Delete style={{ width: '1.125rem', height: '1.125rem' }} />
 									</IconWrap>
-								) : (
-									<></>
 								)}
 							</InputWrap>
 							<TabWrap>
@@ -390,15 +391,26 @@ export default function SelectCeleb() {
 											popularCelebList.map((popular, index) => (
 												<Celeb
 													key={popular.celebIdx}
-													onClick={undefined}
+													onClick={e => onSelectCeleb(popular, e, index)}
 													style={{ marginLeft: '0.6875rem' }}
 												>
 													<ImgCircle
 														key={popular.id}
 														src={popular.celebImgUrl}
-														border={false}
+														border={
+															checkStatusList[popular.celebIdx - 1]
+														}
 													/>
 													{popular.name}
+													<CountBadge
+														status={
+															checkStatusList[popular.celebIdx - 1]
+														}
+													>
+														<span className="badgeItem">
+															{badgeNumList[index]}
+														</span>
+													</CountBadge>
 												</Celeb>
 											))}
 									</div>

@@ -491,7 +491,7 @@ export default function My() {
 				</BottomDialogDiv>
 			</BottomDialogWrap>
 
-			<UploadPopupWrap openStatus={uploadPopupStatus}>
+			<UploadPopupWrap onClick={() => setUploadPopupStatus(false)} openStatus={uploadPopupStatus}>
 				<UploadPopup>
 					<div onClick={() => navigate('/upload/item')} className="uploadPopupBtn topBtn">
 						<IconUploadItem
