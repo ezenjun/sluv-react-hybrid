@@ -481,7 +481,7 @@ const FeedContainer = styled.div`
 	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-start;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
 	}
@@ -508,6 +508,7 @@ const BinderTextWrap = styled.div`
 `;
 const ItemWrap = styled.div`
 	display: grid;
+	width: 100%;
 	justify-items: center;
 	flex-grow: none;
 	grid-template-columns: 1fr 1fr 1fr;
