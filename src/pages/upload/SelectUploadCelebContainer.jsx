@@ -207,9 +207,13 @@ export default function SelectUploadCelebContainer() {
 
 				<SearchTab>
 					<InputWrap>
-						<IconWrap>
-							<SearchIcon />
-						</IconWrap>
+						<SearchIcon
+							style={{
+								width: '1.125rem',
+								height: '1.125rem',
+								flexShrink: '0',
+							}}
+						/>
 						<Input
 							value={searchInput}
 							type="text"
@@ -219,7 +223,7 @@ export default function SelectUploadCelebContainer() {
 						/>
 						{searchInput.length !== 0 && (
 							<IconWrap onClick={onClickInputDelete}>
-								<Delete />
+								<Delete style={{ width: '1.125rem', height: '1.125rem' }} />
 							</IconWrap>
 						)}
 					</InputWrap>
