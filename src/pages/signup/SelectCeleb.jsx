@@ -248,7 +248,7 @@ export default function SelectCeleb() {
 						{state === '/settings' && <BackButton onClick={() => navigate(-1)} />}
 						<NavRight style={{alignItems: 'center'}}>
 							{selectedNum > 0 && (
-								<SubText margin="0 1rem" color="#9e30f4">
+								<SubText fontsize="1rem" margin="0 1rem" color="#9e30f4">
 									{selectedNum}개 선택
 								</SubText>
 							)}

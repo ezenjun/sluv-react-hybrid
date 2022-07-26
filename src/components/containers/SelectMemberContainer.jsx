@@ -155,13 +155,14 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		<>
 			<TopNav>
 				<BackButton onClick={onHandleBackButton} />
-				<NavRight>
+				<NavRight style={{ alignItems: 'center' }}>
 					{selectedMemberNum > 0 && (
-						<SubText margin="0 1rem" color="#9e30f4">
+						<SubText fontsize="1rem" margin="0 1rem" color="#9e30f4">
 							{selectedMemberNum}개 선택
 						</SubText>
 					)}
 					<NextButton
+						fontsize="1rem"
 						status={selectedMemberNum > 0 ? true : false}
 						onClick={onHandleNextButton}
 					>
@@ -199,7 +200,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 
 				<MembersContainer>
 					{(function () {
-						if(data[currentMemberPage].memberList.length > 0) {
+						if (data[currentMemberPage].memberList.length > 0) {
 							let renderList = [];
 							for (let i = 0; i < data[currentMemberPage].memberList.length; i += 8) {
 								renderList.push(
@@ -504,9 +505,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 								);
 							}
 							return renderList;
-
 						}
-						
 					})()}
 				</MembersContainer>
 			</ContentWrap>
