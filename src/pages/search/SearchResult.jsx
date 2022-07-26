@@ -38,7 +38,7 @@ import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
-
+import Loading from '../../components/Loading';
 import {
 	BottomDialogDiv,
 	BottomDialogWrap,
@@ -79,17 +79,18 @@ export default function SearchResult() {
 	};
 	const handleEnterEvent = () => {
 		if (window.event.keyCode === 13) {
-			let queryKeyword = searchInput;
+			setLoading(true);
+			let queryKeyword = window.event.target.value;
 			let blank = ' ';
 			let isBlank = queryKeyword.includes(blank);
 			if (isBlank) {
 				queryKeyword = queryKeyword.replaceAll(' ', '+');
 				console.log('with blank', queryKeyword);
 			}
-			setSearchInputStatus(searchInput);
-			setSearchInput(searchInput);
+			setSearchInputStatus(queryKeyword);
+			setSearchInput(queryKeyword);
 			// setSearchInput(searchInput);
-			navigate(`/search/result`, { state: { searchInput } });
+			navigate(`/search/result`, { state: { searchInput: queryKeyword } });
 			getSearchResultList(queryKeyword);
 			childFunc.current();
 		}
@@ -145,6 +146,7 @@ export default function SearchResult() {
 	const getFilteredSearchList = inputList => {
 		setSearchResultList(inputList);
 	};
+	const [loading, setLoading] = useState(true);
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
@@ -156,6 +158,7 @@ export default function SearchResult() {
 			console.log(data.message);
 			if (data.code === 3070) {
 				setSearchResultList([]);
+				setLoading(false);
 			}
 			return;
 		}
@@ -172,6 +175,7 @@ export default function SearchResult() {
 		}
 		console.log(tmp);
 		setLatestIsBinderList([...tmp]);
+		setLoading(false);
 	};
 
 	// 필터 없이 무한스크롤
@@ -468,267 +472,286 @@ export default function SearchResult() {
 			{/* )} */}
 
 			<FeedContainer>
-				{searchResultList && searchResultList.length > 0 ? (
-					<ItemContainer>
-						<FilterWrap>
-							<SubText fontsize="14px" color="#8d8d8d">
-								전체 {searchResultList.searchItemCnt}
-							</SubText>
-							{view ? (
-								<ViewButton onClick={changeView}>
-									<FilterSmall style={{ marginRight: '2px' }}></FilterSmall>
-									<SubText fontsize="12px" color="#8d8d8d">
-										작게보기
-									</SubText>
-								</ViewButton>
-							) : (
-								<ViewButton onClick={changeView}>
-									<FilterBig style={{ marginRight: '2px' }}></FilterBig>
-									<SubText fontsize="12px" color="#8d8d8d">
-										크게보기
-									</SubText>
-								</ViewButton>
-							)}
-						</FilterWrap>
-						{view ? (
-							<LargeViewWrap>
-								{searchResultList && (
-									<>
-										{searchResultList.map((item, index) => (
-											<>
-												<LargeViewItem
-													onClick={() => {
-														onDetailItemClick(item.itemIdx);
-													}}
-													key={item.itemIdx}
-												>
-													<LargeViewImage src={item.itemImgUrl}>
-														<ImageText>
-															<SubText
-																fontsize="0.8125rem"
-																fontweight="bold"
-																color="white"
-															>
-																{item.name}'s
-															</SubText>
-															{latestIsBinderList[index] === true ? (
-																<BinderRed
-																	onClick={e =>
-																		onDeleteBinderClick(
-																			e,
-																			item.itemIdx
-																		)
-																	}
-																	style={{
-																		width: '1.5rem',
-																		height: '1.5rem',
-																	}}
-																/>
-															) : (
-																<BinderWhite
-																	onClick={e =>
-																		onAddBinderClick(
-																			e,
-																			item.itemIdx
-																		)
-																	}
-																	style={{
-																		width: '1.5rem',
-																		height: '1.5rem',
-																	}}
-																/>
-															)}
-														</ImageText>
-													</LargeViewImage>
-													<ItemTextWrap>
-														<SubText fontsize="1rem">
-															{item.brandKr}
-														</SubText>
-														<VerticalLine></VerticalLine>
-														<SubText fontsize="1rem">
-															{item.itemName}
-														</SubText>
-													</ItemTextWrap>
-													<SubInfoWrap>
-														<ProfileImg
-															src={item.profileImgUrl}
-														></ProfileImg>
-														<SubText margin="0 ">
-															{' '}
-															{item.nickName}
-														</SubText>
-														<Dot></Dot>
-														<SubText color="#8d8d8d">
-															{' '}
-															{item.uploadTime}
-														</SubText>
-													</SubInfoWrap>
-												</LargeViewItem>
-												<HorizontalLine></HorizontalLine>
-											</>
-										))}
-									</>
-								)}
-								{/* <div ref={ref}></div> */}
-							</LargeViewWrap>
-						) : (
-							<GridItemWrap>
-								{searchResultList && (
-									<>
-										{searchResultList.map((item, index) => (
-											<>
-												{searchResultList.length - 1 === index ? (
-													<GridItem
-														onClick={() => {
-															onDetailItemClick(item.itemIdx);
-														}}
-														key={item.itemIdx}
-													>
-														<GridImage src={item.itemImgUrl}>
-															<ImageText>
-																<SubText
-																	fontsize="0.8125rem"
-																	fontweight="bold"
-																	color="white"
-																>
-																	{item.name}'s
-																</SubText>
-																{latestIsBinderList[index] ===
-																true ? (
-																	<BinderRed
-																		onClick={e =>
-																			onDeleteBinderClick(
-																				e,
-																				item.itemIdx
-																			)
-																		}
-																		style={{
-																			width: '1.5rem',
-																			height: '1.5rem',
-																		}}
-																	/>
-																) : (
-																	<BinderWhite
-																		onClick={e =>
-																			onAddBinderClick(
-																				e,
-																				item.itemIdx
-																			)
-																		}
-																		style={{
-																			width: '1.5rem',
-																			height: '1.5rem',
-																		}}
-																	/>
-																)}
-															</ImageText>
-														</GridImage>
-														<SubText
-															fontsize="1rem"
-															fontweight="bold"
-															margin="0 0 0.375rem 0 "
-														>
-															{item.brandKr}
-														</SubText>
-														<SubText
-															style={{
-																textOverflow: 'ellipsis',
-																whiteSpace: 'nowrap',
-																overflow: 'hidden',
-																width: '100%',
-															}}
-														>
-															{item.itemName}
-														</SubText>
-													</GridItem>
-												) : (
-													<GridItem
-														onClick={() => {
-															onDetailItemClick(item.itemIdx);
-														}}
-														key={item.itemIdx}
-													>
-														<GridImage src={item.itemImgUrl}>
-															<ImageText>
-																<SubText
-																	fontsize="0.8125rem"
-																	fontweight="bold"
-																	color="white"
-																>
-																	{item.name}'s
-																</SubText>
-																{latestIsBinderList[index] ===
-																true ? (
-																	<BinderRed
-																		onClick={e =>
-																			onDeleteBinderClick(
-																				e,
-																				item.itemIdx
-																			)
-																		}
-																		style={{
-																			width: '1.5rem',
-																			height: '1.5rem',
-																		}}
-																	/>
-																) : (
-																	<BinderWhite
-																		onClick={e =>
-																			onAddBinderClick(
-																				e,
-																				item.itemIdx
-																			)
-																		}
-																		style={{
-																			width: '1.5rem',
-																			height: '1.5rem',
-																		}}
-																	/>
-																)}
-															</ImageText>
-														</GridImage>
-														<SubText
-															fontsize="1rem"
-															fontweight="bold"
-															margin="0 0 0.375rem 0 "
-														>
-															{item.brandKr}
-														</SubText>
-														<SubText
-															style={{
-																textOverflow: 'ellipsis',
-																whiteSpace: 'nowrap',
-																overflow: 'hidden',
-																width: '100%',
-															}}
-														>
-															{item.itemName}
-														</SubText>
-													</GridItem>
-												)}
-											</>
-										))}
-									</>
-								)}
-							</GridItemWrap>
-						)}
-					</ItemContainer>
+				{loading ? (
+					<div style={{ height: '5rem' }}>
+						<Loading></Loading>
+					</div>
 				) : (
-					<ItemContainer
-						style={{
-							justifyContent: 'center',
-							alignItems: 'center',
-							height: '90%',
-						}}
-					>
-						<NoResult style={{ width: '3.75rem', height: '3.75rem' }}></NoResult>
-						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
-							검색 결과가 없어요
-						</SubText>
-						<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
-							다른 키워드로 검색해보세요
-						</SubText>
-					</ItemContainer>
+					<>
+						{searchResultList.length > 0 ? (
+							<ItemContainer>
+								<FilterWrap>
+									<SubText fontsize="14px" color="#8d8d8d">
+										전체 {searchResultList.searchItemCnt}
+									</SubText>
+									{view ? (
+										<ViewButton onClick={changeView}>
+											<FilterSmall
+												style={{ marginRight: '2px' }}
+											></FilterSmall>
+											<SubText fontsize="12px" color="#8d8d8d">
+												작게보기
+											</SubText>
+										</ViewButton>
+									) : (
+										<ViewButton onClick={changeView}>
+											<FilterBig style={{ marginRight: '2px' }}></FilterBig>
+											<SubText fontsize="12px" color="#8d8d8d">
+												크게보기
+											</SubText>
+										</ViewButton>
+									)}
+								</FilterWrap>
+								{view ? (
+									<LargeViewWrap>
+										{searchResultList && (
+											<>
+												{searchResultList.map((item, index) => (
+													<>
+														<LargeViewItem
+															onClick={() => {
+																onDetailItemClick(item.itemIdx);
+															}}
+															key={item.itemIdx}
+														>
+															<LargeViewImage src={item.itemImgUrl}>
+																<ImageText>
+																	<SubText
+																		fontsize="0.8125rem"
+																		fontweight="bold"
+																		color="white"
+																	>
+																		{item.name}'s
+																	</SubText>
+																	{latestIsBinderList[index] ===
+																	true ? (
+																		<BinderRed
+																			onClick={e =>
+																				onDeleteBinderClick(
+																					e,
+																					item.itemIdx
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																			}}
+																		/>
+																	) : (
+																		<BinderWhite
+																			onClick={e =>
+																				onAddBinderClick(
+																					e,
+																					item.itemIdx
+																				)
+																			}
+																			style={{
+																				width: '1.5rem',
+																				height: '1.5rem',
+																			}}
+																		/>
+																	)}
+																</ImageText>
+															</LargeViewImage>
+															<ItemTextWrap>
+																<SubText fontsize="1rem">
+																	{item.brandKr}
+																</SubText>
+																<VerticalLine></VerticalLine>
+																<SubText fontsize="1rem">
+																	{item.itemName}
+																</SubText>
+															</ItemTextWrap>
+															<SubInfoWrap>
+																<ProfileImg
+																	src={item.profileImgUrl}
+																></ProfileImg>
+																<SubText margin="0 ">
+																	{' '}
+																	{item.nickName}
+																</SubText>
+																<Dot></Dot>
+																<SubText color="#8d8d8d">
+																	{' '}
+																	{item.uploadTime}
+																</SubText>
+															</SubInfoWrap>
+														</LargeViewItem>
+														<HorizontalLine></HorizontalLine>
+													</>
+												))}
+											</>
+										)}
+										{/* <div ref={ref}></div> */}
+									</LargeViewWrap>
+								) : (
+									<GridItemWrap>
+										{searchResultList && (
+											<>
+												{searchResultList.map((item, index) => (
+													<>
+														{searchResultList.length - 1 === index ? (
+															<GridItem
+																onClick={() => {
+																	onDetailItemClick(item.itemIdx);
+																}}
+																key={item.itemIdx}
+															>
+																<GridImage src={item.itemImgUrl}>
+																	<ImageText>
+																		<SubText
+																			fontsize="0.8125rem"
+																			fontweight="bold"
+																			color="white"
+																		>
+																			{item.name}'s
+																		</SubText>
+																		{latestIsBinderList[
+																			index
+																		] === true ? (
+																			<BinderRed
+																				onClick={e =>
+																					onDeleteBinderClick(
+																						e,
+																						item.itemIdx
+																					)
+																				}
+																				style={{
+																					width: '1.5rem',
+																					height: '1.5rem',
+																				}}
+																			/>
+																		) : (
+																			<BinderWhite
+																				onClick={e =>
+																					onAddBinderClick(
+																						e,
+																						item.itemIdx
+																					)
+																				}
+																				style={{
+																					width: '1.5rem',
+																					height: '1.5rem',
+																				}}
+																			/>
+																		)}
+																	</ImageText>
+																</GridImage>
+																<SubText
+																	fontsize="1rem"
+																	fontweight="bold"
+																	margin="0 0 0.375rem 0 "
+																>
+																	{item.brandKr}
+																</SubText>
+																<SubText
+																	style={{
+																		textOverflow: 'ellipsis',
+																		whiteSpace: 'nowrap',
+																		overflow: 'hidden',
+																		width: '100%',
+																	}}
+																>
+																	{item.itemName}
+																</SubText>
+															</GridItem>
+														) : (
+															<GridItem
+																onClick={() => {
+																	onDetailItemClick(item.itemIdx);
+																}}
+																key={item.itemIdx}
+															>
+																<GridImage src={item.itemImgUrl}>
+																	<ImageText>
+																		<SubText
+																			fontsize="0.8125rem"
+																			fontweight="bold"
+																			color="white"
+																		>
+																			{item.name}'s
+																		</SubText>
+																		{latestIsBinderList[
+																			index
+																		] === true ? (
+																			<BinderRed
+																				onClick={e =>
+																					onDeleteBinderClick(
+																						e,
+																						item.itemIdx
+																					)
+																				}
+																				style={{
+																					width: '1.5rem',
+																					height: '1.5rem',
+																				}}
+																			/>
+																		) : (
+																			<BinderWhite
+																				onClick={e =>
+																					onAddBinderClick(
+																						e,
+																						item.itemIdx
+																					)
+																				}
+																				style={{
+																					width: '1.5rem',
+																					height: '1.5rem',
+																				}}
+																			/>
+																		)}
+																	</ImageText>
+																</GridImage>
+																<SubText
+																	fontsize="1rem"
+																	fontweight="bold"
+																	margin="0 0 0.375rem 0 "
+																>
+																	{item.brandKr}
+																</SubText>
+																<SubText
+																	style={{
+																		textOverflow: 'ellipsis',
+																		whiteSpace: 'nowrap',
+																		overflow: 'hidden',
+																		width: '100%',
+																	}}
+																>
+																	{item.itemName}
+																</SubText>
+															</GridItem>
+														)}
+													</>
+												))}
+											</>
+										)}
+									</GridItemWrap>
+								)}
+							</ItemContainer>
+						) : (
+							<ItemContainer
+								style={{
+									justifyContent: 'center',
+									alignItems: 'center',
+									height: '90%',
+								}}
+							>
+								<NoResult
+									style={{ width: '3.75rem', height: '3.75rem' }}
+								></NoResult>
+								<SubText
+									fontsize="1rem"
+									fontweight="bold"
+									margin="1rem 0 0.4375rem 0"
+								>
+									검색 결과가 없어요
+								</SubText>
+								<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
+									다른 키워드로 검색해보세요
+								</SubText>
+							</ItemContainer>
+						)}
+					</>
 				)}
 			</FeedContainer>
 			<SearchBottomSlideMenu

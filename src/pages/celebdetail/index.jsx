@@ -41,6 +41,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import Loading from '../../components/Loading';
 
 export default function CelebDetail() {
 	let { celebIdx } = useParams();
@@ -271,7 +272,7 @@ export default function CelebDetail() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	}
-
+	const [loadingLatest, setLoadingLatest] = useState(true);
 	const [CurrentList, setCurrentList] = useState([]);
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
@@ -281,6 +282,7 @@ export default function CelebDetail() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setLoadingLatest(false);
 			return;
 		}
 		setLatestList([...latestList, data.result]);
@@ -295,7 +297,9 @@ export default function CelebDetail() {
 			}
 		}
 		setLatestIsBinderList([...latestIsBinderList, tmp]);
+		setLoadingLatest(false);
 	};
+	const [loadingHot, setLoadingHot] = useState(true);
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
 			'get',
@@ -304,6 +308,7 @@ export default function CelebDetail() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setLoadingHot(false);
 			return;
 		}
 		setHotList([...hotList, data.result]);
@@ -318,6 +323,7 @@ export default function CelebDetail() {
 		}
 
 		setHotIsBinderList([...hotIsBinderList, tmp]);
+		setLoadingHot(false);
 	};
 
 	const getEachMemberLatestList = async (idx, memberidx) => {
@@ -458,279 +464,298 @@ export default function CelebDetail() {
 						)}
 					</FilterWrap>
 				)}
-
-				{CurrentList.length > 0 ? (
+				{loadingLatest ? (
+					<div style={{ height: '5rem' }}>
+						<Loading></Loading>
+					</div>
+				) : (
 					<>
-						{view ? (
+						{CurrentList.length > 0 ? (
 							<>
-								<LargeViewWrap>
-									{CurrentList && (
-										<>
-											{CurrentList.map((item, index) => (
-												<div
-													key={item.itemIdx}
-													onClick={() => onDetailItemClick(item.itemIdx)}
-												>
-													<LargeViewItem>
-														<LargeViewImage src={item.itemImgUrl}>
-															<ImageText>
-																<SubText
-																	fontsize="0.8125rem"
-																	fontweight="bold"
-																	color="white"
+								{view ? (
+									<>
+										<LargeViewWrap>
+											{CurrentList && (
+												<>
+													{CurrentList.map((item, index) => (
+														<div
+															key={item.itemIdx}
+															onClick={() =>
+																onDetailItemClick(item.itemIdx)
+															}
+														>
+															<LargeViewItem>
+																<LargeViewImage
+																	src={item.itemImgUrl}
 																>
-																	{item.name}'s
-																</SubText>
-																{selectedFilter === 1 ? (
-																	<>
-																		{latestIsBinderList[
-																			selectedChip
-																		] && (
+																	<ImageText>
+																		<SubText
+																			fontsize="0.8125rem"
+																			fontweight="bold"
+																			color="white"
+																		>
+																			{item.name}'s
+																		</SubText>
+																		{selectedFilter === 1 ? (
 																			<>
 																				{latestIsBinderList[
 																					selectedChip
-																				][index] ===
-																				true ? (
-																					<BinderRed
-																						onClick={e =>
-																							onDeleteBinderClick(
-																								item.itemIdx,
-																								e
-																							)
-																						}
-																						style={{
-																							width: '1.5rem',
-																							height: '1.5rem',
-																							zIndex: '900',
-																						}}
-																					/>
-																				) : (
-																					<BinderWhite
-																						onClick={e =>
-																							onAddBinderClick(
-																								e,
-																								item.itemIdx
-																							)
-																						}
-																						style={{
-																							width: '1.5rem',
-																							height: '1.5rem',
-																							zIndex: '900',
-																						}}
-																					/>
+																				] && (
+																					<>
+																						{latestIsBinderList[
+																							selectedChip
+																						][index] ===
+																						true ? (
+																							<BinderRed
+																								onClick={e =>
+																									onDeleteBinderClick(
+																										item.itemIdx,
+																										e
+																									)
+																								}
+																								style={{
+																									width: '1.5rem',
+																									height: '1.5rem',
+																									zIndex: '900',
+																								}}
+																							/>
+																						) : (
+																							<BinderWhite
+																								onClick={e =>
+																									onAddBinderClick(
+																										e,
+																										item.itemIdx
+																									)
+																								}
+																								style={{
+																									width: '1.5rem',
+																									height: '1.5rem',
+																									zIndex: '900',
+																								}}
+																							/>
+																						)}
+																					</>
 																				)}
 																			</>
-																		)}
-																	</>
-																) : (
-																	<>
-																		{hotIsBinderList[
-																			selectedChip
-																		] && (
+																		) : (
 																			<>
 																				{hotIsBinderList[
 																					selectedChip
-																				][index] ? (
-																					<BinderRed
-																						onClick={e =>
-																							onDeleteBinderClick(
-																								item.itemIdx,
-																								e
-																							)
-																						}
-																						style={{
-																							width: '1.5rem',
-																							height: '1.5rem',
-																							zIndex: '150',
-																						}}
-																					/>
-																				) : (
-																					<BinderWhite
-																						onClick={e =>
-																							onAddBinderClick(
-																								item.itemIdx,
-																								e
-																							)
-																						}
-																						style={{
-																							width: '1.5rem',
-																							height: '1.5rem',
-																							zIndex: '150',
-																						}}
-																					/>
+																				] && (
+																					<>
+																						{hotIsBinderList[
+																							selectedChip
+																						][index] ? (
+																							<BinderRed
+																								onClick={e =>
+																									onDeleteBinderClick(
+																										item.itemIdx,
+																										e
+																									)
+																								}
+																								style={{
+																									width: '1.5rem',
+																									height: '1.5rem',
+																									zIndex: '150',
+																								}}
+																							/>
+																						) : (
+																							<BinderWhite
+																								onClick={e =>
+																									onAddBinderClick(
+																										item.itemIdx,
+																										e
+																									)
+																								}
+																								style={{
+																									width: '1.5rem',
+																									height: '1.5rem',
+																									zIndex: '150',
+																								}}
+																							/>
+																						)}
+																					</>
 																				)}
 																			</>
 																		)}
-																	</>
-																)}
-															</ImageText>
-														</LargeViewImage>
-														<ItemTextWrap>
-															<SubText fontsize="1rem">
-																{item.brandKr}
+																	</ImageText>
+																</LargeViewImage>
+																<ItemTextWrap>
+																	<SubText fontsize="1rem">
+																		{item.brandKr}
+																	</SubText>
+																	<VerticalLine></VerticalLine>
+																	<SubText fontsize="1rem">
+																		{item.itemName}
+																	</SubText>
+																</ItemTextWrap>
+																<SubInfoWrap>
+																	<ProfileImg
+																		src={item.profileImgUrl}
+																	></ProfileImg>
+																	<SubText margin="0 ">
+																		{' '}
+																		{item.publisher}
+																	</SubText>
+																	<Dot></Dot>
+																	<SubText color="#8d8d8d">
+																		{' '}
+																		{item.uploadTime}
+																	</SubText>
+																</SubInfoWrap>
+															</LargeViewItem>
+															<HorizontalLine></HorizontalLine>
+														</div>
+													))}
+												</>
+											)}
+										</LargeViewWrap>
+									</>
+								) : (
+									<>
+										<GridItemWrap>
+											{CurrentList.map((item, index) => (
+												<GridItem
+													key={item.itemIdx}
+													onClick={() => onDetailItemClick(item.itemIdx)}
+												>
+													<GridImage src={item.itemImgUrl}>
+														<ImageText>
+															<SubText
+																fontsize="0.8125rem"
+																fontweight="bold"
+																color="white"
+															>
+																{item.name}'s
 															</SubText>
-															<VerticalLine></VerticalLine>
-															<SubText fontsize="1rem">
-																{item.itemName}
-															</SubText>
-														</ItemTextWrap>
-														<SubInfoWrap>
-															<ProfileImg
-																src={item.profileImgUrl}
-															></ProfileImg>
-															<SubText margin="0 ">
-																{' '}
-																{item.publisher}
-															</SubText>
-															<Dot></Dot>
-															<SubText color="#8d8d8d">
-																{' '}
-																{item.uploadTime}
-															</SubText>
-														</SubInfoWrap>
-													</LargeViewItem>
-													<HorizontalLine></HorizontalLine>
-												</div>
-											))}
-										</>
-									)}
-								</LargeViewWrap>
-							</>
-						) : (
-							<>
-								<GridItemWrap>
-									{CurrentList.map((item, index) => (
-										<GridItem
-											key={item.itemIdx}
-											onClick={() => onDetailItemClick(item.itemIdx)}
-										>
-											<GridImage src={item.itemImgUrl}>
-												<ImageText>
-													<SubText
-														fontsize="0.8125rem"
-														fontweight="bold"
-														color="white"
-													>
-														{item.name}'s
-													</SubText>
-													{selectedFilter === 1 ? (
-														<>
-															{latestIsBinderList[selectedChip] && (
+															{selectedFilter === 1 ? (
 																<>
 																	{latestIsBinderList[
 																		selectedChip
-																	][index] === true ? (
-																		<BinderRed
-																			onClick={e =>
-																				onDeleteBinderClick(
-																					item.itemIdx,
-																					e
-																				)
-																			}
-																			style={{
-																				width: '1.5rem',
-																				height: '1.5rem',
-																				zIndex: '900',
-																			}}
-																		/>
-																	) : (
-																		<BinderWhite
-																			onClick={e =>
-																				onAddBinderClick(
-																					e,
-																					item.itemIdx
-																				)
-																			}
-																			style={{
-																				width: '1.5rem',
-																				height: '1.5rem',
-																				zIndex: '900',
-																			}}
-																		/>
+																	] && (
+																		<>
+																			{latestIsBinderList[
+																				selectedChip
+																			][index] === true ? (
+																				<BinderRed
+																					onClick={e =>
+																						onDeleteBinderClick(
+																							item.itemIdx,
+																							e
+																						)
+																					}
+																					style={{
+																						width: '1.5rem',
+																						height: '1.5rem',
+																						zIndex: '900',
+																					}}
+																				/>
+																			) : (
+																				<BinderWhite
+																					onClick={e =>
+																						onAddBinderClick(
+																							e,
+																							item.itemIdx
+																						)
+																					}
+																					style={{
+																						width: '1.5rem',
+																						height: '1.5rem',
+																						zIndex: '900',
+																					}}
+																				/>
+																			)}
+																		</>
 																	)}
 																</>
-															)}
-														</>
-													) : (
-														<>
-															{hotIsBinderList[selectedChip] && (
+															) : (
 																<>
-																	{hotIsBinderList[selectedChip][
-																		index
-																	] ? (
-																		<BinderRed
-																			onClick={e =>
-																				onDeleteBinderClick(
-																					item.itemIdx,
-																					e
-																				)
-																			}
-																			style={{
-																				width: '1.5rem',
-																				height: '1.5rem',
-																				zIndex: '150',
-																			}}
-																		/>
-																	) : (
-																		<BinderWhite
-																			onClick={e =>
-																				onAddBinderClick(
-																					item.itemIdx,
-																					e
-																				)
-																			}
-																			style={{
-																				width: '1.5rem',
-																				height: '1.5rem',
-																				zIndex: '150',
-																			}}
-																		/>
+																	{hotIsBinderList[
+																		selectedChip
+																	] && (
+																		<>
+																			{hotIsBinderList[
+																				selectedChip
+																			][index] ? (
+																				<BinderRed
+																					onClick={e =>
+																						onDeleteBinderClick(
+																							item.itemIdx,
+																							e
+																						)
+																					}
+																					style={{
+																						width: '1.5rem',
+																						height: '1.5rem',
+																						zIndex: '150',
+																					}}
+																				/>
+																			) : (
+																				<BinderWhite
+																					onClick={e =>
+																						onAddBinderClick(
+																							item.itemIdx,
+																							e
+																						)
+																					}
+																					style={{
+																						width: '1.5rem',
+																						height: '1.5rem',
+																						zIndex: '150',
+																					}}
+																				/>
+																			)}
+																		</>
 																	)}
 																</>
 															)}
-														</>
-													)}
-												</ImageText>
-											</GridImage>
-											<SubText
-												fontsize="1rem"
-												fontweight="bold"
-												margin="0 0 0.375rem 0 "
-											>
-												{item.brandKr}
-											</SubText>
-											<SubText
-												style={{
-													textOverflow: 'ellipsis',
-													whiteSpace: 'nowrap',
-													overflow: 'hidden',
-													width: '100%',
-												}}
-											>
-												{item.itemName}
-											</SubText>
-										</GridItem>
-									))}
-								</GridItemWrap>
+														</ImageText>
+													</GridImage>
+													<SubText
+														fontsize="1rem"
+														fontweight="bold"
+														margin="0 0 0.375rem 0 "
+													>
+														{item.brandKr}
+													</SubText>
+													<SubText
+														style={{
+															textOverflow: 'ellipsis',
+															whiteSpace: 'nowrap',
+															overflow: 'hidden',
+															width: '100%',
+														}}
+													>
+														{item.itemName}
+													</SubText>
+												</GridItem>
+											))}
+										</GridItemWrap>
+									</>
+								)}
 							</>
+						) : (
+							<ItemContainer
+								style={{
+									justifyContent: 'center',
+									alignItems: 'center',
+									height: '70%',
+								}}
+							>
+								<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
+								<SubText
+									fontsize="1rem"
+									fontweight="bold"
+									margin="1rem 0 0.4375rem 0"
+								>
+									아직 업로드된 아이템이 없어요
+								</SubText>
+								<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
+									직접 업로드 해보세요!
+								</SubText>
+							</ItemContainer>
 						)}
 					</>
-				) : (
-					<ItemContainer
-						style={{
-							justifyContent: 'center',
-							alignItems: 'center',
-							height: '70%',
-						}}
-					>
-						<NoItem style={{ width: '3.75rem', height: '3.75rem' }}></NoItem>
-						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
-							아직 업로드된 아이템이 없어요
-						</SubText>
-						<SubText fontsize="0.875rem" fontweight="bold" color="#8D8D8D">
-							직접 업로드 해보세요!
-						</SubText>
-					</ItemContainer>
 				)}
 			</FeedContainer>
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
