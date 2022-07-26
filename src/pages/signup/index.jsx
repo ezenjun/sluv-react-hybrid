@@ -356,6 +356,7 @@ export default function Signup() {
 
 		console.log(data.result.jwt);
 		setAutoLoginCheck(true);
+		localStorage.setItem('autoLogin', true);
 		localStorage.setItem('myUserIdx', data.result.userIdx);
 		localStorage.setItem('x-access-token', data.result.jwt);
 

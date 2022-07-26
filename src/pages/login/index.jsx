@@ -82,13 +82,14 @@ export default function Login() {
 			}
 		}
 
-		if(autoLoginCheck) {
+		if(localStorage.getItem('autoLogin')) {
 			const data = await customApiClient('get', '/auth/auto-login');
 			console.log(data);
 			if (!data) return;
 
 			if (!data.isSuccess) {
 				localStorage.removeItem('x-access-token');
+				localStorage.removeItem('autoLogin');
 
 				if (current_user_platform == 'android') {
 					//splash close 함수 호출

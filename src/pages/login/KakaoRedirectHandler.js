@@ -39,6 +39,7 @@ export default function KakaoRedirectHandler() {
 				setCurrentPage(4);
 				setUserIdx(data.result.userIdx);
 				setAutoLoginCheck(true);
+				localStorage.setItem('autoLogin', true);
 				console.log('처음 회원가입 jwt', data.result.jwt);
 				console.log(data.result.userIdx);
 				navigate('/signup');
@@ -56,6 +57,7 @@ export default function KakaoRedirectHandler() {
 			// 닉네임으로 페이지 변경
 			setCurrentPage(4);
 			setAutoLoginCheck(true);
+			localStorage.setItem('autoLogin', true);
 			setUserIdx(data.result.userIdx);
 			navigate('/signup');
 		}
