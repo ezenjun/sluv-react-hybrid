@@ -377,8 +377,8 @@ export default function Follow() {
 										) : (
 											<UserBasicProfileImg
 												style={{
-													width: '2.25rem',
-													height: '2.25rem',
+													width: '1.5rem',
+													height: '1.5rem',
 													marginRight: '0.5rem',
 												}}
 											></UserBasicProfileImg>

@@ -452,11 +452,13 @@ export default function ItemDetail() {
 	};
 
 	const listInnerRef = useRef();
-	const scrollToRef = ref => ref.current.scrollIntoView(0, ref.current.offsetTop);
-	const executeScroll = () => {
-		console.log('clicked top');
-		scrollToRef(listInnerRef);
-	};
+	// const scrollToRef = ref => ref.current.scrollIntoView(0, ref.current.offsetTop);
+	const scrollToRef = ref =>
+		ref.current.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth',
+		});
 
 	useEffect(() => {
 		getItemInfo();
@@ -487,7 +489,7 @@ export default function ItemDetail() {
 			</TopNav>
 
 			{itemInfo && (
-				<FeedContainer>
+				<FeedContainer ref={listInnerRef}>
 					{/* <button
 						onClick={executeScroll}
 						style={{
@@ -500,7 +502,7 @@ export default function ItemDetail() {
 					>
 						top
 					</button> */}
-					<ImageContainer ref={listInnerRef}>
+					<ImageContainer>
 						{itemInfo.itemImgList && (
 							<Slider {...settings}>
 								{itemInfo.itemImgList.map(itemImg => (
