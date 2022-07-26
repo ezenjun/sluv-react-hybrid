@@ -113,14 +113,14 @@ export default function Settings() {
 
 			<PopUpModal>
 				<MainText fontsize="1.125rem" margin="1.5rem 0 0.75rem 0">
-					서비스에서
+					정말 스럽에서
 					<br />
 					로그아웃 할까요?
 				</MainText>
 				<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
-					스럽에서 로그아웃되며,
+					확인을 누르면 스럽에서 로그아웃 돼요
 					<br />
-					다음에 또 만나요
+					다음에 또 만나요!
 				</SubText>
 				<ButtonWrap>
 					<Button backgroundColor="#c9c9c9" onClick={() => setPopUpModalState(false)}>

@@ -451,9 +451,17 @@ export default function ItemDetail() {
 		});
 	};
 
+	const listInnerRef = useRef();
+	const scrollToRef = ref => ref.current.scrollIntoView(0, ref.current.offsetTop);
+	const executeScroll = () => {
+		console.log('clicked top');
+		scrollToRef(listInnerRef);
+	};
+
 	useEffect(() => {
 		getItemInfo();
 		setBottomNavStatus(false);
+		scrollToRef(listInnerRef);
 	}, [itemIdx]);
 
 	return (
@@ -480,7 +488,19 @@ export default function ItemDetail() {
 
 			{itemInfo && (
 				<FeedContainer>
-					<ImageContainer>
+					{/* <button
+						onClick={executeScroll}
+						style={{
+							position: 'fixed',
+							bottom: '5rem',
+							right: '30px',
+							width: '3.125rem',
+							height: '3.125rem',
+						}}
+					>
+						top
+					</button> */}
+					<ImageContainer ref={listInnerRef}>
 						{itemInfo.itemImgList && (
 							<Slider {...settings}>
 								{itemInfo.itemImgList.map(itemImg => (
@@ -595,18 +615,22 @@ export default function ItemDetail() {
 										style={{
 											width: '2.875rem',
 											height: '2.875rem',
-											marginRight: '1rem',
+											marginRight: '0.9375rem',
+											flexShrink: 0,
 										}}
 									></ItemLinkIcon>
 									<ItemTextWrap>
-										<SubText fontsize="0.875rem">
+										<SubText
+											fontsize="0.8438rem"
+											style={{ whiteSpace: 'nowrap' }}
+										>
 											어디서 구매할 수 있는지 알려드릴게요!
 										</SubText>
 										<div
 											style={{
 												display: 'flex',
 												alignItems: 'center',
-												marginTop: '6px',
+												marginTop: '0.375rem',
 											}}
 										>
 											<SubText color="#9E30F4">
@@ -1250,7 +1274,8 @@ const ItemLInkContainer = styled.div`
 `;
 const ItemLInkWrap = styled.div`
 	display: flex;
-	padding: 1.25rem 1.625rem;
+	padding: 1.25rem 1.5rem;
+	box-sizing: border-box;
 	flex-direction: row;
 	border: 1px solid #ebebeb;
 	border-radius: 1rem;

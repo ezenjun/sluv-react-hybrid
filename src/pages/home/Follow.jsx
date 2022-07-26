@@ -18,7 +18,7 @@ import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg
 import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
 import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
 import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
-
+import { ReactComponent as ScrollTop } from '../../assets/Icons/scrollToTop.svg';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
 import { VerticalLine } from '../../components/Lines/VerticalLine';
 import { MainText } from '../../components/Texts/MainText';
@@ -164,7 +164,7 @@ export default function Follow() {
 	}
 
 	const getFollowItemList = async () => {
-		const data = await customApiClient('get', `/homes/items/followers?page=1&pageSize=6`);
+		const data = await customApiClient('get', `/homes/items/followers?page=1&pageSize=20`);
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -250,16 +250,66 @@ export default function Follow() {
 		}
 		console.log('UnFollowUser', data.message);
 	};
+	const scrollRef = useRef();
+	const scrollToRef = ref =>
+		ref.current.scrollTo({
+			top: 0,
+			left: 0,
+			behavior: 'smooth',
+		});
+	const executeScroll = () => {
+		console.log('clicked top');
+		scrollToRef(scrollRef);
+	};
+	const [showTopBtn, setShowTopBtn] = useState(false);
+
 	useEffect(() => {
 		getSameFollowSluverList();
 		getFollowItemList();
+		scrollRef.current.addEventListener('scroll', () => {
+			if (scrollRef.current.scrollTop > 100) {
+				setShowTopBtn(true);
+			} else {
+				setShowTopBtn(false);
+			}
+		});
 	}, []);
 
 	return (
-		<FeedContainer>
+		<FeedContainer ref={scrollRef}>
 			{followItemList.length > 0 ? (
 				<>
 					<LargeViewWrap padding="0 20px 40px 20px">
+						{showTopBtn ? (
+							<ScrollTop
+								onClick={executeScroll}
+								style={{
+									position: 'fixed',
+									bottom: '5rem',
+									right: '30px',
+									width: '3.125rem',
+									height: '3.125rem',
+									visibility: 'visible',
+									transition: 'visibility 0s linear 0s, opacity 300ms',
+									opacity: '1',
+								}}
+							></ScrollTop>
+						) : (
+							<ScrollTop
+								onClick={executeScroll}
+								style={{
+									position: 'fixed',
+									bottom: '5rem',
+									right: '30px',
+									width: '3.125rem',
+									height: '3.125rem',
+									visibility: 'hidden',
+									transition: 'visibility 0s linear 300ms, opacity 300ms',
+									opacity: '0',
+								}}
+							></ScrollTop>
+						)}
+
 						{followItemList.map((item, index) => (
 							<div key={item.itemIdx} onClick={() => onDetailItemClick(item.itemIdx)}>
 								<LargeViewItem>
@@ -300,9 +350,26 @@ export default function Follow() {
 										</ImageText>
 									</LargeViewImage>
 									<ItemTextWrap>
-										<SubText fontsize="1rem">{item.brandKr}</SubText>
+										<div
+											style={{
+												maxWidth: '30%',
+												overflow: 'hidden',
+												textOverflow: 'ellipsis',
+											}}
+										>
+											<SubText fontsize="1rem">{item.brandKr}</SubText>
+										</div>
+
 										<VerticalLine></VerticalLine>
-										<SubText fontsize="1rem">{item.ItemName}</SubText>
+										<div
+											style={{
+												maxWidth: '65%',
+												overflow: 'hidden',
+												textOverflow: 'ellipsis',
+											}}
+										>
+											<SubText fontsize="1rem">{item.ItemName}</SubText>
+										</div>
 									</ItemTextWrap>
 									<SubInfoWrap>
 										{item.profileImgUrl ? (
@@ -551,6 +618,7 @@ export default function Follow() {
 }
 
 const FeedContainer = styled.div`
+	height: 100%;
 	padding: 1.25rem 0 0 0;
 	overflow-y: scroll;
 	::-webkit-scrollbar {
@@ -559,10 +627,15 @@ const FeedContainer = styled.div`
 `;
 const ItemTextWrap = styled.div`
 	display: flex;
+	width: 100%;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	margin: 1rem 0 0.625rem 0;
+	white-space: nowrap;
+	box-sizing: border-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 const ProfileImg = styled.div`
 	width: ${props => props.size || '1.375rem'};
