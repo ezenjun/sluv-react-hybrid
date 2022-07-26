@@ -475,13 +475,29 @@ export default function Binder() {
 									{binderList.map(item => (
 										<>
 											<GridItem key={item.binderIdx}>
-												<BinderImage
-													src={BasicCover}
-													marginbottom="0.6875rem"
-													onClick={() =>
-														onEachBinderClick(item.binderIdx, item.name)
-													}
-												></BinderImage>
+												{item.dibCount > 0 ? (
+													<BinderImage
+														src={PinkBinder}
+														marginbottom="0.6875rem"
+														onClick={() =>
+															onEachBinderClick(
+																item.binderIdx,
+																item.name
+															)
+														}
+													></BinderImage>
+												) : (
+													<BinderImage
+														src={BasicCover}
+														marginbottom="0.6875rem"
+														onClick={() =>
+															onEachBinderClick(
+																item.binderIdx,
+																item.name
+															)
+														}
+													></BinderImage>
+												)}
 												<SubText
 													fontsize="1rem"
 													fontweight="bold"
