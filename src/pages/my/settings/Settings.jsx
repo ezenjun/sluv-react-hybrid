@@ -30,6 +30,7 @@ export default function Settings() {
 		localStorage.removeItem('x-access-token');
 		localStorage.removeItem('myUserIdx');
 		setAutoLoginCheck(false);
+		localStorage.removeItem('autoLogin');
 
 		setPopUpModalState(false);
 		navigate('/');

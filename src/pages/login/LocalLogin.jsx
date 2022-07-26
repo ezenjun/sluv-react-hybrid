@@ -118,6 +118,11 @@ export default function LocalLogin() {
 			localStorage.setItem('myUserIdx', data.result.userIdx);
 			//토큰저장
 			localStorage.setItem('x-access-token', data.result.jwt);
+			if(autoLoginCheck) {
+				localStorage.setItem('autoLogin', true);
+			} else {
+				localStorage.removeItem('autoLogin');
+			}
 
 			navigate('/home');
 		} else {
