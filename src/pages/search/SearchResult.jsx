@@ -88,7 +88,7 @@ export default function SearchResult() {
 				console.log('with blank', queryKeyword);
 			}
 			setSearchInputStatus(queryKeyword);
-			setSearchInput(queryKeyword);
+			setSearchInput(window.event.target.value);
 			// setSearchInput(searchInput);
 			navigate(`/search/result`, { state: { searchInput: queryKeyword } });
 			getSearchResultList(queryKeyword);
