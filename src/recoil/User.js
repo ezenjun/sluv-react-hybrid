@@ -14,3 +14,8 @@ export const SocialLoginUserIdxState = atom({
 	key: 'SocialLoginUserIdxState',
 	default: -1,
 });
+
+export const AutoLoginState = atom({
+	key: 'AutoLoginState',
+	default: false,
+});

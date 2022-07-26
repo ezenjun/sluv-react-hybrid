@@ -259,7 +259,7 @@ export default function SelectCeleb() {
 				<MainContainer>
 					<TopNav style={{ justifyContent: 'space-between' }}>
 						{state === '/settings' && <BackButton onClick={() => navigate(-1)} />}
-						<NavRight>
+						<NavRight style={{alignItems: 'center'}}>
 							{selectedNum > 0 && (
 								<SubText fontsize="1rem" margin="0 1rem" color="#9e30f4">
 									{selectedNum}개 선택

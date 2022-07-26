@@ -55,7 +55,8 @@ export default function Faq() {
 						</div>
 						<Fade collapse when={firstFaqStatus} duration={500}>
 							<div style={{ fontSize: '0.875rem', marginTop: '1.25rem' }}>
-								광고 및 제휴와 관련된 비즈니스 문의는 celebit.sluv@gmail.com 으로 연락해주세요.
+								광고 및 제휴와 관련된 비즈니스 문의는 celebit.sluv@gmail.com 으로
+								연락해주세요.
 							</div>
 						</Fade>
 					</div>
@@ -111,8 +112,9 @@ export default function Faq() {
 			</ContentWrap>
 
 			<a
+				target="_blank"
+				rel="noopener noreferrer external"
 				href="https://open.kakao.com/o/s1IQ8upe"
-				target="blank"
 				style={{ textDecoration: 'none', padding: '0 1.25rem' }}
 			>
 				<PurpleButton style={{ fontSize: '1rem' }} marginBottom="1.625rem">

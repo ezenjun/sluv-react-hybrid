@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
@@ -11,6 +11,7 @@ import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 import { BottomNavState } from '../../../recoil/BottomNav';
 import { PopUpModalState } from '../../../recoil/PopUpModal';
+import { AutoLoginState } from '../../../recoil/User';
 
 export default function Settings() {
 	const navigate = useNavigate();
@@ -19,6 +20,8 @@ export default function Settings() {
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
+	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
+
 	useEffect(() => {
 		setBottomNavStatus(false);
 	}, []);
@@ -26,6 +29,7 @@ export default function Settings() {
 	const onClickLogout = () => {
 		localStorage.removeItem('x-access-token');
 		localStorage.removeItem('myUserIdx');
+		setAutoLoginCheck(false);
 
 		setPopUpModalState(false);
 		navigate('/');

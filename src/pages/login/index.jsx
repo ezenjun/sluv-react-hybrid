@@ -12,18 +12,22 @@ import { ReactComponent as KakaoIcon } from '../../assets/Icons/kakao_icon.svg';
 import { MainText } from '../../components/Texts/MainText';
 import { palette } from '../../styles/palette';
 import { LoginSpeechBubble } from '../../components/Bubbles/LoginSpeechBubble';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { checkMobile } from '../../App';
 import {
 	SignupProgressState,
 	SocialLoginUserIdxState,
 	SocialLoginCompleteState,
+	AutoLoginState,
 } from '../../recoil/User';
+
 export default function Login() {
 	const navigate = useNavigate();
 
 	const setCurrentPage = useSetRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
+
+	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
 
 	// async function handleCallbackResponse(response) {
 	// 	// console.log("encoded JWT ID Token: " + response.credential);
@@ -78,35 +82,37 @@ export default function Login() {
 			}
 		}
 
-		const data = await customApiClient('get', '/auth/auto-login');
-		console.log(data);
-		if (!data) return;
+		if(autoLoginCheck) {
+			const data = await customApiClient('get', '/auth/auto-login');
+			console.log(data);
+			if (!data) return;
 
-		if (!data.isSuccess) {
-			localStorage.removeItem('x-access-token');
+			if (!data.isSuccess) {
+				localStorage.removeItem('x-access-token');
 
-			if (current_user_platform == 'android') {
-				//splash close 함수 호출
-				try {
-					window.android.closeSplash();
-				} catch (err) {
-					console.log(err);
+				if (current_user_platform == 'android') {
+					//splash close 함수 호출
+					try {
+						window.android.closeSplash();
+					} catch (err) {
+						console.log(err);
+					}
+				} else if (current_user_platform == 'ios') {
+					//splash close 함수 호출
+					try {
+						window.webkit.messageHandlers.closeSplash.postMessage('hihi');
+					} catch (err) {
+						console.log(err);
+					}
 				}
-			} else if (current_user_platform == 'ios') {
-				//splash close 함수 호출
-				try {
-					window.webkit.messageHandlers.closeSplash.postMessage('hihi');
-				} catch (err) {
-					console.log(err);
-				}
+
+				return;
 			}
 
-			return;
-		}
-
-		if (data.code === 1001) {
-			localStorage.setItem('myUserIdx', data.result.userIdx);
-			navigate('/home');
+			if (data.code === 1001) {
+				localStorage.setItem('myUserIdx', data.result.userIdx);
+				navigate('/home');
+			}
 		}
 	};
 	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
@@ -189,14 +195,14 @@ export default function Login() {
 						<span className="boldText"> 셀럽의 아이템</span>을 만나보세요!
 					</LoginSpeechBubble>
 				</div>
-				<a href={KAKAO_AUTH_URL}>
+				{/* <a href={KAKAO_AUTH_URL}>
 					<KaKaoButton>
 						<KakaoIcon
 							style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
 						/>
 						<span className="kakaoBtnText">카카오로 시작하기</span>
 					</KaKaoButton>
-				</a>
+				</a> */}
 				<EmailButton to="/login">
 					<EmailIcon
 						style={{ width: '1.125rem', height: '1.125rem', marginRight: '1rem' }}
@@ -211,17 +217,17 @@ export default function Login() {
 					이메일로 시작하기
 				</EmailButton>
 
-				<Division>
+				{/* <Division>
 					<div className="grayLine"></div>
 					<span className="divisionText">또는</span>
 					<div className="grayLine"></div>
-				</Division>
+				</Division> */}
 
-				<div>
+				{/* <div>
 					<GoogleButton>
 						<div id="google" />
 					</GoogleButton>
-				</div>
+				</div> */}
 			</ButtonContainer>
 			{/* <LocalLogin>
 				이미 계정이 있어요. <LoginText to="/login">로그인하기</LoginText>
