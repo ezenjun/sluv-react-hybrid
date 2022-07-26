@@ -13,7 +13,7 @@ import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Check } from '../../assets/Icons/check_validation.svg';
 import { ReactComponent as CheckOff } from '../../assets/Icons/checkbox_off.svg';
 import { ReactComponent as CheckOn } from '../../assets/Icons/checkbox_on.svg';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -21,6 +21,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import { useEffect } from 'react';
+import { AutoLoginState } from '../../recoil/User';
 
 export default function LocalLogin() {
 	const navigate = useNavigate();
@@ -29,13 +30,14 @@ export default function LocalLogin() {
 	const [password, setPassword] = useState('');
 	const [emailValid, setEmailValid] = useState(false);
 	const [passwordValid, setPasswordValid] = useState(false);
-	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
 	const [rememberIdCheck, setRememberIdCheck] = useState(false);
 
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
+
+	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
 
 	useEffect(() => {
 		setEmail(localStorage.getItem('myEmail'));

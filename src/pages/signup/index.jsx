@@ -6,6 +6,7 @@ import { customApiClient } from '../../utils/apiClient';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainContainer } from '../../components/containers/MainContainer';
 import {
+	AutoLoginState,
 	SignupProgressState,
 	SocialLoginCompleteState,
 	SocialLoginUserIdxState,
@@ -35,6 +36,8 @@ export default function Signup() {
 	const [currentPage, setCurrentPage] = useRecoilState(SignupProgressState);
 	const setSocialLoginComplete = useSetRecoilState(SocialLoginCompleteState);
 	const socialLoginUserIdx = useRecoilValue(SocialLoginUserIdxState);
+
+	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
 
 	const [allCheck, setAllCheck] = useState(false);
 	const [ageCheck, setAgeCheck] = useState(false);
@@ -352,6 +355,7 @@ export default function Signup() {
 		if (!data.isSuccess) return;
 
 		console.log(data.result.jwt);
+		setAutoLoginCheck(true);
 		localStorage.setItem('myUserIdx', data.result.userIdx);
 		localStorage.setItem('x-access-token', data.result.jwt);
 
