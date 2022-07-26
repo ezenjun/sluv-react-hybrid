@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { BackButton } from '../../components/Buttons/BackButton';
 import { Input } from '../../components/Input';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
+import { ReactComponent as RequestCelebIcon } from '../../assets/Icons/RequestCeleb.svg';
+import { ReactComponent as RequestBubble } from '../../assets/Icons/RequestBubble.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ContentWrap } from '../../components/containers/ContentWrap';
@@ -15,12 +17,18 @@ import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { customApiClient } from '../../utils/apiClient';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { celebCategoryList, ChooseCelebCurrentPageState, FavoriteCelebListState, PopularCelebListState, TotalCelebListState, UserFavoriteCelebIdxListState } from '../../recoil/Celebrity';
+import {
+	celebCategoryList,
+	ChooseCelebCurrentPageState,
+	FavoriteCelebListState,
+	PopularCelebListState,
+	TotalCelebListState,
+	UserFavoriteCelebIdxListState,
+} from '../../recoil/Celebrity';
 import SelectMemberContainer from '../../components/containers/SelectMemberContainer';
 import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function SelectCeleb() {
-
 	const { state } = useLocation();
 	console.log(state);
 
@@ -30,7 +38,7 @@ export default function SelectCeleb() {
 	const [badgeNumList, setBadgeNumList] = useState([]);
 	const [selectedGroups, setSelectedGroups] = useState([]);
 	const [selectedCelebIdxArray, setSelectedCelebIdxArray] = useState([]);
-	
+
 	const [isCelebConfirm, setIsCelebConfirm] = useState(false);
 	const [selectedNum, setSelectedNum] = useState(0);
 
@@ -44,7 +52,7 @@ export default function SelectCeleb() {
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const setFavoriteCelebList = useSetRecoilState(FavoriteCelebListState);
-	
+
 	useEffect(() => {
 		// 하단바 사라지기
 		setBottomNavStatus(false);
@@ -52,7 +60,7 @@ export default function SelectCeleb() {
 		setSelectedNum(0);
 
 		// 셀럽 및 멤버 목록 조회 API 호출
-		if(totalCelebList.length < 1) {
+		if (totalCelebList.length < 1) {
 			getCelebList();
 		} else {
 			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
@@ -66,10 +74,9 @@ export default function SelectCeleb() {
 			setBadgeNumList(temp2);
 		}
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
-		if(popularCelebList.length < 1) {
+		if (popularCelebList.length < 1) {
 			getPopularCelebList();
 		}
-		
 	}, []);
 
 	useEffect(() => {
@@ -77,8 +84,7 @@ export default function SelectCeleb() {
 		temp2 = new Array(totalCelebList.length).fill(0);
 		setBadgeNumList(temp2);
 		console.log(temp2);
-
-	},[totalCelebList]);
+	}, [totalCelebList]);
 
 	useEffect(() => {
 		console.log(`선택한 셀럽 수 : ${selectedNum}`);
@@ -94,7 +100,7 @@ export default function SelectCeleb() {
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
-		
+
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
@@ -118,10 +124,9 @@ export default function SelectCeleb() {
 			return;
 		}
 		setPopularCelebList(data.result);
-	}
+	};
 
 	const onClickTab = (idx, name) => {
-		
 		let tempArr = [];
 		if (idx === 1) {
 			setSelectedCategory(1);
@@ -147,7 +152,7 @@ export default function SelectCeleb() {
 				setSelectedGroups(tempGroup);
 			}
 			tempWholeCeleb = selectedCelebIdxArray;
-			tempWholeCeleb.push({celebIdx: celeb.celebIdx});
+			tempWholeCeleb.push({ celebIdx: celeb.celebIdx });
 			setSelectedCelebIdxArray(tempWholeCeleb);
 
 			tempBadgeNumList = badgeNumList;
@@ -167,10 +172,10 @@ export default function SelectCeleb() {
 
 			tempBadgeNumList = badgeNumList;
 			tempBadgeNumList.map((badgeNum, _index) => {
-				if(badgeNum > tempBadgeNumList[index]) {
+				if (badgeNum > tempBadgeNumList[index]) {
 					tempBadgeNumList[_index] = tempBadgeNumList[_index] - 1;
 				}
-			})
+			});
 			setBadgeNumList(tempBadgeNumList);
 		}
 		let tempCheckList = checkStatusList;
@@ -182,12 +187,11 @@ export default function SelectCeleb() {
 
 	const onPostFavoriteCelebs = async () => {
 		const body = {
-			celebMemberList: selectedCelebIdxArray
+			celebMemberList: selectedCelebIdxArray,
 		};
 		const data = await customApiClient('post', '/interest', body);
-		
 
-		if(!data.isSuccess) {
+		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
 		}
@@ -195,51 +199,60 @@ export default function SelectCeleb() {
 		setFavoriteCelebList([]);
 		console.log(data.message);
 		navigate('/home');
-	}
+	};
 
 	const onHandleNextButton = () => {
-		
-		if(isCelebConfirm) {
-			if(selectedGroups.length === 0) {
+		if (isCelebConfirm) {
+			if (selectedGroups.length === 0) {
 				onPostFavoriteCelebs();
-				
 			} else {
 				setCurrentPage(currentPage + 1);
 			}
 		}
-	}
+	};
 
-	const onHandleChangeSearch = (e) => {
+	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
 
 		const value = e.target.value;
 
-		const searchResult = totalCelebList.filter((data) => {
+		const searchResult = totalCelebList.filter(data => {
 			return data.name.includes(value);
-		})
+		});
 
-		if(searchResult.length > 0) {
-			if(searchResult[0].category === "SINGER") {
+		if (searchResult.length > 0) {
+			if (searchResult[0].category === 'SINGER') {
 				setSelectedCategory(1);
-			} else if(searchResult[0].category === "ACTOR") {
+			} else if (searchResult[0].category === 'ACTOR') {
 				setSelectedCategory(2);
 			}
 			setSearchFailStatus(false);
 		} else {
 			setSearchFailStatus(true);
-		} 
+		}
 
 		setCurrentCelebList(searchResult);
-	}
+	};
 
 	const onClickInputDelete = () => {
 		setSearchInput('');
 		setCurrentCelebList(totalCelebList);
 		setSelectedCategory(1);
 		setSearchFailStatus(false);
-	}
-
-
+	};
+	const listInnerRef = useRef();
+	const [reachedBottom, setReachedBottom] = useState(false);
+	const onScroll = () => {
+		if (listInnerRef.current) {
+			const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+			if (scrollTop + clientHeight >= scrollHeight) {
+				console.log('reached bottom');
+				setReachedBottom(true);
+			} else {
+				setReachedBottom(false);
+			}
+		}
+	};
 	return (
 		<>
 			{currentPage === 0 && (
@@ -248,7 +261,7 @@ export default function SelectCeleb() {
 						{state === '/settings' && <BackButton onClick={() => navigate(-1)} />}
 						<NavRight>
 							{selectedNum > 0 && (
-								<SubText margin="0 1rem" color="#9e30f4">
+								<SubText fontsize="1rem" margin="0 1rem" color="#9e30f4">
 									{selectedNum}개 선택
 								</SubText>
 							)}
@@ -262,7 +275,7 @@ export default function SelectCeleb() {
 						</NavRight>
 					</TopNav>
 
-					<ContentWrap padding="0">
+					<ContentWrap padding="0" onScroll={onScroll} ref={listInnerRef}>
 						<TextWrap>
 							<MainText fontsize="1.5rem" margin="1.625rem 0 0.5rem 0">
 								좋아하는 셀럽 태그를
@@ -394,18 +407,37 @@ export default function SelectCeleb() {
 						)}
 
 						{!searchFailStatus && (
-							<RequestWrap>
-								<RequestButton>
-									<PurpleButton
-										style={{ fontSize: '0.875rem' }}
-										boxshadow="0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3)"
-										marginBottom="0"
+							<>
+								<RequestWrap>
+									{reachedBottom ? (
+										<RequestBubble
+											style={{
+												visibility: 'hidden',
+												transition:
+													'visibility 0s linear 300ms, opacity 300ms',
+												opacity: '0',
+											}}
+										></RequestBubble>
+									) : (
+										<RequestBubble
+											style={{
+												visibility: 'visible',
+												transition:
+													'visibility 0s linear 0s, opacity 300ms',
+												opacity: '1',
+											}}
+										></RequestBubble>
+									)}
+
+									<RequestButton
 										onClick={() => navigate('../../request/celebrity')}
 									>
-										셀럽 추가 요청하기
-									</PurpleButton>
-								</RequestButton>
-							</RequestWrap>
+										<RequestCelebIcon
+											style={{ width: '1.5rem', height: '1.5rem' }}
+										></RequestCelebIcon>
+									</RequestButton>
+								</RequestWrap>
+							</>
 						)}
 					</ContentWrap>
 				</MainContainer>
@@ -427,13 +459,23 @@ export default function SelectCeleb() {
 export const RequestWrap = styled.div`
 	width: 100%;
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: fixed;
+	flex-direction: column;
+	/* justify-content: flex-end; */
+	align-items: flex-end;
+	position: absolute;
+	right: 1rem;
 	bottom: 1rem;
+	/* transition: 0.3s ease-in-out; */
 `;
 export const RequestButton = styled.div`
-	width: 156px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0 0.25rem 0.625rem 0 rgba(111, 32, 173, 0.3);
+	width: 3.25rem;
+	height: 3.25rem;
+	border-radius: 50%;
+	background-color: #9e30f4;
 	margin: 0;
 `;
 
@@ -469,7 +511,7 @@ export const NavRight = styled.div`
 export const NextButton = styled.span`
 	font-size: ${props => props.fontsize || '0.75rem'};
 	font-weight: ${props => props.fontweight || '600'};
-	color: ${props => props.status ? '#262626' : '#b1b1b1'};
+	color: ${props => (props.status ? '#262626' : '#b1b1b1')};
 	margin: ${props => props.margin || '0'};
 	&:hover {
 		cursor: pointer;
@@ -679,10 +721,11 @@ export const Tab = styled.div`
 	background-color: ${props => (props.status ? '#2b1e34' : 'white')};
 	color: ${props => (props.status ? 'white' : '#2b1e34')};
 	border: ${props => (props.status ? 'none' : '1px solid #E2E0E0')};
-	border-radius: 30px;
-	font-size: 14px;
-	padding: 10px 16px;
-	margin: 0 6px;
+	border-radius: 1.875rem;
+	font-size: 0.875rem;
+	font-weight: bold;
+	padding: 0.625rem 1rem;
+	margin: 0 0.375rem;
 	&:hover {
 		cursor: pointer;
 	}

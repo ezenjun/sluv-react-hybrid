@@ -148,6 +148,7 @@ export default function MyPageContainer({
 										whiteSpace: 'nowrap',
 										overflow: 'hidden',
 										width: '100%',
+										maxWidth: '10.125rem',
 									}}
 								>
 									{item.itemName}
