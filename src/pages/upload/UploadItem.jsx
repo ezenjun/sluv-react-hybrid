@@ -291,7 +291,7 @@ export default function UploadItem() {
 	};
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		setSelectedFileList(fileArr);
+		setSelectedFileList(pre => [...pre, fileArr]);
 		console.log(fileArr);
 
 		let fileURLs = [];
@@ -305,7 +305,7 @@ export default function UploadItem() {
 			let reader = new FileReader();
 			reader.onload = () => {
 				fileURLs[i] = reader.result;
-				setPreviewImgUrlList([...fileURLs]);
+				setPreviewImgUrlList(pre => [...pre, fileURLs[i] ]);
 			};
 			reader.readAsDataURL(file);
 		}
