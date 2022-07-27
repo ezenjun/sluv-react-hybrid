@@ -81,7 +81,6 @@ export default function Binder() {
 	const [isUploadSuccess, setIsUploadSuccess] = useState(false);
 	const [selectedFile, setSelectedFile] = useState('');
 
-	const [editBinderIdx, setEditBinderIdx] = useState(null);
 	const [binderEachIndexinList, setBinderEachIndexinList] = useState(null);
 	const [currentBinderImgUrl, setCurrentBinderImgUrl] = useState('');
 
@@ -93,17 +92,17 @@ export default function Binder() {
 		console.log(binderList);
 	}, []);
 
-	useEffect(() => {
-		if (
-			binderName &&
-			editedCoverImgUrl &&
-			isConfirm &&
-			checkBinderNameChange &&
-			isUploadSuccess
-		) {
-			editBinderApi(editBinderIdx);
-		}
-	}, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
+	// useEffect(() => {
+	// 	if (
+	// 		binderName &&
+	// 		editedCoverImgUrl &&
+	// 		isConfirm &&
+	// 		checkBinderNameChange &&
+	// 		isUploadSuccess
+	// 	) {
+	// 		editBinderApi(editBinderIdx);
+	// 	}
+	// }, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
 
 	// Function
 	const onAddBinder = () => {
@@ -113,40 +112,19 @@ export default function Binder() {
 	const onEachBinderClick = (idx, name) => {
 		navigate(`./${idx}`, { state: name });
 	};
-	const exitEdit = () => {
-		setCurrentPage('binder');
-		// setSelectedFile('');
-		setIsUploadSuccess(false);
-	};
-	const [originalBinderImgUrl, setOriginalBinderImgUrl] = useState('');
-	const [originalBinderName, setOriginalBinderName] = useState('');
-	const onEditBinder = (binderIdx, listIdx) => {
+	const [editBinderIdx, setEditBinderIdx] = useState();
+	const [editBinderName, setEditBinderName] = useState();
+	const [editBinderImgUrl, setEditBinderImgUrl] = useState();
+	const onClickThreedot = (binderIdx, binderName, binderImgUrl) => {
 		setBottomMenuStatusState(true);
 		setEditBinderIdx(binderIdx);
-		setOriginalBinderImgUrl(binderList[listIdx].coverImgUrl);
-		setCurrentBinderImgUrl(binderList[listIdx].coverImgUrl);
-		setBinderEachIndexinList(listIdx);
-		setBinderName(binderList[listIdx].name); // value에 기존 바인더 이름이 들어가서 원래 바인더 이름으로 수정시작하기 위함
-		setOriginalBinderName(binderList[listIdx].name); // 기존 바인더 이름(변경 확인용)
+		setEditBinderName(binderName);
+		setEditBinderImgUrl(binderImgUrl);
 	};
-
-	const onAlbumClick = e => {
-		e.preventDefault();
-		coverImgInput.current.click();
-	};
-	const onDefaultClick = () => {
-		setBottomMenuStatusState(false);
-		setCurrentBinderImgUrl('');
-		setSelectedFile('');
-		console.log('currentBinderImgUrl !== selectedFile', currentBinderImgUrl !== selectedFile);
-		console.log('currentBinderImgUrl', currentBinderImgUrl);
-		console.log('selectedFile', selectedFile);
-		const imgEL = document.querySelector('.img__box');
-		imgEL.style.backgroundImage = null;
-	};
-	console.log('currentBinderImgUrl !== selectedFile', selectedFile);
-	const editBinder = () => {
-		navigate('./edit');
+	const editBinder = (binderIdx, binderName, binderImgUrl) => {
+		navigate('./edit', {
+			state: { binderIdx: binderIdx, binderName: binderName, binderImgUrl: binderImgUrl },
+		});
 		setBottomMenuStatusState(false);
 	};
 	const deleteBinder = () => {
@@ -163,34 +141,7 @@ export default function Binder() {
 		getBinderList();
 		deleteBInderAPI(editBinderIdx);
 	};
-	const onEditBinderFinish = () => {
-		if (selectedFile !== currentBinderImgUrl) {
-			s3ImgUpload(selectedFile);
-		} else {
-			editBinderApi(editBinderIdx);
-		}
-	};
-	const onAddCoverImage = () => {
-		setBottomMenuStatusState(true);
-	};
 
-	const handleBinderName = e => {
-		setBinderName(e.target.value);
-		const regex = /^.{1,20}$/;
-		if (regex.test(e.target.value)) {
-			setBinderName(e.target.value);
-			setIsConfirm(true);
-			console.log(binderName);
-		} else {
-			setIsConfirm(false);
-		}
-		if (e.target.value !== originalBinderName) {
-			setCheckBinderNameChange(true);
-		} else {
-			setCheckBinderNameChange(false);
-		}
-	};
-	const [checkBinderNameChange, setCheckBinderNameChange] = useState(false);
 	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
@@ -226,157 +177,6 @@ export default function Binder() {
 				setToastMessageWrapStatus(false);
 			}, 2300);
 		}
-	};
-
-	const s3ImgUpload = file => {
-		const params = {
-			ACL: 'public-read',
-			Body: file,
-			Bucket: BINDER_COVER_IMAGE_S3_BUCKET,
-			Key: file.name,
-			ContentType: 'image/jpeg',
-		};
-		myBucket
-			.putObject(params)
-			.on('httpUploadProgress', evt => {
-				console.log(evt);
-			})
-			.on('complete', evt => {
-				console.log(
-					'https://' +
-						evt.request.httpRequest.endpoint.host +
-						evt.request.httpRequest.path
-				);
-				setEditedCoverImgUrl(
-					'https://' +
-						evt.request.httpRequest.endpoint.host +
-						evt.request.httpRequest.path
-				);
-				setIsUploadSuccess(true);
-			})
-			.send(err => {
-				if (err) console.log(err);
-			});
-	};
-
-	const editBinderApi = async idx => {
-		console.log('patch API 호출 전 마지막 데이터 확인' + binderName);
-		console.log('patch API 호출 전 마지막 데이터 확인' + editedCoverImgUrl);
-		let body = {};
-		// if (isUploadSuccess) {
-		// 	body = {
-		// 		coverImgUrl: editedCoverImgUrl,
-		// 		name: binderName,
-		// 	};
-		// } else if (!currentBinderImgUrl) {
-		// 	body = {
-		// 		coverImgUrl: '',
-		// 		name: binderName,
-		// 	};
-		// } else {
-		// 	body = { name: binderName };
-		// }
-
-		if (selectedFile !== currentBinderImgUrl) {
-			// 사진을 다른 사진으로 변경한 경우
-			// 바인더 이름도 변경한 경우
-			if (checkBinderNameChange) {
-				body = {
-					coverImgUrl: editedCoverImgUrl,
-					name: binderName,
-				};
-				//body: url:새로운 사진 url, name:새로운 바인더 이름
-			}
-			// 바인더 이름은 변경하지 않은 경우
-			else {
-				body = {
-					coverImgUrl: editedCoverImgUrl,
-					name: binderName,
-				};
-				//body: url:새로운 사진 url, name:기존 바인더 이름
-			}
-		} else {
-			// 사진을 업로드하지 않은 경우
-
-			// 사진을 변경하지 않은 경우
-			if (currentBinderImgUrl) {
-				// 바인더 이름을 변경한 경우
-				// body: url:기존 사진 url, name:새로운 바인더 이름
-				body = {
-					coverImgUrl: currentBinderImgUrl,
-					name: binderName,
-				};
-			} else {
-				// 기본 커버로 설정한 경우
-				if (checkBinderNameChange) {
-					// 바인더 이름도 변경한 경우
-					//body: url:null, name:새로운 바인더 이름
-					body = {
-						coverImgUrl: '',
-						name: binderName,
-					};
-				} else {
-					// 바인더 이름은 변경하지 않은 경우
-					//body: url:null, name:기존 바인더 이름
-					body = {
-						coverImgUrl: '',
-						name: binderName,
-					};
-				}
-			}
-		}
-
-		console.log(idx);
-		const data = await customApiClient('patch', `/binders/${idx}`, body);
-		console.log(data);
-
-		if (!data) return;
-		if (!data.isSuccess) {
-			if (data.code === 3080) {
-				setToastMessageBottomPosition('3.875rem');
-				setToastMessageWrapStatus(true);
-				setToastMessageStatus(true);
-				setToastMessage(`이미 같은 이름의 바인더가 있어요`);
-				setCurrentPage('edit');
-				setTimeout(() => {
-					setToastMessageStatus(false);
-				}, 2000);
-				setTimeout(() => {
-					setToastMessageWrapStatus(false);
-				}, 2300);
-			}
-			return;
-		} else {
-			setToastMessageBottomPosition('3.875rem');
-			setToastMessageWrapStatus(true);
-			setToastMessageStatus(true);
-			setToastMessage(`바인더가 수정되었어요`);
-			setTimeout(() => {
-				setToastMessageStatus(false);
-			}, 2000);
-			setTimeout(() => {
-				setToastMessageWrapStatus(false);
-			}, 2300);
-			setCurrentPage('binder');
-			getBinderList();
-			setOriginalBinderName('');
-			setCheckBinderNameChange(false);
-		}
-	};
-
-	const onChangeCoverImg = e => {
-		const file = e.target.files[0];
-
-		if (!file) return;
-
-		setSelectedFile(file);
-
-		const imgEL = document.querySelector('.img__box');
-		const reader = new FileReader();
-		reader.onload = () => (imgEL.style.backgroundImage = `url(${reader.result})`);
-		reader.readAsDataURL(file);
-
-		setBottomMenuStatusState(false);
 	};
 
 	const onClickUploadQuestion = () => {
@@ -525,7 +325,11 @@ export default function Binder() {
 
 														<EditBinder
 															onClick={() =>
-																onEditBinder(item.binderIdx, index)
+																onClickThreedot(
+																	item.binderIdx,
+																	item.name,
+																	item.coverImgUrl
+																)
 															}
 														></EditBinder>
 													</GridItemInfo>
@@ -620,7 +424,13 @@ export default function Binder() {
 							)}
 						</GridItemWrap>
 						<BottomSlideMenu>
-							<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={editBinder}>
+							<SubText
+								fontsize="1rem"
+								margin="0 0 0.9375rem 0"
+								onClick={() =>
+									editBinder(editBinderIdx, editBinderName, editBinderImgUrl)
+								}
+							>
 								바인더 수정하기
 							</SubText>
 							<SubText
@@ -635,72 +445,6 @@ export default function Binder() {
 				</MainContainer>
 			)}
 
-			{currentPage === 'edit' && (
-				<MainContainer padding="0 0 0 0">
-					<TopNav style={{ justifyContent: 'space-between' }}>
-						<BackButton onClick={exitEdit} />
-						<div className="centerText">바인더 수정하기</div>
-
-						<div
-							className="rightText"
-							style={{
-								color:
-									isConfirm &&
-									(checkBinderNameChange || originalBinderImgUrl !== selectedFile)
-										? '#262626'
-										: '#b1b1b1',
-							}}
-							onClick={() => onEditBinderFinish(editBinderIdx)}
-						>
-							완료
-						</div>
-					</TopNav>
-					<FeedContainerEdit>
-						{currentBinderImgUrl ? (
-							<AddImage onClick={onAddCoverImage} src={currentBinderImgUrl}>
-								<CoverImage className="img__box" />
-							</AddImage>
-						) : (
-							<BasicCoverAddImage onClick={onAddCoverImage}>
-								{/* <PictureIconBackground>
-									<BinderAddPicture
-										style={{ width: '2rem', height: '2rem' }}
-									></BinderAddPicture>
-								</PictureIconBackground>
-								<SubText fontweight="normal" color="#b1b1b1">
-									기본 커버
-								</SubText>
-								<CoverImage className="img__box" /> */}
-								<BasicBinder
-									style={{ width: '10.125rem', height: '10.125rem' }}
-								></BasicBinder>
-								<CoverImage className="img__box" />
-							</BasicCoverAddImage>
-						)}
-						<input
-							type="file"
-							accept="image/*"
-							ref={coverImgInput}
-							style={{ display: 'none' }}
-							onChange={onChangeCoverImg}
-						/>
-						<BinderName
-							placeholder={binderList[binderEachIndexinList].name}
-							value={binderName}
-							type="text"
-							onChange={handleBinderName}
-						/>
-					</FeedContainerEdit>
-					<BottomSlideMenu>
-						<SubText fontsize="1rem" margin="0 0 0.9375rem 0" onClick={onAlbumClick}>
-							앨범에서 사진 선택
-						</SubText>
-						<SubText fontsize="1rem" margin="0.9375rem 0" onClick={onDefaultClick}>
-							기본 커버 선택
-						</SubText>
-					</BottomSlideMenu>
-				</MainContainer>
-			)}
 			{/* {currentPage === 'delete' && ( */}
 			<PopUpModal closeButton={true} closeFunction={cancleDelete}>
 				<MainText fontsize="1.125rem" margin="0 0 0.75rem 0">
@@ -798,19 +542,6 @@ const GridItemInfo = styled.div`
 	justify-content: space-between;
 `;
 
-const FeedContainerEdit = styled.div`
-	height: 100vh;
-	padding: 4.375rem 1.25rem 1.25rem 1.25rem;
-	/* border: 1px solid black; */
-	overflow-y: scroll;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	::-webkit-scrollbar {
-		display: none; /* for Chrome, Safari, and Opera */
-	}
-`;
-
 const BasicCoverAddImage = styled.div`
 	display: flex;
 	/* position: relative; */
@@ -852,16 +583,6 @@ const BinderName = styled.input`
 		color: #b1b1b1;
 	}
 	caret-color: #9e30f4;
-`;
-const PictureIconBackground = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 3.125rem;
-	height: 3.125rem;
-	border-radius: 50%;
-	background-color: #ebebeb;
-	margin-bottom: 0.375rem;
 `;
 
 const TopWrap = styled.div`
