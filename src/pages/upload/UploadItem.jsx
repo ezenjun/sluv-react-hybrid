@@ -468,6 +468,19 @@ export default function UploadItem() {
 		navigate('/home');
 	};
 
+	const onClickBackButton = () => {
+		setSelectedFileList([]);
+		setPreviewImgUrlList([]);
+
+		if(selectedMember.memberIdx) {
+			setCurrentPage(1);
+		} else {
+			setCurrentPage(0);
+		}
+		
+
+	};
+
 	return (
 		<>
 			{currentPage === 0 && <SelectUploadCelebContainer />}
@@ -475,7 +488,7 @@ export default function UploadItem() {
 			{currentPage === 2 && (
 				<MainContainer>
 					<TopNav style={{ justifyContent: 'space-between' }}>
-						<BackButton onClick={() => setCurrentPage(0)} />
+						<BackButton onClick={onClickBackButton} />
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							정보 공유하기
 						</MainText>
