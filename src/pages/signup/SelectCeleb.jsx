@@ -29,7 +29,6 @@ import { BottomNavState } from '../../recoil/BottomNav';
 
 export default function SelectCeleb() {
 	const { state } = useLocation();
-	console.log(state);
 
 	const navigate = useNavigate();
 
@@ -104,15 +103,27 @@ export default function SelectCeleb() {
 		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
-		}
-		console.log(data.result);
-		setTotalCelebList(data.result);
-		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
+		} 
+		if (state === '/settings') {
+			const favoriteList = localStorage.getItem('favoriteCeleb');
+			let temp = [];
+			setFavoriteCelebList(JSON.parse(favoriteList));
+			JSON.parse(favoriteList).map((favorite, index) => {
+				temp.push(data.result.find(item => item.celebIdx === favorite.celebIdx));
+			});
+			let tempSet = new Set(temp.concat(data.result));
 
-		let temp;
-		(temp = []).length = totalCelebList.length;
-		temp.fill(false);
-		setCheckStatusList(temp);
+			setTotalCelebList(Array.from(tempSet));
+			setCurrentCelebList(Array.from(tempSet).filter(item => item.category === 'SINGER'));
+		} else {
+			setTotalCelebList(data.result);
+			setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
+
+			let temp;
+			(temp = []).length = totalCelebList.length;
+			temp.fill(false);
+			setCheckStatusList(temp);
+		}
 	};
 
 	const getPopularCelebList = async () => {
@@ -196,6 +207,8 @@ export default function SelectCeleb() {
 		}
 
 		setFavoriteCelebList([]);
+		setTotalCelebList([]);
+		localStorage.removeItem('favoriteCeleb');
 		console.log(data.message);
 		navigate('/home');
 	};
