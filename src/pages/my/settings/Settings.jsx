@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -6,12 +6,26 @@ import { BackButton } from '../../../components/Buttons/BackButton';
 import { ContentWrap } from '../../../components/containers/ContentWrap';
 import { MainContainer } from '../../../components/containers/MainContainer';
 import { TopNav } from '../../../components/containers/TopNav';
-import { Button, ButtonWrap, PopUpModal } from '../../../components/PopUp/PopUpModal';
+import { customApiClient } from '../../../utils/apiClient';
+import {
+	Button,
+	ButtonWrap,
+	CloseWrap,
+	ModalWrap,
+	PopUpModal,
+	WholePage,
+} from '../../../components/PopUp/PopUpModal';
 import { MainText } from '../../../components/Texts/MainText';
 import { SubText } from '../../../components/Texts/SubText';
 import { BottomNavState } from '../../../recoil/BottomNav';
 import { PopUpModalState } from '../../../recoil/PopUpModal';
 import { AutoLoginState } from '../../../recoil/User';
+import {
+	ToastMessageBottomPositionState,
+	ToastMessageState,
+	ToastMessageStatusState,
+	ToastMessageWrapStatusState,
+} from '../../../recoil/ToastMessage';
 
 export default function Settings() {
 	const navigate = useNavigate();
@@ -21,10 +35,15 @@ export default function Settings() {
 	const setPopUpModalState = useSetRecoilState(PopUpModalState);
 
 	const [autoLoginCheck, setAutoLoginCheck] = useRecoilState(AutoLoginState);
-
+	const [deletePopUpState, setDeletePopUpState] = useState(false);
 	useEffect(() => {
 		setBottomNavStatus(false);
 	}, []);
+
+	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
+	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
+	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
+	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const onClickLogout = () => {
 		localStorage.removeItem('x-access-token');
@@ -35,6 +54,32 @@ export default function Settings() {
 		setPopUpModalState(false);
 		navigate('/');
 	};
+
+	async function onDeleteAccount() {
+		const url = `/users/delete`;
+		const data = await customApiClient('delete', url);
+		if (!data) return;
+		if (data.isSuccess) {
+			console.log(data);
+			console.log(data.message);
+			localStorage.removeItem('x-access-token');
+			localStorage.removeItem('myUserIdx');
+			setAutoLoginCheck(false);
+			localStorage.removeItem('autoLogin');
+			setDeletePopUpState(false);
+			setToastMessageBottomPosition('5.125rem');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+			setToastMessage('회원 탈퇴가 완료되었어요. 다음에 또 스럽을 찾아와 주세요!');
+			setTimeout(() => {
+				setToastMessageStatus(false);
+			}, 2000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 2300);
+			navigate('/');
+		}
+	}
 
 	return (
 		<MainContainer>
@@ -106,8 +151,14 @@ export default function Settings() {
 				</ItemWrap>
 				<ItemWrap>
 					<TitleWrap>기타</TitleWrap>
-					<div onClick={() => setPopUpModalState(true)} className="buttonWrap">
+					<div
+						onClick={() => setPopUpModalState(true)}
+						className="buttonWrap marginBottom"
+					>
 						<div>로그아웃</div>
+					</div>
+					<div onClick={() => setDeletePopUpState(true)} className="buttonWrap">
+						<div>탈퇴하기</div>
 					</div>
 				</ItemWrap>
 			</ContentWrap>
@@ -132,6 +183,30 @@ export default function Settings() {
 					</Button>
 				</ButtonWrap>
 			</PopUpModal>
+
+			<WholePage openStatus={deletePopUpState}>
+				<ModalWrap>
+					<MainText fontsize="1.125rem" margin="1.5rem 0 0.75rem 0">
+						정말 탈퇴하시나요?
+					</MainText>
+					<SubText fontsize="0.875rem" margin="0 0 2rem 0" color="#8d8d8d">
+						개인 정보를 포함한 모든 정보가 삭제되어요
+						<br />
+						그래도 탈퇴하실 건가요?
+					</SubText>
+					<ButtonWrap>
+						<Button
+							backgroundColor="#c9c9c9"
+							onClick={() => setDeletePopUpState(false)}
+						>
+							취소
+						</Button>
+						<Button backgroundColor="#9e30f4" onClick={onDeleteAccount}>
+							확인
+						</Button>
+					</ButtonWrap>
+				</ModalWrap>
+			</WholePage>
 		</MainContainer>
 	);
 }
