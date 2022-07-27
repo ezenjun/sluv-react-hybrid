@@ -647,7 +647,10 @@ export default function UploadItem() {
 						<SpeechBubbleWrap
 							style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center' }}
 						>
-							<div>이미지는 최대 5장까지 추가할 수 있어요</div>
+							<div>
+								이미지는 최대 5장까지 추가할 수 있어요
+								<span className="redStar">*</span>
+							</div>
 							<InfoIcon
 								onClick={() => setInfoDialogStatus(!infoDialogStatus)}
 								style={{ width: '1rem', height: '1rem', marginLeft: '0.25rem' }}
