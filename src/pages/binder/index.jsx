@@ -94,7 +94,13 @@ export default function Binder() {
 	}, []);
 
 	useEffect(() => {
-		if (binderName && editedCoverImgUrl && isConfirm && isUploadSuccess) {
+		if (
+			binderName &&
+			editedCoverImgUrl &&
+			isConfirm &&
+			checkBinderNameChange &&
+			isUploadSuccess
+		) {
 			editBinderApi(editBinderIdx);
 		}
 	}, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
@@ -109,13 +115,19 @@ export default function Binder() {
 	};
 	const exitEdit = () => {
 		setCurrentPage('binder');
+		// setSelectedFile('');
+		setIsUploadSuccess(false);
 	};
+	const [originalBinderImgUrl, setOriginalBinderImgUrl] = useState('');
+	const [originalBinderName, setOriginalBinderName] = useState('');
 	const onEditBinder = (binderIdx, listIdx) => {
 		setBottomMenuStatusState(true);
 		setEditBinderIdx(binderIdx);
+		setOriginalBinderImgUrl(binderList[listIdx].coverImgUrl);
 		setCurrentBinderImgUrl(binderList[listIdx].coverImgUrl);
 		setBinderEachIndexinList(listIdx);
-		setBinderName('');
+		setBinderName(binderList[listIdx].name); // value에 기존 바인더 이름이 들어가서 원래 바인더 이름으로 수정시작하기 위함
+		setOriginalBinderName(binderList[listIdx].name); // 기존 바인더 이름(변경 확인용)
 	};
 
 	const onAlbumClick = e => {
@@ -126,11 +138,15 @@ export default function Binder() {
 		setBottomMenuStatusState(false);
 		setCurrentBinderImgUrl('');
 		setSelectedFile('');
+		console.log('currentBinderImgUrl !== selectedFile', currentBinderImgUrl !== selectedFile);
+		console.log('currentBinderImgUrl', currentBinderImgUrl);
+		console.log('selectedFile', selectedFile);
 		const imgEL = document.querySelector('.img__box');
 		imgEL.style.backgroundImage = null;
 	};
+	console.log('currentBinderImgUrl !== selectedFile', selectedFile);
 	const editBinder = () => {
-		setCurrentPage('edit');
+		navigate('./edit');
 		setBottomMenuStatusState(false);
 	};
 	const deleteBinder = () => {
@@ -148,7 +164,7 @@ export default function Binder() {
 		deleteBInderAPI(editBinderIdx);
 	};
 	const onEditBinderFinish = () => {
-		if (selectedFile) {
+		if (selectedFile !== currentBinderImgUrl) {
 			s3ImgUpload(selectedFile);
 		} else {
 			editBinderApi(editBinderIdx);
@@ -168,8 +184,13 @@ export default function Binder() {
 		} else {
 			setIsConfirm(false);
 		}
+		if (e.target.value !== originalBinderName) {
+			setCheckBinderNameChange(true);
+		} else {
+			setCheckBinderNameChange(false);
+		}
 	};
-
+	const [checkBinderNameChange, setCheckBinderNameChange] = useState(false);
 	const [binderList, setBinderList] = useState([]);
 	const getBinderList = async () => {
 		const data = await customApiClient('get', '/binders');
@@ -242,19 +263,69 @@ export default function Binder() {
 		console.log('patch API 호출 전 마지막 데이터 확인' + binderName);
 		console.log('patch API 호출 전 마지막 데이터 확인' + editedCoverImgUrl);
 		let body = {};
-		if (isUploadSuccess) {
-			body = {
-				coverImgUrl: editedCoverImgUrl,
-				name: binderName,
-			};
-		} else if (!currentBinderImgUrl) {
-			body = {
-				coverImgUrl: '',
-				name: binderName,
-			};
+		// if (isUploadSuccess) {
+		// 	body = {
+		// 		coverImgUrl: editedCoverImgUrl,
+		// 		name: binderName,
+		// 	};
+		// } else if (!currentBinderImgUrl) {
+		// 	body = {
+		// 		coverImgUrl: '',
+		// 		name: binderName,
+		// 	};
+		// } else {
+		// 	body = { name: binderName };
+		// }
+
+		if (selectedFile !== currentBinderImgUrl) {
+			// 사진을 다른 사진으로 변경한 경우
+			// 바인더 이름도 변경한 경우
+			if (checkBinderNameChange) {
+				body = {
+					coverImgUrl: editedCoverImgUrl,
+					name: binderName,
+				};
+				//body: url:새로운 사진 url, name:새로운 바인더 이름
+			}
+			// 바인더 이름은 변경하지 않은 경우
+			else {
+				body = {
+					coverImgUrl: editedCoverImgUrl,
+					name: binderName,
+				};
+				//body: url:새로운 사진 url, name:기존 바인더 이름
+			}
 		} else {
-			body = { name: binderName };
+			// 사진을 업로드하지 않은 경우
+
+			// 사진을 변경하지 않은 경우
+			if (currentBinderImgUrl) {
+				// 바인더 이름을 변경한 경우
+				// body: url:기존 사진 url, name:새로운 바인더 이름
+				body = {
+					coverImgUrl: currentBinderImgUrl,
+					name: binderName,
+				};
+			} else {
+				// 기본 커버로 설정한 경우
+				if (checkBinderNameChange) {
+					// 바인더 이름도 변경한 경우
+					//body: url:null, name:새로운 바인더 이름
+					body = {
+						coverImgUrl: '',
+						name: binderName,
+					};
+				} else {
+					// 바인더 이름은 변경하지 않은 경우
+					//body: url:null, name:기존 바인더 이름
+					body = {
+						coverImgUrl: '',
+						name: binderName,
+					};
+				}
+			}
 		}
+
 		console.log(idx);
 		const data = await customApiClient('patch', `/binders/${idx}`, body);
 		console.log(data);
@@ -279,8 +350,7 @@ export default function Binder() {
 			setToastMessageBottomPosition('3.875rem');
 			setToastMessageWrapStatus(true);
 			setToastMessageStatus(true);
-			setToastMessage(`바인더 이름이 변경되었어요`);
-			setCurrentPage('edit');
+			setToastMessage(`바인더가 수정되었어요`);
 			setTimeout(() => {
 				setToastMessageStatus(false);
 			}, 2000);
@@ -289,6 +359,8 @@ export default function Binder() {
 			}, 2300);
 			setCurrentPage('binder');
 			getBinderList();
+			setOriginalBinderName('');
+			setCheckBinderNameChange(false);
 		}
 	};
 
@@ -571,7 +643,13 @@ export default function Binder() {
 
 						<div
 							className="rightText"
-							style={{ color: isConfirm ? '#262626' : '#b1b1b1' }}
+							style={{
+								color:
+									isConfirm &&
+									(checkBinderNameChange || originalBinderImgUrl !== selectedFile)
+										? '#262626'
+										: '#b1b1b1',
+							}}
 							onClick={() => onEditBinderFinish(editBinderIdx)}
 						>
 							완료
@@ -752,13 +830,7 @@ const AddImage = styled.div`
 	height: 10.125rem;
 	border-radius: 1rem;
 	/* background-color: #f6f6f6; */
-	background-image: linear-gradient(
-			to top,
-			#000 0%,
-			rgba(60, 60, 60, 0.77) 0%,
-			rgba(0, 0, 0, 0) 34%
-		),
-		url(${props => props.src});
+	background-image: url(${props => props.src});
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 50%;
