@@ -678,53 +678,55 @@ export default function UploadItem() {
 							</MiniInfoDialog>
 						</SpeechBubbleWrap>
 
-						<ImgUploadBubbleWrap>
-							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
-								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
-							</UploadButtonWrap>
-							{previewImgUrlList.length > 0 &&
-								previewImgUrlList.map((img, index) => (
-									<PreviewImgWrap
-										onClick={() => onClickPreviewImg(index)}
-										key={index}
-									>
-										<img
-											className="previewImg"
-											src={img}
-											alt="미리보기 이미지"
-										/>
-										{checkedElement == index && (
-											<RepresentDiv>대표</RepresentDiv>
-										)}
+						<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+							<ImgUploadBubbleWrap>
+								<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
+									<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
+								</UploadButtonWrap>
+								{previewImgUrlList.length > 0 &&
+									previewImgUrlList.map((img, index) => (
+										<PreviewImgWrap
+											onClick={() => onClickPreviewImg(index)}
+											key={index}
+										>
+											<img
+												className="previewImg"
+												src={img}
+												alt="미리보기 이미지"
+											/>
+											{checkedElement == index && (
+												<RepresentDiv>대표</RepresentDiv>
+											)}
 
-										<ImgDelete
-											onClick={() => onClickPreviewImgDelete(index)}
-											style={{
-												width: '1.5rem',
-												height: '1.5rem',
-												position: 'absolute',
-												top: '-0.5rem',
-												right: '-0.5rem',
-											}}
-										/>
-										<input
-											type="radio"
-											value={index}
-											style={{ display: 'none' }}
-											checked={checkedElement == index}
-											onChange={onChangeRadioButton}
-										/>
-									</PreviewImgWrap>
-								))}
-							<input
-								type="file"
-								accept="image/*"
-								ref={imgInput}
-								style={{ display: 'none' }}
-								onChange={onChangeImg}
-								multiple
-							/>
-						</ImgUploadBubbleWrap>
+											<ImgDelete
+												onClick={() => onClickPreviewImgDelete(index)}
+												style={{
+													width: '1.5rem',
+													height: '1.5rem',
+													position: 'absolute',
+													top: '-0.5rem',
+													right: '-0.5rem',
+												}}
+											/>
+											<input
+												type="radio"
+												value={index}
+												style={{ display: 'none' }}
+												checked={checkedElement == index}
+												onChange={onChangeRadioButton}
+											/>
+										</PreviewImgWrap>
+									))}
+								<input
+									type="file"
+									accept="image/*"
+									ref={imgInput}
+									style={{ display: 'none' }}
+									onChange={onChangeImg}
+									multiple
+								/>
+							</ImgUploadBubbleWrap>
+						</div>
 					</TopRadiusContainer>
 
 					{popUpPageNum === 1 && (
@@ -856,6 +858,7 @@ const UploadButtonWrap = styled.button`
 	width: 5rem;
 	height: 5rem;
 	border-radius: 13px;
+	background-color: white;
 	border: solid 1px #94849d;
 	display: flex;
 	justify-content: center;

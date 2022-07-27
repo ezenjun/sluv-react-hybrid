@@ -47,6 +47,7 @@ export const ImgUploadBubbleWrap = styled.div`
 	overflow-x: auto;
 	display: flex;
 	flex-direction: row-reverse;
+	display: inline-flex;
 
 	background-color: white;
 	position: relative;
