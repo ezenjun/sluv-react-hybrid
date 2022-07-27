@@ -23,6 +23,7 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 	const [renderingList, setRenderingList] = useState([]);
 	const [searchInput, setSearchInput] = useState('');
 	const [renderDataNum, setRenderDataNum] = useState(40);
+	const [tempSearchResultList, setTempSearchResultList] = useState([]);
 
 	const [ref, inView] = useInView();
 	const [isLoaded, setIsLoaded] = useState(true);
@@ -80,8 +81,9 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 				return brand.brandEn.includes(value);
 			}
 		});
+		setCurrentBrandList(searchResult);
 
-		setRenderingList(searchResult);
+		setRenderingList(searchResult.slice(0, renderDataNum));
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
