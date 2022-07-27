@@ -75,10 +75,10 @@ export default function Home() {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
 		postFcmToken();
+		
 		// 관심셀럽 조회 API 호출
-		if (favoriteCelebList.length < 1) {
-			getFavoriteCeleb();
-		}
+		getFavoriteCeleb();
+		
 	}, []);
 
 	const postFcmToken = async () => {
@@ -164,6 +164,7 @@ export default function Home() {
 		}
 		console.log('ggetFavoriteCeleb', data.result);
 		setFavoriteCelebList(data.result);
+		localStorage.setItem('favoriteCeleb', JSON.stringify(data.result));
 	};
 	const scrolltoTop = () => {
 		window.scrollTo(0, 0);
@@ -225,6 +226,7 @@ export default function Home() {
 								style={{
 									width: '1.125rem',
 									height: '1.125rem',
+									marginLeft: '0.375rem',
 									marginRight: '0.5rem',
 								}}
 							/>
@@ -235,6 +237,7 @@ export default function Home() {
 								style={{
 									width: '1.125rem',
 									height: '1.125rem',
+									marginLeft: '0.375rem',
 									marginRight: '0.5rem',
 								}}
 							/>

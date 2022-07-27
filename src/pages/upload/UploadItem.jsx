@@ -291,7 +291,7 @@ export default function UploadItem() {
 	};
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		setSelectedFileList(fileArr);
+		setSelectedFileList(pre => [...pre, fileArr]);
 		console.log(fileArr);
 
 		let fileURLs = [];
@@ -305,7 +305,7 @@ export default function UploadItem() {
 			let reader = new FileReader();
 			reader.onload = () => {
 				fileURLs[i] = reader.result;
-				setPreviewImgUrlList([...fileURLs]);
+				setPreviewImgUrlList(pre => [...pre, fileURLs[i] ]);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -468,6 +468,19 @@ export default function UploadItem() {
 		navigate('/home');
 	};
 
+	const onClickBackButton = () => {
+		setSelectedFileList([]);
+		setPreviewImgUrlList([]);
+
+		if(selectedMember.memberIdx) {
+			setCurrentPage(1);
+		} else {
+			setCurrentPage(0);
+		}
+		
+
+	};
+
 	return (
 		<>
 			{currentPage === 0 && <SelectUploadCelebContainer />}
@@ -475,7 +488,7 @@ export default function UploadItem() {
 			{currentPage === 2 && (
 				<MainContainer>
 					<TopNav style={{ justifyContent: 'space-between' }}>
-						<BackButton onClick={() => setCurrentPage(0)} />
+						<BackButton onClick={onClickBackButton} />
 						<MainText style={{ fontSize: '1.125rem' }} className="centerText">
 							정보 공유하기
 						</MainText>
@@ -634,7 +647,10 @@ export default function UploadItem() {
 						<SpeechBubbleWrap
 							style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center' }}
 						>
-							<div>이미지는 최대 5장까지 추가할 수 있어요</div>
+							<div>
+								이미지는 최대 5장까지 추가할 수 있어요
+								<span className="redStar">*</span>
+							</div>
 							<InfoIcon
 								onClick={() => setInfoDialogStatus(!infoDialogStatus)}
 								style={{ width: '1rem', height: '1rem', marginLeft: '0.25rem' }}
@@ -662,53 +678,55 @@ export default function UploadItem() {
 							</MiniInfoDialog>
 						</SpeechBubbleWrap>
 
-						<ImgUploadBubbleWrap>
-							<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
-								<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
-							</UploadButtonWrap>
-							{previewImgUrlList.length > 0 &&
-								previewImgUrlList.map((img, index) => (
-									<PreviewImgWrap
-										onClick={() => onClickPreviewImg(index)}
-										key={index}
-									>
-										<img
-											className="previewImg"
-											src={img}
-											alt="미리보기 이미지"
-										/>
-										{checkedElement == index && (
-											<RepresentDiv>대표</RepresentDiv>
-										)}
+						<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+							<ImgUploadBubbleWrap>
+								<UploadButtonWrap onClick={e => onClickItemImgSelect(e)}>
+									<Plus style={{ width: '1.5rem', height: '1.5rem' }} />
+								</UploadButtonWrap>
+								{previewImgUrlList.length > 0 &&
+									previewImgUrlList.map((img, index) => (
+										<PreviewImgWrap
+											onClick={() => onClickPreviewImg(index)}
+											key={index}
+										>
+											<img
+												className="previewImg"
+												src={img}
+												alt="미리보기 이미지"
+											/>
+											{checkedElement == index && (
+												<RepresentDiv>대표</RepresentDiv>
+											)}
 
-										<ImgDelete
-											onClick={() => onClickPreviewImgDelete(index)}
-											style={{
-												width: '1.5rem',
-												height: '1.5rem',
-												position: 'absolute',
-												top: '-0.5rem',
-												right: '-0.5rem',
-											}}
-										/>
-										<input
-											type="radio"
-											value={index}
-											style={{ display: 'none' }}
-											checked={checkedElement == index}
-											onChange={onChangeRadioButton}
-										/>
-									</PreviewImgWrap>
-								))}
-							<input
-								type="file"
-								accept="image/*"
-								ref={imgInput}
-								style={{ display: 'none' }}
-								onChange={onChangeImg}
-								multiple
-							/>
-						</ImgUploadBubbleWrap>
+											<ImgDelete
+												onClick={() => onClickPreviewImgDelete(index)}
+												style={{
+													width: '1.5rem',
+													height: '1.5rem',
+													position: 'absolute',
+													top: '-0.5rem',
+													right: '-0.5rem',
+												}}
+											/>
+											<input
+												type="radio"
+												value={index}
+												style={{ display: 'none' }}
+												checked={checkedElement == index}
+												onChange={onChangeRadioButton}
+											/>
+										</PreviewImgWrap>
+									))}
+								<input
+									type="file"
+									accept="image/*"
+									ref={imgInput}
+									style={{ display: 'none' }}
+									onChange={onChangeImg}
+									multiple
+								/>
+							</ImgUploadBubbleWrap>
+						</div>
 					</TopRadiusContainer>
 
 					{popUpPageNum === 1 && (
@@ -840,6 +858,7 @@ const UploadButtonWrap = styled.button`
 	width: 5rem;
 	height: 5rem;
 	border-radius: 13px;
+	background-color: white;
 	border: solid 1px #94849d;
 	display: flex;
 	justify-content: center;
