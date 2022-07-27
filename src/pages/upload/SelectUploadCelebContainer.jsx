@@ -97,6 +97,7 @@ export default function SelectUploadCelebContainer() {
 			return;
 		}
 		setTotalCelebList(data.result);
+		
 		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
 	};
 	const getPopularCelebList = async () => {
@@ -118,6 +119,7 @@ export default function SelectUploadCelebContainer() {
 		console.log('내 관심셀럽 리스트', data.result);
 		setFavoriteCelebList(data.result);
 	};
+	console.log('내 관심셀럽', favoriteCelebList);
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
