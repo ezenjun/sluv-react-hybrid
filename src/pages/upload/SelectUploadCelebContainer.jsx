@@ -8,6 +8,7 @@ import { ReactComponent as RequestCelebIcon } from '../../assets/Icons/RequestCe
 import { ReactComponent as RequestBubble } from '../../assets/Icons/RequestBubble.svg';
 import {
 	Celeb,
+	CountBadge,
 	IconWrap,
 	Image,
 	ImgCircle,
@@ -37,7 +38,6 @@ import {
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
 import { useNavigate } from 'react-router-dom';
-import { PurpleButton } from '../../components/Buttons/PurpleButton';
 import { UploadCelebState, UploadMemberState } from '../../recoil/Upload';
 import { UploadPopupState } from '../../recoil/BottomNav';
 
@@ -72,23 +72,23 @@ export default function SelectUploadCelebContainer() {
 	useEffect(() => {
 		setSelectedCeleb({});
 		setSelectedMember({});
-		// 셀럽 및 멤버 목록 조회 API 호출
-		if (totalCelebList.length < 1) {
+
+		if( totalCelebList.length < 1) {
 			getCelebList();
+			console.log('data');
 		} else {
 			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 		}
+		
+
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if (popularCelebList.length < 1) {
 			getPopularCelebList();
 		}
-		// 관심셀럽 조회 API 호출
-		if (favoriteCelebList.length < 1) {
-			getFavoriteCeleb();
-		}
 	}, []);
 
 	const getCelebList = async () => {
+		const favoriteList = localStorage.getItem('favoriteCeleb');
 		const data = await customApiClient('get', '/celebs/members');
 
 		if (!data) return;
@@ -96,9 +96,16 @@ export default function SelectUploadCelebContainer() {
 			console.log(data.message);
 			return;
 		}
-		setTotalCelebList(data.result);
 		
-		setCurrentCelebList(data.result.filter(item => item.category === 'SINGER'));
+		let temp = [];
+		setFavoriteCelebList(JSON.parse(favoriteList));
+		JSON.parse(favoriteList).map((favorite, index) => {
+			temp.push(data.result.find((item) => item.celebIdx === favorite.celebIdx));
+		});
+		let tempSet = new Set(temp.concat(data.result));
+		
+		setTotalCelebList(Array.from(tempSet));
+		setCurrentCelebList(Array.from(tempSet).filter(item => item.category === 'SINGER'));
 	};
 	const getPopularCelebList = async () => {
 		const data = await customApiClient('get', '/interest/top-choice');
@@ -109,17 +116,6 @@ export default function SelectUploadCelebContainer() {
 		}
 		setPopularCelebList(data.result);
 	};
-	const getFavoriteCeleb = async () => {
-		const data = await customApiClient('get', '/interest');
-		if (!data) return;
-		if (!data.isSuccess) {
-			console.log(data.message);
-			return;
-		}
-		console.log('내 관심셀럽 리스트', data.result);
-		setFavoriteCelebList(data.result);
-	};
-	console.log('내 관심셀럽', favoriteCelebList);
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
@@ -146,8 +142,8 @@ export default function SelectUploadCelebContainer() {
 
 	const onClickInputDelete = () => {
 		setSearchInput('');
-		setCurrentCelebList(totalCelebList);
 		setSelectedCategory(1);
+		setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 		setSearchFailStatus(false);
 	};
 
@@ -248,13 +244,16 @@ export default function SelectUploadCelebContainer() {
 				{!searchFailStatus && (
 					<ListContainer>
 						{currentCelebList.length > 0 &&
-							currentCelebList.map(celeb => (
+							currentCelebList.map((celeb, index) => (
 								<Celeb
 									key={celeb.celebIdx}
 									onClick={e => onClickUploadCeleb(celeb, e)}
 								>
 									<ImgCircle key={celeb.id} src={celeb.celebImgUrl} />
 									{celeb.name}
+									<CountBadge status={false}>
+										<span className="badgeItem">v</span>
+									</CountBadge>
 								</Celeb>
 							))}
 					</ListContainer>

@@ -164,6 +164,7 @@ export default function Home() {
 		}
 		console.log('ggetFavoriteCeleb', data.result);
 		setFavoriteCelebList(data.result);
+		localStorage.setItem('favoriteCeleb', JSON.stringify(data.result));
 	};
 	const scrolltoTop = () => {
 		window.scrollTo(0, 0);
