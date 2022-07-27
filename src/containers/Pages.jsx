@@ -47,6 +47,7 @@ import EditProfile from '../pages/my/settings/EditProfile';
 import EditPassword from '../pages/my/settings/EditPassword';
 import ResetPassword from '../pages/my/settings/ResetPassword';
 import EventDetail from '../pages/EventDetail';
+import EditBinder from '../pages/binder/EditBinder';
 
 export default function Pages() {
 	return (
@@ -87,6 +88,7 @@ export default function Pages() {
 			<Route path="/binder" element={<Binder />} />
 			<Route path="/binder/:idx" element={<BinderDetail />} />
 			<Route path="/binder/add" element={<AddBinder />} />
+			<Route path="/binder/edit" element={<EditBinder />} />
 
 			<Route path="/users/:idx" element={<My />} />
 			<Route path="/users/viewed-items" element={<ViewedItems />} />
