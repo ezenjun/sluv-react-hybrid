@@ -289,10 +289,12 @@ export default function UploadItem() {
 		e.preventDefault();
 		imgInput.current.click();
 	};
+	console.log('hjhj',selectedFileList);
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		setSelectedFileList(pre => [...pre, fileArr]);
 		console.log(fileArr);
+		
+		setSelectedFileList(pre => [...pre, ...fileArr]);
 
 		let fileURLs = [];
 
@@ -357,6 +359,7 @@ export default function UploadItem() {
 	};
 
 	const onClickUploadItem = async fileList => {
+		console.log(fileList);
 		const arr = Array.from(fileList);
 		arr.map((_file, index) => {
 			s3ImgUpload(_file, index, arr.length - 1);
