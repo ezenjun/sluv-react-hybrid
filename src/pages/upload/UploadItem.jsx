@@ -96,6 +96,7 @@ export default function UploadItem() {
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
 	const [confirmPopupStatus, setConfirmPopupStatus] = useState(false);
+	const [afterUploadItemIdx, setAfterUploadItemIdx] = useState(-1);
 
 	const now = new Date();
 
@@ -169,6 +170,7 @@ export default function UploadItem() {
 		setBottomMenuStatusState(false);
 		setBottomNavStatus(false);
 		setIsImgUploadComplete(false);
+		setAfterUploadItemIdx(null);
 		
 	}, []);
 
@@ -417,6 +419,8 @@ export default function UploadItem() {
 		if (!data) return;
 
 		console.log('아이템 업로드 완료');
+		setAfterUploadItemIdx(data.result.addedItem);
+
 		if(state) {
 			setToastMessageBottomPosition('1.625rem');
 			setToastMessage('게시글이 수정되었어요');
@@ -477,7 +481,7 @@ export default function UploadItem() {
 	const onClickYes = () => {
 		setConfirmPopupStatus(false);
 		setUploadPopupStatus(false);
-		navigate('/home');
+		navigate(`/item/detail/${afterUploadItemIdx}`);
 	};
 
 	const onClickBackButton = () => {
