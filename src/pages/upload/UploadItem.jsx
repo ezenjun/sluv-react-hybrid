@@ -44,6 +44,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
+import Loading from '../../components/Loading';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -97,6 +98,7 @@ export default function UploadItem() {
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
 	const [confirmPopupStatus, setConfirmPopupStatus] = useState(false);
 	const [afterUploadItemIdx, setAfterUploadItemIdx] = useState(-1);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const now = new Date();
 
@@ -292,7 +294,7 @@ export default function UploadItem() {
 		console.log(selectedFileList);
 		imgInput.current.click();
 	};
-	console.log('hjhj',selectedFileList);
+	
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
 		console.log('테스트',fileArr);
@@ -317,7 +319,7 @@ export default function UploadItem() {
 		setCheckedElement(0);
 	};
 
-	const s3ImgUpload = (file, index, length) => {
+	const s3ImgUpload = async (file, index, length) => {
 		const params = {
 			ACL: 'public-read',
 			Body: file,
@@ -329,7 +331,7 @@ export default function UploadItem() {
 		myBucket
 			.putObject(params)
 			.on('httpUploadProgress', evt => {
-				console.log(evt);
+				console.log('인덱스!!!', evt);
 			})
 			.on('complete', evt => {
 				let temp = [];
@@ -419,6 +421,7 @@ export default function UploadItem() {
 		if (!data) return;
 
 		console.log('아이템 업로드 완료');
+		setIsLoading(false);
 		setAfterUploadItemIdx(data.result.addedItem);
 
 		if(state) {
@@ -441,6 +444,7 @@ export default function UploadItem() {
 
 	const onClickUploadBtnStart = () => {
 		if (isUploadConfirm) {
+			setIsLoading(true);
 			onClickUploadItem(selectedFileList);
 		} else {
 			setToastMessageBottomPosition('1.625rem');
@@ -844,6 +848,12 @@ export default function UploadItem() {
 							</div>
 						</ModalWrap>
 					</WholePage>
+
+					{isLoading && (
+						<div style={{ height: '5rem' }}>
+							<Loading></Loading>
+						</div>
+					)}
 				</MainContainer>
 			)}
 		</>
