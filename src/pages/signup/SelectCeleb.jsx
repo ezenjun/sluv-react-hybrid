@@ -49,7 +49,7 @@ export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const setFavoriteCelebList = useSetRecoilState(FavoriteCelebListState);
+	const [favoriteCelebList ,setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
 
 	useEffect(() => {
 		// 하단바 사라지기
@@ -97,6 +97,20 @@ export default function SelectCeleb() {
 		setIsCelebConfirm(true);
 	}, [selectedNum]);
 
+	useEffect(() => {
+		if(state === '/settings') {
+			let tempBadgeNumList = badgeNumList;
+			let cnt = 1;
+			favoriteCelebList.map((favorite, index) => {
+				tempBadgeNumList[
+					totalCelebList.findIndex(item => item.celebIdx === favorite.celebIdx)
+				] = cnt;
+				cnt++;
+			})
+			setBadgeNumList(tempBadgeNumList);
+		}
+	},[badgeNumList]);
+
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
 
@@ -109,6 +123,15 @@ export default function SelectCeleb() {
 			const favoriteList = localStorage.getItem('favoriteCeleb');
 			let temp = [];
 			setFavoriteCelebList(JSON.parse(favoriteList));
+
+			// tempBadgeNumList = badgeNumList;
+			// tempBadgeNumList[totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)] =
+			// 	selectedNum + 1;
+			// setBadgeNumList(tempBadgeNumList);
+
+			let tempBadgeNumList = badgeNumList;
+			let cnt = 1;
+			
 			JSON.parse(favoriteList).map((favorite, index) => {
 				let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
 				onSelectCeleb(favoriteTemp);
@@ -170,7 +193,8 @@ export default function SelectCeleb() {
 			setSelectedCelebIdxArray(tempWholeCeleb);
 
 			tempBadgeNumList = badgeNumList;
-			tempBadgeNumList[index] = selectedNum + 1;
+			tempBadgeNumList[totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)] =
+				selectedNum + 1;
 			setBadgeNumList(tempBadgeNumList);
 		} else {
 			setSelectedNum(selectedNum - 1);
@@ -361,7 +385,14 @@ export default function SelectCeleb() {
 												status={checkStatusList[celeb.celebIdx - 1]}
 											>
 												<span className="badgeItem">
-													{badgeNumList[index]}
+													{
+														badgeNumList[
+															totalCelebList.findIndex(
+																item =>
+																	item.celebIdx === celeb.celebIdx
+															)
+														]
+													}
 												</span>
 											</CountBadge>
 										</Celeb>
@@ -423,7 +454,15 @@ export default function SelectCeleb() {
 														}
 													>
 														<span className="badgeItem">
-															{badgeNumList[index]}
+															{
+																badgeNumList[
+																	totalCelebList.findIndex(
+																		item =>
+																			item.celebIdx ===
+																			popular.celebIdx
+																	)
+																]
+															}
 														</span>
 													</CountBadge>
 												</Celeb>

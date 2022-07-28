@@ -97,7 +97,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		} 
 	};
 
-	const onSelectMember = (member, e, index) => {
+	const onSelectMember = (member, index) => {
 		console.log(member);
 
 		let tempWholeMember = [];
@@ -129,8 +129,6 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		let tempCheckList = checkStatusList;
 		tempCheckList[member.memberIdx - 1] = !tempCheckList[member.memberIdx - 1];
 		setCheckStatusList(tempCheckList);
-
-		e.preventDefault();
 	};
 
 	const onPostFavoriteCelebs = async () => {
@@ -216,7 +214,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebLeftTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -268,7 +266,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebRightTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -302,7 +300,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebLeftBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -336,7 +334,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebRightBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -370,7 +368,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextLeftBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -404,7 +402,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextLeftTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -438,7 +436,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextRightTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -472,7 +470,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextRightBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
