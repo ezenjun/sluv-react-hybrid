@@ -195,13 +195,18 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 						color="white"
 						borderRight="8px solid #9e30f4"
 					>
-						<div>{data[currentMemberPage].name && data[currentMemberPage].name}</div>
+						<div>{data && data[currentMemberPage] && data[currentMemberPage].name}</div>
 					</SpeechBubbleWrap>
 				</BottomWrap>
 
 				<MembersContainer>
 					{(function () {
-						if (data[currentMemberPage].memberList.length > 0) {
+						if (
+							data &&
+							data[currentMemberPage] &&
+							data[currentMemberPage].memberList &&
+							data[currentMemberPage].memberList.length > 0
+						) {
 							let renderList = [];
 							for (let i = 0; i < data[currentMemberPage].memberList.length; i += 8) {
 								renderList.push(

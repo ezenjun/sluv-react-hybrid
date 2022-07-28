@@ -57,6 +57,8 @@ export default function SelectCeleb() {
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
 
+		setCurrentPage(0);
+
 		// 셀럽 및 멤버 목록 조회 API 호출
 		getCelebList();
 		// if (totalCelebList.length < 1) {
@@ -509,7 +511,7 @@ export default function SelectCeleb() {
 				</MainContainer>
 			)}
 
-			{currentPage === 1 && (
+			{selectedNum && currentPage === 1 && (
 				<MainContainer>
 					<SelectMemberContainer
 						data={selectedGroups}
