@@ -212,7 +212,12 @@ export default function SelectCeleb() {
 
 			tempBadgeNumList = badgeNumList;
 			tempBadgeNumList.map((badgeNum, _index) => {
-				if (badgeNum > tempBadgeNumList[index]) {
+				if (
+					badgeNum >
+					tempBadgeNumList[
+						totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)
+					]
+				) {
 					tempBadgeNumList[_index] = tempBadgeNumList[_index] - 1;
 				}
 			});
