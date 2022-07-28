@@ -281,7 +281,7 @@ export default function SelectCeleb() {
 
 	const onClickInputDelete = () => {
 		setSearchInput('');
-		setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+		setCurrentCelebList(totalCelebList);
 		setSelectedCategory(1);
 		setSearchFailStatus(false);
 	};
@@ -489,6 +489,7 @@ export default function SelectCeleb() {
 												transition:
 													'visibility 0s linear 300ms, opacity 300ms',
 												opacity: '0',
+												zIndex: '100000',
 											}}
 										></RequestBubble>
 									) : (
@@ -498,6 +499,7 @@ export default function SelectCeleb() {
 												transition:
 													'visibility 0s linear 0s, opacity 300ms',
 												opacity: '1',
+												zIndex: '100000',
 											}}
 										></RequestBubble>
 									)}
@@ -530,7 +532,6 @@ export default function SelectCeleb() {
 }
 
 export const RequestWrap = styled.div`
-	width: 100%;
 	display: flex;
 	flex-direction: column;
 	/* justify-content: flex-end; */
@@ -550,6 +551,7 @@ export const RequestButton = styled.div`
 	border-radius: 50%;
 	background-color: #9e30f4;
 	margin: 0;
+	z-index:100000;
 `;
 
 export const BottomWrap = styled.div`

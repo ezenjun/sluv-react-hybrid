@@ -12,7 +12,8 @@ import { MainContainer } from '../../components/containers/MainContainer';
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
 import { CoverImage } from './AddBinder';
 import { ReactComponent as BinderAddPicture } from '../../assets/Icons/binderAddPicture.svg';
-import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicBinder.svg';
+import { ReactComponent as BasicBinder } from '../../assets/Binder/BasicCover.svg';
+
 import {
 	ToastMessageBottomPositionState,
 	ToastMessageState,
@@ -256,7 +257,7 @@ export default function EditBinder() {
 								? '#262626'
 								: '#b1b1b1',
 					}}
-					onClick={() => onEditBinderFinish(binderIdx)}
+					onClick={() => nameValid && (binderNameChanged || binderImgUrlChanged) && onEditBinderFinish(binderIdx)}
 				>
 					완료
 				</div>
