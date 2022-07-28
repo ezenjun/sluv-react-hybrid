@@ -208,8 +208,8 @@ export default function UploadItem() {
 	]);
 
 	useEffect(() => {
-		isImgUploadComplete && onPostUpload();
-	}, [isImgUploadComplete]);
+		imgUrlList.length > 0 && isImgUploadComplete && onPostUpload();
+	}, [isImgUploadComplete, imgUrlList]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -287,12 +287,13 @@ export default function UploadItem() {
 	};
 	const onClickItemImgSelect = e => {
 		e.preventDefault();
+		console.log(selectedFileList);
 		imgInput.current.click();
 	};
 	console.log('hjhj',selectedFileList);
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		console.log(fileArr);
+		console.log('테스트',fileArr);
 		
 		setSelectedFileList(pre => [...pre, ...fileArr]);
 
@@ -310,7 +311,8 @@ export default function UploadItem() {
 				setPreviewImgUrlList(pre => [...pre, fileURLs[i] ]);
 			};
 			reader.readAsDataURL(file);
-		}
+		} 
+		setCheckedElement(0);
 	};
 
 	const s3ImgUpload = (file, index, length) => {
@@ -357,6 +359,7 @@ export default function UploadItem() {
 				if (err) console.log(err);
 			});
 	};
+	console.log('미리보기제발',checkedElement);
 
 	const onClickUploadItem = async fileList => {
 		console.log(fileList);
@@ -387,7 +390,7 @@ export default function UploadItem() {
 		} else {
 			body = {
 				celebIdx: selectedCeleb.celebIdx,
-				memberIdx: selectedMember.memberIdx,
+				memberIdx: selectedMember.memberIdx ? selectedMember.memberIdx : null,
 				parentCategory: filterList[selectedItemMainFilter - 1].name,
 				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
 				brandIdx: brandObj.brandIdx,
@@ -395,8 +398,8 @@ export default function UploadItem() {
 				whenDiscovery: date,
 				whereDiscovery: place,
 				price: selectedPriceMainFilterIdx,
-				content: extraInfo,
-				sellerSite: link,
+				content: extraInfo ? extraInfo : null,
+				sellerSite: link ? link : null,
 				itemImgUrlList: imgUrlList,
 			};
 		}
@@ -451,6 +454,7 @@ export default function UploadItem() {
 	};
 
 	const onClickPreviewImg = index => {
+		setCheckedElement(index);
 		console.log(index);
 	};
 	const onClickPreviewImgDelete = index => {
@@ -462,7 +466,7 @@ export default function UploadItem() {
 		temp.splice(index, 1);
 		temp2.splice(index, 1);
 		setPreviewImgUrlList([...temp]);
-		setSelectedFileList([selectedFileList]);
+		setSelectedFileList([...selectedFileList]);
 	};
 	console.log(selectedFileList);
 	const onChangeRadioButton = e => {
