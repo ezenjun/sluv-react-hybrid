@@ -456,10 +456,15 @@ export default function UploadItem() {
 	const onClickPreviewImgDelete = index => {
 		setCheckedElement(0);
 		let temp = [];
+		let temp2 = [];
 		temp = previewImgUrlList;
+		temp2 = selectedFileList;
 		temp.splice(index, 1);
+		temp2.splice(index, 1);
 		setPreviewImgUrlList([...temp]);
+		setSelectedFileList([selectedFileList]);
 	};
+	console.log(selectedFileList);
 	const onChangeRadioButton = e => {
 		console.log(e.target.value);
 		setCheckedElement(e.target.value);
