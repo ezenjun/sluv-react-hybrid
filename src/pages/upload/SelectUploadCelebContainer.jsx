@@ -101,8 +101,6 @@ export default function SelectUploadCelebContainer() {
 		let temp = [];
 		setFavoriteCelebList(JSON.parse(favoriteList));
 		JSON.parse(favoriteList).map((favorite, index) => {
-			
-			// temp.push(data.result.find((item) => item.celebIdx === favorite.celebIdx));
 			let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
 			favoriteTemp.isFavorite = true;
 			temp.push(favoriteTemp);

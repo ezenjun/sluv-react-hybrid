@@ -58,19 +58,20 @@ export default function SelectCeleb() {
 		setSelectedNum(0);
 
 		// 셀럽 및 멤버 목록 조회 API 호출
-		if (totalCelebList.length < 1) {
-			getCelebList();
-		} else {
-			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+		getCelebList();
+		// if (totalCelebList.length < 1) {
+		// 	getCelebList();
+		// } else {
+		// 	setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 
-			let temp;
-			let temp2;
-			(temp = []).length = totalCelebList.length;
-			temp.fill(false);
-			temp2 = new Array(totalCelebList.length).fill(0);
-			setCheckStatusList(temp);
-			setBadgeNumList(temp2);
-		}
+		// 	let temp;
+		// 	let temp2;
+		// 	(temp = []).length = totalCelebList.length;
+		// 	temp.fill(false);
+		// 	temp2 = new Array(totalCelebList.length).fill(0);
+		// 	setCheckStatusList(temp);
+		// 	setBadgeNumList(temp2);
+		// }
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if (popularCelebList.length < 1) {
 			getPopularCelebList();
@@ -109,8 +110,11 @@ export default function SelectCeleb() {
 			let temp = [];
 			setFavoriteCelebList(JSON.parse(favoriteList));
 			JSON.parse(favoriteList).map((favorite, index) => {
-				temp.push(data.result.find(item => item.celebIdx === favorite.celebIdx));
+				let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
+				onSelectCeleb(favoriteTemp);
+				temp.push(favoriteTemp);
 			});
+			setSelectedNum(JSON.parse(favoriteList).length);
 			let tempSet = new Set(temp.concat(data.result));
 
 			setTotalCelebList(Array.from(tempSet));
@@ -149,7 +153,7 @@ export default function SelectCeleb() {
 		}
 	};
 
-	const onSelectCeleb = (celeb, e, index) => {
+	const onSelectCeleb = (celeb, index) => {
 		let tempGroup = [];
 		let tempWholeCeleb = [];
 		let tempBadgeNumList = [];
@@ -191,8 +195,6 @@ export default function SelectCeleb() {
 		let tempCheckList = checkStatusList;
 		tempCheckList[celeb.celebIdx - 1] = !tempCheckList[celeb.celebIdx - 1];
 		setCheckStatusList(tempCheckList);
-
-		e.preventDefault();
 	};
 
 	const onPostFavoriteCelebs = async () => {
@@ -347,7 +349,7 @@ export default function SelectCeleb() {
 									currentCelebList.map((celeb, index) => (
 										<Celeb
 											key={celeb.celebIdx}
-											onClick={e => onSelectCeleb(celeb, e, index)}
+											onClick={e => onSelectCeleb(celeb, index)}
 										>
 											<ImgCircle
 												key={celeb.id}
@@ -404,7 +406,7 @@ export default function SelectCeleb() {
 											popularCelebList.map((popular, index) => (
 												<Celeb
 													key={popular.celebIdx}
-													onClick={e => onSelectCeleb(popular, e, index)}
+													onClick={e => onSelectCeleb(popular, index)}
 													style={{ marginLeft: '0.6875rem' }}
 												>
 													<ImgCircle
