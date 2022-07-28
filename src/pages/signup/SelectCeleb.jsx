@@ -281,7 +281,7 @@ export default function SelectCeleb() {
 
 	const onClickInputDelete = () => {
 		setSearchInput('');
-		setCurrentCelebList(totalCelebList);
+		setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 		setSelectedCategory(1);
 		setSearchFailStatus(false);
 	};
