@@ -143,7 +143,7 @@ export default function UploadItem() {
 				memberIdx: state.memberIdx,
 				name: state.memberName,
 			});
-			setSelectedItemMainFilter(state.parentCategory);
+			setSelectedItemMainFilter(filterList.findIndex(item => item.name == state.parentCategory));
 			setSelectedItemSubFilter(state.subCategory);
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
@@ -376,7 +376,7 @@ export default function UploadItem() {
 			body = {
 				celebIdx: selectedCeleb.celebIdx,
 				memberIdx: selectedMember.memberIdx,
-				parentCategory: selectedItemMainFilter,
+				parentCategory: filterList[selectedItemMainFilter - 1].name,
 				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
 				brandIdx: brandObj.brandIdx,
 				name: productName,
