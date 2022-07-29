@@ -20,9 +20,7 @@ export function HotKeyword() {
 			return;
 		}
 		let temp = data.result;
-		console.log('HotKeyword', data.result);
 		setKeywordList(temp);
-		console.log('HotKeyword', keywordList);
 	};
 	const onKeywordClick = searchInput => {
 		navigate(`/search/result`, { state: { searchInput } });

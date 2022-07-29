@@ -23,13 +23,12 @@ export function RecommendUserComponent() {
 
 	const onChipClick = (idx, celebIdx) => {
 		setSelected(idx);
-		console.log('celebIdx', celebIdx);
+
 		setSelectedCelebIdx(celebIdx);
-		console.log('cIdx', idx);
+
 		if (!userRecommendList[idx]) {
 			//userRecommendList[chip의 셀럽 위치 dix]가 존재하지 않을 때
 			getEachCelebRecommendList(celebIdx, idx); // 셀럽별 인기 스러버 요청API ㅎ
-			console.log('호출');
 		}
 	};
 
@@ -37,7 +36,7 @@ export function RecommendUserComponent() {
 		e.stopPropagation();
 		FollowUser(userIdx);
 		let tempList = userRecommendList;
-		console.log('팔로우 클릭');
+
 		// let length = userRecommendList.length;
 		for (var i = 0; i < tempList.length; i++) {
 			//	userRecommendList 전체를 돌면서 팔로잉 플래그 변환(팔로잉 -> 팔로우)
@@ -60,7 +59,7 @@ export function RecommendUserComponent() {
 		e.stopPropagation();
 		UnFollowUser(userIdx);
 		let tempList = userRecommendList;
-		console.log('언팔 클릭');
+
 		for (var i = 0; i < tempList.length; i++) {
 			//	userRecommendList 전체를 돌면서 팔로잉 플래그 변환(팔로우 -> 팔로잉)
 			if (tempList[i]) {
@@ -86,7 +85,7 @@ export function RecommendUserComponent() {
 			console.log(data.message);
 			return;
 		}
-		console.log('FollowUser', data.message);
+
 		// console.log('userRecommendList', userRecommendList);
 	};
 	const UnFollowUser = async userIdx => {
@@ -97,7 +96,6 @@ export function RecommendUserComponent() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 	};
 
 	const [userRecommendList, setUserRecommendList] = useState([]);
@@ -111,7 +109,6 @@ export function RecommendUserComponent() {
 			return;
 		}
 		setUserRecommendList([...userRecommendList, data.result]); //useEffect에서 처음에 userRecommendList[0]에 전체 인기 스러버 들어감
-		console.log('getTotalCelebRecommendList', data.result);
 	};
 	// 각 셀럽별 인기 스러버
 	const getEachCelebRecommendList = async (celedIdx, idx) => {
@@ -123,9 +120,7 @@ export function RecommendUserComponent() {
 		}
 		let temp = userRecommendList;
 		temp[idx] = data.result;
-		console.log('temp[selected]', temp);
 		setUserRecommendList([...temp]); // userRecommendList[클릭한 관심셀럽 이름 위치 idx] 에 셀럽별 인기 스러버 저장
-		console.log(userRecommendList);
 	};
 	useEffect(() => {
 		getTotalCelebRecommendList();

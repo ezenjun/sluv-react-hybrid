@@ -34,7 +34,6 @@ import {
 import Loading from '../../../components/Loading';
 
 export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
-	console.log(ComponentIndex);
 	const navigate = useNavigate();
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
 	const setToastMessageWrapStatus = useSetRecoilState(ToastMessageWrapStatusState);
@@ -80,9 +79,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		setSelectedChip(idx);
 		if (!latestList[idx]) {
 			getEachMemberLatestList(idx, memberIdx);
-			console.log('latest', latestList);
 		} else {
-			console.log('latestList[idx] 존재');
 			if (selectedFilter === 1) {
 				setCurrentList(latestList[idx]);
 			} else {
@@ -91,9 +88,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		}
 		if (!hotList[idx]) {
 			getEachMemberHotList(idx, memberIdx);
-			console.log(' hot', hotList);
 		} else {
-			console.log('hotList[idx] 존재');
 			if (selectedFilter === 1) {
 				setCurrentList(latestList[idx]);
 			} else {
@@ -110,7 +105,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -128,8 +122,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -137,8 +129,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -155,7 +145,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			itemIdx: itemIdx,
 			binderIdx: binderIdx,
 		};
-		console.log(body);
 		const Uri = '/dibs';
 		const data = await customApiClient('post', Uri, body);
 		if (!data) return;
@@ -163,7 +152,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			console.log(data.message);
 			return;
 		}
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			for (var j = 0; j < latestIsBinderList[i].length; j++) {
@@ -171,12 +159,10 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 					if (latestList[i][j].itemIdx === selectedItemIdx) {
 						tempLatest[i][j] = !tempLatest[i][j];
 						setLatestIsBinderList([...tempLatest]);
-						console.log('clicked');
 					}
 				}
 			}
 		}
-		console.log('tempLatest', tempLatest);
 		let tempHot = hotIsBinderList;
 		for (var k = 0; k < hotIsBinderList.length; k++) {
 			for (var l = 0; l < hotIsBinderList[k].length; l++) {
@@ -188,7 +174,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 				}
 			}
 		}
-		console.log('tempHot', tempHot);
 		setOpenState(false);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
@@ -209,8 +194,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			for (var j = 0; j < latestIsBinderList[i].length; j++) {
@@ -218,12 +201,10 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 					if (latestList[i][j].itemIdx === itemIdx) {
 						tempLatest[i][j] = !tempLatest[i][j];
 						setLatestIsBinderList([...tempLatest]);
-						console.log('clicked');
 					}
 				}
 			}
 		}
-		console.log('tempLatest', tempLatest);
 		let tempHot = hotIsBinderList;
 		for (var k = 0; k < hotIsBinderList.length; k++) {
 			for (var l = 0; l < hotIsBinderList[k].length; l++) {
@@ -235,7 +216,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 				}
 			}
 		}
-		console.log('tempHot', tempHot);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
@@ -257,14 +237,12 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
-			console.log(data.message);
+			// console.log(data.message);
 			setLoading(false);
 			return;
 		}
 		setLatestList([...latestList, data.result]);
 		setCurrentList(data.result);
-		console.log('latest result: ', data.result);
-		console.log(data.result[0].isDib === 'N');
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -274,7 +252,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 			}
 		}
 		setLatestIsBinderList([...latestIsBinderList, tmp]);
-		console.log('latest temp', tmp);
 		setLoading(false);
 	};
 	const getTotalHotList = async () => {
@@ -284,11 +261,10 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
-			console.log(data.message);
+			// console.log(data.message);
 			return;
 		}
 		setHotList([...hotList, data.result]);
-		console.log('hot result: ', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -297,9 +273,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 				tmp.push(false);
 			}
 		}
-
 		setHotIsBinderList([...hotIsBinderList, tmp]);
-		console.log('hot temp', tmp);
 	};
 
 	const getEachMemberLatestList = async (idx, memberidx) => {
@@ -309,14 +283,13 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
-			console.log(data.message);
+			// console.log(data.message);
 			setCurrentList([]);
 			return;
 		}
 		var temp = latestList;
 		temp[idx] = data.result;
 		setLatestList([...temp]);
-		console.log('latest each result: ', data.result);
 		if (selectedFilter === 1) {
 			setCurrentList(data.result);
 		}
@@ -331,7 +304,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		}
 		binderList[idx] = tmp;
 		setLatestIsBinderList([...binderList]);
-		console.log('hot temp', tmp);
 	};
 	const getEachMemberHotList = async (idx, memberidx) => {
 		const data = await customApiClient(
@@ -340,15 +312,13 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
-			console.log(data.message);
+			// console.log(data.message);
 			setCurrentList([]);
 			return;
 		}
 		let temp = hotList;
 		temp[idx] = data.result;
 		setHotList([...temp]);
-		// setHotList([...hotList, data.result]);
-		console.log('hot each result: ', data.result);
 		if (selectedFilter === 2) {
 			setCurrentList(data.result);
 		}
@@ -363,7 +333,6 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		}
 		binderList[idx] = tmp;
 		setHotIsBinderList([...binderList]);
-		console.log('hot temp', tmp);
 	};
 	useEffect(() => {
 		getTotalLatestList();

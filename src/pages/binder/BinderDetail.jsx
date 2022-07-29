@@ -69,7 +69,6 @@ export default function BinderDetail() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log(binderList);
 	};
 
 	useEffect(() => {
@@ -131,7 +130,6 @@ export default function BinderDetail() {
 	};
 	// 아이템 삭제 선택 후 팹업 모달에서 삭제 확인
 	const onConfirmDelete = () => {
-		console.log('clicked');
 		setPopUpModalStatusState(false);
 		setBottomMenuStatusState(false);
 		deleteDipList(params.idx);
@@ -149,7 +147,6 @@ export default function BinderDetail() {
 		(temp = []).length = data.result.length;
 		temp.fill(false);
 		setSelectedStatusList(temp);
-		console.log('SelectedStatusList', selectedStatusList);
 	};
 	// 바인더 내 선택 찜 삭제
 	const deleteDipList = async binderIdx => {
@@ -177,9 +174,6 @@ export default function BinderDetail() {
 		MoveDipList(params.idx, toidx);
 	};
 	const MoveDipList = async (binderIdx, toIdx) => {
-		console.log(toIdx);
-		console.log(binderIdx);
-		console.log(selectedItemList);
 		const body = { itemIdxList: selectedItemList };
 		const binderIndex = binderList.findIndex(binder => binder.binderIdx === toIdx);
 		const name = binderList[binderIndex].name;
@@ -187,7 +181,6 @@ export default function BinderDetail() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
-			console.log(data.code);
 			return;
 		} else {
 			setBottomMenuStatusState(false);

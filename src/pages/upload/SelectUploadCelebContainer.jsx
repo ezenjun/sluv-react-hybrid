@@ -63,7 +63,6 @@ export default function SelectUploadCelebContainer() {
 		if (listInnerRef.current) {
 			const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
 			if (scrollTop + clientHeight >= scrollHeight) {
-				console.log('reached bottom');
 				setReachedBottom(true);
 			} else {
 				setReachedBottom(false);
@@ -74,13 +73,12 @@ export default function SelectUploadCelebContainer() {
 		setSelectedCeleb({});
 		setSelectedMember({});
 
-		if( totalCelebList.length < 1) {
+		if (totalCelebList.length < 1) {
 			getCelebList();
 			console.log('data');
 		} else {
 			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
 		}
-		
 
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if (popularCelebList.length < 1) {
@@ -97,7 +95,7 @@ export default function SelectUploadCelebContainer() {
 			console.log(data.message);
 			return;
 		}
-		
+
 		let temp = [];
 		setFavoriteCelebList(JSON.parse(favoriteList));
 		JSON.parse(favoriteList).map((favorite, index) => {
@@ -106,7 +104,7 @@ export default function SelectUploadCelebContainer() {
 			temp.push(favoriteTemp);
 		});
 		let tempSet = new Set(temp.concat(data.result));
-		
+
 		setTotalCelebList(Array.from(tempSet));
 		setCurrentCelebList(Array.from(tempSet).filter(item => item.category === 'SINGER'));
 	};
@@ -255,7 +253,9 @@ export default function SelectUploadCelebContainer() {
 									<ImgCircle key={celeb.id} src={celeb.celebImgUrl} />
 									{celeb.name}
 									<CountBadge status={celeb.isFavorite ? true : false}>
-										<FavoriteHeart style={{width:'1.5rem', height:'1.5rem'}}/>
+										<FavoriteHeart
+											style={{ width: '1.5rem', height: '1.5rem' }}
+										/>
 									</CountBadge>
 								</Celeb>
 							))}

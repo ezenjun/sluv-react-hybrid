@@ -281,7 +281,6 @@ export default function Signup() {
 			handleAuthCodeCheckAPI();
 		} else {
 			if (data.code === 3007) {
-				console.log('중복된 번호');
 				setBottomMenuStatusState(true);
 				setUserEmail(data.result.email);
 			}
@@ -297,7 +296,6 @@ export default function Signup() {
 		const data = await customApiClient('get', url);
 		if (data.isSuccess === true) {
 			handleNextClick();
-			console.log('인증번호 인증 성공');
 		} else {
 			setAuthCodeValid(false);
 
@@ -312,8 +310,6 @@ export default function Signup() {
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
 			}, 2300);
-
-			console.log('인증번호 인증 실패');
 		}
 	}
 	// 이메일 비밀번호 확인 API
@@ -322,7 +318,6 @@ export default function Signup() {
 		const data = await customApiClient('get', url);
 		if (data.isSuccess === true) {
 			handleNextClick();
-			console.log('이메일 등록 성공');
 		} else {
 			setEmailValid(false);
 			setToastMessageBottomPosition('5.125rem');
@@ -354,7 +349,6 @@ export default function Signup() {
 		if (!data) return;
 		if (!data.isSuccess) return;
 
-		console.log(data.result.jwt);
 		setAutoLoginCheck(true);
 		localStorage.setItem('autoLogin', true);
 		localStorage.setItem('myUserIdx', data.result.userIdx);
@@ -368,8 +362,6 @@ export default function Signup() {
 		const body = {
 			nickName: nickname,
 		};
-		console.log('구글로그인 후', typeof socialLoginUserIdx);
-		console.log(`/users/${socialLoginUserIdx}/nickname`);
 		const uri = `/users/${socialLoginUserIdx}/nickname`;
 		const data = await customApiClient('patch', uri, body);
 		console.log(data);
@@ -390,7 +382,6 @@ export default function Signup() {
 			} else {
 				// 최초 사용자
 				// 회원가입 API 호출
-				console.log('hi');
 				onPostLocalSignUp();
 			}
 		} else if (data.code === 3002) {

@@ -82,7 +82,7 @@ export default function Login() {
 			}
 		}
 
-		if(localStorage.getItem('autoLogin')) {
+		if (localStorage.getItem('autoLogin')) {
 			const data = await customApiClient('get', '/auth/auto-login');
 			console.log(data);
 			if (!data) return;
@@ -119,25 +119,17 @@ export default function Login() {
 	const setUserIdx = useSetRecoilState(SocialLoginUserIdxState);
 
 	async function handleCallbackResponse(response) {
-		console.log('Encoded JWT ID token: ' + response.credential);
 		const url = `/auth/google-login?code=${response.credential}`;
 		const data = await customApiClient('get', url);
-		console.log(data);
 
 		if (data.code === 3001) {
-			console.log(data.code);
-			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			if (data.result.nickname === 'tempNickName') {
 				setCurrentPage(4);
-				console.log('처음 회원가입 jwt', data.result.jwt);
 				setUserIdx(data.result.userIdx);
-				console.log(data.result.userIdx);
 				navigate('/signup');
 			} else {
-				console.log('다시 로그인 jwt', data.result.jwt);
 				setUserIdx(data.result.userIdx);
-				console.log('user IDX', data.result.userIdx);
 				navigate('/home');
 			}
 		}

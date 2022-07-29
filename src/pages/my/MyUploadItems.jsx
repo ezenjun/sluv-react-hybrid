@@ -54,7 +54,6 @@ export default function MyUploadItems() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -69,8 +68,6 @@ export default function MyUploadItems() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -78,8 +75,6 @@ export default function MyUploadItems() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -104,14 +99,12 @@ export default function MyUploadItems() {
 			console.log(data.message);
 			return;
 		}
-		console.log('latestIsBinderList', myUploadIsDibList);
 		let tempLatest = myUploadIsDibList;
 		for (var i = 0; i < myUploadIsDibList.length; i++) {
 			if (state.uploadItemList[i]) {
 				if (state.uploadItemList[i].itemIdx === selectedItemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setMyUploadIsDibList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
@@ -135,15 +128,12 @@ export default function MyUploadItems() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', myUploadIsDibList);
 		let tempLatest = myUploadIsDibList;
 		for (var i = 0; i < myUploadIsDibList.length; i++) {
 			if (state.uploadItemList[i]) {
 				if (state.uploadItemList[i].itemIdx === itemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setMyUploadIsDibList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}

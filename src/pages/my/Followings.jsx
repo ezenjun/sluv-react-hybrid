@@ -78,7 +78,6 @@ export default function Followings() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 		var tmp = isFollowList;
 		tmp[index] = !tmp[index];
 		setIsFollowList([...tmp]);

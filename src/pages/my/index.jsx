@@ -71,8 +71,6 @@ export default function My() {
 	}, []);
 
 	const getUserPageData = async userIdx => {
-		console.log('유저인덱스(path variable 늘 조심하자!!! : ', typeof userIdx, userIdx);
-
 		const data = await customApiClient('get', `/users/${userIdx}/page`);
 
 		if (!data) return;
@@ -83,17 +81,15 @@ export default function My() {
 		setCelebList(data.result.userInfo.interestCelebList);
 		setUserInfo(data.result.userInfo);
 		setUploadInfo(data.result.uploadInfo);
-		console.log(data);
+		// console.log(data);
 		var tmp = [];
 		for (var i = 0; i < data.result.uploadInfo.uploadItemList.length; i++) {
-			console.log('포문 안', data.result.uploadInfo.uploadItemList[i]);
 			if (data.result.uploadInfo.uploadItemList[i].isDib === 'Y') {
 				tmp.push(true);
 			} else {
 				tmp.push(false);
 			}
 		}
-		console.log('테ㅁ프.', tmp);
 		if (data.result.userInfo.isFollow === 'Y') {
 			setFollowStatus(true);
 		} else {
@@ -123,7 +119,6 @@ export default function My() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 
 	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
@@ -141,11 +136,9 @@ export default function My() {
 	};
 
 	const onSelectBinder = (binderIdx, itemIdx) => {
-		console.log('셀렉트 바인더', itemIdx);
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				if (itemIdx === selectedItemIdx) {
-					console.log('해당 아이템');
 					addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
 				}
 			}
@@ -201,7 +194,6 @@ export default function My() {
 			console.log(data.message);
 			return;
 		}
-		console.log('FollowUser', data.message);
 		setFollowStatus(true);
 		// console.log('userRecommendList', userRecommendList);
 	};
@@ -213,7 +205,6 @@ export default function My() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 		setFollowStatus(false);
 	};
 

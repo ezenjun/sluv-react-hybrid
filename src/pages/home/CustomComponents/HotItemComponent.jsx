@@ -43,8 +43,6 @@ export const HotItemComponent = () => {
 
 		let temp = data.result;
 		setDailyList(temp);
-		console.log('daily', dailyList);
-		console.log(data.result);
 	};
 	const getWeeklyHotList = async () => {
 		const data = await customApiClient('get', `/homes/hot-items?period=weekly`);
@@ -55,17 +53,13 @@ export const HotItemComponent = () => {
 		}
 		let temp = data.result;
 		setWeeklyList(temp);
-		console.log('weekly', weeklyList);
-		console.log(data.result);
 	};
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
 	};
 	useEffect(() => {
 		getDailyHotList();
-		console.log(dailyList);
 		getWeeklyHotList();
-		console.log(weeklyList);
 	}, []);
 	return (
 		<ItemContainer padding="0.625rem 0 1.875rem 0">

@@ -133,7 +133,7 @@ export default function UploadItem() {
 	});
 
 	useEffect(() => {
-		if(state) {
+		if (state) {
 			console.log(state);
 			setSelectedCeleb({
 				celebIdx: state.celebIdx,
@@ -148,7 +148,7 @@ export default function UploadItem() {
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
 			setBrand(state.brandKr);
-			setBrandObj({ brandIdx : state.brandIdx});
+			setBrandObj({ brandIdx: state.brandIdx });
 			setIsBrand(true);
 			setProductName(state.itemName);
 			setIsProductName(true);
@@ -173,18 +173,17 @@ export default function UploadItem() {
 		setBottomNavStatus(false);
 		setIsImgUploadComplete(false);
 		setAfterUploadItemIdx(null);
-		
 	}, []);
 
 	useEffect(() => {
-		console.log('상위 카테고리 : ', selectedItemMainFilter);
-		console.log('하위 카테고리 : ', selectedItemSubFilter);
-		console.log('브랜드', brandObj.brandIdx);
-		console.log('제품명', productName);
-		console.log('날짜', date);
-		console.log('장소', place);
-		console.log('가격', selectedPriceMainFilterIdx);
-		console.log('이미지미리보기리스트', previewImgUrlList);
+		// console.log('상위 카테고리 : ', selectedItemMainFilter);
+		// console.log('하위 카테고리 : ', selectedItemSubFilter);
+		// console.log('브랜드', brandObj.brandIdx);
+		// console.log('제품명', productName);
+		// console.log('날짜', date);
+		// console.log('장소', place);
+		// console.log('가격', selectedPriceMainFilterIdx);
+		// console.log('이미지미리보기리스트', previewImgUrlList);
 
 		if (
 			selectedItemMainFilter &&
@@ -270,7 +269,6 @@ export default function UploadItem() {
 		const dd = String(val.getDate()).padStart(2, '0');
 		const mm = String(val.getMonth() + 1).padStart(2, '0');
 		const yyyy = val.getFullYear();
-		console.log(yyyy + '-' + mm + '-' + dd);
 		setDate(yyyy + '-' + mm + '-' + dd);
 		setIsDate(true);
 		setVisible(false);
@@ -294,11 +292,11 @@ export default function UploadItem() {
 		console.log(selectedFileList);
 		imgInput.current.click();
 	};
-	
+
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		console.log('테스트',fileArr);
-		
+		console.log('테스트', fileArr);
+
 		setSelectedFileList(pre => [...pre, ...fileArr]);
 
 		let fileURLs = [];
@@ -312,10 +310,10 @@ export default function UploadItem() {
 			let reader = new FileReader();
 			reader.onload = () => {
 				fileURLs[i] = reader.result;
-				setPreviewImgUrlList(pre => [...pre, fileURLs[i] ]);
+				setPreviewImgUrlList(pre => [...pre, fileURLs[i]]);
 			};
 			reader.readAsDataURL(file);
-		} 
+		}
 		setCheckedElement(0);
 	};
 
@@ -363,7 +361,6 @@ export default function UploadItem() {
 				if (err) console.log(err);
 			});
 	};
-	console.log('미리보기제발',checkedElement);
 
 	const onClickUploadItem = async fileList => {
 		console.log(fileList);
@@ -375,7 +372,7 @@ export default function UploadItem() {
 
 	const onPostUpload = async () => {
 		let body = {};
-		if(state) {
+		if (state) {
 			body = {
 				celebIdx: selectedCeleb.celebIdx,
 				memberIdx: selectedMember.memberIdx,
@@ -390,7 +387,6 @@ export default function UploadItem() {
 				sellerSite: link,
 				itemImgUrlList: imgUrlList,
 			};
-
 		} else {
 			body = {
 				celebIdx: selectedCeleb.celebIdx,
@@ -407,24 +403,20 @@ export default function UploadItem() {
 				itemImgUrlList: imgUrlList,
 			};
 		}
-		
 
-		console.log('넘아가는 데이터', body);
 		let data = {};
-		if(state) {
+		if (state) {
 			data = await customApiClient('patch', `/items/${state.itemIdx}`, body);
 		} else {
 			data = await customApiClient('post', '/items', body);
 		}
-		
+
 		console.log(data);
 		if (!data) return;
 
-		console.log('아이템 업로드 완료');
 		setIsLoading(false);
-		
 
-		if(state) {
+		if (state) {
 			setToastMessageBottomPosition('1.625rem');
 			setToastMessage('게시글이 수정되었어요');
 			setToastMessageWrapStatus(true);
@@ -493,13 +485,11 @@ export default function UploadItem() {
 		setSelectedFileList([]);
 		setPreviewImgUrlList([]);
 
-		if(selectedMember.memberIdx) {
+		if (selectedMember.memberIdx) {
 			setCurrentPage(1);
 		} else {
 			setCurrentPage(0);
 		}
-		
-
 	};
 
 	return (
@@ -851,7 +841,13 @@ export default function UploadItem() {
 					</WholePage>
 
 					{isLoading && (
-						<div style={{ height: '5rem', backgroundColor:'transparent', zIndex:'100000' }}>
+						<div
+							style={{
+								height: '5rem',
+								backgroundColor: 'transparent',
+								zIndex: '100000',
+							}}
+						>
 							<Loading></Loading>
 						</div>
 					)}

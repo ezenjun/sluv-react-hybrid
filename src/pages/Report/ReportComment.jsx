@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SpeechBubbleWrap } from '../../components/Bubbles/SpeechBubble';
 import { BackButton } from '../../components/Buttons/BackButton';
-import { MainContainer } from '../../components/containers/MainContainer'
+import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { TopRadiusContainer } from '../../components/containers/TopRadiusContainer';
 import { MainText } from '../../components/Texts/MainText';
@@ -10,11 +10,13 @@ import { CheckboxWrap, CircularCheckboxWrap } from './ReportUser';
 import { ReactComponent as Unchecked } from '../../assets/Icons/icon_circular_checkbox_empty.svg';
 import { ReactComponent as Checked } from '../../assets/Icons/icon_circular_checkbox_fill.svg';
 import PopupBackgroundGradient from '../../assets/Containers/popup_background_gradient.svg';
-import { InputSpeechBubbleWrap, SpeechBubbleTextArea } from '../../components/Bubbles/InputSpeechBubble';
+import {
+	InputSpeechBubbleWrap,
+	SpeechBubbleTextArea,
+} from '../../components/Bubbles/InputSpeechBubble';
 import { customApiClient } from '../../utils/apiClient';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
 import { PurpleButton } from '../../components/Buttons/PurpleButton';
-
 
 export default function ReportComment() {
 	const navigate = useNavigate();
@@ -63,9 +65,8 @@ export default function ReportComment() {
 	};
 
 	const onClickConfirm = async () => {
-		console.log('click');
 		let body = {};
-		if(extraOpinion) {
+		if (extraOpinion) {
 			body = {
 				category: checkedElement,
 				content: extraOpinion,
@@ -75,19 +76,19 @@ export default function ReportComment() {
 				category: checkedElement,
 			};
 		}
-		
+
 		const data = await customApiClient('post', `/items/${idx}/edit-req`, body);
-		if(!data) return;
+		if (!data) return;
 		console.log(data);
-		if(!data.isSuccess) return;
+		if (!data.isSuccess) return;
 
 		setPopupStatus(true);
-	}
+	};
 
 	const onClickYes = () => {
 		setPopupStatus(false);
 		navigate(-1);
-	}
+	};
 
 	return (
 		<MainContainer>
@@ -195,4 +196,3 @@ export default function ReportComment() {
 		</MainContainer>
 	);
 }
-

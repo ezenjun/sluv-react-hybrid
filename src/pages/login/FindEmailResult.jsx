@@ -28,7 +28,6 @@ export default function FindEmailResult() {
 		const data = await customApiClient('get', url);
 		if (!data) return;
 		if (data.isSuccess) {
-			console.log(maskingFunc.email(data.result.email));
 			setEmailInfo(maskingFunc.email(data.result.email));
 			setIdExist(false);
 		} else {

@@ -20,9 +20,15 @@ export default function Event() {
 			<EventCard onClick={() => onClickCard(1)}>
 				<Top>
 					<DDAY>
-						<SubText fontweight="700" color="#9E30F4">
-							D-{result}
-						</SubText>
+						{result !== 0 ? (
+							<SubText fontweight="700" color="#9E30F4">
+								D-{result}
+							</SubText>
+						) : (
+							<SubText fontweight="700" color="#9E30F4">
+								D-Day
+							</SubText>
+						)}
 					</DDAY>
 				</Top>
 

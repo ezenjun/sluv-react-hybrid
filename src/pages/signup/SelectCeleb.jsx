@@ -49,7 +49,7 @@ export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const [favoriteCelebList ,setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
+	const [favoriteCelebList, setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
 
 	useEffect(() => {
 		// 하단바 사라지기
@@ -88,10 +88,6 @@ export default function SelectCeleb() {
 	}, [totalCelebList]);
 
 	useEffect(() => {
-		console.log(`선택한 셀럽 수 : ${selectedNum}`);
-		console.log(selectedGroups);
-		console.log(selectedCelebIdxArray);
-
 		if (selectedNum < 3) {
 			setIsCelebConfirm(false);
 			return;
@@ -100,7 +96,7 @@ export default function SelectCeleb() {
 	}, [selectedNum]);
 
 	useEffect(() => {
-		if(state === '/settings') {
+		if (state === '/settings') {
 			let tempBadgeNumList = badgeNumList;
 			let cnt = 1;
 			favoriteCelebList.map((favorite, index) => {
@@ -108,10 +104,10 @@ export default function SelectCeleb() {
 					totalCelebList.findIndex(item => item.celebIdx === favorite.celebIdx)
 				] = cnt;
 				cnt++;
-			})
+			});
 			setBadgeNumList(tempBadgeNumList);
 		}
-	},[badgeNumList]);
+	}, [badgeNumList]);
 
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
@@ -120,7 +116,7 @@ export default function SelectCeleb() {
 		if (!data.isSuccess) {
 			console.log(data.message);
 			return;
-		} 
+		}
 		if (state === '/settings') {
 			const favoriteList = localStorage.getItem('favoriteCeleb');
 			let temp = [];
@@ -133,7 +129,7 @@ export default function SelectCeleb() {
 
 			let tempBadgeNumList = badgeNumList;
 			let cnt = 1;
-			
+
 			JSON.parse(favoriteList).map((favorite, index) => {
 				let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
 				onSelectCeleb(favoriteTemp);
@@ -291,7 +287,6 @@ export default function SelectCeleb() {
 		if (listInnerRef.current) {
 			const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
 			if (scrollTop + clientHeight >= scrollHeight) {
-				console.log('reached bottom');
 				setReachedBottom(true);
 			} else {
 				setReachedBottom(false);
@@ -551,7 +546,7 @@ export const RequestButton = styled.div`
 	border-radius: 50%;
 	background-color: #9e30f4;
 	margin: 0;
-	z-index:100000;
+	z-index: 100000;
 `;
 
 export const BottomWrap = styled.div`
