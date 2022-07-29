@@ -11,6 +11,7 @@ import firstimg from '../../assets/Event/0.png';
 import secondimg from '../../assets/Event/1.png';
 import thirdimg from '../../assets/Event/2.png';
 import fourthimg from '../../assets/Event/3.png';
+import { PurpleButton } from '../../components/Buttons/PurpleButton';
 
 export default function EventDetail() {
 	const navigate = useNavigate();
@@ -32,42 +33,20 @@ export default function EventDetail() {
 				</div>
 			</TopNav>
 			<FeedContainer>
-				<img
-					style={{
-						width: '100%',
-						height: '23.4375rem',
-						marginBottom: '8px',
-					}}
-					src={firstimg}
-					alt="first"
-				></img>
-				<img
-					style={{
-						width: '100%',
-						height: '23.4375rem',
-						marginBottom: '8px',
-					}}
-					src={secondimg}
-					alt="first"
-				></img>
-				<img
-					style={{
-						width: '100%',
-						height: '23.4375rem',
-						marginBottom: '8px',
-					}}
-					src={thirdimg}
-					alt="first"
-				></img>
-				<img
-					style={{
-						width: '100%',
-						height: '23.4375rem',
-						marginBottom: '8px',
-					}}
-					src={fourthimg}
-					alt="first"
-				></img>
+				<Image src={firstimg}></Image>
+				<Image src={secondimg}></Image>
+				<Image src={thirdimg}></Image>
+				<Image src={fourthimg}></Image>
+				<div style={{ padding: '0 1.25rem', marginTop: '0.75rem' }}>
+					<a
+						href="https://www.instagram.com/sluv_official/"
+						style={{
+							textDecoration: 'none',
+						}}
+					>
+						<PurpleButton>스럽 인스타그램 바로가기</PurpleButton>
+					</a>
+				</div>
 			</FeedContainer>
 		</MainContainer>
 	);
@@ -83,5 +62,18 @@ const FeedContainer = styled.div`
 	}
 	svg > rect {
 		width: 100%;
+	}
+`;
+const Image = styled.div`
+	width: 100%;
+	background-image: url(${props => props.src});
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50%;
+	margin-bottom: 1.25rem;
+	:after {
+		content: '';
+		display: block;
+		padding-bottom: 100%;
 	}
 `;
