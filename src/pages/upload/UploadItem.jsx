@@ -202,12 +202,12 @@ export default function UploadItem() {
 	]);
 
 	useEffect(() => {
-		imgUrlList.length > 0 && isImgUploadComplete && onPostUpload();
-
-		// if(imgUrlList.length > 0 && isImgUploadComplete) {
-
-		// }
-	}, [isImgUploadComplete, imgUrlList]);
+		console.log('이미지유알엘리스트', imgUrlList);
+		console.log('셀렉티드파일리스트', selectedFileList);
+		if (imgUrlList.length > 0 && imgUrlList.length == selectedFileList.length && isImgUploadComplete) {
+			onPostUpload();
+		}
+	}, [isImgUploadComplete, imgUrlList, selectedFileList]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -324,7 +324,7 @@ export default function UploadItem() {
 		myBucket
 			.putObject(params)
 			.on('httpUploadProgress', evt => {
-				console.log('인덱스!!!', evt);
+				
 			})
 			.on('complete', evt => {
 				let temp = [];
@@ -367,6 +367,7 @@ export default function UploadItem() {
 	};
 
 	const onPostUpload = async () => {
+		
 		let body = {};
 		if (state) {
 			body = {
@@ -399,6 +400,7 @@ export default function UploadItem() {
 				itemImgUrlList: imgUrlList,
 			};
 		}
+		console.log('body체크', body);
 
 		let data = {};
 		if (state) {
