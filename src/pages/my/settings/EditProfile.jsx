@@ -101,7 +101,7 @@ export default function EditProfile() {
 
 	const handleNickname = e => {
 		setNickname(e.target.value);
-		const regex = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/; // 한글 영문 숫자 1글자 이상 regex
+		const regex = /^.{0,15}$/; // 한글 영문 숫자 1글자 이상 regex
 		if (regex.test(e.target.value)) {
 			setNicknameValid(true);
 		} else {
