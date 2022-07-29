@@ -31,7 +31,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import { NoUploadItemWrap } from './MyUploadItems';
-
+import Loading from '../../components/Loading';
 export default function ViewedItems() {
 	const navigate = useNavigate();
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
@@ -198,100 +198,107 @@ export default function ViewedItems() {
 					최근 본 아이템
 				</MainText>
 			</TopNav>
-			<ContentWrap>
-				{itemCount ? (
-					<div>
-						<div
-							style={{
-								margin: '1rem 0 0.8125rem',
-								fontSize: '0.75rem',
-								color: '#8d8d8d',
-							}}
-						>
-							<span style={{ marginRight: '0.25rem' }}>최근 본 아이템</span>
-							<span>{itemCount}</span>
+			{itemList.length <= 0 ? (
+				<div style={{ height: '5rem' }}>
+					<Loading></Loading>
+				</div>
+			) : (
+				<ContentWrap>
+					{itemCount ? (
+						<div>
+							<div
+								style={{
+									margin: '1rem 0 0.8125rem',
+									fontSize: '0.75rem',
+									color: '#8d8d8d',
+								}}
+							>
+								<span style={{ marginRight: '0.25rem' }}>최근 본 아이템</span>
+								<span>{itemCount}</span>
+							</div>
+							<GridItemWrap>
+								{itemList.length > 0 &&
+									itemList.map((item, index) => (
+										<GridItem
+											key={item.itemIdx}
+											onClick={() => onDetailItemClick(item.itemIdx)}
+										>
+											<GridImage src={item.itemImgUrl}>
+												<ImageText>
+													<SubText
+														fontsize="0.8125rem"
+														fontweight="bold"
+														color="white"
+													>
+														{item.name}'s
+													</SubText>
+													{latestIsBinderList[index] === true ? (
+														<BinderRed
+															onClick={e =>
+																onDeleteBinderClick(item.itemIdx, e)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																zIndex: '900',
+															}}
+														/>
+													) : (
+														<BinderWhite
+															onClick={e =>
+																onAddBinderClick(e, item.itemIdx)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+																zIndex: '900',
+															}}
+														/>
+													)}
+												</ImageText>
+											</GridImage>
+											<SubText
+												fontsize="1rem"
+												fontweight="bold"
+												margin="0 0 0.375rem 0 "
+											>
+												{item.brandKr}
+											</SubText>
+											<SubText
+												style={{
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+													width: '100%',
+												}}
+											>
+												{item.itemName}
+											</SubText>
+										</GridItem>
+									))}
+							</GridItemWrap>
 						</div>
-						<GridItemWrap>
-							{itemList.length > 0 &&
-								itemList.map((item, index) => (
-									<GridItem
-										key={item.itemIdx}
-										onClick={() => onDetailItemClick(item.itemIdx)}
-									>
-										<GridImage src={item.itemImgUrl}>
-											<ImageText>
-												<SubText
-													fontsize="0.8125rem"
-													fontweight="bold"
-													color="white"
-												>
-													{item.name}'s
-												</SubText>
-												{latestIsBinderList[index] === true ? (
-													<BinderRed
-														onClick={e =>
-															onDeleteBinderClick(item.itemIdx, e)
-														}
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-															zIndex: '900',
-														}}
-													/>
-												) : (
-													<BinderWhite
-														onClick={e =>
-															onAddBinderClick(e, item.itemIdx)
-														}
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-															zIndex: '900',
-														}}
-													/>
-												)}
-											</ImageText>
-										</GridImage>
-										<SubText
-											fontsize="1rem"
-											fontweight="bold"
-											margin="0 0 0.375rem 0 "
-										>
-											{item.brandKr}
-										</SubText>
-										<SubText
-											style={{
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												overflow: 'hidden',
-												width: '100%',
-											}}
-										>
-											{item.itemName}
-										</SubText>
-									</GridItem>
-								))}
-						</GridItemWrap>
-					</div>
-				) : (
-					<NoUploadItemWrap>
-						<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
-						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
-							최근 본 아이템이 없어요
-						</SubText>
-						<SubText
-							fontsize="0.875rem"
-							fontweight="400"
-							color="#8D8D8D"
-							style={{ textAlign: 'center' }}
-						>
-							좋아하는 셀럽의 아이템 정보를
-							<br />
-							자유롭게 찾아보아요
-						</SubText>
-					</NoUploadItemWrap>
-				)}
-			</ContentWrap>
+					) : (
+						<NoUploadItemWrap>
+							<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
+							<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+								최근 본 아이템이 없어요
+							</SubText>
+							<SubText
+								fontsize="0.875rem"
+								fontweight="400"
+								color="#8D8D8D"
+								style={{ textAlign: 'center' }}
+							>
+								좋아하는 셀럽의 아이템 정보를
+								<br />
+								자유롭게 찾아보아요
+							</SubText>
+						</NoUploadItemWrap>
+					)}
+				</ContentWrap>
+			)}
+
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
 				<RowWrap onClick={() => onCreateBinder(selectedItemIdx)}>
 					<ImageWrap>
