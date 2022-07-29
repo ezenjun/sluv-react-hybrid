@@ -605,67 +605,69 @@ export default function HotItem() {
 					</SubText>
 				</RowWrap>
 				<HorizontalLine></HorizontalLine>
-				{binderList.map(binder => (
-					<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
-						{binder.coverImgUrl ? (
-							<ImageWrap src={binder.coverImgUrl}></ImageWrap>
-						) : (
-							<>
-								{!binder.isBasic ? (
-									<PinkBinder
-										style={{
-											width: '3.75rem',
-											height: '3.75rem',
-											marginRight: '1.25rem',
-											borderRadius: '1rem',
-										}}
-									></PinkBinder>
-								) : (
-									<>
-										{binder.binderIdx % 3 === 0 ? (
-											<YellowBinder
-												style={{
-													width: '3.75rem',
-													height: '3.75rem',
-													marginRight: '1.25rem',
-													borderRadius: '1rem',
-												}}
-											></YellowBinder>
-										) : (
-											<>
-												{binder.binderIdx % 3 === 1 ? (
-													<GreenBinder
-														style={{
-															width: '3.75rem',
-															height: '3.75rem',
-															marginRight: '1.25rem',
-															borderRadius: '1rem',
-														}}
-													></GreenBinder>
-												) : (
-													<BlueBinder
-														style={{
-															width: '3.75rem',
-															height: '3.75rem',
-															marginRight: '1.25rem',
-															borderRadius: '1rem',
-														}}
-													></BlueBinder>
-												)}
-											</>
-										)}
-									</>
-								)}
-							</>
-						)}
-						<SubText fontsize="1rem" margin="0.9375rem 0">
-							{binder.name}
-						</SubText>
-						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
-							&nbsp;({binder.dibCount})
-						</SubText>
-					</RowWrap>
-				))}
+				<BinderOverflow>
+					{binderList.map(binder => (
+						<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
+							{binder.coverImgUrl ? (
+								<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+							) : (
+								<>
+									{!binder.isBasic ? (
+										<PinkBinder
+											style={{
+												width: '3.75rem',
+												height: '3.75rem',
+												marginRight: '1.25rem',
+												borderRadius: '1rem',
+											}}
+										></PinkBinder>
+									) : (
+										<>
+											{binder.binderIdx % 3 === 0 ? (
+												<YellowBinder
+													style={{
+														width: '3.75rem',
+														height: '3.75rem',
+														marginRight: '1.25rem',
+														borderRadius: '1rem',
+													}}
+												></YellowBinder>
+											) : (
+												<>
+													{binder.binderIdx % 3 === 1 ? (
+														<GreenBinder
+															style={{
+																width: '3.75rem',
+																height: '3.75rem',
+																marginRight: '1.25rem',
+																borderRadius: '1rem',
+															}}
+														></GreenBinder>
+													) : (
+														<BlueBinder
+															style={{
+																width: '3.75rem',
+																height: '3.75rem',
+																marginRight: '1.25rem',
+																borderRadius: '1rem',
+															}}
+														></BlueBinder>
+													)}
+												</>
+											)}
+										</>
+									)}
+								</>
+							)}
+							<SubText fontsize="1rem" margin="0.9375rem 0">
+								{binder.name}
+							</SubText>
+							<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+								&nbsp;({binder.dibCount})
+							</SubText>
+						</RowWrap>
+					))}
+				</BinderOverflow>
 			</BottomSlideMenu>
 		</MainContainer>
 	);
@@ -747,5 +749,13 @@ const ItemContainer = styled.div`
 	flex-direction: column;
 	::-webkit-scrollbar {
 		display: none; /* for Chrome, Safari, and Opera */
+	}
+`;
+const BinderOverflow = styled.div`
+	max-height: 24.6875rem;
+	overflow-y: scroll;
+	/* padding-bottom: 1.25rem; */
+	::-webkit-scrollbar {
+		display: none;
 	}
 `;

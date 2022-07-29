@@ -986,70 +986,72 @@ export default function ItemDetail() {
 				<HorizontalLine
 					style={{ marginLeft: '1.25rem', marginRight: '1.25rem' }}
 				></HorizontalLine>
-				{binderList.map(binder => (
-					<RowWrap
-						key={binder.name}
-						onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
-					>
-						{binder.coverImgUrl ? (
-							<ImageWrap src={binder.coverImgUrl}></ImageWrap>
-						) : (
-							<>
-								{!binder.isBasic ? (
-									<PinkBinder
-										style={{
-											width: '3.75rem',
-											height: '3.75rem',
-											marginRight: '1.25rem',
-											borderRadius: '1rem',
-										}}
-									></PinkBinder>
-								) : (
-									<>
-										{binder.binderIdx % 3 === 0 ? (
-											<YellowBinder
-												style={{
-													width: '3.75rem',
-													height: '3.75rem',
-													marginRight: '1.25rem',
-													borderRadius: '1rem',
-												}}
-											></YellowBinder>
-										) : (
-											<>
-												{binder.binderIdx % 3 === 1 ? (
-													<GreenBinder
-														style={{
-															width: '3.75rem',
-															height: '3.75rem',
-															marginRight: '1.25rem',
-															borderRadius: '1rem',
-														}}
-													></GreenBinder>
-												) : (
-													<BlueBinder
-														style={{
-															width: '3.75rem',
-															height: '3.75rem',
-															marginRight: '1.25rem',
-															borderRadius: '1rem',
-														}}
-													></BlueBinder>
-												)}
-											</>
-										)}
-									</>
-								)}
-							</>
-						)}
-						<SubText fontsize="1rem" margin="0.9375rem 0">
-							{binder.name}
-						</SubText>
-						<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
-							&nbsp;({binder.dibCount})
-						</SubText>
-					</RowWrap>
-				))}
+				<BinderOverflow>
+					{binderList.map(binder => (
+						<RowWrap
+							key={binder.name}
+							onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
+						>
+							{binder.coverImgUrl ? (
+								<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+							) : (
+								<>
+									{!binder.isBasic ? (
+										<PinkBinder
+											style={{
+												width: '3.75rem',
+												height: '3.75rem',
+												marginRight: '1.25rem',
+												borderRadius: '1rem',
+											}}
+										></PinkBinder>
+									) : (
+										<>
+											{binder.binderIdx % 3 === 0 ? (
+												<YellowBinder
+													style={{
+														width: '3.75rem',
+														height: '3.75rem',
+														marginRight: '1.25rem',
+														borderRadius: '1rem',
+													}}
+												></YellowBinder>
+											) : (
+												<>
+													{binder.binderIdx % 3 === 1 ? (
+														<GreenBinder
+															style={{
+																width: '3.75rem',
+																height: '3.75rem',
+																marginRight: '1.25rem',
+																borderRadius: '1rem',
+															}}
+														></GreenBinder>
+													) : (
+														<BlueBinder
+															style={{
+																width: '3.75rem',
+																height: '3.75rem',
+																marginRight: '1.25rem',
+																borderRadius: '1rem',
+															}}
+														></BlueBinder>
+													)}
+												</>
+											)}
+										</>
+									)}
+								</>
+							)}
+							<SubText fontsize="1rem" margin="0.9375rem 0">
+								{binder.name}
+							</SubText>
+							<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+								&nbsp;({binder.dibCount})
+							</SubText>
+						</RowWrap>
+					))}
+				</BinderOverflow>
 			</BottomSlideMenu>
 
 			<BottomDialogWrap openStatus={reportDialogStatus}>
@@ -1343,4 +1345,11 @@ const Button = styled.div`
 	font-weight: bold;
 	border-radius: 1.9rem;
 	color: #fff;
+`;
+const BinderOverflow = styled.div`
+	max-height: 24.6875rem;
+	overflow-y: scroll;
+	::-webkit-scrollbar {
+		display: none;
+	}
 `;

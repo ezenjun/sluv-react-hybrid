@@ -75,10 +75,9 @@ export default function Home() {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
 		postFcmToken();
-		
+
 		// 관심셀럽 조회 API 호출
 		getFavoriteCeleb();
-		
 	}, []);
 
 	const postFcmToken = async () => {

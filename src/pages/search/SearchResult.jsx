@@ -38,6 +38,10 @@ import { ReactComponent as FilterBig } from '../../assets/Icons/filterBig.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as Refresh } from '../../assets/Icons/refreshFilter.svg';
+import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg';
+import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
+import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
+import { ReactComponent as BlueBinder } from '../../assets/Binder/BlueBinder.svg';
 import Loading from '../../components/Loading';
 import {
 	BottomDialogDiv,
@@ -794,17 +798,72 @@ export default function SearchResult() {
 						</SubText>
 					</RowWrap>
 					<HorizontalLine></HorizontalLine>
-					{binderList.map(binder => (
-						<RowWrap key={binder.name} onClick={() => onSelectBinder(binder.binderIdx)}>
-							<ImageWrap></ImageWrap>
-							<SubText fontsize="1rem" margin="0.9375rem 0">
-								{binder.name}
-							</SubText>
-							<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
-								&nbsp;({binder.dibCount})
-							</SubText>
-						</RowWrap>
-					))}
+					<BinderOverflow>
+						{binderList.map(binder => (
+							<RowWrap
+								key={binder.name}
+								onClick={() => onSelectBinder(binder.binderIdx, selectedItemIdx)}
+							>
+								{binder.coverImgUrl ? (
+									<ImageWrap src={binder.coverImgUrl}></ImageWrap>
+								) : (
+									<>
+										{!binder.isBasic ? (
+											<PinkBinder
+												style={{
+													width: '3.75rem',
+													height: '3.75rem',
+													marginRight: '1.25rem',
+													borderRadius: '1rem',
+												}}
+											></PinkBinder>
+										) : (
+											<>
+												{binder.binderIdx % 3 === 0 ? (
+													<YellowBinder
+														style={{
+															width: '3.75rem',
+															height: '3.75rem',
+															marginRight: '1.25rem',
+															borderRadius: '1rem',
+														}}
+													></YellowBinder>
+												) : (
+													<>
+														{binder.binderIdx % 3 === 1 ? (
+															<GreenBinder
+																style={{
+																	width: '3.75rem',
+																	height: '3.75rem',
+																	marginRight: '1.25rem',
+																	borderRadius: '1rem',
+																}}
+															></GreenBinder>
+														) : (
+															<BlueBinder
+																style={{
+																	width: '3.75rem',
+																	height: '3.75rem',
+																	marginRight: '1.25rem',
+																	borderRadius: '1rem',
+																}}
+															></BlueBinder>
+														)}
+													</>
+												)}
+											</>
+										)}
+									</>
+								)}
+								<SubText fontsize="1rem" margin="0.9375rem 0">
+									{binder.name}
+								</SubText>
+								<SubText fontweight="normal" fontsize="1rem" color="#8d8d8d">
+									&nbsp;({binder.dibCount})
+								</SubText>
+							</RowWrap>
+						))}
+					</BinderOverflow>
 				</BottomDialogDiv>
 			</BottomDialogWrap>
 		</MainContainer>
@@ -911,4 +970,11 @@ const ImageWrap = styled.div`
 	background-color: #f6f6f6;
 	border-radius: 0.8125rem;
 	margin-right: 1.25rem;
+`;
+const BinderOverflow = styled.div`
+	max-height: 24.6875rem;
+	overflow-y: scroll;
+	::-webkit-scrollbar {
+		display: none;
+	}
 `;
