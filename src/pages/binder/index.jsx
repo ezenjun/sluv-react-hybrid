@@ -41,7 +41,7 @@ import { CoverImage } from './AddBinder';
 
 import AWS from 'aws-sdk';
 import { BINDER_COVER_IMAGE_S3_BUCKET, REGION } from '../../utils/s3Module';
-
+import Loading from '../../components/Loading';
 AWS.config.update({
 	region: REGION,
 	accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -210,12 +210,152 @@ export default function Binder() {
 								바인더 추가
 							</SubText>
 						</BinderTextWrap>
-						<GridItemWrap>
-							{binderList.length > 1 ? ( // 생성 바인더 존재하는 경우
-								<>
-									{binderList.map((item, index) => (
-										<>
-											{item.isBasic === 0 ? ( // 기본 바인더
+						{binderList.length <= 0 ? (
+							<div style={{ height: '5rem' }}>
+								<Loading></Loading>
+							</div>
+						) : (
+							<GridItemWrap>
+								{binderList.length > 1 ? ( // 생성 바인더 존재하는 경우
+									<>
+										{binderList.map((item, index) => (
+											<>
+												{item.isBasic === 0 ? ( // 기본 바인더
+													<GridItem key={item.binderIdx}>
+														{item.dibCount > 0 ? (
+															<BinderImage
+																src={PinkBinder}
+																marginbottom="0.6875rem"
+																onClick={() =>
+																	onEachBinderClick(
+																		item.binderIdx,
+																		item.name
+																	)
+																}
+															></BinderImage>
+														) : (
+															<BinderImage
+																src={BasicCover}
+																marginbottom="0.6875rem"
+																onClick={() =>
+																	onEachBinderClick(
+																		item.binderIdx,
+																		item.name
+																	)
+																}
+															></BinderImage>
+														)}
+
+														<SubText
+															fontsize="1rem"
+															fontweight="bold"
+															margin="0 0 0.25rem 0 "
+														>
+															{item.name}
+														</SubText>
+														<SubText
+															fontsize="0.75rem"
+															fontweight="normal"
+															color="#8d8d8d"
+														>
+															{item.dibCount}개 보관중
+														</SubText>
+													</GridItem>
+												) : (
+													//생성 바인더들
+													<GridItem key={item.binderIdx}>
+														{item.coverImgUrl ? (
+															<BinderImage
+																src={item.coverImgUrl}
+																marginbottom="0.6875rem"
+																onClick={() =>
+																	onEachBinderClick(
+																		item.binderIdx,
+																		item.name
+																	)
+																}
+															></BinderImage>
+														) : (
+															<>
+																{item.binderIdx % 3 === 0 ? (
+																	<BinderImage
+																		src={YellowBinder}
+																		marginbottom="0.6875rem"
+																		onClick={() =>
+																			onEachBinderClick(
+																				item.binderIdx,
+																				item.name
+																			)
+																		}
+																	></BinderImage>
+																) : (
+																	<>
+																		{item.binderIdx % 3 ===
+																		1 ? (
+																			<BinderImage
+																				src={GreenBinder}
+																				marginbottom="0.6875rem"
+																				onClick={() =>
+																					onEachBinderClick(
+																						item.binderIdx,
+																						item.name
+																					)
+																				}
+																			></BinderImage>
+																		) : (
+																			<BinderImage
+																				src={BlueBinder}
+																				marginbottom="0.6875rem"
+																				onClick={() =>
+																					onEachBinderClick(
+																						item.binderIdx,
+																						item.name
+																					)
+																				}
+																			></BinderImage>
+																		)}
+																	</>
+																)}
+															</>
+														)}
+
+														<GridItemInfo>
+															<SubText
+																fontsize="1rem"
+																fontweight="bold"
+																margin="0 0.125rem 0.25rem 0 "
+																style={{ whiteSpace: 'normal' }}
+															>
+																{item.name}
+															</SubText>
+
+															<EditBinder
+																onClick={() =>
+																	onClickThreedot(
+																		item.binderIdx,
+																		item.name,
+																		item.coverImgUrl
+																	)
+																}
+															></EditBinder>
+														</GridItemInfo>
+														<SubText
+															fontsize="0.75rem"
+															fontweight="normal"
+															color="#8d8d8d"
+														>
+															{item.dibCount}개 보관중
+														</SubText>
+													</GridItem>
+												)}
+											</>
+										))}
+									</>
+								) : (
+									// 기본 바인더만 존재할때
+									<>
+										{binderList.map(item => (
+											<>
 												<GridItem key={item.binderIdx}>
 													{item.dibCount > 0 ? (
 														<BinderImage
@@ -240,7 +380,6 @@ export default function Binder() {
 															}
 														></BinderImage>
 													)}
-
 													<SubText
 														fontsize="1rem"
 														fontweight="bold"
@@ -248,181 +387,50 @@ export default function Binder() {
 													>
 														{item.name}
 													</SubText>
-													<SubText
-														fontsize="0.75rem"
-														fontweight="normal"
-														color="#8d8d8d"
-													>
+													<SubText fontsize="0.75rem">
 														{item.dibCount}개 보관중
 													</SubText>
 												</GridItem>
-											) : (
-												//생성 바인더들
-												<GridItem key={item.binderIdx}>
-													{item.coverImgUrl ? (
-														<BinderImage
-															src={item.coverImgUrl}
-															marginbottom="0.6875rem"
-															onClick={() =>
-																onEachBinderClick(
-																	item.binderIdx,
-																	item.name
-																)
-															}
-														></BinderImage>
-													) : (
-														<>
-															{item.binderIdx % 3 === 0 ? (
-																<BinderImage
-																	src={YellowBinder}
-																	marginbottom="0.6875rem"
-																	onClick={() =>
-																		onEachBinderClick(
-																			item.binderIdx,
-																			item.name
-																		)
-																	}
-																></BinderImage>
-															) : (
-																<>
-																	{item.binderIdx % 3 === 1 ? (
-																		<BinderImage
-																			src={GreenBinder}
-																			marginbottom="0.6875rem"
-																			onClick={() =>
-																				onEachBinderClick(
-																					item.binderIdx,
-																					item.name
-																				)
-																			}
-																		></BinderImage>
-																	) : (
-																		<BinderImage
-																			src={BlueBinder}
-																			marginbottom="0.6875rem"
-																			onClick={() =>
-																				onEachBinderClick(
-																					item.binderIdx,
-																					item.name
-																				)
-																			}
-																		></BinderImage>
-																	)}
-																</>
-															)}
-														</>
-													)}
-
-													<GridItemInfo>
-														<SubText
-															fontsize="1rem"
-															fontweight="bold"
-															margin="0 0.125rem 0.25rem 0 "
-															style={{ whiteSpace: 'normal' }}
-														>
-															{item.name}
-														</SubText>
-
-														<EditBinder
-															onClick={() =>
-																onClickThreedot(
-																	item.binderIdx,
-																	item.name,
-																	item.coverImgUrl
-																)
-															}
-														></EditBinder>
-													</GridItemInfo>
-													<SubText
-														fontsize="0.75rem"
-														fontweight="normal"
-														color="#8d8d8d"
-													>
-														{item.dibCount}개 보관중
-													</SubText>
-												</GridItem>
-											)}
-										</>
-									))}
-								</>
-							) : (
-								// 기본 바인더만 존재할때
-								<>
-									{binderList.map(item => (
-										<>
-											<GridItem key={item.binderIdx}>
-												{item.dibCount > 0 ? (
-													<BinderImage
-														src={PinkBinder}
+												<GridItem onClick={onAddBinder}>
+													<AddBinder
+														backgroundColor="#fbf6ff"
 														marginbottom="0.6875rem"
-														onClick={() =>
-															onEachBinderClick(
-																item.binderIdx,
-																item.name
-															)
-														}
-													></BinderImage>
-												) : (
-													<BinderImage
-														src={BasicCover}
-														marginbottom="0.6875rem"
-														onClick={() =>
-															onEachBinderClick(
-																item.binderIdx,
-																item.name
-															)
-														}
-													></BinderImage>
-												)}
-												<SubText
-													fontsize="1rem"
-													fontweight="bold"
-													margin="0 0 0.25rem 0 "
-												>
-													{item.name}
-												</SubText>
-												<SubText fontsize="0.75rem">
-													{item.dibCount}개 보관중
-												</SubText>
-											</GridItem>
-											<GridItem onClick={onAddBinder}>
-												<AddBinder
-													backgroundColor="#fbf6ff"
-													marginbottom="0.6875rem"
-												>
-													<div
-														style={{
-															display: 'flex',
-															width: '100%',
-															flexDirection: 'column',
-															justifyContent: 'center',
-															alignItems: 'center',
-															textAlign: 'center',
-														}}
 													>
-														<AddBinderButton
+														<div
 															style={{
-																width: '1.875rem',
-																height: '1.875rem',
+																display: 'flex',
+																width: '100%',
+																flexDirection: 'column',
+																justifyContent: 'center',
+																alignItems: 'center',
+																textAlign: 'center',
 															}}
-														></AddBinderButton>
-														<SubText
-															fontsize="0.8125rem"
-															margin="0.375rem 0 0.25rem 0"
 														>
-															나만의 바인더를
-														</SubText>
-														<SubText fontsize="0.8125rem">
-															만들어봐요!
-														</SubText>
-													</div>
-												</AddBinder>
-											</GridItem>
-										</>
-									))}
-								</>
-							)}
-						</GridItemWrap>
+															<AddBinderButton
+																style={{
+																	width: '1.875rem',
+																	height: '1.875rem',
+																}}
+															></AddBinderButton>
+															<SubText
+																fontsize="0.8125rem"
+																margin="0.375rem 0 0.25rem 0"
+															>
+																나만의 바인더를
+															</SubText>
+															<SubText fontsize="0.8125rem">
+																만들어봐요!
+															</SubText>
+														</div>
+													</AddBinder>
+												</GridItem>
+											</>
+										))}
+									</>
+								)}
+							</GridItemWrap>
+						)}
+
 						<BottomSlideMenu>
 							<SubText
 								fontsize="1rem"

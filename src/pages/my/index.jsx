@@ -234,11 +234,11 @@ export default function My() {
 
 	return (
 		<MainContainer>
-			{isAuthUser === -1 && (
+			{/* {isAuthUser === -1 && (
 				<div style={{ height: '5rem' }}>
 					<Loading></Loading>
 				</div>
-			)}
+			)} */}
 			<TopNav>
 				{isAuthUser === 1 && (
 					<>
@@ -266,116 +266,130 @@ export default function My() {
 					</>
 				)}
 			</TopNav>
+			{userInfo ? (
+				<ContentWrap padding="0">
+					<ProfileWrap>
+						<ProfileContentsWrap>
+							{userInfo.profileImgUrl ? (
+								<ProfileImg
+									className="userProfileImg"
+									src={userInfo.profileImgUrl}
+								/>
+							) : (
+								<UserBasicProfileImg className="userProfileImg" />
+							)}
 
-			<ContentWrap padding="0">
-				<ProfileWrap>
-					<ProfileContentsWrap>
-						{userInfo.profileImgUrl ? (
-							<ProfileImg className="userProfileImg" src={userInfo.profileImgUrl} />
-						) : (
-							<UserBasicProfileImg className="userProfileImg" />
-						)}
-
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<span className="userNickname">{userInfo.nickName}</span>
-							<span className="userId">{userInfo.id}</span>
-						</div>
-						<div
-							style={{
-								display: 'flex',
-								alignItems: 'center',
-								marginTop: '0.5rem',
-								justifyContent: 'center',
-							}}
-						>
-							<span onClick={() => navigate(`/users/${userInfo.userIdx}/followings`)}>
-								<span className="followTitle">팔로잉</span>
-								<span className="followNum">{userInfo.followingCnt}</span>
-							</span>
 							<div
 								style={{
-									borderLeft: '1px solid #d9d9d9',
-									height: '0.75rem',
-									margin: '0 0.5rem',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
 								}}
-							></div>
-							<span onClick={() => navigate(`/users/${userInfo.userIdx}/followers`)}>
-								<span className="followTitle">팔로워</span>
-								<span className="followNum">{userInfo.followerCnt}</span>
-							</span>
-						</div>
-						<div className="celebWrap">
-							{celebList.slice(0, 3).map((celeb, index) => (
-								<Chip key={index}>{celeb.celebName}</Chip>
-							))}
-							{celebList.length > 3 && (
-								<div>
-									{isCelebOpen ? (
-										<IconArrowUp
-											onClick={() => setIsCelebOpen(!isCelebOpen)}
-											style={{ width: '1.75rem', height: '1.75rem' }}
-										/>
-									) : (
-										<IconArrowDown
-											onClick={() => setIsCelebOpen(!isCelebOpen)}
-											style={{ width: '1.75rem', height: '1.75rem' }}
-										/>
-									)}
-								</div>
-							)}
-						</div>
-						<CelebFadeDiv openStatus={isCelebOpen}>
-							{celebList.slice(3).map((celeb, index) => (
-								<Chip key={index}>{celeb.celebName}</Chip>
-							))}
-						</CelebFadeDiv>
-
-						{isAuthUser === 0 && (
-							<>
-								{followStatus ? (
-									<FollowButton
-										onClick={e => onUnFollow(e, userInfo.userIdx)}
-										follow={followStatus}
-									>
-										팔로잉
-									</FollowButton>
-								) : (
-									<FollowButton
-										onClick={e => onFollow(e, userInfo.userIdx)}
-										follow={followStatus}
-									>
-										팔로우
-									</FollowButton>
+							>
+								<span className="userNickname">{userInfo.nickName}</span>
+								<span className="userId">{userInfo.id}</span>
+							</div>
+							<div
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									marginTop: '0.5rem',
+									justifyContent: 'center',
+								}}
+							>
+								<span
+									onClick={() =>
+										navigate(`/users/${userInfo.userIdx}/followings`)
+									}
+								>
+									<span className="followTitle">팔로잉</span>
+									<span className="followNum">{userInfo.followingCnt}</span>
+								</span>
+								<div
+									style={{
+										borderLeft: '1px solid #d9d9d9',
+										height: '0.75rem',
+										margin: '0 0.5rem',
+									}}
+								></div>
+								<span
+									onClick={() => navigate(`/users/${userInfo.userIdx}/followers`)}
+								>
+									<span className="followTitle">팔로워</span>
+									<span className="followNum">{userInfo.followerCnt}</span>
+								</span>
+							</div>
+							<div className="celebWrap">
+								{celebList.slice(0, 3).map((celeb, index) => (
+									<Chip key={index}>{celeb.celebName}</Chip>
+								))}
+								{celebList.length > 3 && (
+									<div>
+										{isCelebOpen ? (
+											<IconArrowUp
+												onClick={() => setIsCelebOpen(!isCelebOpen)}
+												style={{ width: '1.75rem', height: '1.75rem' }}
+											/>
+										) : (
+											<IconArrowDown
+												onClick={() => setIsCelebOpen(!isCelebOpen)}
+												style={{ width: '1.75rem', height: '1.75rem' }}
+											/>
+										)}
+									</div>
 								)}
-							</>
-						)}
-					</ProfileContentsWrap>
-				</ProfileWrap>
+							</div>
+							<CelebFadeDiv openStatus={isCelebOpen}>
+								{celebList.slice(3).map((celeb, index) => (
+									<Chip key={index}>{celeb.celebName}</Chip>
+								))}
+							</CelebFadeDiv>
 
-				{isAuthUser === 1 && (
-					<MyPageContainer
-						uploadInfo={uploadInfo}
-						getSelectedItemIdx={getSelectedItemIdx}
-						myUploadIsDibList={myUploadIsDibList}
-						getMyUpLoadDibList={getMyUpLoadDibList}
-						// myUploadIsDibList={myUploadIsDibList}
-					/>
-				)}
-				{isAuthUser === 0 && (
-					<ProfileContainer
-						uploadInfo={uploadInfo}
-						getSelectedItemIdx={getSelectedItemIdx}
-						myUploadIsDibList={myUploadIsDibList}
-						getMyUpLoadDibList={getMyUpLoadDibList}
-					/>
-				)}
-			</ContentWrap>
+							{isAuthUser === 0 && (
+								<>
+									{followStatus ? (
+										<FollowButton
+											onClick={e => onUnFollow(e, userInfo.userIdx)}
+											follow={followStatus}
+										>
+											팔로잉
+										</FollowButton>
+									) : (
+										<FollowButton
+											onClick={e => onFollow(e, userInfo.userIdx)}
+											follow={followStatus}
+										>
+											팔로우
+										</FollowButton>
+									)}
+								</>
+							)}
+						</ProfileContentsWrap>
+					</ProfileWrap>
+
+					{isAuthUser === 1 && (
+						<MyPageContainer
+							uploadInfo={uploadInfo}
+							getSelectedItemIdx={getSelectedItemIdx}
+							myUploadIsDibList={myUploadIsDibList}
+							getMyUpLoadDibList={getMyUpLoadDibList}
+							// myUploadIsDibList={myUploadIsDibList}
+						/>
+					)}
+					{isAuthUser === 0 && (
+						<ProfileContainer
+							uploadInfo={uploadInfo}
+							getSelectedItemIdx={getSelectedItemIdx}
+							myUploadIsDibList={myUploadIsDibList}
+							getMyUpLoadDibList={getMyUpLoadDibList}
+						/>
+					)}
+				</ContentWrap>
+			) : (
+				<div style={{ height: '5rem' }}>
+					<Loading></Loading>
+				</div>
+			)}
 
 			{/* 아이템 바인더 추가용 bottomslideMenu */}
 			<BottomSlideMenu>

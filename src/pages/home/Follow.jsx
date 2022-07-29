@@ -168,6 +168,7 @@ export default function Follow() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
+			setLoading(false);
 			return;
 		}
 		let temp = data.result;
