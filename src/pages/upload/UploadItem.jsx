@@ -176,15 +176,6 @@ export default function UploadItem() {
 	}, []);
 
 	useEffect(() => {
-		// console.log('상위 카테고리 : ', selectedItemMainFilter);
-		// console.log('하위 카테고리 : ', selectedItemSubFilter);
-		// console.log('브랜드', brandObj.brandIdx);
-		// console.log('제품명', productName);
-		// console.log('날짜', date);
-		// console.log('장소', place);
-		// console.log('가격', selectedPriceMainFilterIdx);
-		// console.log('이미지미리보기리스트', previewImgUrlList);
-
 		if (
 			selectedItemMainFilter &&
 			selectedItemSubFilter &&
@@ -212,6 +203,10 @@ export default function UploadItem() {
 
 	useEffect(() => {
 		imgUrlList.length > 0 && isImgUploadComplete && onPostUpload();
+
+		// if(imgUrlList.length > 0 && isImgUploadComplete) {
+
+		// }
 	}, [isImgUploadComplete, imgUrlList]);
 
 	const onClickItemCategorySelect = () => {
@@ -354,6 +349,7 @@ export default function UploadItem() {
 				setImgUrlList(temp);
 
 				if (index === length) {
+					console.log('체크체크')
 					setIsImgUploadComplete(true);
 				}
 			})
