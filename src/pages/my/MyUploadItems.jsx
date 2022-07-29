@@ -30,7 +30,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
-
+import Loading from '../../components/Loading';
 export default function MyUploadItems() {
 	const navigate = useNavigate();
 	const setToastMessageBottomPosition = useSetRecoilState(ToastMessageBottomPositionState);
@@ -179,99 +179,108 @@ export default function MyUploadItems() {
 					나의 아이템 업로드
 				</MainText>
 			</TopNav>
-			<ContentWrap>
-				{state.uploadCnt ? (
-					<div>
-						<div
-							style={{
-								margin: '1rem 0 0.8125rem',
-								fontSize: '0.75rem',
-								color: '#8d8d8d',
-							}}
-						>
-							<span style={{ marginRight: '0.25rem' }}>전체</span>
-							<span>{state.uploadCnt}</span>
+			{state.uploadItemList.length <= 0 ? (
+				<div style={{ height: '5rem' }}>
+					<Loading></Loading>
+				</div>
+			) : (
+				<ContentWrap>
+					{state.uploadCnt ? (
+						<div>
+							<div
+								style={{
+									margin: '1rem 0 0.8125rem',
+									fontSize: '0.75rem',
+									color: '#8d8d8d',
+								}}
+							>
+								<span style={{ marginRight: '0.25rem' }}>전체</span>
+								<span>{state.uploadCnt}</span>
+							</div>
+							<GridItemWrap>
+								{state.uploadItemList.length > 0 &&
+									state.uploadItemList.map((item, index) => (
+										<GridItem
+											key={item.itemIdx}
+											onClick={() => onDetailItemClick(item.itemIdx)}
+										>
+											<GridImage src={item.itemImgUrl}>
+												<ImageText>
+													<SubText
+														fontsize="0.8125rem"
+														fontweight="bold"
+														color="white"
+													>
+														{item.name}'s
+													</SubText>
+													{myUploadIsDibList[index] === true ? (
+														<BinderRed
+															onClick={e =>
+																onDeleteBinderClick(e, item.itemIdx)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+															}}
+														/>
+													) : (
+														<BinderWhite
+															onClick={e =>
+																onAddBinderClick(e, item.itemIdx)
+															}
+															style={{
+																width: '1.5rem',
+																height: '1.5rem',
+															}}
+														/>
+													)}
+												</ImageText>
+											</GridImage>
+											<SubText
+												fontsize="1rem"
+												fontweight="bold"
+												margin="0 0 0.375rem 0 "
+											>
+												{item.brandKr}
+											</SubText>
+											<SubText
+												style={{
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													overflow: 'hidden',
+													width: '100%',
+												}}
+											>
+												{item.itemName}
+											</SubText>
+										</GridItem>
+									))}
+							</GridItemWrap>
 						</div>
-						<GridItemWrap>
-							{state.uploadItemList.length > 0 &&
-								state.uploadItemList.map((item, index) => (
-									<GridItem
-										key={item.itemIdx}
-										onClick={() => onDetailItemClick(item.itemIdx)}
-									>
-										<GridImage src={item.itemImgUrl}>
-											<ImageText>
-												<SubText
-													fontsize="0.8125rem"
-													fontweight="bold"
-													color="white"
-												>
-													{item.name}'s
-												</SubText>
-												{myUploadIsDibList[index] === true ? (
-													<BinderRed
-														onClick={e =>
-															onDeleteBinderClick(e, item.itemIdx)
-														}
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												) : (
-													<BinderWhite
-														onClick={e =>
-															onAddBinderClick(e, item.itemIdx)
-														}
-														style={{
-															width: '1.5rem',
-															height: '1.5rem',
-														}}
-													/>
-												)}
-											</ImageText>
-										</GridImage>
-										<SubText
-											fontsize="1rem"
-											fontweight="bold"
-											margin="0 0 0.375rem 0 "
-										>
-											{item.brandKr}
-										</SubText>
-										<SubText
-											style={{
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap',
-												overflow: 'hidden',
-												width: '100%',
-											}}
-										>
-											{item.itemName}
-										</SubText>
-									</GridItem>
-								))}
-						</GridItemWrap>
-					</div>
-				) : (
-					<NoUploadItemWrap>
-						<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
-						<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
-							업로드한 아이템이 없어요
-						</SubText>
-						<SubText
-							fontsize="0.875rem"
-							fontweight="400"
-							color="#8D8D8D"
-							style={{ textAlign: 'center' }}
-						>
-							좋아하는 셀럽의 아이템 정보를
-							<br />
-							업로드하고 공유해보아요
-						</SubText>
-						<Chip onClick={() => navigate('/upload/item')}>아이템 업로드 하러가기</Chip>
-					</NoUploadItemWrap>
-				)}
-			</ContentWrap>
+					) : (
+						<NoUploadItemWrap>
+							<NoUploadItemIcon style={{ width: '3.75rem', height: '3.75rem' }} />
+							<SubText fontsize="1rem" fontweight="bold" margin="1rem 0 0.4375rem 0">
+								업로드한 아이템이 없어요
+							</SubText>
+							<SubText
+								fontsize="0.875rem"
+								fontweight="400"
+								color="#8D8D8D"
+								style={{ textAlign: 'center' }}
+							>
+								좋아하는 셀럽의 아이템 정보를
+								<br />
+								업로드하고 공유해보아요
+							</SubText>
+							<Chip onClick={() => navigate('/upload/item')}>
+								아이템 업로드 하러가기
+							</Chip>
+						</NoUploadItemWrap>
+					)}
+				</ContentWrap>
+			)}
+
 			<BottomSlideMenu open={openState} getOpenStatus={getOpenStatus}>
 				<RowWrap
 					style={{ marginBottom: '0' }}
