@@ -25,6 +25,7 @@ import { GridImage } from '../../components/GridItems/GridImage';
 import { ImageText } from '../../components/ImageText';
 
 import { BottomSlideMenu } from '../../components/containers/BottomSlideMenu';
+import { ReactComponent as BasicProfile } from '../../assets/Icons/user_basic_profile_img.svg';
 import { ReactComponent as PinkBinder } from '../../assets/Binder/PinkBinder.svg';
 import { ReactComponent as YellowBinder } from '../../assets/Binder/YellowBinder.svg';
 import { ReactComponent as GreenBinder } from '../../assets/Binder/GreenBinder.svg';
@@ -277,7 +278,7 @@ export default function CelebDetail() {
 	const getTotalLatestList = async () => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?celebIdx=${celebIdx}&order=latest&page=1&pageSize=6`
+			`/homes/items?celebIdx=${celebIdx}&order=latest&page=1&pageSize=30`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -303,7 +304,7 @@ export default function CelebDetail() {
 	const getTotalHotList = async () => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?celebIdx=${celebIdx}&order=hot&page=1&pageSize=6`
+			`/homes/items?celebIdx=${celebIdx}&order=hot&page=1&pageSize=30`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -329,7 +330,7 @@ export default function CelebDetail() {
 	const getEachMemberLatestList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${memberidx}&order=latest&page=1&pageSize=6`
+			`/homes/items?memberIdx=${memberidx}&order=latest&page=1&pageSize=30`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -359,7 +360,7 @@ export default function CelebDetail() {
 	const getEachMemberHotList = async (idx, memberidx) => {
 		const data = await customApiClient(
 			'get',
-			`/homes/items?memberIdx=${memberidx}&order=hot&page=1&pageSize=6`
+			`/homes/items?memberIdx=${memberidx}&order=hot&page=1&pageSize=30`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -590,9 +591,21 @@ export default function CelebDetail() {
 																	</SubText>
 																</ItemTextWrap>
 																<SubInfoWrap>
-																	<ProfileImg
-																		src={item.profileImgUrl}
-																	></ProfileImg>
+																	{item.profileImgUrl ? (
+																		<ProfileImg
+																			src={item.profileImgUrl}
+																		></ProfileImg>
+																	) : (
+																		<BasicProfile
+																			style={{
+																				width: '1.375rem',
+																				height: '1.375rem',
+																				marginRight:
+																					'0.5rem',
+																			}}
+																		></BasicProfile>
+																	)}
+
 																	<SubText margin="0 ">
 																		{' '}
 																		{item.publisher}

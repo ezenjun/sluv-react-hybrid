@@ -1132,12 +1132,12 @@ export default function ItemDetail() {
 	);
 }
 const Image = styled.div`
-	background-color: pink;
 	width: 23.4375rem;
 	height: 23.4375rem;
 	background-image: url(${props => props.src});
 	background-size: cover;
 	background-position: 50%;
+	background-color: lightgray;
 	/* background-image: url(${props => props.src}); */
 `;
 const ImageContainer = styled.div`

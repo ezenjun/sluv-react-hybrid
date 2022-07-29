@@ -6,7 +6,7 @@ export const GridImage = styled.div`
 	align-items: flex-end;
 	width: 100%;
 	border-radius: 1rem;
-	/* background-color: ${props => props.backgroundColor || '#f6f6f6'}; */
+	background-color: lightgrey;
 	background-image: linear-gradient(
 			to top,
 			#000 0%,
@@ -26,20 +26,5 @@ export const GridImage = styled.div`
 		content: '';
 		display: block;
 		padding-bottom: 100%;
-	}
-
-	@keyframes loadingAnimation {
-		//배경색 위치 이동하는 애니메이션
-		0% {
-			background-position: -20rem 0;
-		}
-		100% {
-			background-position: 20rem 0;
-		}
-	}
-	:empty {
-		background: linear-gradient(to right, #eeeeee 10%, #dddddd 28%, #eeeeee 53%);
-		background-size: 100%;
-		animation: 2s loadingAnimation forwards infinite linear; //애니메이션 적용
 	}
 `;
