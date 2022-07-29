@@ -92,10 +92,6 @@ export default function EditBinder() {
 		}
 	};
 	const editBinderApi = async (idx, editedimgUrl) => {
-		console.log('patch API 호출 전 마지막 기존 바인더 이름 확인' + binderName);
-		console.log('patch API 호출 전 마지막 변경 바인더 이름 확인' + tmpBinderName);
-		console.log('patch API 호출 전 마지막 기존 사진' + binderImgUrl);
-		console.log('patch API 호출 전 마지막 바뀐 사진' + editedimgUrl);
 		let body = {};
 		if (selectedFile) {
 			// 사진을 다른 사진으로 변경한 경우
@@ -145,9 +141,7 @@ export default function EditBinder() {
 				}
 			}
 		}
-		console.log(idx);
 		const data = await customApiClient('patch', `/binders/${idx}`, body);
-		console.log(data);
 
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -257,7 +251,11 @@ export default function EditBinder() {
 								? '#262626'
 								: '#b1b1b1',
 					}}
-					onClick={() => nameValid && (binderNameChanged || binderImgUrlChanged) && onEditBinderFinish(binderIdx)}
+					onClick={() =>
+						nameValid &&
+						(binderNameChanged || binderImgUrlChanged) &&
+						onEditBinderFinish(binderIdx)
+					}
 				>
 					완료
 				</div>

@@ -41,8 +41,6 @@ import {
 } from '../../recoil/ToastMessage';
 
 export default function HotItem() {
-	let { celebIdx } = useParams();
-	let location = useLocation();
 	const navigate = useNavigate();
 	const [latestList, setLatestList] = useState([]);
 	const [hotList, setHotList] = useState([]);
@@ -54,7 +52,6 @@ export default function HotItem() {
 
 	const onDetailItemClick = itemIdx => {
 		navigate(`/item/detail/${itemIdx}`);
-		// window.location.reload();
 	};
 	// 최신순/ 인기순
 
@@ -97,7 +94,6 @@ export default function HotItem() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -115,8 +111,6 @@ export default function HotItem() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -124,8 +118,6 @@ export default function HotItem() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -157,7 +149,6 @@ export default function HotItem() {
 				if (latestList[i].itemIdx === selectedItemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
@@ -192,15 +183,12 @@ export default function HotItem() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			if (latestList[i]) {
 				if (latestList[i].itemIdx === itemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
@@ -214,7 +202,6 @@ export default function HotItem() {
 				}
 			}
 		}
-		console.log('tempHot', tempHot);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
@@ -237,7 +224,6 @@ export default function HotItem() {
 		}
 		setLatestList(data.result);
 		setCurrentList(data.result);
-		console.log('latest result: ', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -256,7 +242,6 @@ export default function HotItem() {
 			return;
 		}
 		setHotList(data.result);
-		console.log('hot result: ', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {

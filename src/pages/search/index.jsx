@@ -67,7 +67,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getLatestViewList', data.result.recentItemList);
 		setLatestViewList(data.result.recentItemList.slice(0, 10));
 		var tmp = [];
 		for (var i = 0; i < data.result.recentItemList.length; i++) {
@@ -92,7 +91,6 @@ export default function Search() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const onCreateBinder = itemIdx => {
 		navigate('/binder/add', {
@@ -102,11 +100,9 @@ export default function Search() {
 	};
 	//바인더에 추가
 	const onSelectBinder = (binderIdx, itemIdx) => {
-		console.log('셀렉트 바인더', itemIdx);
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				if (itemIdx === selectedItemIdx) {
-					console.log('해당 아이템');
 					addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
 				}
 			}
@@ -160,7 +156,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
 		var tmp = viewIsDibList;
 		for (var i = 0; i < viewIsDibList.length; i++) {
 			if (latestViewList[i]) {
@@ -200,11 +195,9 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getHotSearchList', data.result);
 		setHotSearchList(data.result);
 		let standarddate = data.result[0].standard;
 		standarddate = standarddate.replaceAll('-', '.');
-		console.log('date changed to ', standarddate);
 		setRankDate(standarddate);
 	};
 
@@ -217,7 +210,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getHotKeywordList', data.result);
 		setHotKeywordList(data.result);
 	};
 
@@ -230,7 +222,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getRecentSearchList', data.result);
 		setRecentSearchList(data.result);
 	};
 	const onDeleteAll = () => {
@@ -243,7 +234,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getRecentSearchList', data.result);
 		setRecentSearchList([]);
 	};
 	const onDeleteEach = (searchidx, idx) => {
@@ -260,7 +250,6 @@ export default function Search() {
 			console.log(data.message);
 			return;
 		}
-		console.log('getRecentSearchList', data.result);
 	};
 
 	const onHandleChangeSearch = e => {
@@ -277,7 +266,6 @@ export default function Search() {
 	};
 
 	const onClickKeyword = searchInput => {
-		console.log('searchInput', searchInput);
 		navigate(`/search/result`, { state: { searchInput } });
 	};
 

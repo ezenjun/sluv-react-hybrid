@@ -100,7 +100,6 @@ export default function AddBinder() {
 		if (regex.test(e.target.value)) {
 			setBinderName(e.target.value);
 			setIsConfirm(true);
-			console.log(binderName);
 		} else {
 			setIsConfirm(false);
 		}
@@ -138,7 +137,6 @@ export default function AddBinder() {
 
 	const onPostBinder = async () => {
 		let body = {};
-		console.log('커버url', coverImgUrl);
 		if (coverImgUrl) {
 			body = {
 				isBasic: 1,
@@ -156,7 +154,6 @@ export default function AddBinder() {
 		if (!data.isSuccess) {
 			console.log(data.message);
 			if (data.code === 3080) {
-				console.log('3080', data.message);
 				setToastMessageBottomPosition('3.75rem');
 				setToastMessageWrapStatus(true);
 				setToastMessageStatus(true);
@@ -175,7 +172,6 @@ export default function AddBinder() {
 			if (location.state) {
 				// 바인더 생성 후 아이템 저장
 				if (location.state.fromBinderIdx) {
-					console.log('바인더 옮겨');
 					const body = { itemIdxList: location.state.selectedList };
 					const data = await customApiClient(
 						'patch',
@@ -184,8 +180,17 @@ export default function AddBinder() {
 					);
 					if (!data) return;
 					if (!data.isSuccess) {
-						console.log(data.message);
-						console.log(data.code);
+						setBottomMenuStatusState(false);
+						setToastMessageBottomPosition('5rem');
+						setToastMessageWrapStatus(true);
+						setToastMessageStatus(true);
+						setToastMessage(`오류가 발생했어요. 다시한번 시도해주세요`);
+						setTimeout(() => {
+							setToastMessageStatus(false);
+						}, 2000);
+						setTimeout(() => {
+							setToastMessageWrapStatus(false);
+						}, 2300);
 						return;
 					} else {
 						setBottomMenuStatusState(false);
@@ -211,7 +216,6 @@ export default function AddBinder() {
 					const data = await customApiClient('post', Uri, body);
 					if (!data) return;
 					if (!data.isSuccess) {
-						console.log(data.message);
 						return;
 					}
 					setBottomMenuStatusState(false);
@@ -226,7 +230,6 @@ export default function AddBinder() {
 						setToastMessageWrapStatus(false);
 					}, 2300);
 					navigate(-1);
-					console.log('홈에서 바인더 생성 후 아이템 추가');
 				}
 			} else {
 				navigate('/binder');

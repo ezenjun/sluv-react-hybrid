@@ -67,10 +67,6 @@ export default function Home() {
 	const onClickTab = (idx, name) => {
 		setSelectedTab(idx);
 	};
-	const toggleTab = idx => {
-		setTabIndex(idx);
-		console.log(tabIndex);
-	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
@@ -161,7 +157,6 @@ export default function Home() {
 			console.log(data.message);
 			return;
 		}
-		console.log('ggetFavoriteCeleb', data.result);
 		setFavoriteCelebList(data.result);
 		localStorage.setItem('favoriteCeleb', JSON.stringify(data.result));
 	};

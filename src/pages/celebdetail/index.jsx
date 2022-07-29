@@ -97,9 +97,7 @@ export default function CelebDetail() {
 		setSelectedChip(idx);
 		if (!latestList[idx]) {
 			getEachMemberLatestList(idx, memberIdx);
-			console.log('filter 1, latest', latestList);
 		} else {
-			console.log('latestList[idx] 존재');
 			if (selectedFilter === 1) {
 				setCurrentList(latestList[idx]);
 			} else {
@@ -108,9 +106,7 @@ export default function CelebDetail() {
 		}
 		if (!hotList[idx]) {
 			getEachMemberHotList(idx, memberIdx);
-			console.log('filter 2, hot', hotList);
 		} else {
-			console.log('hotList[idx] 존재');
 			if (selectedFilter === 1) {
 				setCurrentList(latestList[idx]);
 			} else {
@@ -136,7 +132,6 @@ export default function CelebDetail() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -154,8 +149,6 @@ export default function CelebDetail() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -163,8 +156,6 @@ export default function CelebDetail() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -181,7 +172,6 @@ export default function CelebDetail() {
 			itemIdx: itemIdx,
 			binderIdx: binderIdx,
 		};
-		console.log(body);
 		const Uri = '/dibs';
 		const data = await customApiClient('post', Uri, body);
 		if (!data) return;
@@ -197,7 +187,6 @@ export default function CelebDetail() {
 					if (latestList[i][j].itemIdx === selectedItemIdx) {
 						tempLatest[i][j] = !tempLatest[i][j];
 						setLatestIsBinderList([...tempLatest]);
-						console.log('clicked');
 					}
 				}
 			}
@@ -235,8 +224,6 @@ export default function CelebDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			for (var j = 0; j < latestIsBinderList[i].length; j++) {
@@ -244,12 +231,10 @@ export default function CelebDetail() {
 					if (latestList[i][j].itemIdx === itemIdx) {
 						tempLatest[i][j] = !tempLatest[i][j];
 						setLatestIsBinderList([...tempLatest]);
-						console.log('clicked');
 					}
 				}
 			}
 		}
-		console.log('tempLatest', tempLatest);
 		let tempHot = hotIsBinderList;
 		for (var k = 0; k < hotIsBinderList.length; k++) {
 			for (var l = 0; l < hotIsBinderList[k].length; l++) {
@@ -261,7 +246,6 @@ export default function CelebDetail() {
 				}
 			}
 		}
-		console.log('tempHot', tempHot);
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
 		setToastMessageStatus(true);
@@ -288,7 +272,6 @@ export default function CelebDetail() {
 		}
 		setLatestList([...latestList, data.result]);
 		setCurrentList(data.result);
-		console.log('latest result: ', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -313,7 +296,6 @@ export default function CelebDetail() {
 			return;
 		}
 		setHotList([...hotList, data.result]);
-		console.log('hot result: ', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -341,7 +323,6 @@ export default function CelebDetail() {
 		let temp = latestList;
 		temp[idx] = data.result;
 		setLatestList([...temp]);
-		console.log('latest each result: ', data.result);
 		if (selectedFilter === 1) {
 			setCurrentList(data.result);
 		}
@@ -371,8 +352,6 @@ export default function CelebDetail() {
 		let temp = hotList;
 		temp[idx] = data.result;
 		setHotList([...temp]);
-		// setHotList([...hotList, data.result]);
-		console.log('hot each result: ', data.result);
 		if (selectedFilter === 2) {
 			setCurrentList(data.result);
 		}
@@ -388,7 +367,6 @@ export default function CelebDetail() {
 		binderList[idx] = tmp;
 		setHotIsBinderList([...binderList]);
 	};
-	console.log('location.state', location.state);
 
 	return (
 		<MainContainer padding="0">

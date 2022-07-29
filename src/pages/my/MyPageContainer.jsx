@@ -69,7 +69,6 @@ export default function MyPageContainer({
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
 		var tmp = myUploadIsDibList;
 		for (var i = 0; i < myUploadIsDibList.length; i++) {
 			if (uploadInfo.uploadItemList[i]) {

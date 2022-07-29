@@ -89,20 +89,7 @@ export default function Binder() {
 		// 하단바 띄워주기
 		getBinderList();
 		setBottomNavStatus(true);
-		console.log(binderList);
 	}, []);
-
-	// useEffect(() => {
-	// 	if (
-	// 		binderName &&
-	// 		editedCoverImgUrl &&
-	// 		isConfirm &&
-	// 		checkBinderNameChange &&
-	// 		isUploadSuccess
-	// 	) {
-	// 		editBinderApi(editBinderIdx);
-	// 	}
-	// }, [binderName, editedCoverImgUrl, isConfirm, isUploadSuccess]);
 
 	// Function
 	const onAddBinder = () => {

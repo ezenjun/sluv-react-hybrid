@@ -53,7 +53,6 @@ export default function ProfileContainer({
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
 		var tmp = myUploadIsDibList;
 		for (var i = 0; i < myUploadIsDibList.length; i++) {
 			if (uploadInfo.uploadItemList[i]) {
@@ -75,7 +74,7 @@ export default function ProfileContainer({
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	}
-	console.log(uploadInfo);
+	// console.log(uploadInfo);
 	return (
 		<ProfileContainerWrap>
 			{uploadInfo.uploadCnt > 0 && (

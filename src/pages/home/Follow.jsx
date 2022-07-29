@@ -41,7 +41,6 @@ export default function Follow() {
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
 	const onClickUserProfile = idx => {
-		console.log('유저 클리리리리');
 		navigate(`/users/${idx}`);
 	};
 	const onDetailItemClick = itemIdx => {
@@ -57,7 +56,6 @@ export default function Follow() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -73,8 +71,6 @@ export default function Follow() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -82,8 +78,6 @@ export default function Follow() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -115,7 +109,6 @@ export default function Follow() {
 				if (followItemList[i].itemIdx === selectedItemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
@@ -139,8 +132,6 @@ export default function Follow() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			if (followItemList[i]) {
@@ -173,7 +164,6 @@ export default function Follow() {
 		}
 		let temp = data.result;
 		setFollowItemList([...temp]);
-		console.log('setFollwItemList', data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.length; i++) {
 			if (data.result[i].isDib === 'Y') {
@@ -194,20 +184,15 @@ export default function Follow() {
 		}
 		let temp = data.result;
 		setSameFollowSluverList([...temp]);
-		console.log('getSameFollowSluverList', data.result);
 	};
 	const onFollow = userIdx => {
 		FollowUser(userIdx);
 		let tempList = sameFollowSluverList;
-		console.log('팔로우 클릭');
 		// let length = userRecommendList.length;
 		for (var i = 0; i < tempList.length; i++) {
 			if (tempList[i].userIdx === userIdx) {
-				console.log('tempList[i].isFollow', tempList[i].isFollow);
 				if (tempList[i].isFollow === 'N') {
-					console.log('tempList[i].isFOllow inside', tempList[i].isFollow);
 					tempList[i].isFollow = 'Y';
-					console.log('tempList[i]', tempList[i].isFollow);
 					setSameFollowSluverList([...tempList]);
 				}
 			}
@@ -216,14 +201,11 @@ export default function Follow() {
 	const onUnFollow = userIdx => {
 		UnFollowUser(userIdx);
 		let tempList = sameFollowSluverList;
-		console.log('언팔 클릭');
 		for (var i = 0; i < tempList.length; i++) {
 			if (tempList[i].userIdx === userIdx) {
 				console.log('tempList[i].isFollow', tempList[i].isFollow);
 				if (tempList[i].isFollow === 'Y') {
-					console.log('tempList[i]', tempList[i].isFollow);
 					tempList[i].isFollow = 'N';
-					console.log('tempList[i]', tempList[i].isFollow);
 					setSameFollowSluverList([...tempList]);
 				}
 			}
@@ -238,7 +220,6 @@ export default function Follow() {
 			console.log(data.message);
 			return;
 		}
-		console.log('FollowUser', data.message);
 	};
 	const UnFollowUser = async userIdx => {
 		// 팔로잉 버튼 클릭(언팔)
@@ -248,7 +229,6 @@ export default function Follow() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 	};
 	const scrollRef = useRef();
 	const scrollToRef = ref =>
@@ -258,7 +238,6 @@ export default function Follow() {
 			behavior: 'smooth',
 		});
 	const executeScroll = () => {
-		console.log('clicked top');
 		scrollToRef(scrollRef);
 	};
 	const [showTopBtn, setShowTopBtn] = useState(false);

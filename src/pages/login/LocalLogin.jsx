@@ -113,12 +113,10 @@ export default function LocalLogin() {
 		const postUserSignupUri = '/auth/login';
 		const data = await customApiClient('post', postUserSignupUri, body);
 		if (data.isSuccess === true) {
-			console.log('로그인 완료');
-			console.log(data.result.jwt);
 			localStorage.setItem('myUserIdx', data.result.userIdx);
 			//토큰저장
 			localStorage.setItem('x-access-token', data.result.jwt);
-			if(autoLoginCheck) {
+			if (autoLoginCheck) {
 				localStorage.setItem('autoLogin', true);
 			} else {
 				localStorage.removeItem('autoLogin');
@@ -138,7 +136,6 @@ export default function LocalLogin() {
 				setToastMessageWrapStatus(false);
 			}, 2300);
 
-			console.log(data.message);
 			if (data.code === 3003) {
 				setEmailValid(false);
 			} else if (data.code === 3004) {

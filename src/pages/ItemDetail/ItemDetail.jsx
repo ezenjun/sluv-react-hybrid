@@ -85,7 +85,6 @@ export default function ItemDetail() {
 			return;
 		} else {
 			setPopUpModalStatusState(false);
-			console.log('아이템 삭제', data.result);
 			navigate(-1);
 		}
 	};
@@ -135,7 +134,6 @@ export default function ItemDetail() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const onCreateBinder = itemIdx => {
 		navigate('/binder/add', {
@@ -165,14 +163,11 @@ export default function ItemDetail() {
 		setSelectedItemIdx(itemInfo.itemIdx);
 	};
 	const onSelectBinder = (binderIdx, itemIdx) => {
-		console.log('셀렉트 바인더', itemIdx);
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				if (itemIdx === itemInfo.itemIdx) {
-					console.log('해당 아이템');
 					addToBinderAPI(itemInfo.itemIdx, binderIdx, binderList[i].name);
 				} else {
-					console.log('추천된 아이템');
 					addToBinderAPI(itemIdx, binderIdx, binderList[i].name);
 				}
 			}
@@ -246,7 +241,6 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
 		var tmp = sameCelebItemIsDibList;
 		for (var i = 0; i < sameCelebItemIsDibList.length; i++) {
 			if (sameCelebItemList[i]) {
@@ -332,7 +326,6 @@ export default function ItemDetail() {
 		}
 		// 아이템 정보 저장
 		setItemInfo(data.result.itemInfo);
-		console.log('isMe', data.result.itemInfo);
 		// 아이템 바인더 저장 여부
 		if (data.result.itemInfo.isDib === 'Y') setIsDib(true);
 		else setIsDib(false);
@@ -389,7 +382,6 @@ export default function ItemDetail() {
 		}
 		setSameBrandItemIsDibList([...tmp]);
 	};
-	console.log('ItemLink', itemLink);
 	const FollowUser = async userIdx => {
 		// 팔로우 버튼 클릭
 		const data = await customApiClient('post', `/users/${userIdx}/follow`);
@@ -398,8 +390,6 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('FollowUser', data.message);
-		// console.log('userRecommendList', userRecommendList);
 	};
 	const UnFollowUser = async userIdx => {
 		// 팔로잉 버튼 클릭(언팔)
@@ -409,7 +399,6 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 	};
 	const LikeItem = async itemIdx => {
 		// 좋아요 버튼 클릭
@@ -419,8 +408,6 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('LikeItem', data.message);
-		// console.log('userRecommendList', userRecommendList);
 	};
 	const UnLikeItem = async itemIdx => {
 		// 좋아요 해제
@@ -430,8 +417,6 @@ export default function ItemDetail() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnLikeItem', data.message);
-		// console.log('userRecommendList', userRecommendList);
 	};
 	const onClickShareButton = e => {
 		setToastMessageBottomPosition('3.875rem');

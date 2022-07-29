@@ -105,8 +105,6 @@ export default function FindEmail() {
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
 			}, 2300);
-
-			console.log('인증번호 인증 실패');
 		}
 	}
 

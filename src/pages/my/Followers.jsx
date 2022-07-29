@@ -73,7 +73,6 @@ export default function Followers() {
 			console.log(data.message);
 			return;
 		}
-		console.log('FollowUser', data.message);
 		var tmp = isFollowList;
 		tmp[index] = !tmp[index];
 		setIsFollowList([...tmp]);
@@ -87,7 +86,6 @@ export default function Followers() {
 			console.log(data.message);
 			return;
 		}
-		console.log('UnFollowUser', data.message);
 		var tmp = isFollowList;
 		tmp[index] = !tmp[index];
 		setIsFollowList([...tmp]);

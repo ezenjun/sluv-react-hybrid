@@ -89,7 +89,6 @@ export default function SearchResult() {
 			let isBlank = queryKeyword.includes(blank);
 			if (isBlank) {
 				queryKeyword = queryKeyword.replaceAll(' ', '+');
-				console.log('with blank', queryKeyword);
 			}
 			setSearchInputStatus(queryKeyword);
 			setSearchInput(window.event.target.value);
@@ -166,8 +165,6 @@ export default function SearchResult() {
 			}
 			return;
 		}
-		console.log('queryKeyword', queryKeyword);
-		console.log('결과받아와봐', data.result.searchItemList);
 		setSearchResultList(data.result.searchItemList);
 		var tmp = [];
 		for (var i = 0; i < data.result.searchItemList.length; i++) {
@@ -177,7 +174,6 @@ export default function SearchResult() {
 				tmp.push(false);
 			}
 		}
-		console.log(tmp);
 		setLatestIsBinderList([...tmp]);
 		setLoading(false);
 	};
@@ -231,7 +227,6 @@ export default function SearchResult() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -248,8 +243,6 @@ export default function SearchResult() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -257,8 +250,6 @@ export default function SearchResult() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -290,11 +281,9 @@ export default function SearchResult() {
 				if (searchResultList[i].itemIdx === itemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
-		console.log('tempLatest', tempLatest);
 
 		setOpenState(false);
 		setToastMessageBottomPosition('3.875rem');
@@ -316,19 +305,15 @@ export default function SearchResult() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			if (searchResultList[i]) {
 				if (searchResultList[i].itemIdx === itemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
-		console.log('tempLatest', tempLatest);
 
 		setToastMessageBottomPosition('3.875rem');
 		setToastMessageWrapStatus(true);
@@ -379,7 +364,6 @@ export default function SearchResult() {
 		setSearchInputStatus(location.state.searchInput);
 		setSearchInput(location.state.searchInput);
 		let queryKeyword = location.state.searchInput;
-		console.log('location.state.searchInput', location.state.searchInput);
 		setQueryKeyword(queryKeyword);
 		getSearchResultList(queryKeyword);
 	}, []);

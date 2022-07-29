@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import { Input } from '../../../components/Input';
 import { IconWrap, InputWrap } from '../../signup/SelectCeleb';
 
@@ -16,7 +16,7 @@ import { render } from '@testing-library/react';
 import { useInView } from 'react-intersection-observer';
 import { useCallback } from 'react';
 
-export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
+export default function SelectBrandDialog({ setBrandObj, setFlag, setBrand }) {
 	const [brandList, setBrandList] = useRecoilState(BrandListState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [currentBrandList, setCurrentBrandList] = useState([]);
@@ -33,7 +33,6 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 			getBrandList();
 		} else {
 			setCurrentBrandList(brandList);
-			console.log('brandList : 데이터 있어서 조회 안해!!');
 		}
 	}, []);
 
@@ -48,7 +47,7 @@ export default function SelectBrandDialog({setBrandObj, setFlag, setBrand}) {
 	}, [renderDataNum]);
 
 	useEffect(() => {
-		if(inView && !isLoaded) {
+		if (inView && !isLoaded) {
 			setRenderDataNum(renderDataNum + 40);
 		}
 	}, [inView, isLoaded]);

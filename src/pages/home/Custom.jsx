@@ -17,7 +17,6 @@ import { customApiClient } from '../../utils/apiClient';
 export default function Custom() {
 	// 해당 유저 관심셀럽 리스트 //
 	const favoriteCelebList = useRecoilValue(FavoriteCelebListState);
-	console.log(favoriteCelebList);
 
 	return (
 		<>
@@ -129,6 +128,18 @@ export default function Custom() {
 						<CelebsLuvItem
 							celeb={favoriteCelebList[18]}
 							ComponentIndex={18}
+						></CelebsLuvItem>
+					)}
+					{favoriteCelebList[19] && (
+						<CelebsLuvItem
+							celeb={favoriteCelebList[19]}
+							ComponentIndex={19}
+						></CelebsLuvItem>
+					)}
+					{favoriteCelebList[20] && (
+						<CelebsLuvItem
+							celeb={favoriteCelebList[20]}
+							ComponentIndex={20}
 						></CelebsLuvItem>
 					)}
 				</>

@@ -61,7 +61,6 @@ export default function ViewedItems() {
 		console.log(data.result);
 		var tmp = [];
 		for (var i = 0; i < data.result.recentItemList.length; i++) {
-			console.log('아아템', data.result.recentItemList[i]);
 			if (data.result.recentItemList[i].isDib === 'Y') {
 				tmp.push(true);
 			} else {
@@ -84,7 +83,6 @@ export default function ViewedItems() {
 			return;
 		}
 		setBinderList(data.result);
-		console.log('바인더 리스트', data.result);
 	};
 	const [openState, setOpenState] = useState(false);
 	const onCreateBinder = itemIdx => {
@@ -100,8 +98,6 @@ export default function ViewedItems() {
 		getBinderList();
 		setOpenState(true);
 		setSelectedItemIdx(itemIdx);
-		console.log(itemIdx);
-		console.log('selectedItemIdx', selectedItemIdx);
 		// setBottomMenuStatusState(true);
 	};
 	const getOpenStatus = input => {
@@ -109,8 +105,6 @@ export default function ViewedItems() {
 	};
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
-		console.log('셀렉트 바인더', selectedItemIdx);
-
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
 				addToBinderAPI(selectedItemIdx, binderIdx, binderList[i].name);
@@ -142,7 +136,6 @@ export default function ViewedItems() {
 				if (itemList[i].itemIdx === selectedItemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
@@ -166,15 +159,12 @@ export default function ViewedItems() {
 			console.log(data.message);
 			return;
 		}
-		console.log('바인더에서 삭제 data.isSuccess', data.isSuccess);
-		console.log('latestIsBinderList', latestIsBinderList);
 		let tempLatest = latestIsBinderList;
 		for (var i = 0; i < latestIsBinderList.length; i++) {
 			if (itemList[i]) {
 				if (itemList[i].itemIdx === itemIdx) {
 					tempLatest[i] = !tempLatest[i];
 					setLatestIsBinderList([...tempLatest]);
-					console.log('clicked');
 				}
 			}
 		}
