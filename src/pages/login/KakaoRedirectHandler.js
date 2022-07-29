@@ -77,5 +77,9 @@ export default function KakaoRedirectHandler() {
 		}
 	};
 
-	return <Loading />;
+	return (
+		<div style={{ height: '5rem' }}>
+			<Loading></Loading>
+		</div>
+	);
 }

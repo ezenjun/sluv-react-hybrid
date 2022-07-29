@@ -851,7 +851,7 @@ export default function UploadItem() {
 					</WholePage>
 
 					{isLoading && (
-						<div style={{ height: '5rem' }}>
+						<div style={{ height: '5rem', backgroundColor:'transparent', zIndex:'100000' }}>
 							<Loading></Loading>
 						</div>
 					)}
