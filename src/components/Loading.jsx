@@ -13,4 +13,5 @@ const LoadingDialog = styled.img`
 	transform: translate(-50%, -50%);
 	/* width: 100%; */
 	height: inherit;
+	background-color: transparent;
 `;

@@ -348,7 +348,7 @@ export default function ItemDetail() {
 		setLikeCnt(data.result.itemInfo.itemLikeCnt);
 		// 링크 존재
 		if (data.result.itemInfo.sellerSite) {
-			if (data.result.itemInfo.sellerSite.slice(0, 5) !== 'https') {
+			if (data.result.itemInfo.sellerSite.slice(0, 4) !== 'http') {
 				setItemLink('https://' + data.result.itemInfo.sellerSite);
 			} else {
 				setItemLink(data.result.itemInfo.sellerSite);
