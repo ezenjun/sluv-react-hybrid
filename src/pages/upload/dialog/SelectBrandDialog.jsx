@@ -71,7 +71,7 @@ export default function SelectBrandDialog({ setBrandObj, setFlag, setBrand }) {
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
 
-		const value = e.target.value;
+		const value = (e.target.value).toUpperCase();
 
 		const searchResult = brandList.filter(brand => {
 			if (brand.brandKr.includes(value)) {
