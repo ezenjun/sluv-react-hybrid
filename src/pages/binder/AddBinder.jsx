@@ -199,7 +199,7 @@ export default function AddBinder() {
 						setTimeout(() => {
 							setToastMessageWrapStatus(false);
 						}, 2300);
-						// navigate(-1);
+						navigate(-1);
 					}
 				}
 				if (location.state.item) {
@@ -228,18 +228,19 @@ export default function AddBinder() {
 					navigate(-1);
 					console.log('홈에서 바인더 생성 후 아이템 추가');
 				}
+			} else {
+				navigate('/binder');
+				setToastMessageBottomPosition('4.125rem');
+				setToastMessageWrapStatus(true);
+				setToastMessageStatus(true);
+				setToastMessage(`${binderName} 바인더가 생성되었어요`);
+				setTimeout(() => {
+					setToastMessageStatus(false);
+				}, 2000);
+				setTimeout(() => {
+					setToastMessageWrapStatus(false);
+				}, 2300);
 			}
-			navigate('/binder');
-			setToastMessageBottomPosition('4.125rem');
-			setToastMessageWrapStatus(true);
-			setToastMessageStatus(true);
-			setToastMessage(`${binderName} 바인더가 생성되었어요`);
-			setTimeout(() => {
-				setToastMessageStatus(false);
-			}, 2000);
-			setTimeout(() => {
-				setToastMessageWrapStatus(false);
-			}, 2300);
 		}
 	};
 
