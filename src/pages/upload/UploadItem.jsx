@@ -44,6 +44,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import { ModalWrap, WholePage } from '../../components/PopUp/PopUpModal';
+import Loading from '../../components/Loading';
 
 export default function UploadItem() {
 	const navigate = useNavigate();
@@ -96,6 +97,8 @@ export default function UploadItem() {
 
 	const [popUpPageNum, setPopUpPageNum] = useState(0);
 	const [confirmPopupStatus, setConfirmPopupStatus] = useState(false);
+	const [afterUploadItemIdx, setAfterUploadItemIdx] = useState(-1);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const now = new Date();
 
@@ -169,6 +172,7 @@ export default function UploadItem() {
 		setBottomMenuStatusState(false);
 		setBottomNavStatus(false);
 		setIsImgUploadComplete(false);
+		setAfterUploadItemIdx(null);
 		
 	}, []);
 
@@ -208,8 +212,8 @@ export default function UploadItem() {
 	]);
 
 	useEffect(() => {
-		isImgUploadComplete && onPostUpload();
-	}, [isImgUploadComplete]);
+		imgUrlList.length > 0 && isImgUploadComplete && onPostUpload();
+	}, [isImgUploadComplete, imgUrlList]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -287,12 +291,13 @@ export default function UploadItem() {
 	};
 	const onClickItemImgSelect = e => {
 		e.preventDefault();
+		console.log(selectedFileList);
 		imgInput.current.click();
 	};
-	console.log('hjhj',selectedFileList);
+	
 	const onChangeImg = e => {
 		const fileArr = e.target.files;
-		console.log(fileArr);
+		console.log('테스트',fileArr);
 		
 		setSelectedFileList(pre => [...pre, ...fileArr]);
 
@@ -310,10 +315,11 @@ export default function UploadItem() {
 				setPreviewImgUrlList(pre => [...pre, fileURLs[i] ]);
 			};
 			reader.readAsDataURL(file);
-		}
+		} 
+		setCheckedElement(0);
 	};
 
-	const s3ImgUpload = (file, index, length) => {
+	const s3ImgUpload = async (file, index, length) => {
 		const params = {
 			ACL: 'public-read',
 			Body: file,
@@ -325,7 +331,7 @@ export default function UploadItem() {
 		myBucket
 			.putObject(params)
 			.on('httpUploadProgress', evt => {
-				console.log(evt);
+				console.log('인덱스!!!', evt);
 			})
 			.on('complete', evt => {
 				let temp = [];
@@ -357,6 +363,7 @@ export default function UploadItem() {
 				if (err) console.log(err);
 			});
 	};
+	console.log('미리보기제발',checkedElement);
 
 	const onClickUploadItem = async fileList => {
 		console.log(fileList);
@@ -387,7 +394,7 @@ export default function UploadItem() {
 		} else {
 			body = {
 				celebIdx: selectedCeleb.celebIdx,
-				memberIdx: selectedMember.memberIdx,
+				memberIdx: selectedMember.memberIdx ? selectedMember.memberIdx : null,
 				parentCategory: filterList[selectedItemMainFilter - 1].name,
 				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
 				brandIdx: brandObj.brandIdx,
@@ -395,8 +402,8 @@ export default function UploadItem() {
 				whenDiscovery: date,
 				whereDiscovery: place,
 				price: selectedPriceMainFilterIdx,
-				content: extraInfo,
-				sellerSite: link,
+				content: extraInfo ? extraInfo : null,
+				sellerSite: link ? link : null,
 				itemImgUrlList: imgUrlList,
 			};
 		}
@@ -414,6 +421,9 @@ export default function UploadItem() {
 		if (!data) return;
 
 		console.log('아이템 업로드 완료');
+		setIsLoading(false);
+		
+
 		if(state) {
 			setToastMessageBottomPosition('1.625rem');
 			setToastMessage('게시글이 수정되었어요');
@@ -423,17 +433,19 @@ export default function UploadItem() {
 			setTimeout(() => {
 				setToastMessageStatus(false);
 				navigate(-1);
-			}, 2000);
+			}, 1000);
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
-			}, 2300);
+			}, 1300);
 		} else {
+			setAfterUploadItemIdx(data.result.addedItem);
 			setConfirmPopupStatus(true);
 		}
 	};
 
 	const onClickUploadBtnStart = () => {
 		if (isUploadConfirm) {
+			setIsLoading(true);
 			onClickUploadItem(selectedFileList);
 		} else {
 			setToastMessageBottomPosition('1.625rem');
@@ -451,15 +463,21 @@ export default function UploadItem() {
 	};
 
 	const onClickPreviewImg = index => {
+		setCheckedElement(index);
 		console.log(index);
 	};
 	const onClickPreviewImgDelete = index => {
 		setCheckedElement(0);
 		let temp = [];
+		let temp2 = [];
 		temp = previewImgUrlList;
+		temp2 = selectedFileList;
 		temp.splice(index, 1);
+		temp2.splice(index, 1);
 		setPreviewImgUrlList([...temp]);
+		setSelectedFileList([...selectedFileList]);
 	};
+	console.log(selectedFileList);
 	const onChangeRadioButton = e => {
 		console.log(e.target.value);
 		setCheckedElement(e.target.value);
@@ -468,7 +486,7 @@ export default function UploadItem() {
 	const onClickYes = () => {
 		setConfirmPopupStatus(false);
 		setUploadPopupStatus(false);
-		navigate('/home');
+		navigate(`/item/detail/${afterUploadItemIdx}`);
 	};
 
 	const onClickBackButton = () => {
@@ -831,6 +849,12 @@ export default function UploadItem() {
 							</div>
 						</ModalWrap>
 					</WholePage>
+
+					{isLoading && (
+						<div style={{ height: '5rem' }}>
+							<Loading></Loading>
+						</div>
+					)}
 				</MainContainer>
 			)}
 		</>

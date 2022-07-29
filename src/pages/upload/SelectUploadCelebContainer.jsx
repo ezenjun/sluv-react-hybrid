@@ -27,6 +27,7 @@ import {
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as Close } from '../../assets/Icons/CloseX.svg';
+import { ReactComponent as FavoriteHeart } from '../../assets/Icons/icon_favorite_celeb_heart.svg';
 import { Input } from '../../components/Input';
 import {
 	celebCategoryList,
@@ -100,7 +101,9 @@ export default function SelectUploadCelebContainer() {
 		let temp = [];
 		setFavoriteCelebList(JSON.parse(favoriteList));
 		JSON.parse(favoriteList).map((favorite, index) => {
-			temp.push(data.result.find((item) => item.celebIdx === favorite.celebIdx));
+			let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
+			favoriteTemp.isFavorite = true;
+			temp.push(favoriteTemp);
 		});
 		let tempSet = new Set(temp.concat(data.result));
 		
@@ -251,8 +254,8 @@ export default function SelectUploadCelebContainer() {
 								>
 									<ImgCircle key={celeb.id} src={celeb.celebImgUrl} />
 									{celeb.name}
-									<CountBadge status={false}>
-										<span className="badgeItem">v</span>
+									<CountBadge status={celeb.isFavorite ? true : false}>
+										<FavoriteHeart style={{width:'1.5rem', height:'1.5rem'}}/>
 									</CountBadge>
 								</Celeb>
 							))}

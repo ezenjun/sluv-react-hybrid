@@ -97,7 +97,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		} 
 	};
 
-	const onSelectMember = (member, e, index) => {
+	const onSelectMember = (member, index) => {
 		console.log(member);
 
 		let tempWholeMember = [];
@@ -129,8 +129,6 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 		let tempCheckList = checkStatusList;
 		tempCheckList[member.memberIdx - 1] = !tempCheckList[member.memberIdx - 1];
 		setCheckStatusList(tempCheckList);
-
-		e.preventDefault();
 	};
 
 	const onPostFavoriteCelebs = async () => {
@@ -197,13 +195,18 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 						color="white"
 						borderRight="8px solid #9e30f4"
 					>
-						<div>{data[currentMemberPage].name && data[currentMemberPage].name}</div>
+						<div>{data && data[currentMemberPage] && data[currentMemberPage].name}</div>
 					</SpeechBubbleWrap>
 				</BottomWrap>
 
 				<MembersContainer>
 					{(function () {
-						if (data[currentMemberPage].memberList.length > 0) {
+						if (
+							data &&
+							data[currentMemberPage] &&
+							data[currentMemberPage].memberList &&
+							data[currentMemberPage].memberList.length > 0
+						) {
 							let renderList = [];
 							for (let i = 0; i < data[currentMemberPage].memberList.length; i += 8) {
 								renderList.push(
@@ -216,7 +219,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebLeftTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -268,7 +271,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebRightTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -302,7 +305,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebLeftBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -336,7 +339,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebRightBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -370,7 +373,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextLeftBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -404,7 +407,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextLeftTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -438,7 +441,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextRightTop
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle
@@ -472,7 +475,7 @@ export default function SelectMemberContainer({ data, postIdxArray, setPostIdxAr
 														<CelebNextRightBottom
 															key={member.memberIdx}
 															onClick={e =>
-																onSelectMember(member, e, index)
+																onSelectMember(member, index)
 															}
 														>
 															<ImgCircle

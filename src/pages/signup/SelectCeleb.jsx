@@ -49,7 +49,7 @@ export default function SelectCeleb() {
 	const [currentPage, setCurrentPage] = useRecoilState(ChooseCelebCurrentPageState);
 	const [totalCelebList, setTotalCelebList] = useRecoilState(TotalCelebListState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const setFavoriteCelebList = useSetRecoilState(FavoriteCelebListState);
+	const [favoriteCelebList ,setFavoriteCelebList] = useRecoilState(FavoriteCelebListState);
 
 	useEffect(() => {
 		// 하단바 사라지기
@@ -57,20 +57,23 @@ export default function SelectCeleb() {
 		// 선택한 관심셀럽 수 초기화
 		setSelectedNum(0);
 
-		// 셀럽 및 멤버 목록 조회 API 호출
-		if (totalCelebList.length < 1) {
-			getCelebList();
-		} else {
-			setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+		setCurrentPage(0);
 
-			let temp;
-			let temp2;
-			(temp = []).length = totalCelebList.length;
-			temp.fill(false);
-			temp2 = new Array(totalCelebList.length).fill(0);
-			setCheckStatusList(temp);
-			setBadgeNumList(temp2);
-		}
+		// 셀럽 및 멤버 목록 조회 API 호출
+		getCelebList();
+		// if (totalCelebList.length < 1) {
+		// 	getCelebList();
+		// } else {
+		// 	setCurrentCelebList(totalCelebList.filter(item => item.category === 'SINGER'));
+
+		// 	let temp;
+		// 	let temp2;
+		// 	(temp = []).length = totalCelebList.length;
+		// 	temp.fill(false);
+		// 	temp2 = new Array(totalCelebList.length).fill(0);
+		// 	setCheckStatusList(temp);
+		// 	setBadgeNumList(temp2);
+		// }
 		// 다른 스러버들이 많이 추가한 셀럽 API 호출
 		if (popularCelebList.length < 1) {
 			getPopularCelebList();
@@ -96,6 +99,20 @@ export default function SelectCeleb() {
 		setIsCelebConfirm(true);
 	}, [selectedNum]);
 
+	useEffect(() => {
+		if(state === '/settings') {
+			let tempBadgeNumList = badgeNumList;
+			let cnt = 1;
+			favoriteCelebList.map((favorite, index) => {
+				tempBadgeNumList[
+					totalCelebList.findIndex(item => item.celebIdx === favorite.celebIdx)
+				] = cnt;
+				cnt++;
+			})
+			setBadgeNumList(tempBadgeNumList);
+		}
+	},[badgeNumList]);
+
 	const getCelebList = async () => {
 		const data = await customApiClient('get', '/celebs/members');
 
@@ -108,9 +125,21 @@ export default function SelectCeleb() {
 			const favoriteList = localStorage.getItem('favoriteCeleb');
 			let temp = [];
 			setFavoriteCelebList(JSON.parse(favoriteList));
+
+			// tempBadgeNumList = badgeNumList;
+			// tempBadgeNumList[totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)] =
+			// 	selectedNum + 1;
+			// setBadgeNumList(tempBadgeNumList);
+
+			let tempBadgeNumList = badgeNumList;
+			let cnt = 1;
+			
 			JSON.parse(favoriteList).map((favorite, index) => {
-				temp.push(data.result.find(item => item.celebIdx === favorite.celebIdx));
+				let favoriteTemp = data.result.find(item => item.celebIdx === favorite.celebIdx);
+				onSelectCeleb(favoriteTemp);
+				temp.push(favoriteTemp);
 			});
+			setSelectedNum(JSON.parse(favoriteList).length);
 			let tempSet = new Set(temp.concat(data.result));
 
 			setTotalCelebList(Array.from(tempSet));
@@ -149,7 +178,7 @@ export default function SelectCeleb() {
 		}
 	};
 
-	const onSelectCeleb = (celeb, e, index) => {
+	const onSelectCeleb = (celeb, index) => {
 		let tempGroup = [];
 		let tempWholeCeleb = [];
 		let tempBadgeNumList = [];
@@ -166,7 +195,8 @@ export default function SelectCeleb() {
 			setSelectedCelebIdxArray(tempWholeCeleb);
 
 			tempBadgeNumList = badgeNumList;
-			tempBadgeNumList[index] = selectedNum + 1;
+			tempBadgeNumList[totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)] =
+				selectedNum + 1;
 			setBadgeNumList(tempBadgeNumList);
 		} else {
 			setSelectedNum(selectedNum - 1);
@@ -182,7 +212,12 @@ export default function SelectCeleb() {
 
 			tempBadgeNumList = badgeNumList;
 			tempBadgeNumList.map((badgeNum, _index) => {
-				if (badgeNum > tempBadgeNumList[index]) {
+				if (
+					badgeNum >
+					tempBadgeNumList[
+						totalCelebList.findIndex(item => item.celebIdx === celeb.celebIdx)
+					]
+				) {
 					tempBadgeNumList[_index] = tempBadgeNumList[_index] - 1;
 				}
 			});
@@ -191,8 +226,6 @@ export default function SelectCeleb() {
 		let tempCheckList = checkStatusList;
 		tempCheckList[celeb.celebIdx - 1] = !tempCheckList[celeb.celebIdx - 1];
 		setCheckStatusList(tempCheckList);
-
-		e.preventDefault();
 	};
 
 	const onPostFavoriteCelebs = async () => {
@@ -347,7 +380,7 @@ export default function SelectCeleb() {
 									currentCelebList.map((celeb, index) => (
 										<Celeb
 											key={celeb.celebIdx}
-											onClick={e => onSelectCeleb(celeb, e, index)}
+											onClick={e => onSelectCeleb(celeb, index)}
 										>
 											<ImgCircle
 												key={celeb.id}
@@ -359,7 +392,14 @@ export default function SelectCeleb() {
 												status={checkStatusList[celeb.celebIdx - 1]}
 											>
 												<span className="badgeItem">
-													{badgeNumList[index]}
+													{
+														badgeNumList[
+															totalCelebList.findIndex(
+																item =>
+																	item.celebIdx === celeb.celebIdx
+															)
+														]
+													}
 												</span>
 											</CountBadge>
 										</Celeb>
@@ -404,7 +444,7 @@ export default function SelectCeleb() {
 											popularCelebList.map((popular, index) => (
 												<Celeb
 													key={popular.celebIdx}
-													onClick={e => onSelectCeleb(popular, e, index)}
+													onClick={e => onSelectCeleb(popular, index)}
 													style={{ marginLeft: '0.6875rem' }}
 												>
 													<ImgCircle
@@ -421,7 +461,15 @@ export default function SelectCeleb() {
 														}
 													>
 														<span className="badgeItem">
-															{badgeNumList[index]}
+															{
+																badgeNumList[
+																	totalCelebList.findIndex(
+																		item =>
+																			item.celebIdx ===
+																			popular.celebIdx
+																	)
+																]
+															}
 														</span>
 													</CountBadge>
 												</Celeb>
@@ -441,6 +489,7 @@ export default function SelectCeleb() {
 												transition:
 													'visibility 0s linear 300ms, opacity 300ms',
 												opacity: '0',
+												zIndex: '100000',
 											}}
 										></RequestBubble>
 									) : (
@@ -450,6 +499,7 @@ export default function SelectCeleb() {
 												transition:
 													'visibility 0s linear 0s, opacity 300ms',
 												opacity: '1',
+												zIndex: '100000',
 											}}
 										></RequestBubble>
 									)}
@@ -468,7 +518,7 @@ export default function SelectCeleb() {
 				</MainContainer>
 			)}
 
-			{currentPage === 1 && (
+			{selectedNum && currentPage === 1 && (
 				<MainContainer>
 					<SelectMemberContainer
 						data={selectedGroups}
@@ -482,7 +532,6 @@ export default function SelectCeleb() {
 }
 
 export const RequestWrap = styled.div`
-	width: 100%;
 	display: flex;
 	flex-direction: column;
 	/* justify-content: flex-end; */
@@ -502,6 +551,7 @@ export const RequestButton = styled.div`
 	border-radius: 50%;
 	background-color: #9e30f4;
 	margin: 0;
+	z-index:100000;
 `;
 
 export const BottomWrap = styled.div`
