@@ -422,7 +422,7 @@ export default function UploadItem() {
 
 		console.log('아이템 업로드 완료');
 		setIsLoading(false);
-		setAfterUploadItemIdx(data.result.addedItem);
+		
 
 		if(state) {
 			setToastMessageBottomPosition('1.625rem');
@@ -433,11 +433,12 @@ export default function UploadItem() {
 			setTimeout(() => {
 				setToastMessageStatus(false);
 				navigate(-1);
-			}, 2000);
+			}, 1000);
 			setTimeout(() => {
 				setToastMessageWrapStatus(false);
-			}, 2300);
+			}, 1300);
 		} else {
+			setAfterUploadItemIdx(data.result.addedItem);
 			setConfirmPopupStatus(true);
 		}
 	};
