@@ -20,7 +20,7 @@ export default function Event() {
 			<EventCard onClick={() => onClickCard(1)}>
 				<Top>
 					<DDAY>
-						{result !== 0 ? (
+						{/* {result !== 0 ? (
 							<SubText fontweight="700" color="#9E30F4">
 								D-{result}
 							</SubText>
@@ -28,7 +28,10 @@ export default function Event() {
 							<SubText fontweight="700" color="#9E30F4">
 								D-Day
 							</SubText>
-						)}
+						)} */}
+						<SubText fontweight="700" color="#9E30F4">
+							종료
+						</SubText>
 					</DDAY>
 				</Top>
 
@@ -71,6 +74,7 @@ const FeedContainer = styled.div`
 
 const EventCard = styled.div`
 	display: flex;
+	z-index: 0;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
