@@ -52,7 +52,58 @@ export default function Search() {
 	const [isCollapsed, setIsCollapsed] = useState(true);
 
 	const [hotSearchList, setHotSearchList] = useState([]);
-
+	// const hotSearchList = [
+	// 	{
+	// 		searchWord: '에스파 윈터',
+	// 		standard: '2022-07-13 17:00 기준',
+	// 		count: 1,
+	// 	},
+	// 	// {
+	// 	// 	searchWord: '카리나 치마',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '블랙핑크 제니',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '카리나',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '강다니엘 셔츠',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '리사',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '윈터',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '에스파',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '제니 가방',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// 	// {
+	// 	// 	searchWord: '블랙핑크',
+	// 	// 	standard: '2022-07-13 17:00 기준',
+	// 	// 	count: 1,
+	// 	// },
+	// ];
 	const [latestViewList, setLatestViewList] = useState([]);
 	const [binderList, setBinderList] = useState([]);
 	const [openState, setOpenState] = useState(false); // 바인더 클릭 시 하단바 status
@@ -188,7 +239,6 @@ export default function Search() {
 	};
 	///////////////////////////////////////////////////////////////////////////////
 	const getHotSearchList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/hot-ranking');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -203,7 +253,6 @@ export default function Search() {
 
 	const [hotKeywordList, setHotKeywordList] = useState([]);
 	const getHotKeywordList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/hot-searchword');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -215,7 +264,6 @@ export default function Search() {
 
 	const [recentSearchList, setRecentSearchList] = useState([]);
 	const getRecentSearchList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/recent');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -852,8 +900,10 @@ const HotSearch = styled.div`
 const CollapsedRow = styled.div`
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
 	box-sizing: border-box;
+	.slick-vertical .slick-slide {
+		border: none;
+	}
 `;
 const EachRank = styled.div`
 	display: flex;
