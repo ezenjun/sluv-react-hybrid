@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
@@ -52,58 +52,6 @@ export default function Search() {
 	const [isCollapsed, setIsCollapsed] = useState(true);
 
 	const [hotSearchList, setHotSearchList] = useState([]);
-	// const hotSearchList = [
-	// 	{
-	// 		searchWord: '에스파 윈터',
-	// 		standard: '2022-07-13 17:00 기준',
-	// 		count: 1,
-	// 	},
-	// 	// {
-	// 	// 	searchWord: '카리나 치마',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '블랙핑크 제니',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '카리나',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '강다니엘 셔츠',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '리사',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '윈터',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '에스파',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '제니 가방',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// 	// {
-	// 	// 	searchWord: '블랙핑크',
-	// 	// 	standard: '2022-07-13 17:00 기준',
-	// 	// 	count: 1,
-	// 	// },
-	// ];
 	const [latestViewList, setLatestViewList] = useState([]);
 	const [binderList, setBinderList] = useState([]);
 	const [openState, setOpenState] = useState(false); // 바인더 클릭 시 하단바 status
@@ -302,7 +250,6 @@ export default function Search() {
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
-		const value = e.target.value;
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
@@ -357,7 +304,13 @@ export default function Search() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-
+	const [inputFocus, setInputFocus] = useState(false);
+	const onFocus = () => {
+		setInputFocus(true);
+	};
+	const onBlur = () => {
+		setInputFocus(false);
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
@@ -383,6 +336,8 @@ export default function Search() {
 						onKeyUp={handleEnterEvent}
 						value={searchInput}
 						onChange={onHandleChangeSearch}
+						onFocus={onFocus}
+						onBlur={onBlur}
 						type="text"
 						placeholder="셀럽과 아이템을 검색해 보세요"
 						margin="0 0 0 0.375rem"
@@ -397,7 +352,7 @@ export default function Search() {
 				</InputWrap>
 			</div>
 
-			{searchInput.length === 0 ? (
+			{!inputFocus ? (
 				<>
 					<FeedContainer>
 						<SearchBottom>
