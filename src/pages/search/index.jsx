@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { customApiClient } from '../../utils/apiClient';
@@ -52,7 +52,6 @@ export default function Search() {
 	const [isCollapsed, setIsCollapsed] = useState(true);
 
 	const [hotSearchList, setHotSearchList] = useState([]);
-
 	const [latestViewList, setLatestViewList] = useState([]);
 	const [binderList, setBinderList] = useState([]);
 	const [openState, setOpenState] = useState(false); // 바인더 클릭 시 하단바 status
@@ -188,7 +187,6 @@ export default function Search() {
 	};
 	///////////////////////////////////////////////////////////////////////////////
 	const getHotSearchList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/hot-ranking');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -203,7 +201,6 @@ export default function Search() {
 
 	const [hotKeywordList, setHotKeywordList] = useState([]);
 	const getHotKeywordList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/hot-searchword');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -215,7 +212,6 @@ export default function Search() {
 
 	const [recentSearchList, setRecentSearchList] = useState([]);
 	const getRecentSearchList = async () => {
-		// 팔로잉 버튼 클릭(언팔)
 		const data = await customApiClient('get', '/search/recent');
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -254,7 +250,6 @@ export default function Search() {
 
 	const onHandleChangeSearch = e => {
 		setSearchInput(e.target.value);
-		const value = e.target.value;
 	};
 	const onClickInputDelete = () => {
 		setSearchInput('');
@@ -309,7 +304,13 @@ export default function Search() {
 			setToastMessageWrapStatus(false);
 		}, 2300);
 	};
-
+	const [inputFocus, setInputFocus] = useState(false);
+	const onFocus = () => {
+		setInputFocus(true);
+	};
+	const onBlur = () => {
+		setInputFocus(false);
+	};
 	useEffect(() => {
 		// 하단바 띄워주기
 		setBottomNavStatus(true);
@@ -335,6 +336,8 @@ export default function Search() {
 						onKeyUp={handleEnterEvent}
 						value={searchInput}
 						onChange={onHandleChangeSearch}
+						onFocus={onFocus}
+						onBlur={onBlur}
 						type="text"
 						placeholder="셀럽과 아이템을 검색해 보세요"
 						margin="0 0 0 0.375rem"
@@ -349,7 +352,7 @@ export default function Search() {
 				</InputWrap>
 			</div>
 
-			{searchInput.length === 0 ? (
+			{!inputFocus ? (
 				<>
 					<FeedContainer>
 						<SearchBottom>
@@ -852,8 +855,10 @@ const HotSearch = styled.div`
 const CollapsedRow = styled.div`
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
 	box-sizing: border-box;
+	.slick-vertical .slick-slide {
+		border: none;
+	}
 `;
 const EachRank = styled.div`
 	display: flex;
