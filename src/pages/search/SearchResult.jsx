@@ -59,9 +59,8 @@ import {
 
 export default function SearchResult() {
 	const navigate = useNavigate();
-	const location = useLocation();
+
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
-	const setSearchInputStatus = useSetRecoilState(SearchInputState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
 	const [searchInput, setSearchInput] = useState('');
@@ -85,16 +84,13 @@ export default function SearchResult() {
 		if (window.event.keyCode === 13) {
 			setLoading(true);
 			let queryKeyword = window.event.target.value;
+			console.log('queryKeyword', queryKeyword);
 			let blank = ' ';
 			let isBlank = queryKeyword.includes(blank);
 			if (isBlank) {
 				queryKeyword = queryKeyword.replaceAll(' ', '+');
 			}
-			setSearchInputStatus(queryKeyword);
-			setSearchInput(window.event.target.value);
-			// setSearchInput(searchInput);
-			navigate(`/search/result`, { state: { searchInput: queryKeyword } });
-			getSearchResultList(queryKeyword);
+			navigate(`/search/result/${queryKeyword}`);
 			childFunc.current();
 		}
 	};
@@ -152,6 +148,7 @@ export default function SearchResult() {
 	const [loading, setLoading] = useState(true);
 	const [searchResultList, setSearchResultList] = useState([]);
 	const getSearchResultList = async queryKeyword => {
+		console.log('getSearchResultLis 안에서 querykeyword', queryKeyword);
 		const data = await customApiClient(
 			'get',
 			`/search?search_word=${queryKeyword}&page=1&pageSize=20`
@@ -177,45 +174,6 @@ export default function SearchResult() {
 		setLatestIsBinderList([...tmp]);
 		setLoading(false);
 	};
-
-	// 필터 없이 무한스크롤
-	// const getAFterSearchResultList = async (queryKeyword, pageIdx) => {
-	// 	const data = await customApiClient(
-	// 		'get',
-	// 		`/search?search_word=${queryKeyword}&page=${pageIdx}&pageSize=8`
-	// 	);
-	// 	if (!data) return;
-	// 	if (!data.isSuccess) {
-	// 		console.log(data.message);
-	// 		if (data.code === 3070) {
-	// 			setSearchResultList([]);
-	// 		}
-	// 		if (data.code === 2060) {
-	// 			//더이상 아이템이 없을 때
-	// 			// setBlockRerender(true);
-	// 			setToastMessageBottomPosition('3.125rem');
-	// 			setToastMessageWrapStatus(true);
-	// 			setToastMessageStatus(true);
-	// 			setToastMessage('더이상 아이템이 없어요');
-	// 			setTimeout(() => {
-	// 				setToastMessageStatus(false);
-	// 			}, 2000);
-	// 			setTimeout(() => {
-	// 				setToastMessageWrapStatus(false);
-	// 			}, 2300);
-	// 		}
-	// 		return;
-	// 	} else {
-	// 		console.log('아이템 리스트 다시 불러오기', data.result.searchItemList);
-	// 		let temp = [];
-	// 		temp = searchResultList;
-	// 		let newArr = temp.concat(data.result.searchItemList);
-	// 		console.log(newArr);
-
-	// 		setSearchResultList([...newArr]);
-	// 		// setSearchResultList([...searchResultList, data.result.searchItemList]);
-	// 	}
-	// };
 
 	// 아이템 바인더 찜
 	const [binderList, setBinderList] = useState([]);
@@ -245,9 +203,7 @@ export default function SearchResult() {
 		setSelectedItemIdx(itemIdx);
 		// setBottomMenuStatusState(true);
 	};
-	const getOpenStatus = input => {
-		setOpenState(input);
-	};
+
 	// console.log('셀렉트아이템인덱스', selectedItemIdx);
 	const onSelectBinder = binderIdx => {
 		for (var i = 0; i < binderList.length; i++) {
@@ -327,46 +283,13 @@ export default function SearchResult() {
 		}, 2300);
 	}
 
-	// 무한스크롤 정의
-	// const [page, setPage] = useState(1);
-	// const [loading, setLoading] = useState(false);
-
-	// const [ref, inView] = useInView();
-	// const [blockRerender, setBlockRerender] = useState(false);
-	// const getNewItems = useCallback(async () => {
-	// 	if (!blockRerender) {
-	// 		setLoading(true);
-	// 		getAFterSearchResultList(location.state.searchInput, page);
-	// 		setLoading(false);
-	// 	}
-	// }, [page]);
-
-	// useEffect(() => {
-	// 	if (isSelected) {
-	// 	} else {
-	// 		getNewItems();
-	// 	}
-	// }, [getNewItems]);
-	// useEffect(() => {
-	// 	// 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-	// 	if (inView && !loading) {
-	// 		if (!blockRerender) {
-	// 			setPage(page => page + 1);
-	// 			console.log('페이지:', page);
-	// 		}
-	// 	}
-	// }, [inView, loading]);
-	// 무한 스크롤
-	const [queryKeyword, setQueryKeyword] = useState('');
+	let params = useParams();
 	useEffect(() => {
 		setBottomNavStatus(false);
 		setBottomMenuStatusState(false);
-		setSearchInputStatus(location.state.searchInput);
-		setSearchInput(location.state.searchInput);
-		let queryKeyword = location.state.searchInput;
-		setQueryKeyword(queryKeyword);
-		getSearchResultList(queryKeyword);
-	}, []);
+		setSearchInput(params.searchInput);
+		getSearchResultList(params.searchInput);
+	}, [params.searchInput]);
 	return (
 		<MainContainer padding="0 0 0 0">
 			<TopNav>
@@ -753,7 +676,7 @@ export default function SearchResult() {
 				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
 				getFilteredSearchList={getFilteredSearchList}
-				queryKeyword={queryKeyword}
+				queryKeyword={params.searchInput}
 			></SearchBottomSlideMenu>
 
 			<BottomDialogWrap openStatus={openState}>

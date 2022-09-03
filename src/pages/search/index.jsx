@@ -256,12 +256,13 @@ export default function Search() {
 	};
 	const handleEnterEvent = () => {
 		if (window.event.keyCode === 13) {
-			navigate(`/search/result`, { state: { searchInput } });
+			navigate(`/search/result/${searchInput}`, { state: { searchInput } });
 		}
 	};
 
 	const onClickKeyword = searchInput => {
-		navigate(`/search/result`, { state: { searchInput } });
+		console.log(searchInput);
+		navigate(`/search/result/${searchInput}`);
 	};
 
 	const settings = {
