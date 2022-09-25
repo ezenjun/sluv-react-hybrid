@@ -6,6 +6,7 @@ const devServerURL = 'https://dev.cmc-sluv.shop'; //개발 서버
 export const apiClient = axios.create({
 	// baseURL: process.env.NODE_ENV !== 'development' ? prodServerURL : devServerURL,
 	baseURL: devServerURL,
+	timeout: 10000,
 });
 
 export const customApiClient = async (method, url, data, jwtKey) => {
