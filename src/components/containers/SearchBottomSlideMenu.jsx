@@ -10,7 +10,7 @@ import { ItemFilter } from '../Filters/ItemFilter';
 import { customApiClient } from '../../utils/apiClient';
 import qs from 'qs';
 import { SubText } from '../Texts/SubText';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 // export const filterList = [
@@ -41,10 +41,9 @@ export const filterList = [
 
 export function SearchBottomSlideMenu(props) {
 	const bottomMenuStatusState = useRecoilValue(BottomMenuStatusState);
-	const searchInputState = useRecoilValue(SearchInputState);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const [isSelected, setIsSelected] = useState(false);
-	const location = useLocation();
+	let params = useParams();
 	const onReset = () => {
 		props.getSelectedItemFilter();
 		props.getSelectedPriceFilter();
@@ -57,13 +56,13 @@ export function SearchBottomSlideMenu(props) {
 		setSelectedAlignMainFilter(null);
 		// setSelectedColorStatusList([]);
 		// setSelectedColorFilterList([]);
-		console.log('searchInputState', searchInputState);
-		getSearchResultList(searchInputState);
+		console.log('params.searchInput', params.searchInput);
+		getSearchResultList(params.searchInput);
 	};
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=1&pageSize=8`
+			`/search?search_word=${queryKeyword}&page=1&pageSize=20`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -96,7 +95,7 @@ export function SearchBottomSlideMenu(props) {
 				price: mainprice,
 				order: mainAlign,
 				page: 1,
-				pageSize: 8,
+				pageSize: 20,
 			},
 			headers: {
 				'X-ACCESS-TOKEN': localStorage.getItem('x-access-token'),
@@ -114,87 +113,89 @@ export function SearchBottomSlideMenu(props) {
 	};
 
 	const onSubmit = (e, queryKeyword) => {
-		setBottomMenuStatusState(false);
-		console.log('서브밋 쿼리 키워드', queryKeyword);
-		var mainItem = null;
-		var subItem = null;
-		var mainprice = null;
-		var mainAlign = null;
-		if (selectedItemMainFilter !== 0) {
-			// 아이템 필터중에 선택한게 존재할 경우
-			if (selectedItemFilterList.length === 0) {
-				// 아이템 상위 카테고리만 선택
-				props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
-				mainItem = filterList[selectedItemMainFilter - 1].name;
-			} else {
-				// 아이템 하위 카테고리 선택
-				if (selectedItemFilterList.length === 1) {
-					// 하위 카테고리에서 1개 선택
-					console.log('selectedItemFilterList', selectedItemFilterList);
-					props.getSelectedItemFilter(selectedItemFilterList[0]);
+		if (isSelected) {
+			setBottomMenuStatusState(false);
+			console.log('서브밋 쿼리 키워드', queryKeyword);
+			var mainItem = null;
+			var subItem = null;
+			var mainprice = null;
+			var mainAlign = null;
+			if (selectedItemMainFilter !== 0) {
+				// 아이템 필터중에 선택한게 존재할 경우
+				if (selectedItemFilterList.length === 0) {
+					// 아이템 상위 카테고리만 선택
+					props.getSelectedItemFilter(filterList[selectedItemMainFilter - 1].name);
 					mainItem = filterList[selectedItemMainFilter - 1].name;
-					subItem = selectedItemFilterList[0];
 				} else {
-					// 하위 카테고리에서 여러개 선택
-					props.getSelectedItemFilter(
-						`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
-					);
-					// 쿼리용 '하위카테고리 하위카테고리'
-					var tmp = ' ';
-					if (selectedItemFilterList) {
-						for (var i = 0; i < selectedItemFilterList.length; i++) {
-							tmp += selectedItemFilterList[i];
-							if (i !== selectedItemFilterList.length - 1) {
-								tmp += ' ';
+					// 아이템 하위 카테고리 선택
+					if (selectedItemFilterList.length === 1) {
+						// 하위 카테고리에서 1개 선택
+						console.log('selectedItemFilterList', selectedItemFilterList);
+						props.getSelectedItemFilter(selectedItemFilterList[0]);
+						mainItem = filterList[selectedItemMainFilter - 1].name;
+						subItem = selectedItemFilterList[0];
+					} else {
+						// 하위 카테고리에서 여러개 선택
+						props.getSelectedItemFilter(
+							`${selectedItemFilterList[0]} 외 ${selectedItemFilterList.length - 1}`
+						);
+						// 쿼리용 '하위카테고리 하위카테고리'
+						var tmp = ' ';
+						if (selectedItemFilterList) {
+							for (var i = 0; i < selectedItemFilterList.length; i++) {
+								tmp += selectedItemFilterList[i];
+								if (i !== selectedItemFilterList.length - 1) {
+									tmp += ' ';
+								}
 							}
 						}
+						mainItem = filterList[selectedItemMainFilter - 1].name;
+						subItem = tmp;
 					}
-					mainItem = filterList[selectedItemMainFilter - 1].name;
-					subItem = tmp;
 				}
+			} else {
+				// 아이템 카테고리 선택 안한 경우
+				props.getSelectedItemFilter();
 			}
-		} else {
-			// 아이템 카테고리 선택 안한 경우
-			props.getSelectedItemFilter();
+
+			if (selectedPriceMainFilter !== null) {
+				// 가격 가테고리 선택
+				// result 필터에 보여지는 text
+				props.getSelectedPriceFilter(selectedPriceMainFilter);
+				// params용
+				mainprice = selectedPriceFilterIdx;
+			} else {
+				// 가격 카테고리 선택 안한 경우
+				props.getSelectedPriceFilter();
+			}
+
+			if (selectedAlignMainFilter !== null) {
+				// 정렬 카테고리 선택
+				// result 필터에 보여지는 text
+				props.getSelectedAlignFilter(selectedAlignMainFilter);
+				// params용
+				mainAlign = selectedAlignEnglish;
+			} else {
+				// 정렬 카테고리 선택 안한 경우
+				props.getSelectedAlignFilter();
+				mainAlign = 'latest';
+			}
+
+			AfterFilterComplete(mainItem, subItem, mainprice, mainAlign, queryKeyword);
+
+			// if (selectedColorFilterList.length > 0) {
+			// 	if (selectedColorFilterList.length === 1) {
+			// 		props.getSelectedColorFilter(selectedColorFilterList[0].name);
+			// 	} else {
+			// 		props.getSelectedColorFilter(
+			// 			`${selectedColorFilterList[0].name} 외 ${selectedColorFilterList.length - 1}`
+			// 		);
+			// 	}
+			// } else {
+			// 	props.getSelectedColorFilter();
+			// }
+			e.preventDefault();
 		}
-
-		if (selectedPriceMainFilter !== null) {
-			// 가격 가테고리 선택
-			// result 필터에 보여지는 text
-			props.getSelectedPriceFilter(selectedPriceMainFilter);
-			// params용
-			mainprice = selectedPriceFilterIdx;
-		} else {
-			// 가격 카테고리 선택 안한 경우
-			props.getSelectedPriceFilter();
-		}
-
-		if (selectedAlignMainFilter !== null) {
-			// 정렬 카테고리 선택
-			// result 필터에 보여지는 text
-			props.getSelectedAlignFilter(selectedAlignMainFilter);
-			// params용
-			mainAlign = selectedAlignEnglish;
-		} else {
-			// 정렬 카테고리 선택 안한 경우
-			props.getSelectedAlignFilter();
-			mainAlign = 'latest';
-		}
-
-		AfterFilterComplete(mainItem, subItem, mainprice, mainAlign, queryKeyword);
-
-		// if (selectedColorFilterList.length > 0) {
-		// 	if (selectedColorFilterList.length === 1) {
-		// 		props.getSelectedColorFilter(selectedColorFilterList[0].name);
-		// 	} else {
-		// 		props.getSelectedColorFilter(
-		// 			`${selectedColorFilterList[0].name} 외 ${selectedColorFilterList.length - 1}`
-		// 		);
-		// 	}
-		// } else {
-		// 	props.getSelectedColorFilter();
-		// }
-		e.preventDefault();
 	};
 	// 아이템 종류
 	const [selectedItemMainFilter, setSelectedItemMainFilter] = useState(0);
@@ -246,7 +247,7 @@ export function SearchBottomSlideMenu(props) {
 
 	useEffect(() => {
 		props.childFunc.current = onReset;
-	}, []);
+	}, [onReset]);
 
 	useEffect(() => {
 		if (

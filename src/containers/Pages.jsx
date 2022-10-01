@@ -83,7 +83,7 @@ export default function Pages() {
 			<Route path="/hot" element={<HotItem />} />
 			<Route path="/notice" element={<Notice />} />
 			<Route path="/search" element={<Search />} />
-			<Route path="/search/result" element={<SearchResult />} />
+			<Route path="/search/result/:searchInput" element={<SearchResult />} />
 
 			<Route path="/binder" element={<Binder />} />
 			<Route path="/binder/:idx" element={<BinderDetail />} />
