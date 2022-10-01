@@ -35,11 +35,11 @@ export default function KakaoRedirectHandler() {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			localStorage.setItem('myUserIdx', data.result.userIdx);
+			localStorage.setItem('autoLogin', true);
 			if (data.result.nickname === 'tempNickName') {
 				setCurrentPage(4);
 				setUserIdx(data.result.userIdx);
 				setAutoLoginCheck(true);
-				localStorage.setItem('autoLogin', true);
 				console.log('처음 회원가입 jwt', data.result.jwt);
 				console.log(data.result.userIdx);
 				navigate('/signup');
@@ -54,10 +54,10 @@ export default function KakaoRedirectHandler() {
 			console.log(data.result.jwt);
 			localStorage.setItem('x-access-token', data.result.jwt);
 			localStorage.setItem('myUserIdx', data.result.userIdx);
-			// 닉네임으로 페이지 변경
-			setCurrentPage(4);
-			setAutoLoginCheck(true);
 			localStorage.setItem('autoLogin', true);
+			
+			setAutoLoginCheck(true);
+			setCurrentPage(4);
 			setUserIdx(data.result.userIdx);
 			navigate('/signup');
 		}
