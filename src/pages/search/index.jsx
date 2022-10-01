@@ -12,6 +12,7 @@ import { GridImage } from '../../components/GridItems/GridImage';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { Input } from '../../components/Input';
 import Slider from 'react-slick';
+import { BackButton } from '../../components/Buttons/BackButton';
 import { ReactComponent as Delete } from '../../assets/Icons/delete_input.svg';
 import { ReactComponent as SearchIcon } from '../../assets/Icons/searchIcon.svg';
 import { ReactComponent as UpArrow } from '../../assets/Icons/upArrow.svg';
@@ -323,7 +324,8 @@ export default function Search() {
 
 	return (
 		<MainContainer padding="0 0 3.125rem 0">
-			<TopNav style={{ height: '3.0625rem' }}>
+			<TopNav style={{ justifyContent: 'space-between' }}>
+				{inputFocus ? <BackButton onClick={() => onBlur()} /> : <></>}
 				<SubText fontsize="1.125rem" fontweight="bold" className="centerText">
 					검색
 				</SubText>
@@ -338,7 +340,6 @@ export default function Search() {
 						value={searchInput}
 						onChange={onHandleChangeSearch}
 						onFocus={onFocus}
-						onBlur={onBlur}
 						type="text"
 						placeholder="셀럽과 아이템을 검색해 보세요"
 						margin="0 0 0 0.375rem"
