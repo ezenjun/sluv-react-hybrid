@@ -62,7 +62,7 @@ export function SearchBottomSlideMenu(props) {
 	const getSearchResultList = async queryKeyword => {
 		const data = await customApiClient(
 			'get',
-			`/search?search_word=${queryKeyword}&page=1&pageSize=8`
+			`/search?search_word=${queryKeyword}&page=1&pageSize=20`
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
@@ -95,7 +95,7 @@ export function SearchBottomSlideMenu(props) {
 				price: mainprice,
 				order: mainAlign,
 				page: 1,
-				pageSize: 8,
+				pageSize: 20,
 			},
 			headers: {
 				'X-ACCESS-TOKEN': localStorage.getItem('x-access-token'),
@@ -247,7 +247,7 @@ export function SearchBottomSlideMenu(props) {
 
 	useEffect(() => {
 		props.childFunc.current = onReset;
-	}, [params.searchInput]);
+	}, [onReset]);
 
 	useEffect(() => {
 		if (

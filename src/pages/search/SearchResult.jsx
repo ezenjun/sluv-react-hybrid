@@ -83,7 +83,7 @@ export default function SearchResult() {
 	const handleEnterEvent = () => {
 		if (window.event.keyCode === 13) {
 			setLoading(true);
-			let queryKeyword = window.event.target.value;
+			let queryKeyword = searchInput;
 			console.log('queryKeyword', queryKeyword);
 			let blank = ' ';
 			let isBlank = queryKeyword.includes(blank);
@@ -161,18 +161,19 @@ export default function SearchResult() {
 				setLoading(false);
 			}
 			return;
-		}
-		setSearchResultList(data.result.searchItemList);
-		var tmp = [];
-		for (var i = 0; i < data.result.searchItemList.length; i++) {
-			if (data.result.searchItemList[i].isDib === 'Y') {
-				tmp.push(true);
-			} else {
-				tmp.push(false);
+		} else {
+			setSearchResultList(data.result.searchItemList);
+			var tmp = [];
+			for (var i = 0; i < data.result.searchItemList.length; i++) {
+				if (data.result.searchItemList[i].isDib === 'Y') {
+					tmp.push(true);
+				} else {
+					tmp.push(false);
+				}
 			}
+			setLatestIsBinderList([...tmp]);
+			setLoading(false);
 		}
-		setLatestIsBinderList([...tmp]);
-		setLoading(false);
 	};
 
 	// 아이템 바인더 찜
@@ -289,6 +290,7 @@ export default function SearchResult() {
 		setBottomMenuStatusState(false);
 		setSearchInput(params.searchInput);
 		getSearchResultList(params.searchInput);
+		console.log('search result useEffect내에서 params', params.searchInput);
 	}, [params.searchInput]);
 	return (
 		<MainContainer padding="0 0 0 0">
@@ -676,7 +678,7 @@ export default function SearchResult() {
 				// getSelectedColorFilter={getSelectedColorFilter}
 				getIsSelected={getIsSelected}
 				getFilteredSearchList={getFilteredSearchList}
-				queryKeyword={params.searchInput}
+				queryKeyword={searchInput}
 			></SearchBottomSlideMenu>
 
 			<BottomDialogWrap openStatus={openState}>
