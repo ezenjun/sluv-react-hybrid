@@ -99,6 +99,7 @@ export default function UploadItem() {
 	const [confirmPopupStatus, setConfirmPopupStatus] = useState(false);
 	const [afterUploadItemIdx, setAfterUploadItemIdx] = useState(-1);
 	const [isLoading, setIsLoading] = useState(false);
+	const [uploadStartFlag, setUploadStartFlag] = useState(false);
 
 	const now = new Date();
 
@@ -247,6 +248,7 @@ export default function UploadItem() {
 		if (!data) return;
 
 		setIsLoading(false);
+		setUploadStartFlag(false);
 
 		if (state) {
 			setToastMessageBottomPosition('1.625rem');
@@ -270,10 +272,10 @@ export default function UploadItem() {
 	useEffect(() => {
 		console.log('이미지유알엘리스트', imgUrlList);
 		console.log('셀렉티드파일리스트', selectedFileList);
-		if (imgUrlList.length > 0 && (imgUrlList.length === selectedFileList.length)) {
+		if (uploadStartFlag && imgUrlList.length > 0 && (imgUrlList.length === selectedFileList.length)) {
 			onPostUpload();
 		}
-	}, [isImgUploadComplete, imgUrlList, selectedFileList, onPostUpload]);
+	}, [imgUrlList, selectedFileList, uploadStartFlag]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -437,6 +439,7 @@ export default function UploadItem() {
 		if (isUploadConfirm) {
 			setIsLoading(true);
 			onClickUploadItem(selectedFileList);
+			setUploadStartFlag(true);
 		} else {
 			setToastMessageBottomPosition('1.625rem');
 			setToastMessage('필수정보를 모두 입력해주세요');
