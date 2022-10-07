@@ -201,13 +201,79 @@ export default function UploadItem() {
 		previewImgUrlList,
 	]);
 
+	const onPostUpload = async () => {
+		let body = {};
+		if (state) {
+			body = {
+				celebIdx: selectedCeleb.celebIdx,
+				memberIdx: selectedMember.memberIdx,
+				parentCategory: filterList[selectedItemMainFilter - 1].name,
+				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
+				brandIdx: brandObj.brandIdx,
+				name: productName,
+				whenDiscovery: date,
+				whereDiscovery: place,
+				price: selectedPriceMainFilterIdx,
+				content: extraInfo,
+				sellerSite: link,
+				itemImgUrlList: imgUrlList,
+			};
+		} else {
+			body = {
+				celebIdx: selectedCeleb.celebIdx,
+				memberIdx: selectedMember.memberIdx ? selectedMember.memberIdx : null,
+				parentCategory: filterList[selectedItemMainFilter - 1].name,
+				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
+				brandIdx: brandObj.brandIdx,
+				name: productName,
+				whenDiscovery: date,
+				whereDiscovery: place,
+				price: selectedPriceMainFilterIdx,
+				content: extraInfo ? extraInfo : null,
+				sellerSite: link ? link : null,
+				itemImgUrlList: imgUrlList,
+			};
+		}
+		console.log('body체크', body);
+
+		let data = {};
+		if (state) {
+			data = await customApiClient('patch', `/items/${state.itemIdx}`, body);
+		} else {
+			data = await customApiClient('post', '/items', body);
+		}
+
+		console.log(data);
+		if (!data) return;
+
+		setIsLoading(false);
+
+		if (state) {
+			setToastMessageBottomPosition('1.625rem');
+			setToastMessage('게시글이 수정되었어요');
+			setToastMessageWrapStatus(true);
+			setToastMessageStatus(true);
+
+			setTimeout(() => {
+				setToastMessageStatus(false);
+				navigate(-1);
+			}, 1000);
+			setTimeout(() => {
+				setToastMessageWrapStatus(false);
+			}, 1300);
+		} else {
+			setAfterUploadItemIdx(data.result.addedItem);
+			setConfirmPopupStatus(true);
+		}
+	};
+
 	useEffect(() => {
 		console.log('이미지유알엘리스트', imgUrlList);
 		console.log('셀렉티드파일리스트', selectedFileList);
-		if (imgUrlList.length > 0 && imgUrlList.length == selectedFileList.length && isImgUploadComplete) {
+		if (imgUrlList.length > 0 && (imgUrlList.length === selectedFileList.length)) {
 			onPostUpload();
 		}
-	}, [isImgUploadComplete, imgUrlList, selectedFileList]);
+	}, [isImgUploadComplete, imgUrlList, selectedFileList, onPostUpload]);
 
 	const onClickItemCategorySelect = () => {
 		setPopUpPageNum(1);
@@ -297,9 +363,8 @@ export default function UploadItem() {
 		let fileURLs = [];
 
 		let file;
-		let filesLength = fileArr.length > 5 ? 5 : fileArr.length;
 
-		for (let i = 0; i < filesLength; i++) {
+		for (let i = 0; i < fileArr.length; i++) {
 			file = fileArr[i];
 
 			let reader = new FileReader();
@@ -346,12 +411,12 @@ export default function UploadItem() {
 							evt.request.httpRequest.path,
 					});
 				}
-				setImgUrlList(temp);
+				setImgUrlList([...temp]);
 
-				if (index === length) {
-					console.log('체크체크')
-					setIsImgUploadComplete(true);
-				}
+				// if (index === length) {
+				// 	console.log('체크체크')
+				// 	setIsImgUploadComplete(true);
+				// } 
 			})
 			.send(err => {
 				if (err) console.log(err);
@@ -366,72 +431,7 @@ export default function UploadItem() {
 		});
 	};
 
-	const onPostUpload = async () => {
-		
-		let body = {};
-		if (state) {
-			body = {
-				celebIdx: selectedCeleb.celebIdx,
-				memberIdx: selectedMember.memberIdx,
-				parentCategory: filterList[selectedItemMainFilter - 1].name,
-				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
-				brandIdx: brandObj.brandIdx,
-				name: productName,
-				whenDiscovery: date,
-				whereDiscovery: place,
-				price: selectedPriceMainFilterIdx,
-				content: extraInfo,
-				sellerSite: link,
-				itemImgUrlList: imgUrlList,
-			};
-		} else {
-			body = {
-				celebIdx: selectedCeleb.celebIdx,
-				memberIdx: selectedMember.memberIdx ? selectedMember.memberIdx : null,
-				parentCategory: filterList[selectedItemMainFilter - 1].name,
-				subCategory: selectedItemSubFilter ? selectedItemSubFilter : '기타',
-				brandIdx: brandObj.brandIdx,
-				name: productName,
-				whenDiscovery: date,
-				whereDiscovery: place,
-				price: selectedPriceMainFilterIdx,
-				content: extraInfo ? extraInfo : null,
-				sellerSite: link ? link : null,
-				itemImgUrlList: imgUrlList,
-			};
-		}
-		console.log('body체크', body);
-
-		let data = {};
-		if (state) {
-			data = await customApiClient('patch', `/items/${state.itemIdx}`, body);
-		} else {
-			data = await customApiClient('post', '/items', body);
-		}
-
-		console.log(data);
-		if (!data) return;
-
-		setIsLoading(false);
-
-		if (state) {
-			setToastMessageBottomPosition('1.625rem');
-			setToastMessage('게시글이 수정되었어요');
-			setToastMessageWrapStatus(true);
-			setToastMessageStatus(true);
-
-			setTimeout(() => {
-				setToastMessageStatus(false);
-				navigate(-1);
-			}, 1000);
-			setTimeout(() => {
-				setToastMessageWrapStatus(false);
-			}, 1300);
-		} else {
-			setAfterUploadItemIdx(data.result.addedItem);
-			setConfirmPopupStatus(true);
-		}
-	};
+	
 
 	const onClickUploadBtnStart = () => {
 		if (isUploadConfirm) {
