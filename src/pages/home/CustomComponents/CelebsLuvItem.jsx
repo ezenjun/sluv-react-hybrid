@@ -70,6 +70,9 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		if (idx === 2) {
 			setCurrentList(hotList[selectedChip]);
 		}
+		for (var i = 0; i < hotList.length; i++) {
+			console.log(hotList[i]);
+		}
 	};
 	// 연예인 선택
 	const [selectedMemeberIdx, setSelectedMemeberIdx] = useState(-1);
@@ -127,7 +130,7 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 	const getOpenStatus = input => {
 		setOpenState(input);
 	};
-	// console.log('셀렉트아이템인덱스', selectedItemIdx);
+
 	const onSelectBinder = binderIdx => {
 		for (var i = 0; i < binderList.length; i++) {
 			if (binderList[i].binderIdx === binderIdx) {
@@ -261,19 +264,21 @@ export const CelebsLuvItem = ({ celeb, ComponentIndex }) => {
 		);
 		if (!data) return;
 		if (!data.isSuccess) {
-			// console.log(data.message);
+			console.log(data.message);
 			return;
-		}
-		setHotList([...hotList, data.result]);
-		var tmp = [];
-		for (var i = 0; i < data.result.length; i++) {
-			if (data.result[i].isDib === 'Y') {
-				tmp.push(true);
-			} else {
-				tmp.push(false);
+		} else {
+			console.log('아이템 HOT결과', data.result);
+			setHotList([...hotList, data.result]);
+			var tmp = [];
+			for (var i = 0; i < data.result.length; i++) {
+				if (data.result[i].isDib === 'Y') {
+					tmp.push(true);
+				} else {
+					tmp.push(false);
+				}
 			}
+			setHotIsBinderList([...hotIsBinderList, tmp]);
 		}
-		setHotIsBinderList([...hotIsBinderList, tmp]);
 	};
 
 	const getEachMemberLatestList = async (idx, memberidx) => {
