@@ -144,7 +144,9 @@ export default function UploadItem() {
 				memberIdx: state.memberIdx,
 				name: state.memberName,
 			});
-			setSelectedItemMainFilter(filterList.findIndex(item => item.name == state.parentCategory));
+			setSelectedItemMainFilter(
+				filterList.findIndex(item => item.name == state.parentCategory)
+			);
 			setSelectedItemSubFilter(state.subCategory);
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
@@ -272,7 +274,11 @@ export default function UploadItem() {
 	useEffect(() => {
 		console.log('이미지유알엘리스트', imgUrlList);
 		console.log('셀렉티드파일리스트', selectedFileList);
-		if (uploadStartFlag && imgUrlList.length > 0 && (imgUrlList.length === selectedFileList.length)) {
+		if (
+			uploadStartFlag &&
+			imgUrlList.length > 0 &&
+			imgUrlList.length === selectedFileList.length
+		) {
 			onPostUpload();
 		}
 	}, [imgUrlList, selectedFileList, uploadStartFlag]);
@@ -390,13 +396,11 @@ export default function UploadItem() {
 
 		myBucket
 			.putObject(params)
-			.on('httpUploadProgress', evt => {
-				
-			})
+			.on('httpUploadProgress', evt => {})
 			.on('complete', evt => {
 				let temp = [];
 				temp = imgUrlList;
-				if (index == checkedElement) {
+				if (index === checkedElement) {
 					temp.push({
 						isRepresent: 1,
 						itemImgUrl:
@@ -418,7 +422,7 @@ export default function UploadItem() {
 				// if (index === length) {
 				// 	console.log('체크체크')
 				// 	setIsImgUploadComplete(true);
-				// } 
+				// }
 			})
 			.send(err => {
 				if (err) console.log(err);
@@ -432,8 +436,6 @@ export default function UploadItem() {
 			s3ImgUpload(_file, index, arr.length - 1);
 		});
 	};
-
-	
 
 	const onClickUploadBtnStart = () => {
 		if (isUploadConfirm) {
