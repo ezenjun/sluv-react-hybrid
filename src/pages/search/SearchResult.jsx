@@ -286,14 +286,14 @@ export default function SearchResult() {
 
 	let params = useParams();
 	useEffect(() => {
-		setBottomNavStatus(false);
+		setBottomNavStatus(true);
 		setBottomMenuStatusState(false);
 		setSearchInput(params.searchInput);
 		getSearchResultList(params.searchInput);
 		console.log('search result useEffect내에서 params', params.searchInput);
 	}, [params.searchInput]);
 	return (
-		<MainContainer padding="0 0 0 0">
+		<MainContainer padding="0 0 0px 0">
 			<TopNav>
 				<BackButton
 					onClick={onBackClick}
@@ -822,7 +822,7 @@ const FilterWrap = styled.div`
 const ItemContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	padding: 20px;
+	padding: 1.25rem 1.25rem 4.375rem 1.25rem;
 `;
 const ItemTextWrap = styled.div`
 	display: flex;
