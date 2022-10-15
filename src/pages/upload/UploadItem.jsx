@@ -143,7 +143,9 @@ export default function UploadItem() {
 				memberIdx: state.memberIdx,
 				name: state.memberName,
 			});
-			setSelectedItemMainFilter(filterList.findIndex(item => item.name == state.parentCategory));
+			setSelectedItemMainFilter(
+				filterList.findIndex(item => item.name == state.parentCategory)
+			);
 			setSelectedItemSubFilter(state.subCategory);
 			setCategory(state.parentCategory + ' > ' + state.subCategory);
 			setIsCategory(true);
@@ -204,7 +206,11 @@ export default function UploadItem() {
 	useEffect(() => {
 		console.log('이미지유알엘리스트', imgUrlList);
 		console.log('셀렉티드파일리스트', selectedFileList);
-		if (imgUrlList.length > 0 && imgUrlList.length == selectedFileList.length && isImgUploadComplete) {
+		if (
+			imgUrlList.length > 0 &&
+			imgUrlList.length === selectedFileList.length &&
+			isImgUploadComplete
+		) {
 			onPostUpload();
 		}
 	}, [isImgUploadComplete, imgUrlList, selectedFileList]);
@@ -323,13 +329,11 @@ export default function UploadItem() {
 
 		myBucket
 			.putObject(params)
-			.on('httpUploadProgress', evt => {
-				
-			})
+			.on('httpUploadProgress', evt => {})
 			.on('complete', evt => {
 				let temp = [];
 				temp = imgUrlList;
-				if (index == checkedElement) {
+				if (index === checkedElement) {
 					temp.push({
 						isRepresent: 1,
 						itemImgUrl:
@@ -349,8 +353,10 @@ export default function UploadItem() {
 				setImgUrlList(temp);
 
 				if (index === length) {
-					console.log('체크체크')
+					console.log('체크체크');
 					setIsImgUploadComplete(true);
+				} else {
+					console.log('index !== length');
 				}
 			})
 			.send(err => {
@@ -367,7 +373,6 @@ export default function UploadItem() {
 	};
 
 	const onPostUpload = async () => {
-		
 		let body = {};
 		if (state) {
 			body = {
