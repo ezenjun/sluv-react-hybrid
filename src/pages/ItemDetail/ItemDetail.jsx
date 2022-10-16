@@ -504,23 +504,28 @@ export default function ItemDetail() {
 								></Image>
 							))}
 						</ImageContainer>
-						{loaded && instanceRef.current && (
-							<Dots>
-								{[
-									...Array(
-										instanceRef.current.track.details.slides.length
-									).keys(),
-								].map(idx => {
-									return (
-										<CarouselDot
-											key={idx}
-											className={
-												'dot' + (currentSlide === idx ? ' active' : '')
-											}
-										></CarouselDot>
-									);
-								})}
-							</Dots>
+						{itemInfo.itemImgList.length > 1 && (
+							<>
+								{loaded && instanceRef.current && (
+									<Dots>
+										{[
+											...Array(
+												instanceRef.current.track.details.slides.length
+											).keys(),
+										].map(idx => {
+											return (
+												<CarouselDot
+													key={idx}
+													className={
+														'dot' +
+														(currentSlide === idx ? ' active' : '')
+													}
+												></CarouselDot>
+											);
+										})}
+									</Dots>
+								)}
+							</>
 						)}
 					</div>
 
