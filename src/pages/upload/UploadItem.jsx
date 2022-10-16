@@ -365,6 +365,7 @@ export default function UploadItem() {
 		let fileURLs = [];
 
 		let file;
+		
 
 		for (let i = 0; i < fileArr.length; i++) {
 			file = fileArr[i];
