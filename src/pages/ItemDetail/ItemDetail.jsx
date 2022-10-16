@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Slider from 'react-slick';
+import { useKeenSlider } from 'keen-slider/react';
+import 'keen-slider/keen-slider.min.css';
 import { customApiClient } from '../../utils/apiClient';
 
 import { MainText } from '../../components/Texts/MainText';
@@ -88,20 +89,6 @@ export default function ItemDetail() {
 			setPopUpModalStatusState(false);
 			navigate(-1);
 		}
-	};
-	const settings = {
-		dots: true,
-		infinite: true,
-		speed: 300,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-		autoplay: false,
-		cssEase: 'linear',
-		arrows: false,
-		dotsClass: 'slick-dots line-indicator',
-		customPaging: i => (
-			<div style={{ position: 'fixed', width: '100%', top: '0', margin: '0' }}></div>
-		),
 	};
 
 	const [itemInfo, setItemInfo] = useState([]);
@@ -440,6 +427,17 @@ export default function ItemDetail() {
 			state: itemInfo,
 		});
 	};
+	const [currentSlide, setCurrentSlide] = useState(0);
+	const [loaded, setLoaded] = useState(false);
+	const [sliderRef, instanceRef] = useKeenSlider({
+		initial: 0,
+		slideChanged(slider) {
+			setCurrentSlide(slider.track.details.rel);
+		},
+		created() {
+			setLoaded(true);
+		},
+	});
 
 	const listInnerRef = useRef();
 	// const scrollToRef = ref => ref.current.scrollIntoView(0, ref.current.offsetTop);
@@ -496,22 +494,36 @@ export default function ItemDetail() {
 					>
 						top
 					</button> */}
-					{/* <ImageContainer>
-						{itemInfo.itemImgList && (
-							<Slider {...settings}>
-								{itemInfo.itemImgList.map(itemImg => (
-									<Image key={itemImg} src={itemImg.itemImgUrl}></Image>
-								))}
-							</Slider>
-						)}
-					</ImageContainer> */}
-					<div>
-						<ImageContainer>
+					<div className="navigation-wrapper" style={{ position: 'relative' }}>
+						<ImageContainer ref={sliderRef} className="keen-slider">
 							{itemInfo.itemImgList.map(itemImg => (
-								<Image key={itemImg} src={itemImg.itemImgUrl}></Image>
+								<Image
+									key={itemImg}
+									src={itemImg.itemImgUrl}
+									className="keen-slider__slide"
+								></Image>
 							))}
 						</ImageContainer>
+						{loaded && instanceRef.current && (
+							<Dots>
+								{[
+									...Array(
+										instanceRef.current.track.details.slides.length
+									).keys(),
+								].map(idx => {
+									return (
+										<CarouselDot
+											key={idx}
+											className={
+												'dot' + (currentSlide === idx ? ' active' : '')
+											}
+										></CarouselDot>
+									);
+								})}
+							</Dots>
+						)}
 					</div>
+
 					<ItemInfoContainer>
 						<SubText fontsize="1rem" fontweight="bold" color="#9E30F4">
 							{itemInfo.celebName}&nbsp;{itemInfo.memberName}
@@ -1139,7 +1151,9 @@ const Image = styled.div`
 	background-size: cover;
 	background-position: 50%;
 	background-color: lightgray;
-	scroll-snap-align: start;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 const ImageContainer = styled.div`
 	display: flex;
@@ -1360,4 +1374,22 @@ const BinderOverflow = styled.div`
 	::-webkit-scrollbar {
 		display: none;
 	}
+`;
+
+const Dots = styled.div`
+	display: flex;
+	position: relative;
+	bottom: 20px;
+	justify-content: center;
+	.active {
+		background: #ffffff;
+	}
+`;
+
+const CarouselDot = styled.div`
+	border: none;
+	width: 30px;
+	height: 2px;
+	background: rgba(240, 240, 240, 0.5);
+	margin: 0;
 `;
