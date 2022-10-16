@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import Slider from 'react-slick';
+import { useKeenSlider } from 'keen-slider/react';
+import 'keen-slider/keen-slider.min.css';
 import { customApiClient } from '../../utils/apiClient';
 
 import { MainText } from '../../components/Texts/MainText';
@@ -15,6 +16,7 @@ import { GridImage } from '../../components/GridItems/GridImage';
 import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
 import { HorizontalLine } from '../../components/Lines/HorizontalLine';
+import { ReactComponent as Home } from '../../assets/Icons/ic_x24_home_on.svg';
 import { ReactComponent as UserBasicProfileImg } from '../../assets/Icons/user_basic_profile_img.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as EditButton } from '../../assets/Icons/threedot_Black.svg';
@@ -87,20 +89,6 @@ export default function ItemDetail() {
 			setPopUpModalStatusState(false);
 			navigate(-1);
 		}
-	};
-	const settings = {
-		dots: true,
-		infinite: true,
-		speed: 300,
-		slidesToShow: 1,
-		slidesToScroll: 1,
-		autoplay: false,
-		cssEase: 'linear',
-		arrows: false,
-		dotsClass: 'slick-dots line-indicator',
-		customPaging: i => (
-			<div style={{ position: 'fixed', width: '100%', top: '0', margin: '0' }}></div>
-		),
 	};
 
 	const [itemInfo, setItemInfo] = useState([]);
@@ -177,6 +165,9 @@ export default function ItemDetail() {
 	const onDeleteBinderClick = (e, itemIdx) => {
 		e.stopPropagation();
 		DeleteFromBinderAPI(itemIdx);
+	};
+	const onClickHome = () => {
+		navigate('/home');
 	};
 
 	async function addToBinderAPI(itemIdx, binderIdx, binderName) {
@@ -436,6 +427,17 @@ export default function ItemDetail() {
 			state: itemInfo,
 		});
 	};
+	const [currentSlide, setCurrentSlide] = useState(0);
+	const [loaded, setLoaded] = useState(false);
+	const [sliderRef, instanceRef] = useKeenSlider({
+		initial: 0,
+		slideChanged(slider) {
+			setCurrentSlide(slider.track.details.rel);
+		},
+		created() {
+			setLoaded(true);
+		},
+	});
 
 	const listInnerRef = useRef();
 	// const scrollToRef = ref => ref.current.scrollIntoView(0, ref.current.offsetTop);
@@ -461,6 +463,10 @@ export default function ItemDetail() {
 			>
 				<BackButton onClick={() => navigate(-1)} />
 				<div className="rightText">
+					<Home
+						onClick={() => onClickHome()}
+						style={{ width: '1.5rem', height: '1.5rem', marginRight: '1.25rem' }}
+					></Home>
 					<CopyToClipboard text={`https://www.sluv.co.kr/item/detail/${itemIdx}`}>
 						<ShareButton
 							onClick={onClickShareButton}
@@ -488,15 +494,35 @@ export default function ItemDetail() {
 					>
 						top
 					</button> */}
-					<ImageContainer>
-						{itemInfo.itemImgList && (
-							<Slider {...settings}>
-								{itemInfo.itemImgList.map(itemImg => (
-									<Image key={itemImg} src={itemImg.itemImgUrl}></Image>
-								))}
-							</Slider>
+					<div className="navigation-wrapper" style={{ position: 'relative' }}>
+						<ImageContainer ref={sliderRef} className="keen-slider">
+							{itemInfo.itemImgList.map(itemImg => (
+								<Image
+									key={itemImg}
+									src={itemImg.itemImgUrl}
+									className="keen-slider__slide"
+								></Image>
+							))}
+						</ImageContainer>
+						{loaded && instanceRef.current && (
+							<Dots>
+								{[
+									...Array(
+										instanceRef.current.track.details.slides.length
+									).keys(),
+								].map(idx => {
+									return (
+										<CarouselDot
+											key={idx}
+											className={
+												'dot' + (currentSlide === idx ? ' active' : '')
+											}
+										></CarouselDot>
+									);
+								})}
+							</Dots>
 						)}
-					</ImageContainer>
+					</div>
 
 					<ItemInfoContainer>
 						<SubText fontsize="1rem" fontweight="bold" color="#9E30F4">
@@ -1119,39 +1145,50 @@ export default function ItemDetail() {
 	);
 }
 const Image = styled.div`
-	width: 23.4375rem;
-	height: 23.4375rem;
+	min-width: 100%;
+	min-height: 23.4375rem;
 	background-image: url(${props => props.src});
 	background-size: cover;
 	background-position: 50%;
 	background-color: lightgray;
-	/* background-image: url(${props => props.src}); */
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 const ImageContainer = styled.div`
-	.slick-dots {
-		position: absolute;
-		bottom: 1.25rem;
-	}
-	.line-indicator li {
-		height: 0.125rem;
-		width: 1.875rem;
-		background: #f0f0f0;
-		opacity: 50%;
-		/* border-radius: 5px; */
-		padding: 0;
-		margin: 0;
-	}
-	.line-indicator li:hover {
-		background: #c3c3c3;
-		margin: 0;
-	}
-	.line-indicator li.slick-active {
-		background: #fff;
-		opacity: 100%;
-		transition: 0.3s ease-in-out;
-		margin: 0;
+	display: flex;
+	min-width: 100%;
+	min-height: 23.4375rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	::-webkit-scrollbar {
+		display: none;
 	}
 `;
+// const ImageContainer = styled.div`
+// 	.slick-dots {
+// 		position: absolute;
+// 		bottom: 1.25rem;
+// 	}
+// 	.line-indicator li {
+// 		height: 0.125rem;
+// 		width: 1.875rem;
+// 		background: #f0f0f0;
+// 		opacity: 50%;
+// 		padding: 0;
+// 		margin: 0;
+// 	}
+// 	.line-indicator li:hover {
+// 		background: #c3c3c3;
+// 		margin: 0;
+// 	}
+// 	.line-indicator li.slick-active {
+// 		background: #fff;
+// 		opacity: 100%;
+// 		transition: 0.3s ease-in-out;
+// 		margin: 0;
+// 	}
+// `;
 
 const BottomNavWrap = styled.div`
 	z-index: 50;
@@ -1337,4 +1374,22 @@ const BinderOverflow = styled.div`
 	::-webkit-scrollbar {
 		display: none;
 	}
+`;
+
+const Dots = styled.div`
+	display: flex;
+	position: relative;
+	bottom: 20px;
+	justify-content: center;
+	.active {
+		background: #ffffff;
+	}
+`;
+
+const CarouselDot = styled.div`
+	border: none;
+	width: 30px;
+	height: 2px;
+	background: rgba(240, 240, 240, 0.5);
+	margin: 0;
 `;

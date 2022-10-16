@@ -5,7 +5,7 @@ import { ReactComponent as LeftArrow } from '../../assets/Icons/left_arrow.svg';
 import { SocialLoginCompleteState } from '../../recoil/User';
 
 const ButtonWrap = styled.div`
-	display: ${props => props.openStatus ? 'none' : 'flex'};
+	display: ${props => (props.openStatus ? 'none' : 'flex')};
 	border: none;
 	background-color: transparent;
 	padding: none;

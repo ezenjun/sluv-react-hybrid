@@ -28,6 +28,8 @@ export const TopNav = styled.div`
 
 	// 상단바 우측 텍스트
 	.rightText {
+		display: flex;
+		align-items: center;
 		font-size: 1rem;
 		font-weight: 600;
 		/* color는 status 처리 필요 */
