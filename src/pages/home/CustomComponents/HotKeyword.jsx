@@ -23,7 +23,7 @@ export function HotKeyword() {
 		setKeywordList(temp);
 	};
 	const onKeywordClick = searchInput => {
-		navigate(`/search/result`, { state: { searchInput } });
+		navigate(`/search/result/${searchInput}`);
 	};
 
 	useEffect(() => {
