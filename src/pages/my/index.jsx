@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
@@ -58,6 +58,7 @@ export default function My() {
 	const [myUploadIsDibList, setMyUploadIsDibList] = useState([]);
 	const [binderList, setBinderList] = useState([]);
 	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+	const [followStatus, setFollowStatus] = useState();
 
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
@@ -96,7 +97,6 @@ export default function My() {
 	const { data: getUserPageData } = useGetUserPage(idx, { onSuccessGetUserPage });
 	const { data: getBindersData } = useGetBinder({ onSuccessGetBinder });
 
-	const [followStatus, setFollowStatus] = useState();
 	const onClickThreeDots = () => {
 		setReportPopupStatus(!reportPopupStatus);
 	};
