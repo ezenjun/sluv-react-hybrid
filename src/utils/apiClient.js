@@ -8,6 +8,14 @@ export const apiClient = axios.create({
 	baseURL: devServerURL,
 });
 
+export const HttpMethod = {
+	DELETE: 'delete',
+	GET: 'get',
+	POST: 'post',
+	PUT: 'put',
+	PATCH: 'patch',
+};
+
 export const customApiClient = async (method, url, data, jwtKey) => {
 	try {
 		const result = await apiClient(url, {

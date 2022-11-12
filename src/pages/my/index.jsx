@@ -42,10 +42,10 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
+import useGetUserPage from '../../hooks/myPage/useGetUserPage';
 
 export default function My() {
 	const { idx } = useParams();
-
 	const navigate = useNavigate();
 
 	const [isAuthUser, setIsAuthUser] = useState(-1);
@@ -64,25 +64,15 @@ export default function My() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	useEffect(() => {
-		getUserPageData(idx);
-		getBinderList();
-	}, []);
-
-	const getUserPageData = async userIdx => {
-		const data = await customApiClient('get', `/users/${userIdx}/page`);
-
-		if (!data) return;
-		if (!data.isSuccess) return;
-
+	const onSuccess = (data) => {
 		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
 		setIsAuthUser(data.result.isMyPage === 'Y' ? 1 : 0);
 		setCelebList(data.result.userInfo.interestCelebList);
 		setUserInfo(data.result.userInfo);
 		setUploadInfo(data.result.uploadInfo);
-		// console.log(data);
-		var tmp = [];
-		for (var i = 0; i < data.result.uploadInfo.uploadItemList.length; i++) {
+
+		let tmp = [];
+		for (let i = 0; i < data.result.uploadInfo.uploadItemList.length; i++) {
 			if (data.result.uploadInfo.uploadItemList[i].isDib === 'Y') {
 				tmp.push(true);
 			} else {
@@ -95,7 +85,15 @@ export default function My() {
 			setFollowStatus(false);
 		}
 		setMyUploadIsDibList([...tmp]);
-	};
+	}
+
+	const { isLoading, data } = useGetUserPage(idx, {onSuccess});
+
+	useEffect(() => {
+		getBinderList();
+	}, []);
+
+
 	const [followStatus, setFollowStatus] = useState();
 	const onClickThreeDots = () => {
 		setReportPopupStatus(!reportPopupStatus);
