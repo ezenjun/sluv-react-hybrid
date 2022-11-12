@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MainContainer } from '../../components/containers/MainContainer';
 import { TopNav } from '../../components/containers/TopNav';
 import { MainText } from '../../components/Texts/MainText';
@@ -29,7 +29,7 @@ import {
 import styled from 'styled-components';
 import MyPageContainer from './MyPageContainer';
 import ProfileContainer from './ProfileContainer';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 import { UploadPopup, UploadPopupWrap } from '../home';
@@ -54,7 +54,6 @@ export default function My() {
 	const [celebList, setCelebList] = useState([]);
 	const [uploadInfo, setUploadInfo] = useState({});
 	const [userInfo, setUserInfo] = useState({});
-	const [isFollow, setIsFollow] = useState(false);
 
 	const [myUploadIsDibList, setMyUploadIsDibList] = useState([]);
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
