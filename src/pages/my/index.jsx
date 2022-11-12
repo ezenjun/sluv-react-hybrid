@@ -43,6 +43,7 @@ import {
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
 import useGetUserPage from '../../hooks/myPage/useGetUserPage';
+import useGetBinder from '../../hooks/binder/useGetBinder';
 
 export default function My() {
 	const { idx } = useParams();
@@ -54,8 +55,10 @@ export default function My() {
 	const [celebList, setCelebList] = useState([]);
 	const [uploadInfo, setUploadInfo] = useState({});
 	const [userInfo, setUserInfo] = useState({});
-
 	const [myUploadIsDibList, setMyUploadIsDibList] = useState([]);
+	const [binderList, setBinderList] = useState([]);
+	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
+
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 	const setBottomNavStatus = useSetRecoilState(BottomNavState);
 	const [uploadPopupStatus, setUploadPopupStatus] = useRecoilState(UploadPopupState);
@@ -64,7 +67,8 @@ export default function My() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const onSuccessGetUserPage = (data) => {
+	// 특정 유저 페이지 조회 API 응답이 onSuccess일 때 호출되는 콜백 함수
+	const onSuccessGetUserPage = data => {
 		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
 		setIsAuthUser(data.result.isMyPage === 'Y' ? 1 : 0);
 		setCelebList(data.result.userInfo.interestCelebList);
@@ -85,14 +89,12 @@ export default function My() {
 			setFollowStatus(false);
 		}
 		setMyUploadIsDibList([...tmp]);
-	}
+	};
+	// 바인더 목록 조회 API 응답이 onSuccess일 때 호출되는 콜백 함수
+	const onSuccessGetBinder = data => setBinderList(data.result);
 
-	const { isLoading, data } = useGetUserPage(idx, { onSuccessGetUserPage });
-
-	useEffect(() => {
-		getBinderList();
-	}, []);
-
+	const { data: getUserPageData } = useGetUserPage(idx, { onSuccessGetUserPage });
+	const { data: getBindersData } = useGetBinder({ onSuccessGetBinder });
 
 	const [followStatus, setFollowStatus] = useState();
 	const onClickThreeDots = () => {
@@ -107,18 +109,6 @@ export default function My() {
 		});
 	};
 
-	const [binderList, setBinderList] = useState([]);
-	const getBinderList = async () => {
-		const data = await customApiClient('get', '/binders');
-		if (!data) return;
-		if (!data.isSuccess) {
-			console.log(data.message);
-			return;
-		}
-		setBinderList(data.result);
-	};
-
-	const [selectedItemIdx, setSelectedItemIdx] = useState(0);
 	const getSelectedItemIdx = idx => {
 		setSelectedItemIdx(idx);
 	};
