@@ -126,7 +126,7 @@ export default function MyUploadItems() {
 		if (!data) return;
 		if (!data.isSuccess) {
 			console.log(data.message);
-			return;d
+			return;
 		}
 		let tempLatest = myUploadIsDibList;
 		for (var i = 0; i < myUploadIsDibList.length; i++) {
