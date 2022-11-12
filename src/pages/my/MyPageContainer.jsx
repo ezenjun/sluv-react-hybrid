@@ -8,9 +8,7 @@ import { ReactComponent as GrayArrow } from '../../assets/Icons/icon_mypage_arro
 import { ReactComponent as RightArrow } from '../../assets/Icons/right_arrow.svg';
 import { ReactComponent as BinderWhite } from '../../assets/Icons/binderWhite.svg';
 import { ReactComponent as BinderRed } from '../../assets/Icons/binderRed.svg';
-import { ReactComponent as NoUploadItemIcon } from '../../assets/Icons/icon_no_upload_item.svg';
 import { GridImage } from '../../components/GridItems/GridImage';
-import { GridItem } from '../../components/GridItems/GridItem';
 import { ImageText } from '../../components/ImageText';
 import { MainText } from '../../components/Texts/MainText';
 import { SubText } from '../../components/Texts/SubText';
@@ -21,8 +19,7 @@ import {
 	ToastMessageStatusState,
 	ToastMessageWrapStatusState,
 } from '../../recoil/ToastMessage';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { BottomNavState, UploadPopupState } from '../../recoil/BottomNav';
+import { useSetRecoilState } from 'recoil';
 import { BottomMenuStatusState } from '../../recoil/BottomSlideMenu';
 
 export default function MyPageContainer({
@@ -39,7 +36,6 @@ export default function MyPageContainer({
 
 	const setBottomMenuStatusState = useSetRecoilState(BottomMenuStatusState);
 
-	console.log(myUploadIsDibList);
 	const onClickMyUpload = () => {
 		navigate('/users/upload-items', {
 			state: uploadInfo,

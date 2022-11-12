@@ -1,9 +1,9 @@
 import { getUserPageApi } from '../../apis/myPageApi';
 import { useQuery } from '@tanstack/react-query';
 
-const useGetUserPage = ( userIdx, {onSuccess} ) => {
+const useGetUserPage = (userIdx, { onSuccessGetUserPage }) => {
 	return useQuery(['getUserPage', userIdx], () => getUserPageApi(userIdx), {
-		onSuccess
+		onSuccess: onSuccessGetUserPage,
 	});
 };
 

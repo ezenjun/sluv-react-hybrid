@@ -64,7 +64,7 @@ export default function My() {
 	const setToastMessageStatus = useSetRecoilState(ToastMessageStatusState);
 	const setToastMessage = useSetRecoilState(ToastMessageState);
 
-	const onSuccess = (data) => {
+	const onSuccessGetUserPage = (data) => {
 		data.result.isMyPage === 'Y' ? setBottomNavStatus(true) : setBottomNavStatus(false);
 		setIsAuthUser(data.result.isMyPage === 'Y' ? 1 : 0);
 		setCelebList(data.result.userInfo.interestCelebList);
@@ -87,7 +87,7 @@ export default function My() {
 		setMyUploadIsDibList([...tmp]);
 	}
 
-	const { isLoading, data } = useGetUserPage(idx, {onSuccess});
+	const { isLoading, data } = useGetUserPage(idx, { onSuccessGetUserPage });
 
 	useEffect(() => {
 		getBinderList();
